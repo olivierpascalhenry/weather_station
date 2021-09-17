@@ -1,0 +1,9 @@
+QToolButton {
+	border: 1px solid transparent;
+    border-radius: 10px;
+	background-color: transparent;
+}
+
+QToolButton:flat {
+	border: none;
+}

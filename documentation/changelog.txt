@@ -1,0 +1,86 @@
+### To do list: ###
+
+* everything
+
+  
+### To fix list: ###
+
+* nothing.
+
+
+### September XX 2021, Release version 0.6.0 ###
+
+
+
+### September 17 2021, Release version 0.5.0 ###
+
+  * ADDED:
+    * a new keyboard window has been added.
+    * new options for the place and altitude have been added.
+    * a new icon for weather has been added.
+    * a function to create shadows has been introduced.
+    * a new icon and function has been added to display weather warning message.
+    * a new thread to clean the database has been introduced.
+    * a touch scroller has been added in the aboutlog window.
+    * the 1h forecast section has been divided into 2 pages for a better readability.
+    * a window to exit the GUI, reboot and stop the computer has been added.
+
+  * MODIFIED:
+    * the option window can now handle the modification of the place by the user.
+    * if the place has been changed and forecast sections are displayed, the forecast is updated and the GUI as well.
+    * the GUI style has been a bit modified to improve readability.
+    * the thread to request forecast is now independant and will send a request every xx minutes based the request_rate
+    option.
+    * ext/int temperatures time series are now separated and displayed in a stacked widget, controlled by buttons. It
+    will give the possibility to add more time series.
+    * a new sensor replaces the old one for interior temp and humidity. Modifications in threads have been done to take
+    care of this sensor. Atmospheric pressure is now recorded and converted to atmospheric pressure at sea level.
+    * pressure and humidty have been added to time series section.
+
+
+### September 11 2021, Release version 0.4.0 ###
+
+  * MODIFIED:
+    * the GUI has been adapted to raspberry pi: no title bar, no cursor, size of all widgets has been set to the RP
+    resolution.
+    * all windows have now the MainWindow as parent.
+
+  * FIXED:
+    * if an icon doesn't exit and must be used for weather prediction, it crashed the GUI. It has been fixed.
+    * in the option window, if the user click on the path button for the log section and cancel the selection of a path,
+     a dot was displayed in the qlineedit, it has been fixed.
+
+  * ADDED:
+    * new icons for weather predictions have been added.
+    * a new numpad window has been added to let the user write numbers in few cases.
+
+
+### August 28 2021, Release version 0.3.0 ###
+
+  * ADDED:
+    * icons for weather forecast have been developed and added.
+    * details for weather forecast have been added.
+    * icons for wind direction have been added.
+
+
+### August 22 2021, Release version 0.2.0 ###
+
+  * ADDED:
+    * the API to request weather data from MeteoFrance has been added.
+    * options for display rate and sensors reading rate have been introduced.
+    * the threads to display forecast data has been added.
+
+  * MODIFIED:
+    * the main window has been modified to include forecast data.
+
+
+### August 21 2021, Release version 0.1.0 ###
+
+  * ADDED:
+    * first version of the GUI.
+    * the main window has been added (first version).
+    * the about / log window has been added (final version).
+    * the option window has been added (first version).
+    * the connection and handling of database POSTGRESQL has been added.
+    * the different threads to gather and display data have been added.
+  
