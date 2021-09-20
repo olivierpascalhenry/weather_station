@@ -273,3 +273,14 @@ def db_data_to_mpl_vectors(data):
         else:
             x.append(tx[1])
     return t, x
+
+
+def set_size(bytes_size):
+    logging.debug('gui - utils.py - set_size')
+    suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+    i = 0
+    while bytes_size >= 1024 and i < len(suffixes)-1:
+        bytes_size /= 1024.
+        i += 1
+    f = ('%.2f' % bytes_size).rstrip('0').rstrip('.')
+    return '%s %s' % (f, suffixes[i])

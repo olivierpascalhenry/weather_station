@@ -1,6 +1,7 @@
 import collections
 import io
 import os
+import sys
 import pickle
 import platform
 import logging
@@ -8,6 +9,9 @@ import pathlib
 import configparser
 import datetime
 import psycopg2
+import requests
+import tempfile
+import shutil
 from numpy import nan
 from ui.version import gui_version, python_version, pyqt5_version
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -19,10 +23,11 @@ import matplotlib.pyplot as plt
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors)
-from functions.window_functions.other_windows_functions import MyAbout, MyOptions, MyExit, My1hFCDetails, My6hFCDetails
+from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
+                                                                My6hFCDetails, MyWarning, MyWarningUpdate)
 from functions.thread_functions.sensors_reading import DataCollectingThread, DBDataDisplayThread
 from functions.thread_functions.forecast_request import MFForecastRequest
-from functions.thread_functions.other_threads import CleaningThread
+from functions.thread_functions.other_threads import CleaningThread, CheckUpdate, DownloadFile
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
@@ -43,6 +48,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
 
+        self.warning_button.setObjectName('no_function')
+
         if platform.system() == 'Linux':
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
@@ -60,7 +67,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display_sensors_data_thread = None
         self.query_mf_forecast_thread = None
         self.db_cleaning_thread = None
+        self.check_update_thread = None
         self.mf_forecast_data = None
+        self.update_url = None
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -73,10 +82,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fc_6h_bt_1 = []
         self.fc_6h_fr_1 = []
         self.fc_6h_nbr1 = 0
+        self.check_update()
         self.database_connection()
         self.exit_button.clicked.connect(self.exit_menu)
         self.about_button.clicked.connect(self.about_weather_station)
         self.option_button.clicked.connect(self.open_options)
+        self.warning_button.clicked.connect(self.warning_update_dispatch)
         self.in_out_bt.clicked.connect(lambda: self.set_stack_widget_page(0))
         self.time_series_bt.clicked.connect(lambda: self.set_stack_widget_page(1))
         self.h1_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(2))
@@ -95,7 +106,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.old_place_object = self.place_object
             f.close()
 
-        self.warning_button.setGraphicsEffect(shadow_creation_function(3, 5))
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -236,31 +246,52 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def launch_clean_thread(self):
         self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
+        self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         self.collect_sensors_data_thread = DataCollectingThread(self.connector, self.cursor, self.config_dict)
+        self.collect_sensors_data_thread.error.connect(self.log_thread_error)
         self.collect_sensors_data_thread.start()
 
     def display_sensors_data(self):
         self.display_sensors_data_thread = DBDataDisplayThread(self.cursor, self.config_dict)
         self.display_sensors_data_thread.db_data.connect(self.refresh_in_out_display)
+        self.display_sensors_data_thread.error.connect(self.log_thread_error)
         self.display_sensors_data_thread.start()
 
     def launch_fc_request_thread(self):
         if self.place_object is not None:
             self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
             self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
+            self.query_mf_forecast_thread.error.connect(self.log_thread_error)
             self.query_mf_forecast_thread.start()
         else:
             logging.warning('gui - mainwindow.py - MainWindow - launch_fc_request_thread : self.place_object is None')
 
+    def check_update(self):
+        logging.debug('gui - mainwindow.py - MainWindow - check_update')
+        self.check_update_thread = CheckUpdate(gui_version)
+        self.check_update_thread.finished.connect(self.display_gui_update_button)
+        self.check_update_thread.error.connect(self.log_thread_error)
+        self.check_update_thread.start()
+
     def refresh_in_out_display(self, data_dict):
         if data_dict['temp_norm_in'] is not None:
-            self.in_temperature_label.setText(str(data_dict['temp_norm_in']) + '°C')
+            if data_dict['temp_norm_in'] == -999:
+                self.in_temperature_label.setText('No data')
+            else:
+                self.in_temperature_label.setText(str(data_dict['temp_norm_in']) + '°C')
         if data_dict['temp_minmax_in'] is not None:
-            self.in_label_3.setText(str(data_dict['temp_minmax_in'][0]) + '°C / '
-                                    + str(data_dict['temp_minmax_in'][1]) + '°C')
+            if data_dict['temp_minmax_in'][0] == -999:
+                data_min = 'No data / '
+            else:
+                data_min = str(data_dict['temp_minmax_in'][0]) + '°C / '
+            if data_dict['temp_minmax_in'][1] == -999:
+                data_max = 'No data'
+            else:
+                data_max = str(data_dict['temp_minmax_in'][1]) + '°C'
+            self.in_label_3.setText(data_min + data_max)
         if data_dict['temp_norm_out'] is not None:
             self.out_temperature_label.setText(str(data_dict['temp_norm_out']) + '°C')
         if data_dict['temp_minmax_out'] is not None:
@@ -272,52 +303,58 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_pressure_label_1.setText('Pression : ' + str(data_dict['pres_norm_int']) + ' hPa')
 
     def plot_time_series(self):
-        color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
-        hours_list = mpl_hour_list()
-        now = datetime.datetime.now()
-        limit = now - datetime.timedelta(hours=24)
-        self.cursor.execute("select int_tp_time, int_tp_data from int_temp where "
-                            "int_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
-        temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-        self.cursor.execute("select ext_tp_time, ext_tp_data from ext_temp where "
-                            "ext_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
-        temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-        self.cursor.execute("select int_hd_time, int_hd_data from int_hum where "
-                            "int_hd_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
-        hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-        self.cursor.execute("select int_ps_time, int_ps_data from int_pres where "
-                            "int_ps_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
-        pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-        self.plot_in.clear()
-        self.plot_in_2.clear()
-        self.plot_out.clear()
-        self.plot_out_2.clear()
-        self.plot_in.set_ylabel('Température (°C)', color=color_1)
-        self.plot_in.tick_params(axis='y', labelcolor=color_1)
-        self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
-        self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
-        self.plot_out.set_ylabel('Température (°C)', color=color_1)
-        self.plot_out.tick_params(axis='y', labelcolor=color_1)
-        self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
-        self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-        self.plot_in.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
-        self.plot_in.set_ylim(min(temp_in_y) - 5, max(temp_in_y) + 5)
-        self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
-        self.plot_in_2.set_ylim(0, 100)
-        self.plot_in.set_xlim(limit, now)
-        self.plot_in.set_xticks(hours_list)
-        self.plot_in.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
-        self.plot_out.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
-        self.plot_out.set_ylim(min(temp_out_y) - 5, max(temp_out_y) + 5)
-        self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
-        self.plot_out_2.set_ylim(min(pres_in_y) - 20, max(pres_in_y) + 20)
-        self.plot_out.set_xlim(limit, now)
-        self.plot_out.set_xticks(hours_list)
-        self.plot_out.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+        try:
+            color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+            hours_list = mpl_hour_list()
+            now = datetime.datetime.now()
+            limit = now - datetime.timedelta(hours=24)
+            self.cursor.execute("select int_tp_time, int_tp_data from int_temp where "
+                                "int_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute("select ext_tp_time, ext_tp_data from ext_temp where "
+                                "ext_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute("select int_hd_time, int_hd_data from int_hum where "
+                                "int_hd_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute("select int_ps_time, int_ps_data from int_pres where "
+                                "int_ps_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.plot_in.clear()
+            self.plot_in_2.clear()
+            self.plot_out.clear()
+            self.plot_out_2.clear()
+            self.plot_in.set_ylabel('Température (°C)', color=color_1)
+            self.plot_in.tick_params(axis='y', labelcolor=color_1)
+            self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
+            self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
+            self.plot_out.set_ylabel('Température (°C)', color=color_1)
+            self.plot_out.tick_params(axis='y', labelcolor=color_1)
+            self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
+            self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
+            self.plot_in.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
+            self.plot_in.set_ylim(min(temp_in_y) - 5, max(temp_in_y) + 5)
+            self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
+            self.plot_in_2.set_ylim(0, 100)
+            self.plot_in.set_xlim(limit, now)
+            self.plot_in.set_xticks(hours_list)
+            self.plot_in.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.plot_out.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
+            self.plot_out.set_ylim(min(temp_out_y) - 5, max(temp_out_y) + 5)
+            self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
+            self.plot_out_2.set_ylim(min(pres_in_y) - 20, max(pres_in_y) + 20)
+            self.plot_out.set_xlim(limit, now)
+            self.plot_out.set_xticks(hours_list)
+            self.plot_out.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+        except Exception as e:
+            self.log_thread_error(['time series', e])
 
     def parse_forecast_data(self, fc_data):
         if fc_data:
             self.mf_forecast_data = fc_data
+            if fc_data['warning']:
+                self.warning_button.setObjectName('warning_function')
+                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
 
     def display_fc_1h(self):
         if self.mf_forecast_data:
@@ -368,6 +405,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         details_window.setGeometry(52, 110, 920, 380)
         details_window.exec_()
 
+    def warning_update_dispatch(self):
+        if self.warning_button.objectName() == 'update_function':
+            update_window = MyWarningUpdate(self)
+            update_window.setGeometry(182, 180, 660, 240)
+            update_window.exec_()
+            if not update_window.cancel:
+                temp_folder = tempfile.gettempdir()
+                download_window = MyDownload(self.update_url, temp_folder, self)
+                download_window.setGeometry(237, 217, 550, 166)
+                download_window.exec_()
+                if download_window.success:
+                    shutil.copy('functions/unzip_update.py', temp_folder)
+                    script_path = str(pathlib.Path(temp_folder).joinpath('unzip_update.py'))
+                    update_path = str(pathlib.Path(temp_folder).joinpath(self.update_url['file']))
+                    install_path = str(pathlib.Path(self.gui_path))
+
+                    command = 'python3 {script_path} {update_path} {install_path}'.format(script_path=script_path,
+                                                                                          update_path=update_path,
+                                                                                          install_path=install_path)
+
+                    print(command)
+
+                    # os.system('x-terminal-emulator -e ' + command)
+                    # time.sleep(1.5)
+                    # self.close()
+
+        elif self.warning_button.objectName() == 'warning_function':
+            warning_window = MyWarning(self.mf_forecast_data['warning'], self)
+            warning_window.setGeometry(197, 175, 630, 350)
+            warning_window.exec_()
+
     def open_options(self):
         logging.debug('gui - mainwindow.py - MainWindow - show_options')
         config_string = io.StringIO()
@@ -395,6 +463,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         about_window = MyAbout(text, self)
         about_window.setGeometry(162, 75, 700, 450)
         about_window.exec_()
+
+    def display_gui_update_button(self, url_dict):
+        if url_dict:
+            self.update_url = url_dict
+            if self.warning_button.objectName() == 'no_function':
+                self.warning_button.setObjectName('update_function')
+                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg'))
+
+    @staticmethod
+    def log_thread_error(e_list):
+        logging.exception('gui - mainwindow.py - MainWindow - log_thread_error - '
+                          'ERROR: {origin} | {error}'.format(origin=e_list[0], error=str(e_list[1])))
 
     def exit_menu(self):
         if platform.system() == 'Windows':

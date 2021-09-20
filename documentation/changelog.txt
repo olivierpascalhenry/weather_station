@@ -8,8 +8,16 @@
 * nothing.
 
 
-### September XX 2021, Release version 0.6.0 ###
+### September 20 2021, Release version 0.6.0 ###
 
+  * MODIFIED:
+    * the project has been pushed on GitHub (private)
+
+  * ADDED:
+    * a first version of a thread to check version online has been added.
+    * first versions of all functions to handle update processes.
+    * functions have been added to handle errors in threads.
+    * weather warning from Meteo France has been added.
 
 
 ### September 17 2021, Release version 0.5.0 ###
