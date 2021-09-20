@@ -11,25 +11,41 @@ if platform.system() == 'Linux':
 
 
 class DataCollectingThread(QtCore.QThread):
+    error = QtCore.pyqtSignal(list)
+
     def __init__(self, connector, cursor, config_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - sensors_reading.py - DataCollectingThread - __init__')
         self.connector = connector
         self.cursor = cursor
         self.cal_params = None
+        self.bus = None
+        self.address = None
         self.sensors_rate = int(config_dict.get('SYSTEM', 'sensors_rate'))
-        self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
+        if config_dict.get('SYSTEM', 'place_altitude'):
+            self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
+        else:
+            self.place_altitude = None
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DataCollectingThread - run')
         if platform.system() == 'Linux':
-            self.cal_params = self.prepare_bme280_bus()
+            try:
+                self.bus = smbus2.SMBus(1)
+                self.address = 0x77
+                self.cal_params = self.prepare_bme280_bus()
+            except Exception as e:
+                self.error.emit(['data collect', e])
         while True:
             date_time = datetime.datetime.now().replace(microsecond=0)
-            ext_tp = self.collect_ext_temp()
-            int_tp, int_hd, int_ps = self.collect_int_temp_hum_pres()
-            self.add_data_to_db(date_time, int_tp, ext_tp, int_hd, int_ps)
-            time.sleep(self.sensors_rate)
+            try:
+                ext_tp = self.collect_ext_temp()
+                int_tp, int_hd, int_ps = self.collect_int_temp_hum_pres()
+                self.add_data_to_db(date_time, int_tp, ext_tp, int_hd, int_ps)
+                time.sleep(self.sensors_rate)
+            except Exception as e:
+                self.error.emit(['data collect', e])
+                self.add_data_to_db(date_time, -999, -999, -999, -999)
 
     def add_data_to_db(self, dt, int_tp, ext_tp, int_hd, int_ps):
         try:
@@ -44,40 +60,42 @@ class DataCollectingThread(QtCore.QThread):
     def collect_ext_temp(self):
         temp = None
         if platform.system() == 'Linux':
-            f = open('/sys/bus/w1/devices/28-012059b3456d/w1_slave', 'r')
-            lines = f.readlines()
-            f.close()
-            if lines[0].strip()[-3:] == 'YES':
-                t_idx = lines[1].find('t=')
-                if t_idx != -1:
-                    temp = float(lines[1][t_idx + 2:]) / 1000.0
-                    if temp > 50:
-                        temp = -999
+            try:
+                f = open('/sys/bus/w1/devices/28-012059b3456d/w1_slave', 'r')
+                lines = f.readlines()
+                f.close()
+                if lines[0].strip()[-3:] == 'YES':
+                    t_idx = lines[1].find('t=')
+                    if t_idx != -1:
+                        temp = float(lines[1][t_idx + 2:]) / 1000.0
+                        if temp > 50:
+                            temp = -999
+            except:
+                temp = -999
         else:
             temp = self.collect_test_data(25., 5)
         return round(temp, 1)
 
     def collect_int_temp_hum_pres(self):
         if platform.system() == 'Linux':
-            data = bme280.sample(bus, address, calibration_params)
+            data = bme280.sample(self.bus, self.address, calibration_params)
             temp = data.temperature
             hum = data.humidity
             pres = data.pressure
-
-            pres = pres + ((pres * 9.80665 * self.place_altitude) /
-                           (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-
+            if self.place_altitude is not None:
+                pres = pres + ((pres * 9.80665 * self.place_altitude) /
+                               (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+                pres = round(pres, 1)
+            else:
+                pres = -999
+            temp = round(temp, 1)
+            hum = round(hum)
             if temp > 50:
                 temp = -999
-
         else:
-            temp = self.collect_test_data(20., 5)
-            hum = self.collect_test_data(65., 20)
-            pres = self.collect_test_data(1013., 15)
-
-        temp = round(temp, 1)
-        hum = round(hum)
-        pres = round(pres, 1)
+            temp = round(self.collect_test_data(20., 5), 1)
+            hum = round(self.collect_test_data(65., 20), 1)
+            pres = round(self.collect_test_data(1013., 15), 1)
         return temp, hum, pres
 
     @staticmethod
@@ -87,8 +105,8 @@ class DataCollectingThread(QtCore.QThread):
         return temp
 
     @staticmethod
-    def prepare_bme280_bus():
-        return bme280.load_calibration_params(smbus2.SMBus(1), 0x77)
+    def prepare_bme280_bus(bus, address):
+        return bme280.load_calibration_params(bus, address)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DataCollectingThread - stop')
@@ -97,6 +115,7 @@ class DataCollectingThread(QtCore.QThread):
 
 class DBDataDisplayThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
+    error = QtCore.pyqtSignal(list)
 
     def __init__(self, cursor, config_dict):
         QtCore.QThread.__init__(self)
@@ -117,48 +136,48 @@ class DBDataDisplayThread(QtCore.QThread):
         q_pres_norm_in = 'SELECT int_ps_data FROM int_pres ORDER BY id DESC LIMIT 1'
 
         while True:
-            temp_dict = {'temp_norm_in': None, 'temp_minmax_in': None, 'temp_norm_out': None, 'temp_minmax_out': None,
-                         'hum_norm_in': None, 'pres_norm_in': None}
             try:
-                self.cursor.execute(q_temp_norm_in)
-                data = self.cursor.fetchone()
-                temp_dict['temp_norm_in'] = data[0]
-            except psycopg2.ProgrammingError:
-                pass
-            try:
-                self.cursor.execute(q_temp_minmax_in)
-                data = self.cursor.fetchone()
-                temp_dict['temp_minmax_in'] = data
-            except psycopg2.ProgrammingError:
-                pass
-
-            try:
-                self.cursor.execute(q_temp_norm_out)
-                data = self.cursor.fetchone()
-                temp_dict['temp_norm_out'] = data[0]
-            except psycopg2.ProgrammingError:
-                pass
-            try:
-                self.cursor.execute(q_temp_minmax_out)
-                data = self.cursor.fetchone()
-                temp_dict['temp_minmax_out'] = data
-            except psycopg2.ProgrammingError:
-                pass
-
-            try:
-                self.cursor.execute(q_hum_norm_in)
-                data = self.cursor.fetchone()
-                temp_dict['hum_norm_in'] = data[0]
-            except psycopg2.ProgrammingError:
-                pass
-            try:
-                self.cursor.execute(q_pres_norm_in)
-                data = self.cursor.fetchone()
-                temp_dict['pres_norm_int'] = data[0]
-            except psycopg2.ProgrammingError:
-                pass
-
-            self.db_data.emit(temp_dict)
+                temp_dict = {'temp_norm_in': None, 'temp_minmax_in': None, 'temp_norm_out': None,
+                             'temp_minmax_out': None, 'hum_norm_in': None, 'pres_norm_in': None}
+                try:
+                    self.cursor.execute(q_temp_norm_in)
+                    data = self.cursor.fetchone()
+                    temp_dict['temp_norm_in'] = data[0]
+                except psycopg2.ProgrammingError:
+                    temp_dict['temp_norm_in'] = -999
+                try:
+                    self.cursor.execute(q_temp_minmax_in)
+                    data = self.cursor.fetchone()
+                    temp_dict['temp_minmax_in'] = data
+                except psycopg2.ProgrammingError:
+                    temp_dict['temp_minmax_in'] = -999
+                try:
+                    self.cursor.execute(q_temp_norm_out)
+                    data = self.cursor.fetchone()
+                    temp_dict['temp_norm_out'] = data[0]
+                except psycopg2.ProgrammingError:
+                    temp_dict['temp_norm_out'] = -999
+                try:
+                    self.cursor.execute(q_temp_minmax_out)
+                    data = self.cursor.fetchone()
+                    temp_dict['temp_minmax_out'] = data
+                except psycopg2.ProgrammingError:
+                    temp_dict['temp_minmax_out'] = -999
+                try:
+                    self.cursor.execute(q_hum_norm_in)
+                    data = self.cursor.fetchone()
+                    temp_dict['hum_norm_in'] = data[0]
+                except psycopg2.ProgrammingError:
+                    temp_dict['hum_norm_in'] = -999
+                try:
+                    self.cursor.execute(q_pres_norm_in)
+                    data = self.cursor.fetchone()
+                    temp_dict['pres_norm_int'] = data[0]
+                except psycopg2.ProgrammingError:
+                    temp_dict['pres_norm_int'] = -999
+                self.db_data.emit(temp_dict)
+            except Exception as e:
+                self.error.emit(['data display', e])
             time.sleep(self.display_rate)
 
     def stop(self):

@@ -2,8 +2,8 @@ import time
 import logging
 import collections
 import datetime
-from meteofrance_api import MeteoFranceClient
-from functions.utils import weather_to_pictogrammes
+import meteofrance_api
+from functions.utils import weather_to_pictogrammes, days_months_dictionary
 
 
 from PyQt5 import QtCore
@@ -11,6 +11,7 @@ from PyQt5 import QtCore
 
 class MFForecastRequest(QtCore.QThread):
     fc_data = QtCore.pyqtSignal(dict)
+    error = QtCore.pyqtSignal(list)
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
@@ -27,13 +28,14 @@ class MFForecastRequest(QtCore.QThread):
         # 'desc': 'Eclaircies'}}
         while True:
             try:
-                mf_client = MeteoFranceClient()
-                lherm_forecast = mf_client.get_forecast_for_place(self.user_place)
+                mf_client = meteofrance_api.MeteoFranceClient()
+                place_forecast = mf_client.get_forecast_for_place(self.user_place)
+                place_warning = mf_client.get_warning_current_phenomenoms(self.user_place.admin2)
                 fc_1h = collections.OrderedDict()
 
                 now = datetime.datetime.now().replace(minute=0, second=0)
                 limite = now + datetime.timedelta(hours=24)
-                for i, forecast in enumerate(lherm_forecast.forecast):
+                for i, forecast in enumerate(place_forecast.forecast):
                     dt = datetime.datetime.utcfromtimestamp(forecast['dt'])
                     if now <= dt <= limite:
                         fc_1h[dt] = {'datetime': dt,
@@ -59,7 +61,7 @@ class MFForecastRequest(QtCore.QThread):
                     dt += datetime.timedelta(hours=6)
                     day_time_list.append(dt)
 
-                forecast_next = lherm_forecast.forecast
+                forecast_next = place_forecast.forecast
                 forecast_dt = [datetime.datetime.utcfromtimestamp(forecast['dt']) for forecast in forecast_next]
                 occurences = [i for i, item in enumerate(forecast_dt) if item in set(day_time_list)]
                 for idx in occurences:
@@ -76,9 +78,30 @@ class MFForecastRequest(QtCore.QThread):
                                  'cover': forecast['clouds']}
 
                 self.forecast['quaterly'] = fc_6h
-            except:
-                pass
-            self.fc_data.emit(self.forecast)
+
+                warn_str = ''
+                warn_bool = False
+                for warn in place_warning.phenomenons_max_colors:
+                    color_id, phenomenon_id = warn['phenomenon_max_color_id'], warn['phenomenon_id']
+                    if color_id >= 3:
+                        warn_bool = True
+                        color = meteofrance_api.helpers.get_warning_text_status_from_indice_color(color_id)
+                        phenomenon = meteofrance_api.helpers.get_phenomenon_name_from_indice(phenomenon_id)
+                        warn_str += 'Alerte {color} pour {phenomenon}\n\n'.format(color=color, phenomenon=phenomenon)
+
+                if warn_bool:
+                    dt = datetime.datetime.utcfromtimestamp(place_warning.end_validity_time)
+                    date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
+                            + days_months_dictionary()['month'][dt.month] + ' ' + str(dt.year))
+                    hour = dt.strftime('%Hh%M')
+                    warn_str += 'Fin de l\'alerte : à {hour}, le {date}'.format(hour=hour, date=date)
+                    self.forecast['warning'] = warn_str
+                else:
+                    self.forecast['warning'] = ''
+
+                self.fc_data.emit(self.forecast)
+            except Exception as e:
+                self.error.emit(['forecast request', e])
             time.sleep(self.request_rate)
 
     def stop(self):

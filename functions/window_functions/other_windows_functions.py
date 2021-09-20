@@ -5,6 +5,7 @@ import platform
 import markdown
 from numpy import arange
 import bisect
+import time
 from meteofrance_api import MeteoFranceClient
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ui.Ui_aboutlogwindow import Ui_aboutlogWindow
@@ -16,8 +17,12 @@ from ui.Ui_forecast6hwindow import Ui_forecast6hWindow
 from ui.Ui_numpadwindow import Ui_numpadWindow
 from ui.Ui_keyboardwindow import Ui_keyboardWindow
 from ui.Ui_townsearchwindow import Ui_townsearchWindow
+from ui.Ui_warningwindow import Ui_warningWindow
+from ui.Ui_updatewindow import Ui_updateWindow
+from ui.Ui_downloadwindow import Ui_downloadWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function)
+from functions.thread_functions.other_threads import DownloadFile
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
@@ -509,4 +514,114 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - MyKeyboard - close_window')
+        self.close()
+
+
+class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
+    def __init__(self, warning_object, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyWarning - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setupUi(self)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        if platform.system() == 'Linux':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.ok_button.clicked.connect(self.close_window)
+        self.text_edit.setText(warning_object)
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyWarning - close_window')
+        self.close()
+
+
+class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
+    def __init__(self, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyWarningUpdate - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setupUi(self)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        if platform.system() == 'Linux':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.ok_button.clicked.connect(self.agree_update)
+        self.cancel_button.clicked.connect(self.close_window)
+        self.cancel = True
+        logging.info('gui - other_windows_functions.py - MyWarningUpdate - ready')
+
+    def agree_update(self):
+        logging.debug('gui - other_windows_functions.py - MyWarningUpdate - agree_update')
+        self.cancel = False
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyWarningUpdate - close_window')
+        self.close()
+
+
+class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
+    def __init__(self, url_dict, folder, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyDownload - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setupUi(self)
+
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        if platform.system() == 'Linux':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+
+        self.temp_folder = folder
+        self.url = url_dict['url']
+
+        self.update_file = pathlib.Path(folder).joinpath(url_dict['file'])
+        self.dw_button.clicked.connect(self.cancel_download)
+        self.cancel = False
+        self.thread = None
+        self.success = False
+        self.download_update()
+        logging.info('gui - other_windows_functions.py - MyDownload - ready')
+
+    def update_progress_bar(self, val):
+        if isinstance(val, list):
+            self.dw_progress_bar.setValue(val[0])
+            self.dw_label.setText(val[1])
+        else:
+            self.dw_progress_bar.setValue(val)
+
+    def download_update(self):
+        logging.debug('gui - other_windows_functions.py - MyDownload - download_update')
+        self.thread = DownloadFile(self.url, self.update_file)
+        self.thread.download_update.connect(self.update_progress_bar)
+        self.thread.download_done.connect(self.donwload_done)
+        self.thread.download_failed.connect(self.download_failed)
+        self.thread.start()
+
+    def donwload_done(self):
+        self.success = True
+        self.close_window()
+
+    def cancel_download(self):
+        logging.debug('gui - other_windows_functions.py - MyDownload - cancel_download')
+        if self.thread is not None:
+            self.thread.cancel_download()
+        self.cancel = True
+        time.sleep(0.25)
+        self.close_window()
+
+    def download_failed(self):
+        logging.debug('gui - other_windows_functions.py - MyDownload - download_failed')
+        self.update_progress_bar(0)
+        self.dw_label.setText('Download failed')
+        self.cancel_download()
+
+    def close_window(self):
+        logging.info('gui - other_windows_functions.py - MyDownload - close_window')
         self.close()
