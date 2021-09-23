@@ -26,7 +26,7 @@ from functions.window_functions.other_windows_functions import (MyAbout, MyOptio
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate)
 from functions.thread_functions.sensors_reading import DataCollectingThread, DBDataDisplayThread
 from functions.thread_functions.forecast_request import MFForecastRequest
-from functions.thread_functions.other_threads import CleaningThread, CheckUpdate, DownloadFile
+from functions.thread_functions.other_threads import CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
@@ -64,6 +64,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.mf_forecast_data = None
+        self.check_internet = None
         self.update_url = None
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
@@ -108,12 +109,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.setup_plot_area()
         self.set_time_date()
-        self.check_update()
+
         self.database_connection()
         self.launch_clean_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
-        self.launch_fc_request_thread()
+        self.check_internet_connection()
 
     def set_stack_widget_page(self, idx):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
@@ -268,6 +269,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display_sensors_data_thread.db_data.connect(self.refresh_in_out_display)
         self.display_sensors_data_thread.error.connect(self.log_thread_error)
         self.display_sensors_data_thread.start()
+
+    def check_internet_connection(self):
+        self.check_internet = CheckInternetConnexion()
+        self.check_internet.connexion_alive.connect(self.start_internet_services)
+        self.check_internet.no_connexion.connect(self.no_internet_message)
+        self.check_internet.start()
+
+    def start_internet_services(self):
+        self.check_update()
+        self.launch_fc_request_thread()
+
+    def no_internet_message(self):
+        logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
+                        'outside world !')
 
     def launch_fc_request_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')

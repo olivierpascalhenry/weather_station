@@ -22,6 +22,8 @@
   * MODIFIED:
     * database has been modified to allow NULL data.
     * update process is now working as it should and has been frozen.
+    * the display of T, P, H, min and max has been improved. If data are too old, they are not displayed.
+    * internet connection is tested before sending MF and GH requests.
 
 
 ### September 20 2021, Release version 0.6.0 ###
