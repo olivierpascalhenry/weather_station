@@ -29,7 +29,7 @@ class DataCollectingThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DataCollectingThread - run')
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             try:
                 self.bus = smbus2.SMBus(1)
                 self.address = 0x77
@@ -45,7 +45,7 @@ class DataCollectingThread(QtCore.QThread):
                 time.sleep(self.sensors_rate)
             except Exception as e:
                 self.error.emit(['data collect', e])
-                self.add_data_to_db(date_time, -999, -999, -999, -999)
+                self.add_data_to_db(date_time, None, None, None, None)
 
     def add_data_to_db(self, dt, int_tp, ext_tp, int_hd, int_ps):
         try:
@@ -59,7 +59,7 @@ class DataCollectingThread(QtCore.QThread):
 
     def collect_ext_temp(self):
         temp = None
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             try:
                 f = open('/sys/bus/w1/devices/28-012059b3456d/w1_slave', 'r')
                 lines = f.readlines()
@@ -67,18 +67,18 @@ class DataCollectingThread(QtCore.QThread):
                 if lines[0].strip()[-3:] == 'YES':
                     t_idx = lines[1].find('t=')
                     if t_idx != -1:
-                        temp = float(lines[1][t_idx + 2:]) / 1000.0
+                        temp = round(float(lines[1][t_idx + 2:]) / 1000.0, 1)
                         if temp > 50:
-                            temp = -999
+                            temp = None
             except:
-                temp = -999
+                temp = None
         else:
             temp = self.collect_test_data(25., 5)
-        return round(temp, 1)
+        return temp
 
     def collect_int_temp_hum_pres(self):
-        if platform.system() == 'Linux':
-            data = bme280.sample(self.bus, self.address, calibration_params)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            data = bme280.sample(self.bus, self.address, self.cal_params)
             temp = data.temperature
             hum = data.humidity
             pres = data.pressure
@@ -87,26 +87,29 @@ class DataCollectingThread(QtCore.QThread):
                                (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
                 pres = round(pres, 1)
             else:
-                pres = -999
+                pres = None
             temp = round(temp, 1)
             hum = round(hum)
             if temp > 50:
-                temp = -999
+                temp = None
         else:
-            temp = round(self.collect_test_data(20., 5), 1)
-            hum = round(self.collect_test_data(65., 20), 1)
-            pres = round(self.collect_test_data(1013., 15), 1)
+            temp = self.collect_test_data(20., 5)
+            hum = self.collect_test_data(65., 20)
+            pres = self.collect_test_data(1013., 15)
         return temp, hum, pres
 
     @staticmethod
     def collect_test_data(num, limit):
         random.seed()
-        temp = round(num + random.uniform(0, limit), 1)
-        return temp
+        none_num = random.randrange(1, 5, 1)
+        if none_num == 1:
+            data = None
+        else:
+            data = round(num + random.uniform(0, limit), 1)
+        return data
 
-    @staticmethod
-    def prepare_bme280_bus(bus, address):
-        return bme280.load_calibration_params(bus, address)
+    def prepare_bme280_bus(self):
+        return bme280.load_calibration_params(self.bus, self.address)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DataCollectingThread - stop')

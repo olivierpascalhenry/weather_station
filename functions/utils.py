@@ -1,5 +1,4 @@
 import os
-import sqlite3
 import configparser
 import logging
 import pathlib
@@ -268,7 +267,7 @@ def db_data_to_mpl_vectors(data):
     t, x = [], []
     for tx in data:
         t.append(tx[0])
-        if tx[1] == -999:
+        if tx[1] is None:
             x.append(nan)
         else:
             x.append(tx[1])

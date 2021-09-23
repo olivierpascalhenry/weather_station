@@ -1,11 +1,27 @@
 ### To do list: ###
 
-* everything
+* nothing
 
   
 ### To fix list: ###
 
 * nothing.
+
+
+### September xx 2021, Release version 0.7.0 ###
+
+  * FIXED:
+    * an issue was fixed in the sensor reading thread about calibration parameters.
+    * fixed plot limits when data for time series are NaN.
+    * fixed plots not refreshing when the TS button is clicked.
+    * fixed missing parameters for computation of calibration in sensors reading.
+
+  * ADDED:
+    * new log messages have been added.
+
+  * MODIFIED:
+    * database has been modified to allow NULL data.
+    * update process is now working as it should and has been frozen.
 
 
 ### September 20 2021, Release version 0.6.0 ###

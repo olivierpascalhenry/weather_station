@@ -35,7 +35,7 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_1.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
@@ -76,7 +76,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.config_dict = config_dict
         self.ow_splitter.setSizes([180, 520])
@@ -218,7 +218,7 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
         QtWidgets.QWidget.__init__(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.iw_label_1.setText(info_text)
         self.iw_okButton.clicked.connect(self.close_window)
@@ -239,7 +239,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         self.exit = False
@@ -283,7 +283,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close_window)
@@ -332,7 +332,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close)
         self.parse_forecast()
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
 
     def parse_forecast(self):
@@ -377,7 +377,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
@@ -416,7 +416,7 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
@@ -465,7 +465,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         self.place_list = place_list
@@ -527,7 +527,7 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.ok_button.clicked.connect(self.close_window)
         self.text_edit.setText(warning_object)
@@ -547,7 +547,7 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.ok_button.clicked.connect(self.agree_update)
         self.cancel_button.clicked.connect(self.close_window)
@@ -575,7 +575,7 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
 
         self.temp_folder = folder

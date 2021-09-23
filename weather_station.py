@@ -10,6 +10,11 @@ from ui.version import gui_version
 from functions.utils import create_option_file, create_logging_handlers
 from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
+from psycopg2 import __version__ as pg_version
+from requests import __version__ as rq_version
+if platform.system() == 'Linux':
+    from smbus2 import __version__ as bu_version
+    from bme280 import __version__ as bm_version
 
 
 def launch_station(gui_path, user_path):
@@ -35,6 +40,11 @@ def launch_station(gui_path, user_path):
     logging.info('gui - pyqt5 version: ' + QtCore.QT_VERSION_STR)
     logging.info('gui - matplotlib version: ' + mpl_version)
     logging.info('gui - markdown version: ' + mk_version)
+    logging.info('gui - psycopg2 version: ' + pg_version)
+    logging.info('gui - requests version: ' + rq_version)
+    if platform.system() == 'Linux':
+        logging.info('gui - smbus2 version: ' + bu_version)
+        logging.info('gui - bme280 version: ' + bm_version)
     ui = MainWindow(gui_path, user_path, config_dict)
     ui.show()
     # splash.finish(ui)
