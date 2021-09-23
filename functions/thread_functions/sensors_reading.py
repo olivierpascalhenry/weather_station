@@ -101,7 +101,7 @@ class DataCollectingThread(QtCore.QThread):
     @staticmethod
     def collect_test_data(num, limit):
         random.seed()
-        none_num = random.randrange(1, 5, 1)
+        none_num = random.randrange(1, 7, 1)
         if none_num == 1:
             data = None
         else:
@@ -130,7 +130,7 @@ class DBDataDisplayThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - DBDataDisplayThread - run')
         time.sleep(self.display_rate / 2.)
 
-        q_temp_norm_in = 'SELECT int_tp_data FROM int_temp ORDER BY id DESC LIMIT 1'
+        q_temp_norm_in = 'SELECT int_tp_time, int_tp_data FROM int_temp ORDER BY id DESC LIMIT 1'
         q_temp_minmax_in = 'SELECT MIN (int_tp_data), MAX (int_tp_data) FROM int_temp'
         q_temp_norm_out = 'SELECT ext_tp_data FROM ext_temp ORDER BY id DESC LIMIT 1'
         q_temp_minmax_out = 'SELECT MIN (ext_tp_data), MAX (ext_tp_data) FROM ext_temp'
@@ -141,43 +141,45 @@ class DBDataDisplayThread(QtCore.QThread):
         while True:
             try:
                 temp_dict = {'temp_norm_in': None, 'temp_minmax_in': None, 'temp_norm_out': None,
-                             'temp_minmax_out': None, 'hum_norm_in': None, 'pres_norm_in': None}
+                             'temp_minmax_out': None, 'hum_norm_in': None, 'pres_norm_in': None, 'datetime': None}
                 try:
                     self.cursor.execute(q_temp_norm_in)
                     data = self.cursor.fetchone()
-                    temp_dict['temp_norm_in'] = data[0]
+                    temp_dict['temp_norm_in'] = data[1]
+                    temp_dict['datetime'] = data[0]
                 except psycopg2.ProgrammingError:
-                    temp_dict['temp_norm_in'] = -999
+                    temp_dict['temp_norm_in'] = None
+                    temp_dict['datetime'] = None
                 try:
                     self.cursor.execute(q_temp_minmax_in)
                     data = self.cursor.fetchone()
                     temp_dict['temp_minmax_in'] = data
                 except psycopg2.ProgrammingError:
-                    temp_dict['temp_minmax_in'] = -999
+                    temp_dict['temp_minmax_in'] = None
                 try:
                     self.cursor.execute(q_temp_norm_out)
                     data = self.cursor.fetchone()
                     temp_dict['temp_norm_out'] = data[0]
                 except psycopg2.ProgrammingError:
-                    temp_dict['temp_norm_out'] = -999
+                    temp_dict['temp_norm_out'] = None
                 try:
                     self.cursor.execute(q_temp_minmax_out)
                     data = self.cursor.fetchone()
                     temp_dict['temp_minmax_out'] = data
                 except psycopg2.ProgrammingError:
-                    temp_dict['temp_minmax_out'] = -999
+                    temp_dict['temp_minmax_out'] = None
                 try:
                     self.cursor.execute(q_hum_norm_in)
                     data = self.cursor.fetchone()
                     temp_dict['hum_norm_in'] = data[0]
                 except psycopg2.ProgrammingError:
-                    temp_dict['hum_norm_in'] = -999
+                    temp_dict['hum_norm_in'] = None
                 try:
                     self.cursor.execute(q_pres_norm_in)
                     data = self.cursor.fetchone()
                     temp_dict['pres_norm_int'] = data[0]
                 except psycopg2.ProgrammingError:
-                    temp_dict['pres_norm_int'] = -999
+                    temp_dict['pres_norm_int'] = None
                 self.db_data.emit(temp_dict)
             except Exception as e:
                 self.error.emit(['data display', e])
