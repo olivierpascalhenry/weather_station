@@ -77,7 +77,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fc_6h_bt_1 = []
         self.fc_6h_fr_1 = []
         self.fc_6h_nbr1 = 0
-
         self.warning_button.setObjectName('no_function')
         self.exit_button.clicked.connect(self.exit_menu)
         self.about_button.clicked.connect(self.about_weather_station)
@@ -91,7 +90,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.right_ts_button.clicked.connect(self.set_ts_stack_right)
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
-
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
 
@@ -106,7 +104,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.in_humidity_label_1.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_pressure_label_1.setGraphicsEffect(shadow_creation_function(1, 5))
-
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.setup_plot_area()
@@ -290,30 +287,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.start()
 
     def refresh_in_out_display(self, data_dict):
-        if data_dict['temp_norm_in'] is not None:
-            if data_dict['temp_norm_in'] == -999:
-                self.in_temperature_label.setText('No data')
-            else:
-                self.in_temperature_label.setText(str(data_dict['temp_norm_in']) + '°C')
-        if data_dict['temp_minmax_in'] is not None:
-            if data_dict['temp_minmax_in'][0] == -999:
-                data_min = 'No data / '
-            else:
-                data_min = str(data_dict['temp_minmax_in'][0]) + '°C / '
-            if data_dict['temp_minmax_in'][1] == -999:
-                data_max = 'No data'
-            else:
-                data_max = str(data_dict['temp_minmax_in'][1]) + '°C'
-            self.in_label_3.setText(data_min + data_max)
-        if data_dict['temp_norm_out'] is not None:
-            self.out_temperature_label.setText(str(data_dict['temp_norm_out']) + '°C')
-        if data_dict['temp_minmax_out'] is not None:
-            self.out_label_3.setText(str(data_dict['temp_minmax_out'][0]) + '°C / '
-                                     + str(data_dict['temp_minmax_out'][1]) + '°C')
-        if data_dict['hum_norm_in'] is not None:
-            self.in_humidity_label_1.setText('Humidité : ' + str(data_dict['hum_norm_in']) + ' %')
-        if data_dict['pres_norm_int'] is not None:
-            self.out_pressure_label_1.setText('Pression : ' + str(data_dict['pres_norm_int']) + ' hPa')
+        dt = data_dict['datetime']
+        if (datetime.datetime.now() - dt).total_seconds() > 10800:
+            in_temp = 'No data'
+            in_minmax_temp = 'No data / No data'
+            out_temp = 'No data'
+            out_minmax_temp = 'No data / No data'
+            humid = 'No data'
+            pres = 'No data'
+        else:
+            in_temp = 'No data'
+            in_minmax_temp = 'No data / No data'
+            out_temp = 'No data'
+            out_minmax_temp = 'No data / No data'
+            humid = 'No data'
+            pres = 'No data'
+            if data_dict['temp_norm_in'] is not None:
+                in_temp = str(data_dict['temp_norm_in']) + ' °C'
+            if data_dict['temp_minmax_in'] is not None:
+                in_minmax_temp = '{data_min} °C / {data_max} °C'.format(data_min=str(data_dict['temp_minmax_in'][0]),
+                                                                        data_max=str(data_dict['temp_minmax_in'][1]))
+            if data_dict['temp_norm_out'] is not None:
+                out_temp = str(data_dict['temp_norm_out']) + ' °C'
+            if data_dict['temp_minmax_out'] is not None:
+                out_minmax_temp = '{data_min} °C / {data_max} °C'.format(data_min=str(data_dict['temp_minmax_out'][0]),
+                                                                         data_max=str(data_dict['temp_minmax_out'][1]))
+            if data_dict['hum_norm_in'] is not None:
+                humid = str(data_dict['hum_norm_in']) + ' %'
+            if data_dict['pres_norm_int'] is not None:
+                pres = str(data_dict['pres_norm_int']) + ' hPa'
+
+        self.in_temperature_label.setText('{in_temp}'.format(in_temp=in_temp))
+        self.in_label_3.setText('{in_minmax_temp}'.format(in_minmax_temp=in_minmax_temp))
+        self.out_temperature_label.setText('{out_temp}'.format(out_temp=out_temp))
+        self.out_label_3.setText('{out_minmax_temp}'.format(out_minmax_temp=out_minmax_temp))
+        self.in_humidity_label_1.setText('Humidité : {humid}'.format(humid=humid))
+        self.out_pressure_label_1.setText('Pression : {pres}'.format(pres=pres))
 
     def plot_time_series(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
@@ -473,13 +482,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     script_path = str(pathlib.Path(temp_folder).joinpath('unzip_update.py'))
                     update_path = str(pathlib.Path(temp_folder).joinpath(self.update_url['file']))
                     install_path = str(pathlib.Path(self.gui_path))
-
                     command = 'python3 {script_path} {update_path} {install_path}'.format(script_path=script_path,
                                                                                           update_path=update_path,
                                                                                           install_path=install_path)
-
-                    # print(command)
-
                     os.system('lxterminal -e ' + command)
                     time.sleep(1.5)
                     self.close()
