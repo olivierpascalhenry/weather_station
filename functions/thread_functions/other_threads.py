@@ -4,6 +4,7 @@ import time
 import psycopg2
 import requests
 import pathlib
+import socket
 from distutils.version import LooseVersion
 from functions.utils import set_size
 from PyQt5 import QtCore
@@ -128,3 +129,25 @@ class DownloadFile(QtCore.QThread):
     def stop(self):
         logging.debug('gui - other_threads.py - DownloadFile - stop')
         self.terminate()
+
+
+class CheckInternetConnexion(QtCore.QThread):
+    connexion_alive = QtCore.pyqtSignal()
+    no_connexion = QtCore.pyqtSignal()
+
+    def __init__(self):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - CheckInternetConnexion - __init__')
+        self.ip_address = '1.1.1.1'
+
+    def run(self):
+        try:
+            socket.create_connection((self.ip_address, 53))
+            self.connexion_alive.emit()
+        except OSError:
+            self.no_connexion.emit()
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - DownloadFile - stop')
+        self.terminate()
+
