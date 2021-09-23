@@ -12,11 +12,10 @@ import psycopg2
 import requests
 import tempfile
 import shutil
-from numpy import nan
+import time
+import numpy as np
 from ui.version import gui_version, python_version, pyqt5_version
 from PyQt5 import QtWidgets, QtCore, QtGui
-import matplotlib
-matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
@@ -47,13 +46,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
-
-        self.warning_button.setObjectName('no_function')
-
-        if platform.system() == 'Linux':
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
@@ -82,8 +77,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fc_6h_bt_1 = []
         self.fc_6h_fr_1 = []
         self.fc_6h_nbr1 = 0
-        self.check_update()
-        self.database_connection()
+
+        self.warning_button.setObjectName('no_function')
         self.exit_button.clicked.connect(self.exit_menu)
         self.about_button.clicked.connect(self.about_weather_station)
         self.option_button.clicked.connect(self.open_options)
@@ -116,13 +111,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.setup_plot_area()
         self.set_time_date()
-
+        self.check_update()
+        self.database_connection()
         self.launch_clean_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
         self.launch_fc_request_thread()
 
     def set_stack_widget_page(self, idx):
+        logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
@@ -135,30 +132,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_fc_6h()
 
     def set_ts_stack_left(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
         idx = self.time_series_stack.currentIndex()
         if idx != 0:
             self.time_series_stack.setCurrentIndex(idx - 1)
             self.set_ts_stack_icon()
 
     def set_ts_stack_right(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_right')
         idx = self.time_series_stack.currentIndex()
         if idx != 1:
             self.time_series_stack.setCurrentIndex(idx + 1)
             self.set_ts_stack_icon()
 
     def set_fc_stack_left(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_left')
         idx = self.forecast_1h_stack.currentIndex()
         if idx != 0:
             self.forecast_1h_stack.setCurrentIndex(idx - 1)
             self.set_fc_stack_icon()
 
     def set_fc_stack_right(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_right')
         idx = self.forecast_1h_stack.currentIndex()
         if idx != 1:
             self.forecast_1h_stack.setCurrentIndex(idx + 1)
             self.set_fc_stack_icon()
 
     def set_ts_stack_icon(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
         idx = self.time_series_stack.currentIndex() + 1
         button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*'))
         active_icon = QtGui.QIcon()
@@ -174,6 +176,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 button.setIcon(inactive_icon)
 
     def set_fc_stack_icon(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_icon')
         idx = self.forecast_1h_stack.currentIndex() + 1
         button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*'))
         active_icon = QtGui.QIcon()
@@ -189,6 +192,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 button.setIcon(inactive_icon)
 
     def set_time_date(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.show_time_date)
         timer.start(1000)
@@ -208,7 +212,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.date_label.setText(date_string)
 
     def setup_plot_area(self):
-        logging.debug('gui - plot_window_functions.py - PlotWindow - setup_plot_area')
+        logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
         color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
         self.figure_in = plt.figure(facecolor='#E2F0D9')
         self.canvas_in = FigureCanvas(self.figure_in)
@@ -223,7 +227,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_in.tick_params(axis='y', labelcolor=color_1)
         self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
         self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
-        self.figure_in.subplots_adjust(left=0.07, right=0.92, bottom=0.15, top=0.90)
+        self.figure_in.subplots_adjust(left=0.08, right=0.92, bottom=0.15, top=0.90)
         self.figure_out = plt.figure(facecolor='#FBE5D6')
         self.canvas_out = FigureCanvas(self.figure_out)
         self.plot_layout_3.addWidget(self.canvas_out)
@@ -236,31 +240,40 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.tick_params(axis='y', labelcolor=color_1)
         self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
         self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-        self.figure_out.subplots_adjust(left=0.07, right=0.92, bottom=0.15, top=0.90)
+        self.figure_out.subplots_adjust(left=0.08, right=0.92, bottom=0.15, top=0.90)
         self.plot_out.set_facecolor('None')
 
     def database_connection(self):
-        self.connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                          database='weather_station_db')
-        self.cursor = self.connector.cursor()
+        logging.debug('gui - mainwindow.py - MainWindow - database_connection')
+        try:
+            self.connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
+                                              database='weather_station_db')
+            self.cursor = self.connector.cursor()
+        except:
+            logging.exception('gui - mainwindow.py - MainWindow - database_connection - ERROR: impossible to connect '
+                              'to the database')
 
     def launch_clean_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
         self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
+        logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
         self.collect_sensors_data_thread = DataCollectingThread(self.connector, self.cursor, self.config_dict)
         self.collect_sensors_data_thread.error.connect(self.log_thread_error)
         self.collect_sensors_data_thread.start()
 
     def display_sensors_data(self):
+        logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
         self.display_sensors_data_thread = DBDataDisplayThread(self.cursor, self.config_dict)
         self.display_sensors_data_thread.db_data.connect(self.refresh_in_out_display)
         self.display_sensors_data_thread.error.connect(self.log_thread_error)
         self.display_sensors_data_thread.start()
 
     def launch_fc_request_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
         if self.place_object is not None:
             self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
             self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
@@ -303,6 +316,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_pressure_label_1.setText('Pression : ' + str(data_dict['pres_norm_int']) + ' hPa')
 
     def plot_time_series(self):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
         try:
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
             hours_list = mpl_hour_list()
@@ -320,6 +334,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.cursor.execute("select int_ps_time, int_ps_data from int_pres where "
                                 "int_ps_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+
             self.plot_in.clear()
             self.plot_in_2.clear()
             self.plot_out.clear()
@@ -333,23 +348,56 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
             self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
             self.plot_in.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
-            self.plot_in.set_ylim(min(temp_in_y) - 5, max(temp_in_y) + 5)
+
+            if np.min(temp_in_y) < 10:
+                y_min = np.min(temp_in_y) - 5
+            else:
+                y_min = 10
+            if np.max(temp_in_y) > 30:
+                y_max = np.max(temp_in_y) + 5
+            else:
+                y_max = 30
+
+            self.plot_in.set_ylim(y_min, y_max)
             self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
             self.plot_in_2.set_ylim(0, 100)
             self.plot_in.set_xlim(limit, now)
             self.plot_in.set_xticks(hours_list)
             self.plot_in.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
             self.plot_out.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
-            self.plot_out.set_ylim(min(temp_out_y) - 5, max(temp_out_y) + 5)
+
+            if np.min(temp_out_y) < 0:
+                y_min = np.min(temp_out_y) - 5
+            else:
+                y_min = 0
+            if np.max(temp_out_y) > 30:
+                y_max = np.max(temp_out_y) + 5
+            else:
+                y_max = 30
+
+            self.plot_out.set_ylim(y_min, y_max)
             self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
-            self.plot_out_2.set_ylim(min(pres_in_y) - 20, max(pres_in_y) + 20)
+
+            if np.min(pres_in_y) < 990:
+                y_min = np.min(pres_in_y) - 10
+            else:
+                y_min = 990
+            if np.max(pres_in_y) > 1030:
+                y_max = np.max(pres_in_y) + 10
+            else:
+                y_max = 1030
+
+            self.plot_out_2.set_ylim(y_min, y_max)
             self.plot_out.set_xlim(limit, now)
             self.plot_out.set_xticks(hours_list)
             self.plot_out.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.canvas_in.draw()
+            self.canvas_out.draw()
         except Exception as e:
             self.log_thread_error(['time series', e])
 
     def parse_forecast_data(self, fc_data):
+        logging.debug('gui - mainwindow.py - MainWindow - parse_forecast_data')
         if fc_data:
             self.mf_forecast_data = fc_data
             if fc_data['warning']:
@@ -357,6 +405,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
 
     def display_fc_1h(self):
+        logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
         if self.mf_forecast_data:
             clean_1h_forecast_widgets(self)
             lim = 0
@@ -376,6 +425,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 lim += 1
 
     def display_fc_6h(self):
+        logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
         if self.mf_forecast_data:
             clean_6h_forecast_widgets(self)
             for i in [0, 4, 8, 12, 16]:
@@ -392,12 +442,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout)
 
     def display_1h_forecast_details(self, full_dt):
+        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.mf_forecast_data['hourly'][full_dt]
         details_window = My1hFCDetails(forecast, self)
         details_window.setGeometry(282, 110, 480, 380)
         details_window.exec_()
 
     def display_6h_forecast_details(self, dt_list):
+        logging.debug('gui - mainwindow.py - MainWindow - display_6h_forecast_details')
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
@@ -406,6 +458,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         details_window.exec_()
 
     def warning_update_dispatch(self):
+        logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
         if self.warning_button.objectName() == 'update_function':
             update_window = MyWarningUpdate(self)
             update_window.setGeometry(182, 180, 660, 240)
@@ -425,11 +478,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                                                           update_path=update_path,
                                                                                           install_path=install_path)
 
-                    print(command)
+                    # print(command)
 
-                    # os.system('x-terminal-emulator -e ' + command)
-                    # time.sleep(1.5)
-                    # self.close()
+                    os.system('lxterminal -e ' + command)
+                    time.sleep(1.5)
+                    self.close()
 
         elif self.warning_button.objectName() == 'warning_function':
             warning_window = MyWarning(self.mf_forecast_data['warning'], self)
@@ -437,7 +490,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             warning_window.exec_()
 
     def open_options(self):
-        logging.debug('gui - mainwindow.py - MainWindow - show_options')
+        logging.debug('gui - mainwindow.py - MainWindow - open_options')
         config_string = io.StringIO()
         self.config_dict.write(config_string)
         config_string.seek(0)
@@ -465,6 +518,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         about_window.exec_()
 
     def display_gui_update_button(self, url_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - display_gui_update_button')
         if url_dict:
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':
@@ -477,6 +531,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                           'ERROR: {origin} | {error}'.format(origin=e_list[0], error=str(e_list[1])))
 
     def exit_menu(self):
+        logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
         if platform.system() == 'Windows':
             self.close()
         else:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import psutil
 import tarfile
 import sys
 import time
@@ -34,11 +35,12 @@ logging.info('WEATHER STATION update is starting ...')
 logging.info('********************************************')
 
 zip_file = sys.argv[1]
-dest_folder = sys.argv[2]
-tmp_folder = str(pathlib.Path(tempfile.gettempdir()).joinpath('weather_station'))
+dest_folder = pathlib.Path(sys.argv[2])
+tmp_folder = pathlib.Path(tempfile.gettempdir()).joinpath('weather_station')
+success = True
 logging.info('zip file: ' + zip_file)
-logging.info('destination folder: ' + dest_folder)
-logging.info('temporary folder: ' + tmp_folder)
+logging.info('destination folder: ' + str(dest_folder))
+logging.info('temporary folder: ' + str(tmp_folder))
 
 print('')
 print('--------------------------------------------------------------------')
@@ -47,52 +49,86 @@ print('------ Do not close the terminal until the end of the process ------')
 print('--------------------------------------------------------------------')
 print('')
 print('File to unzip:\t\t' + zip_file)
-print('Destination folder:\t' + dest_folder)
+print('Destination folder:\t' + str(dest_folder))
 print('')
 print('WEATHER STATION is closing, waiting...')
-time.sleep(3)
-print('')
-print('Uncompressing update...')
-logging.info('uncompressing starting...')
 
-try:
-    tar = tarfile.open(zip_file, "r:gz")
-    tar.extractall(path=tempfile.gettempdir())
-    tar.close()
-    logging.info('uncompressing finished...')
-except Exception:
-    logging.exception('an exception occured during uncompressing')
 
-print('')
-print('Installing update...')
-logging.info('installing update...')
+while True:
+    running = False
+    retry = 0
+    error = False
+    for proc in psutil.process_iter():
+        if proc.name().lower() == 'weather_station':
+            running = True
+            logging.info('weather_station still running...')
 
-try:
-    files = os.listdir(tmp_folder)
-    for f in files:
-        logging.info('---> ' + tmp_folder + f)
-        if os.path.isdir(tmp_folder + f):
-            distutils.dir_util.copy_tree(tmp_folder + f, dest_folder + f)
-        else:
-            shutil.move(tmp_folder + f, dest_folder + f)
-    logging.info('installation finished...')
-except Exception:
-    logging.exception('an exception occured during installation')
-    
-print('')
-print('Cleaning...')
-logging.info('cleaning...')
+    if running:
+        time.sleep(0.25)
+        retry += 1
+        if retry > 20:
+            error = True
+            break
+    else:
+        break
 
-try:
-    shutil.rmtree(tmp_folder)
-    # os.remove(zip_file)
-    logging.info('cleaning finished...')
-except Exception:
-    logging.exception('an exception occurred during cleaning')
+if error:
+    logging.info('weather_station still running, time out, an error occurred')
+    print('')
+    print('An error occured and WEATHER STATION couldn\'t be closed. Please check if WEATHER STATION is still '
+          'running and start the update procedure again. If the update process fails again, contact the developer.')
+    time.sleep(15)
+else:
+    logging.info('weather_station has been closed')
+    print('WEATHER STATION closed')
+    print('')
+    print('Uncompressing update...')
+    logging.info('uncompressing starting...')
 
-print('')
-print('End of the process...')
-logging.info('end of the process...')
-print('Terminal will close in 5 seconds')
-time.sleep(5)
-logging.info('terminal closing...')
+    try:
+        tar = tarfile.open(zip_file, "r:gz")
+        tar.extractall(path=tempfile.gettempdir())
+        tar.close()
+        logging.info('uncompressing finished...')
+    except Exception:
+        success = False
+        logging.exception('an exception occured during uncompressing')
+
+    print('')
+    print('Installing update...')
+    logging.info('installing update...')
+
+    try:
+        for f in tmp_folder.iterdir():
+            logging.info('---> ' + str(f))
+            if f.is_dir():
+                distutils.dir_util.copy_tree(str(f), str(dest_folder.joinpath(f.name)))
+            else:
+                shutil.move(f, dest_folder.joinpath(f.name))
+        logging.info('installation finished...')
+    except Exception:
+        success = False
+        logging.exception('an exception occured during installation')
+
+    print('')
+    print('Cleaning...')
+    logging.info('cleaning...')
+
+    try:
+        shutil.rmtree(tmp_folder)
+        logging.info('cleaning finished...')
+    except Exception:
+        success = False
+        logging.exception('an exception occurred during cleaning')
+
+    print('')
+    print('End of the process...')
+    print('')
+    if not success:
+        print('Something went wrong during the installation of the update. Please check the log file.')
+    logging.info('end of the process...')
+    print('Raspberry will reboot in 5 seconds')
+    time.sleep(5)
+    logging.info('raspberry rebooting...')
+
+    os.system('sudo shutdown -r now')

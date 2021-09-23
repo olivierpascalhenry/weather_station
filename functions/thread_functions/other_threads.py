@@ -53,8 +53,6 @@ class CheckUpdate(QtCore.QThread):
     def run(self):
         logging.debug('gui - other_threads.py - CheckUpdate - run')
         url = 'https://api.github.com/repos/olivierpascalhenry/weather_station/releases'
-        # username = 'olivierpascalhenry'
-        # token = '***REMOVED***'
         try:
             gh_session = requests.Session()
             gh_session.auth = (username, token)
