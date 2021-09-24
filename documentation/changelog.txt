@@ -18,6 +18,7 @@
 
   * ADDED:
     * new log messages have been added.
+    * a new weather icon has been added.
 
   * MODIFIED:
     * database has been modified to allow NULL data.
