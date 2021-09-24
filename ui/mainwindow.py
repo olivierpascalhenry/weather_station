@@ -283,6 +283,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
+        # add error windows with the possibility to retry
 
     def launch_fc_request_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')

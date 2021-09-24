@@ -123,7 +123,7 @@ def weather_to_pictogrammes(weather):
                          'Ensoleillé': 'ensoleille.svg', 'Risque d\'orages': 'risque_orages.svg',
                          'Nuit claire': 'nuit_claire.svg', 'Couvert': 'couvert.svg',
                          'Rares averses': 'rares_averses.svg', 'Pluies éparses': 'pluies_eparses.svg',
-                         'Risque de grèle': '.svg', 'Averses orageuses': 'averses_orageuses.svg',
+                         'Risque de grèle': 'risque_grele.svg', 'Averses orageuses': 'averses_orageuses.svg',
                          'Brume': 'brume.svg', 'Averses': 'averses.svg', 'Pluie': 'pluie.svg',
                          'Pluies orageuses': 'pluies_orageuses.svg', 'Orages': 'orages.svg',
                          'Ciel voilé': 'ciel_voile.svg'}
