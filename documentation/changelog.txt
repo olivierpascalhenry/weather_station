@@ -23,6 +23,7 @@
     * a new weather icon has been added.
     * a new window has been added to ask the user if he wants to retry a new connexion to internet in case of no
     connexion detection.
+    * a spinner has been added when heavy time series are ploted.
 
   * MODIFIED:
     * database has been modified to allow NULL data.

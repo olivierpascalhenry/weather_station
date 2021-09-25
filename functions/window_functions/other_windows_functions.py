@@ -21,9 +21,11 @@ from ui.Ui_warningwindow import Ui_warningWindow
 from ui.Ui_updatewindow import Ui_updateWindow
 from ui.Ui_downloadwindow import Ui_downloadWindow
 from ui.Ui_connexionwindow import Ui_connexionWindow
+from ui.Ui_waitwindow import Ui_waitWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function)
 from functions.thread_functions.other_threads import DownloadFile
+from functions.gui_widgets import QtWaitingSpinner
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
@@ -650,4 +652,38 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
 
     def close_window(self):
         logging.info('gui - other_windows_functions.py - MyConnexion - close_window')
+        self.close()
+
+
+class MyWait(QtWidgets.QDialog, Ui_waitWindow):
+    def __init__(self, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyWait - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        # self.setAttribute(QtCore.Qt.WA_NoSystemBackground, True)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
+        self.spinner = None
+        self.setup_spinner()
+        logging.info('gui - other_windows_functions.py - MyWait - ready')
+
+    def setup_spinner(self):
+        logging.debug('gui - other_windows_functions.py - MyWait - setup_spinner')
+        self.spinner = QtWaitingSpinner(self, centerOnParent=False)
+        self.verticalLayout.addWidget(self.spinner)
+        self.spinner.setRoundness(70.0)
+        self.spinner.setMinimumTrailOpacity(15.0)
+        self.spinner.setTrailFadePercentage(70.0)
+        self.spinner.setNumberOfLines(12)
+        self.spinner.setLineLength(10)
+        self.spinner.setLineWidth(5)
+        self.spinner.setInnerRadius(10)
+        self.spinner.setRevolutionsPerSecond(1)
+        self.spinner.setColor(QtGui.QColor(45, 45, 45))
+        self.spinner.start()
+
+    def closeWindow(self):
+        logging.debug('gui - other_windows_functions.py - MyWait - closeWindow')
         self.close()
