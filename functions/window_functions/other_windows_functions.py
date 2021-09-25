@@ -20,6 +20,7 @@ from ui.Ui_townsearchwindow import Ui_townsearchWindow
 from ui.Ui_warningwindow import Ui_warningWindow
 from ui.Ui_updatewindow import Ui_updateWindow
 from ui.Ui_downloadwindow import Ui_downloadWindow
+from ui.Ui_connexionwindow import Ui_connexionWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function)
 from functions.thread_functions.other_threads import DownloadFile
@@ -624,4 +625,29 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
 
     def close_window(self):
         logging.info('gui - other_windows_functions.py - MyDownload - close_window')
+        self.close()
+
+
+class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
+    def __init__(self, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyConnexion - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setupUi(self)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.retry = False
+        self.ok_button.clicked.connect(self.retry_connexion)
+        self.cancel_button.clicked.connect(self.close_window)
+
+    def retry_connexion(self):
+        self.retry = True
+        self.close_window()
+
+    def close_window(self):
+        logging.info('gui - other_windows_functions.py - MyConnexion - close_window')
         self.close()
