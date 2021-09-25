@@ -145,6 +145,7 @@ class CheckInternetConnexion(QtCore.QThread):
             socket.create_connection((self.ip_address, 53))
             self.connexion_alive.emit()
         except OSError:
+            time.sleep(3)
             self.no_connexion.emit()
 
     def stop(self):

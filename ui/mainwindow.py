@@ -23,7 +23,7 @@ from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
-                                                                My6hFCDetails, MyWarning, MyWarningUpdate)
+                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion)
 from functions.thread_functions.sensors_reading import DataCollectingThread, DBDataDisplayThread
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion
@@ -283,7 +283,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
-        # add error windows with the possibility to retry
+        connexion_window = MyConnexion(self)
+        connexion_window.setGeometry(197, 160, 630, 280)
+        connexion_window.exec_()
+        if connexion_window.retry:
+            self.check_internet_connection()
 
     def launch_fc_request_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
