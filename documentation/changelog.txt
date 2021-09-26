@@ -2,7 +2,6 @@
 
 * remove ID in database tables
 * add a thread to handle plots
-* add a window to ask to retry internet connection
 
   
 ### To fix list: ###
@@ -10,7 +9,7 @@
 * nothing.
 
 
-### September xx 2021, Release version 0.7.0 ###
+### September 26 2021, Release version 0.7.0 ###
 
   * FIXED:
     * an issue was fixed in the sensor reading thread about calibration parameters.
