@@ -30,6 +30,10 @@ def launch_station(gui_path, user_path):
     config_dict = configparser.ConfigParser()
     config_dict.read(str(pathlib.Path(user_path).joinpath('weather_station.ini')))
     create_logging_handlers(config_dict, 'weather_station.log', user_path)
+    if getattr(sys, 'frozen', False):
+        frozen = True
+    else:
+        frozen = False
     logging.info('**********************************')
     logging.info('WEATHER STATION ' + gui_version + ' is starting ...')
     logging.info('**********************************')
@@ -45,6 +49,8 @@ def launch_station(gui_path, user_path):
     if platform.system() == 'Linux':
         logging.info('gui - smbus2 version: ' + bu_version)
         logging.info('gui - bme280 version: ' + bm_version)
+    logging.info('gui - gui frozen ? ' + str(frozen))
+    logging.info('gui - main path: ' + gui_path)
     ui = MainWindow(gui_path, user_path, config_dict)
     ui.show()
     # splash.finish(ui)

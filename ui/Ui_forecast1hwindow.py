@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_forecast1hWindow(object):
-    def setupUi(self, forecast1hWindow):
+    def setupUi(self, forecast1hWindow, gui_path=''):
         forecast1hWindow.setObjectName("forecast1hWindow")
         forecast1hWindow.resize(480, 380)
         forecast1hWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -138,7 +138,7 @@ class Ui_forecast1hWindow(object):
 "}")
         self.ok_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon1)
         self.ok_button.setIconSize(QtCore.QSize(50, 50))
         self.ok_button.setObjectName("ok_button")

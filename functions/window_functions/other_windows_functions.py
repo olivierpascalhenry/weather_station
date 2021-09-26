@@ -29,19 +29,21 @@ from functions.gui_widgets import QtWaitingSpinner
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
-    def __init__(self, text, parent=None):
+    def __init__(self, text, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyAbout - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+            self.browser_1.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+            self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_1.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.browser_1.setHtml(text)
         scroll_1 = QtWidgets.QScroller.scroller(self.browser_1.viewport())
         scroll_1.grabGesture(self.browser_1.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
@@ -70,17 +72,19 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
-    def __init__(self, config_dict, user_path, parent=None):
+    def __init__(self, config_dict, user_path, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.config_dict = config_dict
         self.ow_splitter.setSizes([180, 520])
         self.user_path = user_path
@@ -182,12 +186,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_13.setText(code_postal)
             self.ow_label_14.setText(departement)
 
-    def button_info(self):
-        logging.debug('gui - other_windows_functions.py - MyOptions - button_info')
-        # text = self.information_text[self.sender().objectName()]
-        text = 'no information yet'
-        info_window = MyInfo(text)
-        info_window.exec_()
+    # def button_info(self):
+    #     logging.debug('gui - other_windows_functions.py - MyOptions - button_info')
+    #     text = self.information_text[self.sender().objectName()]
+    #     text = 'no information yet'
+    #     info_window = MyInfo(text)
+    #     info_window.exec_()
 
     def display_numpad(self):
         numpad_window = MyNumpad(self)
@@ -277,17 +281,20 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
 
 
 class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
-    def __init__(self, forecast, parent=None):
+    def __init__(self, forecast, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.gui_path = gui_path
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close_window)
         self.parse_forecast()
@@ -304,9 +311,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
             else:
                 wdir += 180
             idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-            icon = wind_dir_to_pictogramme(idx)
+            icon = wind_dir_to_pictogramme(idx, self.gui_path + '/')
         else:
-            icon = wind_dir_to_pictogramme(0)
+            icon = wind_dir_to_pictogramme(0, self.gui_path + '/')
         self.dir_ln.setIcon(icon)
         self.date_label.setText(date)
         self.hour_label.setText(str(dt.hour) + 'h')
@@ -315,7 +322,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.speed_ln.setText(str(wspeed) + ' km/h')
         self.cover_ln.setText(str(self.forecast['cover']) + ' %')
         self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
-        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather']))
+        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], self.gui_path + '/'))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - close_window')
@@ -323,20 +330,23 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
 
 
 class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
-    def __init__(self, forecast, parent=None):
+    def __init__(self, forecast, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.gui_path = gui_path
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close)
         self.parse_forecast()
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
 
     def parse_forecast(self):
         for i, fc in enumerate(self.forecast):
@@ -349,9 +359,9 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                 else:
                     wdir += 180
                 idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-                icon = wind_dir_to_pictogramme(idx)
+                icon = wind_dir_to_pictogramme(idx, self.gui_path + '/')
             else:
-                icon = wind_dir_to_pictogramme(0)
+                icon = wind_dir_to_pictogramme(0, self.gui_path + '/')
             if i == 0:
                 dt = fc[0]
                 date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
@@ -363,7 +373,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
             self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed) + ' km/h')
             self.findChild(QtWidgets.QToolButton, 'dir_ln_' + str(i + 1)).setIcon(icon)
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
-                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather']))
+                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], self.gui_path + '/'))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - close_window')
@@ -371,17 +381,19 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
 
 
 class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
-    def __init__(self, parent=None):
+    def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyNumpad - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
@@ -410,17 +422,19 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
 
 
 class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
-    def __init__(self, parent=None):
+    def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyKeyboard - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
@@ -459,17 +473,19 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
 
 
 class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
-    def __init__(self, place_list, parent=None):
+    def __init__(self, place_list, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         self.place_list = place_list
         self.radio_bt_list = []
@@ -490,7 +506,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
                 self.radio_bt_list[idx].setMinimumSize(QtCore.QSize(0, 40))
                 self.radio_bt_list[idx].setMaximumSize(QtCore.QSize(16777215, 40))
                 self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
-                self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton'))
+                self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton', self.gui_path + '/'))
                 self.radio_bt_list[idx].setObjectName('place_' + str(idx))
                 self.radio_bt_list[idx].setText(place.name + ', ' + place.postal_code + ', '
                                                 + code_to_departement()[place.admin2])
@@ -521,17 +537,19 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
 
 
 class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
-    def __init__(self, warning_object, parent=None):
+    def __init__(self, warning_object, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarning - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.ok_button.clicked.connect(self.close_window)
         self.text_edit.setText(warning_object)
 
@@ -541,17 +559,19 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
 
 
 class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
-    def __init__(self, parent=None):
+    def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarningUpdate - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.ok_button.clicked.connect(self.agree_update)
         self.cancel_button.clicked.connect(self.close_window)
         self.cancel = True
@@ -571,19 +591,16 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
     def __init__(self, url_dict, folder, parent=None):
         logging.debug('gui - other_windows_functions.py - MyDownload - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
-
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-
         self.temp_folder = folder
         self.url = url_dict['url']
-
         self.update_file = pathlib.Path(folder).joinpath(url_dict['file'])
         self.dw_button.clicked.connect(self.cancel_download)
         self.cancel = False
@@ -631,17 +648,19 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
 
 
 class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
-    def __init__(self, parent=None):
+    def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyConnexion - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setupUi(self)
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, gui_path)
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.retry = False
         self.ok_button.clicked.connect(self.retry_connexion)
         self.cancel_button.clicked.connect(self.close_window)

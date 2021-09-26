@@ -57,17 +57,17 @@ def create_logging_handlers(config_dict, filename, default_path):
         logging.error('gui - logging system - path from ini file not found, using default path')
 
 
-def icon_creation_function(icon_filename):
+def icon_creation_function(icon_filename, gui_path=''):
     logging.debug('gui - utils.py - icon_creation_function')
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap('icons/' + str(icon_filename)), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap(gui_path + 'icons/' + str(icon_filename)), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     return icon
 
 
-def pictogramme_creation_function(icon_filename):
+def pictogramme_creation_function(icon_filename, gui_path=''):
     logging.debug('gui - utils.py - icon_creation_function')
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap('graphic_materials/pictogrammes/' + str(icon_filename)),
+    icon.addPixmap(QtGui.QPixmap(gui_path + 'graphic_materials/pictogrammes/' + str(icon_filename)),
                    QtGui.QIcon.Normal, QtGui.QIcon.Off)
     return icon
 
@@ -95,9 +95,9 @@ def font_creation_function(font_style):
     return font
 
 
-def stylesheet_creation_function(stylesheet):
+def stylesheet_creation_function(stylesheet, gui_path=''):
     logging.debug('gui - utils.py - stylesheet_creation_function')
-    stylesheet = 'graphic_materials/style_sheets/' + stylesheet + '_stylesheet.dat'
+    stylesheet = gui_path + 'graphic_materials/style_sheets/' + stylesheet + '_stylesheet.dat'
     f = open(stylesheet, 'r')
     stylesheet_str = ''.join(f.readlines())
     f.close()
@@ -118,7 +118,7 @@ def days_months_dictionary():
     return date_dict
 
 
-def weather_to_pictogrammes(weather):
+def weather_to_pictogrammes(weather, gui_path=''):
     available_weather = {'Eclaircies': 'eclaircies.svg', 'Très nuageux': 'tres_nuageux.svg',
                          'Ensoleillé': 'ensoleille.svg', 'Risque d\'orages': 'risque_orages.svg',
                          'Nuit claire': 'nuit_claire.svg', 'Couvert': 'couvert.svg',
@@ -133,16 +133,16 @@ def weather_to_pictogrammes(weather):
         logging.warning('gui - utils.py - weather_to_pictogrammes - pictogramme is missing : ' + weather)
         pictogramme = ''
     if pictogramme:
-        link = 'graphic_materials/pictogrammes/' + pictogramme
+        link = gui_path + 'graphic_materials/pictogrammes/' + pictogramme
     else:
-        link = 'icons/none_icon.png'
+        link = gui_path + 'icons/none_icon.png'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(link), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     return icon
 
 
-def wind_dir_to_pictogramme(dir_idx):
-    link = 'graphic_materials/pictogrammes/wind_dir_images/wind_dir_arrow_' + str(dir_idx) + '.svg'
+def wind_dir_to_pictogramme(dir_idx, gui_path=''):
+    link = gui_path + 'graphic_materials/pictogrammes/wind_dir_images/wind_dir_arrow_' + str(dir_idx) + '.svg'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(link), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     return icon

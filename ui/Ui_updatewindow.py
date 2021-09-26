@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_updateWindow(object):
-    def setupUi(self, updateWindow):
+    def setupUi(self, updateWindow, gui_path=''):
         updateWindow.setObjectName("updateWindow")
         updateWindow.resize(660, 240)
         updateWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -83,7 +83,7 @@ class Ui_updateWindow(object):
 "}")
         self.ok_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon)
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
@@ -119,7 +119,7 @@ class Ui_updateWindow(object):
 "}")
         self.cancel_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.cancel_button.setIcon(icon1)
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")

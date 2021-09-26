@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_aboutlogWindow(object):
-    def setupUi(self, aboutlogWindow):
+    def setupUi(self, aboutlogWindow, gui_path=''):
         aboutlogWindow.setObjectName("aboutlogWindow")
         aboutlogWindow.setWindowModality(QtCore.Qt.WindowModal)
         aboutlogWindow.resize(700, 450)
@@ -26,7 +26,7 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         aboutlogWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         aboutlogWindow.setWindowIcon(icon)
         aboutlogWindow.setStyleSheet("QWidget#aboutlogWindow {\n"
 "   background-color: rgb(230,230,230);\n"
@@ -685,7 +685,7 @@ class Ui_aboutlogWindow(object):
 "}")
         self.button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.button.setIcon(icon1)
         self.button.setIconSize(QtCore.QSize(45, 45))
         self.button.setObjectName("button")
