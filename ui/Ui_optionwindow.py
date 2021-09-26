@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_optionWindow(object):
-    def setupUi(self, optionWindow):
+    def setupUi(self, optionWindow, gui_path=''):
         optionWindow.setObjectName("optionWindow")
         optionWindow.resize(700, 364)
         optionWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -25,7 +25,7 @@ class Ui_optionWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         optionWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/option_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/option_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         optionWindow.setWindowIcon(icon)
         optionWindow.setStyleSheet("QWidget#optionWindow {\n"
 "    background-color: rgb(230,230,230);\n"
@@ -516,7 +516,7 @@ class Ui_optionWindow(object):
 "}")
         self.ow_openButton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ow_openButton.setIcon(icon1)
         self.ow_openButton.setIconSize(QtCore.QSize(36, 36))
         self.ow_openButton.setAutoRaise(False)
@@ -937,7 +937,7 @@ class Ui_optionWindow(object):
 "}")
         self.ow_edit_bt_3.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(gui_path + "icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ow_edit_bt_3.setIcon(icon2)
         self.ow_edit_bt_3.setIconSize(QtCore.QSize(36, 36))
         self.ow_edit_bt_3.setObjectName("ow_edit_bt_3")
@@ -1612,7 +1612,7 @@ class Ui_optionWindow(object):
 "}")
         self.ow_ok_button.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(gui_path + "icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ow_ok_button.setIcon(icon3)
         self.ow_ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ow_ok_button.setObjectName("ow_ok_button")
@@ -1648,7 +1648,7 @@ class Ui_optionWindow(object):
 "}")
         self.ow_cancel_button.setText("")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap(gui_path + "icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ow_cancel_button.setIcon(icon4)
         self.ow_cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.ow_cancel_button.setObjectName("ow_cancel_button")

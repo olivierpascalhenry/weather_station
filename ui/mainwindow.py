@@ -46,10 +46,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cursor = None
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
-        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.setupUi(self, self.gui_path + '/')
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        else:
+            self.setupUi(self)
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
@@ -93,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
-        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path + '/'))
 
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
             f = open(self.user_path + '/place_object.dat', 'rb')
@@ -121,8 +123,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
-            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
-        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu', self.gui_path + '/'))
+        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path + '/'))
         if idx == 1:
             self.plot_time_series()
         elif idx == 2:
@@ -348,7 +350,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def plot_time_series(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
 
-        wait_window = MyWait(self)
+        wait_window = MyWait(self.page_2)
         wait_window.setGeometry(448, 210, 128, 90)
         wait_window.exec_()
 
@@ -438,7 +440,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.mf_forecast_data = fc_data
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
-                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
+                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg', self.gui_path + '/'))
 
     def display_fc_1h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
@@ -480,7 +482,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.mf_forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self)
+        details_window = My1hFCDetails(forecast, self.gui_path, self)
         details_window.setGeometry(282, 110, 480, 380)
         details_window.exec_()
 
@@ -489,7 +491,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self)
+        details_window = My6hFCDetails(forecast, self.gui_path, self)
         details_window.setGeometry(52, 110, 920, 380)
         details_window.exec_()
 
@@ -555,7 +557,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':
                 self.warning_button.setObjectName('update_function')
-                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg'))
+                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg', self.gui_path + '/'))
 
     @staticmethod
     def log_thread_error(e_list):
