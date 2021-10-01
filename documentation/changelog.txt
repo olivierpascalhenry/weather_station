@@ -9,6 +9,12 @@
 * nothing.
 
 
+### October xx 2021, Release version 0.7.1 ###
+
+  * FIXED:
+    * the gui path was missing in the connexion window.
+
+
 ### September 26 2021, Release version 0.7.0 ###
 
   * FIXED:
