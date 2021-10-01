@@ -124,7 +124,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu', self.gui_path + '/'))
-        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path + '/'))
+        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated',
+                                                                         self.gui_path + '/'))
         if idx == 1:
             self.plot_time_series()
         elif idx == 2:
@@ -286,7 +287,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
-        connexion_window = MyConnexion(self)
+        connexion_window = MyConnexion(self.gui_path, self)
         connexion_window.setGeometry(197, 160, 630, 280)
         connexion_window.exec_()
         if connexion_window.retry:
