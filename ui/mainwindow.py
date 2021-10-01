@@ -166,11 +166,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         idx = self.time_series_stack.currentIndex() + 1
         button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*'))
         active_icon = QtGui.QIcon()
-        active_icon.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        active_icon.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
+                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
+                              QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         inactive_icon = QtGui.QIcon()
-        inactive_icon.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        inactive_icon.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
+                                QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
+                                QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         for button in button_list:
             if idx == int(button.objectName()[-1:]):
                 button.setIcon(active_icon)
@@ -182,11 +186,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         idx = self.forecast_1h_stack.currentIndex() + 1
         button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*'))
         active_icon = QtGui.QIcon()
-        active_icon.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        active_icon.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
+                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
+                              QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         inactive_icon = QtGui.QIcon()
-        inactive_icon.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        inactive_icon.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
+                                QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
+                                QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         for button in button_list:
             if idx == int(button.objectName()[-1:]):
                 button.setIcon(active_icon)
@@ -447,8 +455,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.mf_forecast_data:
             clean_1h_forecast_widgets(self)
             lim = 0
-            for time, forecast in self.mf_forecast_data['hourly'].items():
-                hour = str(time.hour)
+            for t, forecast in self.mf_forecast_data['hourly'].items():
+                hour = str(t.hour)
                 weather = forecast['weather']
                 temp = str(round(forecast['temp']))
                 if 0 <= lim < 6:
@@ -459,7 +467,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     horizontal_layout = self.prev1h_layout_3
                 else:
                     horizontal_layout = self.prev1h_layout_4
-                add_1h_forecast_widget(self, hour, weather, temp, time, horizontal_layout)
+                add_1h_forecast_widget(self, hour, weather, temp, t, horizontal_layout)
                 lim += 1
 
     def display_fc_6h(self):

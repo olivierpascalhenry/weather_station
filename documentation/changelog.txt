@@ -9,10 +9,12 @@
 * nothing.
 
 
-### October xx 2021, Release version 0.7.1 ###
+### October 1 2021, Release version 0.7.1 ###
 
   * FIXED:
     * the gui path was missing in the connexion window.
+    * icons indicating forecast and time series pages were not loaded correctly.
+    * name 'time' has been replaced by 't' for a variable to avoid conflict with time module.
 
 
 ### September 26 2021, Release version 0.7.0 ###
