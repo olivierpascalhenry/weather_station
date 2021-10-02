@@ -474,6 +474,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
         if self.mf_forecast_data:
             clean_6h_forecast_widgets(self)
+
+            logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h - '
+                          + str(len(list(self.mf_forecast_data['quaterly'].keys()))))
+
             for i in [0, 4, 8, 12, 16]:
                 dt_list = list(self.mf_forecast_data['quaterly'].keys())[i: i + 4]
                 dt = dt_list[2]
