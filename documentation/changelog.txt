@@ -16,6 +16,7 @@
     * icons indicating forecast and time series pages were not loaded correctly.
     * name 'time' has been replaced by 't' for a variable to avoid conflict with time module.
     * fixed issues with icons in forecast windows.
+    * try to fix an issue with MF forecast.
 
 
 ### September 26 2021, Release version 0.7.0 ###
