@@ -284,6 +284,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
     def __init__(self, forecast, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+
+        print(gui_path)
+
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))

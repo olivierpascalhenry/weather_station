@@ -15,6 +15,7 @@
     * the gui path was missing in the connexion window.
     * icons indicating forecast and time series pages were not loaded correctly.
     * name 'time' has been replaced by 't' for a variable to avoid conflict with time module.
+    * fixed issues with icons in forecast windows.
 
 
 ### September 26 2021, Release version 0.7.0 ###
