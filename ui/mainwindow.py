@@ -510,7 +510,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
         if self.warning_button.objectName() == 'update_function':
-            update_window = MyWarningUpdate(self)
+            update_window = MyWarningUpdate(self.gui_path + '/', self)
             update_window.setGeometry(182, 180, 660, 240)
             update_window.exec_()
             if not update_window.cancel:
