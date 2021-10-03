@@ -462,6 +462,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if 0 <= lim < 6:
                     horizontal_layout = self.prev1h_layout_1
                 elif 6 <= lim < 12:
+                    self.right_fc_button.click()
                     horizontal_layout = self.prev1h_layout_2
                 elif 12 <= lim < 18:
                     horizontal_layout = self.prev1h_layout_3
@@ -469,6 +470,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     horizontal_layout = self.prev1h_layout_4
                 add_1h_forecast_widget(self, hour, weather, temp, t, horizontal_layout)
                 lim += 1
+            self.left_fc_button.click()
 
     def display_fc_6h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
@@ -494,7 +496,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.mf_forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.gui_path, self)
+        details_window = My1hFCDetails(forecast, self.gui_path + '/', self)
         details_window.setGeometry(282, 110, 480, 380)
         details_window.exec_()
 
@@ -503,7 +505,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self.gui_path, self)
+        details_window = My6hFCDetails(forecast, self.gui_path + '/', self)
         details_window.setGeometry(52, 110, 920, 380)
         details_window.exec_()
 

@@ -9,6 +9,12 @@
 * nothing.
 
 
+### October xx 2021, Release version 0.7.2 ###
+
+  * FIXED:
+    * try to fix an issue with MF forecast not fully displaying in 1h forecast section.
+
+
 ### October 2 2021, Release version 0.7.1 ###
 
   * FIXED:
