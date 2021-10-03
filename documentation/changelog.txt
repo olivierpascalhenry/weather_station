@@ -10,7 +10,7 @@
 * nothing.
 
 
-### October xx 2021, Release version 0.7.3 ###
+### October 3 2021, Release version 0.7.3 ###
 
   * FIXED:
     * fixed an issue with icons in option and about windows.
