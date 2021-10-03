@@ -2,11 +2,18 @@
 
 * remove ID in database tables
 * add a thread to handle plots
+* handle nan in plots and keep empty data
 
   
 ### To fix list: ###
 
 * nothing.
+
+
+### October xx 2021, Release version 0.7.3 ###
+
+  * FIXED:
+    * fixed an issue with icons in option and about windows.
 
 
 ### October 3 2021, Release version 0.7.2 ###

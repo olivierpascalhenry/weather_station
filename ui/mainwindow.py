@@ -544,7 +544,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_string.seek(0)
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
-        option_window = MyOptions(config_dict_copy, self.user_path, self)
+        option_window = MyOptions(config_dict_copy, self.user_path, self.gui_path + '/', self)
         option_window.setGeometry(162, 125, 700, 364)
         option_window.exec_()
         if not option_window.cancel:
@@ -561,7 +561,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def about_weather_station(self):
         logging.debug('gui - mainwindow.py - MainWindow - about_weather_station')
         text = '<p align=\"justify\">La Station Météo a été développée à partir de Python et de PyQt.</p>'
-        about_window = MyAbout(text, self)
+        about_window = MyAbout(text, self.gui_path + '/', self)
         about_window.setGeometry(162, 75, 700, 450)
         about_window.exec_()
 
