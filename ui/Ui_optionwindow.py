@@ -566,7 +566,8 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_combobox_1.setFont(font)
-        self.ow_combobox_1.setStyleSheet("QComboBox {\n"
+
+        stylesheet_str = ("QComboBox {\n"
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
 "    padding-left: 5px;\n"
@@ -597,7 +598,7 @@ class Ui_optionWindow(object):
 "}\n"
 "\n"
 "QComboBox::down-arrow {\n"
-"    image: url(icons/down_arrow_icon.svg); \n"
+f"    image: url(icons/down_arrow_icon.svg); \n"
 "    width: 16px;\n"
 "    height: 16px\n"
 "}\n"
@@ -631,6 +632,8 @@ class Ui_optionWindow(object):
 "    margin: 3px 5px 3px 5px;\n"
 "    color: rgb(45,45,45);\n"
 "}")
+        stylesheet_str = stylesheet_str.replace('icons', gui_path + 'icons')
+        self.ow_combobox_1.setStyleSheet(stylesheet_str)
         self.ow_combobox_1.setObjectName("ow_combobox_1")
         self.ow_combobox_1.addItem("")
         self.ow_combobox_1.addItem("")

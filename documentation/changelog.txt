@@ -17,6 +17,7 @@
     * fixed path for numpad and keyboard windows.
     * fixed path for icons in no connexion window.
     * fixed path issue in the place window.
+    * fixed path for stylesheet in option window.
 
 
 ### October 3 2021, Release version 0.7.3 ###
