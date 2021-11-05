@@ -7,7 +7,7 @@
   
 ### To fix list: ###
 
-* correct path for icon in the combobox of the option window.
+* nothing.
 
 
 ### November xx 2021, Release version 0.7.4 ###
@@ -16,7 +16,7 @@
     * path for changelog in compiled version has been fixed.
     * fixed path for numpad and keyboard windows.
     * fixed path for icons in no connexion window.
-    * fixed path issue in the place window.
+    * fixed path issues in the place window.
     * fixed path for stylesheet in option window.
 
 

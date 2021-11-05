@@ -509,7 +509,9 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
                 self.radio_bt_list[idx].setMinimumSize(QtCore.QSize(0, 40))
                 self.radio_bt_list[idx].setMaximumSize(QtCore.QSize(16777215, 40))
                 self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
-                self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton', self.gui_path + '/'))
+                stylesheet = stylesheet_creation_function('qradiobutton',
+                                                          self.gui_path + '/').replace('icons', gui_path + 'icons')
+                self.radio_bt_list[idx].setStyleSheet(stylesheet)
                 self.radio_bt_list[idx].setObjectName('place_' + str(idx))
                 self.radio_bt_list[idx].setText(place.name + ', ' + place.postal_code + ', '
                                                 + code_to_departement()[place.admin2])
