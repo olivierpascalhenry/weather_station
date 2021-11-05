@@ -18,6 +18,7 @@
     * fixed path for icons in no connexion window.
     * fixed path issues in the place window.
     * fixed path for stylesheet in option window.
+    * fixed path for stylesheet in aboutlog window.
 
 
 ### October 3 2021, Release version 0.7.3 ###

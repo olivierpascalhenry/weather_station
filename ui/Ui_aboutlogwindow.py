@@ -28,7 +28,8 @@ class Ui_aboutlogWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(gui_path + "icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         aboutlogWindow.setWindowIcon(icon)
-        aboutlogWindow.setStyleSheet("QWidget#aboutlogWindow {\n"
+
+        stylesheet = ("QWidget#aboutlogWindow {\n"
 "   background-color: rgb(230,230,230);\n"
 "   border: 1px solid rgb(75,75,75);\n"
 "}\n"
@@ -196,6 +197,8 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
+
+        aboutlogWindow.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.gridLayout = QtWidgets.QGridLayout(aboutlogWindow)
         self.gridLayout.setObjectName("gridLayout")
         self.splitter = QtWidgets.QSplitter(aboutlogWindow)
@@ -260,7 +263,8 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_1.setFont(font)
         self.browser_1.setAcceptDrops(False)
-        self.browser_1.setStyleSheet("QTextBrowser {\n"
+
+        stylesheet = ("QTextBrowser {\n"
 "    border-radius: 3px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
 "    color: rgb(45,45,45);\n"
@@ -429,6 +433,8 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
+
+        self.browser_1.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.browser_1.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.browser_1.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.browser_1.setObjectName("browser_1")
@@ -478,7 +484,8 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_2.setFont(font)
         self.browser_2.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
-        self.browser_2.setStyleSheet("QTextBrowser {\n"
+
+        stylesheet = ("QTextBrowser {\n"
 "    border-radius: 3px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
 "    color: rgb(45,45,45);\n"
@@ -647,6 +654,8 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
+
+        self.browser_2.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.browser_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.browser_2.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.browser_2.setObjectName("browser_2")

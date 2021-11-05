@@ -29,7 +29,8 @@ class Ui_townsearchWindow(object):
         self.gridLayout_2 = QtWidgets.QGridLayout(townsearchWindow)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scroll_area = QtWidgets.QScrollArea(townsearchWindow)
-        self.scroll_area.setStyleSheet("QScrollArea { background: transparent; }\n"
+
+        stylesheet = ("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
 "\n"
@@ -192,6 +193,8 @@ class Ui_townsearchWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
+
+        self.scroll_area.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.scroll_area.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scroll_area.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.scroll_area.setWidgetResizable(True)
