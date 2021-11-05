@@ -11,7 +11,7 @@
 * nothing.
 
 
-### November xx 2021, Release version 0.7.4 ###
+### November 5 2021, Release version 0.7.4 ###
 
   * FIXED:
     * path for changelog in compiled version has been fixed.
