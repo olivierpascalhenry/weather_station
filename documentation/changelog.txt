@@ -7,13 +7,14 @@
   
 ### To fix list: ###
 
-* in about window, the path of the changelog is relative and can't work once compiled.
+* issues when trying to open keyboards in option window.
 
 
-### October 3 2021, Release version 0.7.4 ###
+### November xx 2021, Release version 0.7.4 ###
 
   * FIXED:
     * path for changelog in compiled version has been fixed.
+    * fixed path for numpad and keyboard windows.
 
 
 ### October 3 2021, Release version 0.7.3 ###
