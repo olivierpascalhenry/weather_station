@@ -168,7 +168,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         place, ville, code_postal, departement = None, None, None, None
         list_places = MeteoFranceClient().search_places(str(self.ow_line_4.text()))
         if len(list_places) > 1:
-            place_search = MyTown(list_places, None)
+            place_search = MyTown(list_places, self.gui_path, None)
             place_search.setGeometry(260, 157, 504, 286)
             place_search.exec_()
             if not place_search.cancel:
