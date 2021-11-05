@@ -81,6 +81,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         else:
             self.setupUi(self)
+        self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -195,7 +196,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     #     info_window.exec_()
 
     def display_numpad(self):
-        numpad_window = MyNumpad(self)
+        numpad_window = MyNumpad(self.gui_path, self)
         numpad_window.setGeometry(227, 26, 246, 298)
         numpad_window.exec_()
         if not numpad_window.cancel:
@@ -209,7 +210,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ow_line_7.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
-        keyboard_window = MyKeyboard(self)
+        keyboard_window = MyKeyboard(self.gui_path, self)
         keyboard_window.setGeometry(56, 11, 588, 328)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
