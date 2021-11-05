@@ -39,6 +39,7 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
             self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         else:
             self.setupUi(self)
+        self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -63,7 +64,7 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         logging.info('gui - other_windows_functions.py - MyAbout - ready')
 
     def read_markdown_file(self):
-        changelog = open('documentation/changelog.txt').read()
+        changelog = open(pathlib.Path(self.gui_path).joinpath('documentation').joinpath('changelog.txt')).read()
         self.browser_2.setHtml(markdown.markdown(changelog))
 
     def close_window(self):

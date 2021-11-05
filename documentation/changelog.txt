@@ -7,7 +7,13 @@
   
 ### To fix list: ###
 
-* nothing.
+* in about window, the path of the changelog is relative and can't work once compiled.
+
+
+### October 3 2021, Release version 0.7.4 ###
+
+  * FIXED:
+    * path for changelog in compiled version has been fixed.
 
 
 ### October 3 2021, Release version 0.7.3 ###
