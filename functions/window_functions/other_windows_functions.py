@@ -484,6 +484,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         else:
             self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.gui_path = gui_path
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
