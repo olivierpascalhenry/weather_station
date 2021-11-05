@@ -15,6 +15,7 @@
   * FIXED:
     * path for changelog in compiled version has been fixed.
     * fixed path for numpad and keyboard windows.
+    * fixed path for icons in no connexion window.
 
 
 ### October 3 2021, Release version 0.7.3 ###
