@@ -3,6 +3,7 @@
 * remove ID in database tables
 * add a thread to handle plots
 * handle nan in plots and keep empty data
+* find a way to handle gui_path and stylesheet for all windows without modifying it.
 
   
 ### To fix list: ###
