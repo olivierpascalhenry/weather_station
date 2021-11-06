@@ -126,7 +126,7 @@ def weather_to_pictogrammes(weather, gui_path=''):
                          'Risque de grèle': 'risque_grele.svg', 'Averses orageuses': 'averses_orageuses.svg',
                          'Brume': 'brume.svg', 'Averses': 'averses.svg', 'Pluie': 'pluie.svg',
                          'Pluies orageuses': 'pluies_orageuses.svg', 'Orages': 'orages.svg',
-                         'Ciel voilé': 'ciel_voile.svg'}
+                         'Ciel voilé': 'ciel_voile.svg', 'Bancs de Brouillard': 'bancs_brouillard.svg'}
     try:
         pictogramme = available_weather[weather]
     except KeyError:

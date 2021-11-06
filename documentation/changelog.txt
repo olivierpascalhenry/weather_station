@@ -8,7 +8,13 @@
   
 ### To fix list: ###
 
-* nothing.
+* prepare Bancs de brouillard icon.
+
+
+### November xx 2021, Release version 0.7.5 ###
+
+  * ADDED:
+    * a new icon for fog has been added.
 
 
 ### November 5 2021, Release version 0.7.4 ###
