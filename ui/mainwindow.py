@@ -517,7 +517,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             update_window.exec_()
             if not update_window.cancel:
                 temp_folder = tempfile.gettempdir()
-                download_window = MyDownload(self.update_url, temp_folder)
+                download_window = MyDownload(self.update_url, temp_folder, self)
                 download_window.setGeometry(237, 217, 550, 166)
                 download_window.exec_()
                 if download_window.success:
@@ -558,7 +558,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def about_weather_station(self):
         logging.debug('gui - mainwindow.py - MainWindow - about_weather_station')
-        text = '<p align=\"justify\">La Station Météo a été développée à partir de Python et de PyQt.</p>'
+        text = (f'<p align=\"justify\">La Station Météo v{gui_version} a été développée à partir de Python et de '
+                f'PyQt.</p>')
         about_window = MyAbout(text, self.gui_path + '/', self)
         about_window.setGeometry(162, 75, 700, 450)
         about_window.exec_()
