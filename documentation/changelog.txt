@@ -8,7 +8,13 @@
   
 ### To fix list: ###
 
-* prepare Bancs de brouillard icon.
+* nothing.
+
+
+### November xx 2021, Release version 0.7.6 ###
+
+  * MODIFIED:
+    * change the log function to rotate log files.
 
 
 ### November 6 2021, Release version 0.7.5 ###

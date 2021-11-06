@@ -1,6 +1,7 @@
 import os
 import configparser
 import logging
+from logging.handlers import RotatingFileHandler
 import pathlib
 import bisect
 import datetime
@@ -44,9 +45,8 @@ def create_logging_handlers(config_dict, filename, default_path):
         using_default_path = True
         log_filename = str(pathlib.Path(default_path).joinpath(filename))
     logging.getLogger('').handlers = []
-    logging.basicConfig(filename=log_filename,
+    logging.basicConfig(handlers=[RotatingFileHandler(log_filename, maxBytes=2000000, backupCount=5)],
                         level=getattr(logging, config_dict.get('LOG', 'level')),
-                        filemode='w',
                         format='%(asctime)s : %(levelname)s : %(message)s')
     formatter = logging.Formatter('%(levelname)s : %(message)s')
     console = logging.StreamHandler()
