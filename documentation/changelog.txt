@@ -16,6 +16,9 @@
   * MODIFIED:
     * change the log function to rotate log files.
 
+  * FIXED:
+    * fixed the update system and the close function which couldn't close the weather station.
+
 
 ### November 6 2021, Release version 0.7.5 ###
 

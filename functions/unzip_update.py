@@ -24,7 +24,7 @@ sys.excepthook = handle_exception
 
 
 logging.getLogger('').handlers = []
-logging.basicConfig(filename='weather_station_updater_log.out',
+logging.basicConfig(filename='/tmp/weather_station_updater_log.out',
                     level=getattr(logging, 'INFO'),
                     filemode='w',
                     format='%(asctime)s : %(levelname)s : %(message)s')
@@ -38,6 +38,9 @@ zip_file = sys.argv[1]
 dest_folder = pathlib.Path(sys.argv[2])
 tmp_folder = pathlib.Path(tempfile.gettempdir()).joinpath('weather_station')
 success = True
+
+kill_proc = True
+
 logging.info('zip file: ' + zip_file)
 logging.info('destination folder: ' + str(dest_folder))
 logging.info('temporary folder: ' + str(tmp_folder))
@@ -62,6 +65,12 @@ while True:
         if proc.name().lower() == 'weather_station':
             running = True
             logging.info('weather_station still running...')
+
+            if kill_proc:
+                proc.kill()
+
+        else:
+            running = False
 
     if running:
         time.sleep(0.25)

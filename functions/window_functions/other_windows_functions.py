@@ -630,6 +630,7 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
         self.thread.start()
 
     def donwload_done(self):
+        logging.debug('gui - other_windows_functions.py - MyDownload - donwload_done')
         self.success = True
         self.close_window()
 

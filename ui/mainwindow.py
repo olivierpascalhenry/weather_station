@@ -517,7 +517,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             update_window.exec_()
             if not update_window.cancel:
                 temp_folder = tempfile.gettempdir()
-                download_window = MyDownload(self.update_url, temp_folder, self)
+                download_window = MyDownload(self.update_url, temp_folder)
                 download_window.setGeometry(237, 217, 550, 166)
                 download_window.exec_()
                 if download_window.success:
@@ -525,9 +525,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     script_path = str(pathlib.Path(temp_folder).joinpath('unzip_update.py'))
                     update_path = str(pathlib.Path(temp_folder).joinpath(self.update_url['file']))
                     install_path = str(pathlib.Path(self.gui_path))
-                    command = 'python3 {script_path} {update_path} {install_path}'.format(script_path=script_path,
-                                                                                          update_path=update_path,
-                                                                                          install_path=install_path)
+                    command = f'python3 {script_path} {update_path} {install_path}'
                     os.system('lxterminal -e ' + command)
                     time.sleep(1.5)
                     self.close()
