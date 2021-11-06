@@ -19,6 +19,9 @@
   * FIXED:
     * fixed the update system and the close function which couldn't close the weather station.
 
+  * ADDED:
+    * added the version number in the aboutlog window.
+
 
 ### November 6 2021, Release version 0.7.5 ###
 
