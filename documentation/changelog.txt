@@ -16,6 +16,9 @@
   * ADDED:
     * a new icon for fog has been added.
 
+  * FIXED:
+    * fixed path for update script.
+
 
 ### November 5 2021, Release version 0.7.4 ###
 
