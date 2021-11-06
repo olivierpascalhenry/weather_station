@@ -521,7 +521,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 download_window.setGeometry(237, 217, 550, 166)
                 download_window.exec_()
                 if download_window.success:
-                    shutil.copy('functions/unzip_update.py', temp_folder)
+                    shutil.copy(self.gui_path + '/functions/unzip_update.py', temp_folder)
                     script_path = str(pathlib.Path(temp_folder).joinpath('unzip_update.py'))
                     update_path = str(pathlib.Path(temp_folder).joinpath(self.update_url['file']))
                     install_path = str(pathlib.Path(self.gui_path))
