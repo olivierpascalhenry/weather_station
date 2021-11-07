@@ -24,6 +24,7 @@
     * modified display of in and out temperature, humidity and pressure.
     * improved the use of pathlib.Path in mainwindow.
     * added a function to correct icon in the connexion window.
+    * icons path has been improved in both forecast windows.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.

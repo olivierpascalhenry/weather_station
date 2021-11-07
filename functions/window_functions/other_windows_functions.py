@@ -287,11 +287,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
     def __init__(self, forecast, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -300,6 +298,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.gui_path = gui_path
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close_window)
+        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.parse_forecast()
 
     def parse_forecast(self):
@@ -314,9 +313,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
             else:
                 wdir += 180
             idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-            icon = wind_dir_to_pictogramme(idx, self.gui_path + '/')
+            icon = wind_dir_to_pictogramme(idx, self.gui_path)
         else:
-            icon = wind_dir_to_pictogramme(0, self.gui_path + '/')
+            icon = wind_dir_to_pictogramme(0, self.gui_path)
         self.dir_ln.setIcon(icon)
         self.date_label.setText(date)
         self.hour_label.setText(str(dt.hour) + 'h')
@@ -325,7 +324,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.speed_ln.setText(str(wspeed) + ' km/h')
         self.cover_ln.setText(str(self.forecast['cover']) + ' %')
         self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
-        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], self.gui_path + '/'))
+        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], self.gui_path))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - close_window')
@@ -336,11 +335,9 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
     def __init__(self, forecast, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -348,6 +345,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         self.setGraphicsEffect(shadow)
         self.gui_path = gui_path
         self.forecast = forecast
+        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.ok_button.clicked.connect(self.close)
         self.parse_forecast()
 
@@ -362,9 +360,9 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                 else:
                     wdir += 180
                 idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-                icon = wind_dir_to_pictogramme(idx, self.gui_path + '/')
+                icon = wind_dir_to_pictogramme(idx, self.gui_path)
             else:
-                icon = wind_dir_to_pictogramme(0, self.gui_path + '/')
+                icon = wind_dir_to_pictogramme(0, self.gui_path)
             if i == 0:
                 dt = fc[0]
                 date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
@@ -376,7 +374,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
             self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed) + ' km/h')
             self.findChild(QtWidgets.QToolButton, 'dir_ln_' + str(i + 1)).setIcon(icon)
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
-                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], self.gui_path + '/'))
+                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], self.gui_path))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - close_window')
