@@ -544,16 +544,17 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
     def __init__(self, warning_object, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarning - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', gui_path))
+        self.warning_button.setIcon(icon_creation_function('weather_warning_icon.png', gui_path))
+        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', gui_path))
         self.ok_button.clicked.connect(self.close_window)
         self.text_edit.setText(warning_object)
 

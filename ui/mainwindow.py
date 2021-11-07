@@ -501,7 +501,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     time.sleep(1.5)
                     self.close()
         elif self.warning_button.objectName() == 'warning_function':
-            warning_window = MyWarning(self.mf_forecast_data['warning'], self)
+            warning_window = MyWarning(self.mf_forecast_data['warning'], self.gui_path, self)
             warning_window.setGeometry(197, 175, 630, 350)
             warning_window.exec_()
 
