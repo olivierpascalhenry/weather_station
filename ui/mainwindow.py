@@ -95,13 +95,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
-
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
-            f = open(self.user_path + '/place_object.dat', 'rb')
+            f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
             self.place_object = pickle.load(f)
             self.old_place_object = self.place_object
             f.close()
-
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -270,7 +268,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
-        connexion_window = MyConnexion(self.gui_path + '/', self)
+        connexion_window = MyConnexion(self.gui_path, self)
         connexion_window.setGeometry(197, 160, 630, 280)
         connexion_window.exec_()
         if connexion_window.retry:

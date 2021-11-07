@@ -23,7 +23,8 @@ from ui.Ui_downloadwindow import Ui_downloadWindow
 from ui.Ui_connexionwindow import Ui_connexionWindow
 from ui.Ui_waitwindow import Ui_waitWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
-                             code_to_departement, stylesheet_creation_function, font_creation_function)
+                             code_to_departement, stylesheet_creation_function, font_creation_function,
+                             icon_creation_function)
 from functions.thread_functions.other_threads import DownloadFile
 from functions.gui_widgets import QtWaitingSpinner
 
@@ -657,19 +658,24 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
     def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyConnexion - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.gui_path = gui_path
         self.retry = False
         self.ok_button.clicked.connect(self.retry_connexion)
         self.cancel_button.clicked.connect(self.close_window)
+        self.set_window_icons()
+
+    def set_window_icons(self):
+        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
+        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
+        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
 
     def retry_connexion(self):
         self.retry = True
