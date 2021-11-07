@@ -13,14 +13,14 @@ def set_mainwindow_icons(self):
     self.time_series_bt.setIcon(icon_creation_function('time_series_icon.svg', self.gui_path + '/'))
     self.h1_prev_bt.setIcon(icon_creation_function('prev_1h_icon.svg', self.gui_path + '/'))
     self.h6_prev_bt.setIcon(icon_creation_function('prev_6h_icon.svg', self.gui_path + '/'))
-
     self.left_ts_button.setIcon(icon_creation_function('left_icon.svg', self.gui_path + '/'))
-
     self.ts_page_marker_1.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path + '/'))
-
     self.ts_page_marker_2.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path + '/'))
-
     self.right_ts_button.setIcon(icon_creation_function('right_icon.svg', self.gui_path + '/'))
+    self.left_fc_button.setIcon(icon_creation_function('left_icon.svg', self.gui_path + '/'))
+    self.fc_page_marker_1.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path + '/'))
+    self.fc_page_marker_2.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path + '/'))
+    self.right_fc_button.setIcon(icon_creation_function('right_icon.svg', self.gui_path + '/'))
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):
