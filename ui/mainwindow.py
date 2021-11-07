@@ -422,7 +422,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.mf_forecast_data = fc_data
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
-                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg', self.gui_path + '/'))
+                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg', self.gui_path))
 
     def display_fc_1h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
@@ -451,8 +451,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.mf_forecast_data:
             clean_6h_forecast_widgets(self)
 
-            logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h - '
-                          + str(len(list(self.mf_forecast_data['quaterly'].keys()))))
+            logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
+                          f'{len(self.mf_forecast_data["quaterly"])}')
 
             for i in [0, 4, 8, 12, 16]:
                 dt_list = list(self.mf_forecast_data['quaterly'].keys())[i: i + 4]
@@ -460,7 +460,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 weather = self.mf_forecast_data['quaterly'][dt]['weather']
                 temp_list = [self.mf_forecast_data['quaterly'][t]['temp'] for t in dt_list]
                 date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
-                temp = str(round(min(temp_list))) + '°C / ' + str(round(max(temp_list))) + '°C'
+                temp = f'{round(min(temp_list))}°C / {round(max(temp_list))}°C'
                 if i < 12:
                     horizontal_layout = self.prev6h_layout_1
                 else:
@@ -495,15 +495,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 download_window.setGeometry(237, 217, 550, 166)
                 download_window.exec_()
                 if download_window.success:
-                    shutil.copy(self.gui_path + '/functions/unzip_update.py', temp_folder)
-                    script_path = str(pathlib.Path(temp_folder).joinpath('unzip_update.py'))
-                    update_path = str(pathlib.Path(temp_folder).joinpath(self.update_url['file']))
-                    install_path = str(pathlib.Path(self.gui_path))
-                    command = f'python3 {script_path} {update_path} {install_path}'
-                    os.system('lxterminal -e ' + command)
+                    install_path = pathlib.Path(self.gui_path)
+                    shutil.copy(str(install_path.joinpath('/functions/unzip_update.py')), temp_folder)
+                    script_path = pathlib.Path(temp_folder).joinpath('unzip_update.py')
+                    update_path = pathlib.Path(temp_folder).joinpath(self.update_url['file'])
+                    os.system(f'lxterminal -e python3 {script_path} {update_path} {install_path}')
                     time.sleep(1.5)
                     self.close()
-
         elif self.warning_button.objectName() == 'warning_function':
             warning_window = MyWarning(self.mf_forecast_data['warning'], self)
             warning_window.setGeometry(197, 175, 630, 350)
@@ -521,12 +519,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         option_window.exec_()
         if not option_window.cancel:
             self.config_dict = option_window.config_dict
-            ini_file = open(str(pathlib.Path(self.user_path, 'weather_station.ini')), 'w')
+            ini_file = open(pathlib.Path(self.user_path).joinpath('weather_station.ini'), 'w')
             self.config_dict.write(ini_file)
             ini_file.close()
             if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
                 self.place_object = option_window.place_object
-                f = open(self.user_path + '/place_object.dat', 'wb')
+                f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'wb')
                 pickle.dump(self.place_object, f)
                 f.close()
 
@@ -544,12 +542,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':
                 self.warning_button.setObjectName('update_function')
-                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg', self.gui_path + '/'))
+                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg', self.gui_path))
 
     @staticmethod
     def log_thread_error(e_list):
-        logging.exception('gui - mainwindow.py - MainWindow - log_thread_error - '
-                          'ERROR: {origin} | {error}'.format(origin=e_list[0], error=str(e_list[1])))
+        logging.exception(f'gui - mainwindow.py - MainWindow - log_thread_error - '
+                          f'ERROR: {e_list[0]} | {str(e_list[1])}')
 
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
