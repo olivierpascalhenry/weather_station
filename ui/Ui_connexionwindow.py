@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_connexionWindow(object):
-    def setupUi(self, connexionWindow, gui_path=''):
+    def setupUi(self, connexionWindow):
         connexionWindow.setObjectName("connexionWindow")
         connexionWindow.resize(630, 280)
         connexionWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -23,7 +23,7 @@ class Ui_connexionWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         connexionWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/info_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/info_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         connexionWindow.setWindowIcon(icon)
         connexionWindow.setStyleSheet("QWidget#connexionWindow {\n"
 "    background-color: rgb(230,230,230);\n"
@@ -85,7 +85,7 @@ class Ui_connexionWindow(object):
 "}")
         self.ok_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon1)
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
@@ -121,7 +121,7 @@ class Ui_connexionWindow(object):
 "}")
         self.cancel_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(gui_path + "icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.cancel_button.setIcon(icon2)
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")

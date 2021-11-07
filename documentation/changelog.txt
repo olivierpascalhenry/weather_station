@@ -23,6 +23,7 @@
     * modified displayed date for better performance.
     * modified display of in and out temperature, humidity and pressure.
     * improved the use of pathlib.Path in mainwindow.
+    * added a function to correct icon in the connexion window.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.

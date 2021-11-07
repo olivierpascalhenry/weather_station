@@ -4,7 +4,6 @@ from functions.utils import (stylesheet_creation_function, weather_to_pictogramm
 
 
 def set_mainwindow_icons(self):
-    # icon_creation_function('option_icon.svg', self.gui_path + '/')
     self.exit_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
     self.separator.setIcon(icon_creation_function('separator_icon_2.png', self.gui_path))
     self.option_button.setIcon(icon_creation_function('option_icon.svg', self.gui_path))
