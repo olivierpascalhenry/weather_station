@@ -44,14 +44,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.old_place_object = None
         self.connector = None
         self.cursor = None
-        QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
-        QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
+        QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
+        QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            set_mainwindow_icons(self)
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-
+        set_mainwindow_icons(self)
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
