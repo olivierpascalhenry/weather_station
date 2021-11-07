@@ -40,19 +40,20 @@ class DataCollectingThread(QtCore.QThread):
             date_time = datetime.datetime.now().replace(microsecond=0)
             try:
                 ext_tp = self.collect_ext_temp()
-                int_tp, int_hd, int_ps = self.collect_int_temp_hum_pres()
-                self.add_data_to_db(date_time, int_tp, ext_tp, int_hd, int_ps)
+                int_tp, int_hd, int_ps, int_ps_msl = self.collect_int_temp_hum_pres()
+                self.add_data_to_db(date_time, int_tp, ext_tp, int_hd, int_ps, int_ps_msl)
                 time.sleep(self.sensors_rate)
             except Exception as e:
                 self.error.emit(['data collect', e])
-                self.add_data_to_db(date_time, None, None, None, None)
+                self.add_data_to_db(date_time, None, None, None, None, None)
 
-    def add_data_to_db(self, dt, int_tp, ext_tp, int_hd, int_ps):
+    def add_data_to_db(self, dt, int_tp, ext_tp, int_hd, int_ps, int_ps_msl):
         try:
             self.cursor.execute('insert into int_temp (int_tp_time, int_tp_data) values (%s, %s)', (dt, int_tp))
             self.cursor.execute('insert into ext_temp (ext_tp_time, ext_tp_data) values (%s, %s)', (dt, ext_tp))
             self.cursor.execute('insert into int_hum (int_hd_time, int_hd_data) values (%s, %s)', (dt, int_hd))
             self.cursor.execute('insert into int_pres (int_ps_time, int_ps_data) values (%s, %s)', (dt, int_ps))
+            self.cursor.execute('insert into int_pres_msl (int_ps_time, int_ps_data) values (%s, %s)', (dt, int_ps_msl))
             self.connector.commit()
         except (psycopg2.InterfaceError, psycopg2.OperationalError):
             pass
@@ -83,11 +84,12 @@ class DataCollectingThread(QtCore.QThread):
             hum = data.humidity
             pres = data.pressure
             if self.place_altitude is not None:
-                pres = pres + ((pres * 9.80665 * self.place_altitude) /
-                               (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-                pres = round(pres, 1)
+                pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
+                                   (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+                pres_msl = round(pres_msl, 1)
             else:
-                pres = None
+                pres_msl = None
+            pres = round(pres, 1)
             temp = round(temp, 1)
             hum = round(hum)
             if temp > 50:
@@ -96,7 +98,8 @@ class DataCollectingThread(QtCore.QThread):
             temp = self.collect_test_data(20., 5)
             hum = self.collect_test_data(65., 20)
             pres = self.collect_test_data(1013., 15)
-        return temp, hum, pres
+            pres_msl = self.collect_test_data(1013., 15)
+        return temp, hum, pres, pres_msl
 
     @staticmethod
     def collect_test_data(num, limit):
@@ -130,18 +133,20 @@ class DBDataDisplayThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - DBDataDisplayThread - run')
         time.sleep(self.display_rate / 2.)
 
-        q_temp_norm_in = 'SELECT int_tp_time, int_tp_data FROM int_temp ORDER BY id DESC LIMIT 1'
+        q_temp_norm_in = 'SELECT int_tp_time, int_tp_data FROM int_temp ORDER BY int_tp_time DESC LIMIT 1'
         q_temp_minmax_in = 'SELECT MIN (int_tp_data), MAX (int_tp_data) FROM int_temp'
-        q_temp_norm_out = 'SELECT ext_tp_data FROM ext_temp ORDER BY id DESC LIMIT 1'
+        q_temp_norm_out = 'SELECT ext_tp_data FROM ext_temp ORDER BY ext_tp_time DESC LIMIT 1'
         q_temp_minmax_out = 'SELECT MIN (ext_tp_data), MAX (ext_tp_data) FROM ext_temp'
-        q_hum_norm_in = 'SELECT int_hd_data FROM int_hum ORDER BY id DESC LIMIT 1'
+        q_hum_norm_in = 'SELECT int_hd_data FROM int_hum ORDER BY int_hd_time DESC LIMIT 1'
         # q_hum_minmax_in = 'SELECT MIN (int_hd_data), MAX (int_hd_data) FROM int_hum'
-        q_pres_norm_in = 'SELECT int_ps_data FROM int_pres ORDER BY id DESC LIMIT 1'
+        q_pres_norm_in = 'SELECT int_ps_data FROM int_pres ORDER BY int_ps_time DESC LIMIT 1'
+        q_presmsl_norm_in = 'SELECT int_ps_data FROM int_pres_msl ORDER BY int_ps_time DESC LIMIT 1'
 
         while True:
             try:
                 temp_dict = {'temp_norm_in': None, 'temp_minmax_in': None, 'temp_norm_out': None,
-                             'temp_minmax_out': None, 'hum_norm_in': None, 'pres_norm_in': None, 'datetime': None}
+                             'temp_minmax_out': None, 'hum_norm_in': None, 'pres_norm_in': None,
+                             'presmsl_norm_in': None, 'datetime': None}
                 try:
                     self.cursor.execute(q_temp_norm_in)
                     data = self.cursor.fetchone()
@@ -180,6 +185,12 @@ class DBDataDisplayThread(QtCore.QThread):
                     temp_dict['pres_norm_int'] = data[0]
                 except psycopg2.ProgrammingError:
                     temp_dict['pres_norm_int'] = None
+                try:
+                    self.cursor.execute(q_presmsl_norm_in)
+                    data = self.cursor.fetchone()
+                    temp_dict['presmsl_norm_int'] = data[0]
+                except psycopg2.ProgrammingError:
+                    temp_dict['presmsl_norm_int'] = None
                 self.db_data.emit(temp_dict)
             except Exception as e:
                 self.error.emit(['data display', e])

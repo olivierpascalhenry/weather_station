@@ -36,3 +36,6 @@ ALTER TABLE public.int_temp OWNER to weather_station;
 
 CREATE TABLE IF NOT EXISTS public.int_pres (int_ps_time timestamp without time zone NOT NULL, int_ps_data real, CONSTRAINT int_pres_pkey PRIMARY KEY (int_ps_time)) TABLESPACE pg_default;
 ALTER TABLE public.int_pres OWNER to weather_station;
+
+CREATE TABLE IF NOT EXISTS public.int_pres_msl (int_ps_time timestamp without time zone NOT NULL, int_ps_data real, CONSTRAINT int_pres_msl_pkey PRIMARY KEY (int_ps_time)) TABLESPACE pg_default;
+ALTER TABLE public.int_pres_msl OWNER to weather_station;

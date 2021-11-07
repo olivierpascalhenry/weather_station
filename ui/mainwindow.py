@@ -302,6 +302,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             out_minmax_temp = 'No data / No data'
             humid = 'No data'
             pres = 'No data'
+            presmsl = 'No data'
         else:
             in_temp = 'No data'
             in_minmax_temp = 'No data / No data'
@@ -309,27 +310,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             out_minmax_temp = 'No data / No data'
             humid = 'No data'
             pres = 'No data'
+            presmsl = 'No data'
             if data_dict['temp_norm_in'] is not None:
-                in_temp = str(data_dict['temp_norm_in']) + ' °C'
+                in_temp = f'{data_dict["temp_norm_in"]} °C'
             if data_dict['temp_minmax_in'] is not None:
-                in_minmax_temp = '{data_min} °C / {data_max} °C'.format(data_min=str(data_dict['temp_minmax_in'][0]),
-                                                                        data_max=str(data_dict['temp_minmax_in'][1]))
+                in_minmax_temp = f'{data_dict["temp_minmax_in"][0]} °C / {data_dict["temp_minmax_in"][1]} °C'
             if data_dict['temp_norm_out'] is not None:
-                out_temp = str(data_dict['temp_norm_out']) + ' °C'
+                out_temp = f'{data_dict["temp_norm_out"]} °C'
             if data_dict['temp_minmax_out'] is not None:
-                out_minmax_temp = '{data_min} °C / {data_max} °C'.format(data_min=str(data_dict['temp_minmax_out'][0]),
-                                                                         data_max=str(data_dict['temp_minmax_out'][1]))
+                out_minmax_temp = f'{data_dict["temp_minmax_out"][0]} °C / {data_dict["temp_minmax_out"][1]} °C'
             if data_dict['hum_norm_in'] is not None:
-                humid = str(data_dict['hum_norm_in']) + ' %'
+                humid = f'{round(data_dict["hum_norm_in"])} %'
             if data_dict['pres_norm_int'] is not None:
-                pres = str(data_dict['pres_norm_int']) + ' hPa'
+                pres = f'{round(data_dict["pres_norm_int"])} hPa'
+            if data_dict['presmsl_norm_int'] is not None:
+                presmsl = f'{round(data_dict["presmsl_norm_int"])} hPa'
 
-        self.in_temperature_label.setText('{in_temp}'.format(in_temp=in_temp))
-        self.in_label_3.setText('{in_minmax_temp}'.format(in_minmax_temp=in_minmax_temp))
-        self.out_temperature_label.setText('{out_temp}'.format(out_temp=out_temp))
-        self.out_label_3.setText('{out_minmax_temp}'.format(out_minmax_temp=out_minmax_temp))
-        self.in_humidity_label_1.setText('Humidité : {humid}'.format(humid=humid))
-        self.out_pressure_label_1.setText('Pression : {pres}'.format(pres=pres))
+        self.in_temperature_label.setText(f'{in_temp}')
+        self.in_label_3.setText(f'{in_minmax_temp}')
+        self.out_temperature_label.setText(f'{out_temp}')
+        self.out_label_3.setText(f'{out_minmax_temp}')
+        self.in_humidity_label_1.setText(f'Humidité : {humid}')
+        self.out_pressure_label_1.setText(f'Pression : {pres}\nPression MSL : {presmsl}')
 
     def plot_time_series(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
