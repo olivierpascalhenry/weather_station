@@ -22,6 +22,7 @@
     * modified set_ts_stack_icon and set_fc_stack_icon functions for better performance.
     * modified displayed date for better performance.
     * modified display of in and out temperature, humidity and pressure.
+    * improved the use of pathlib.Path in mainwindow.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.
