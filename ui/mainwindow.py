@@ -94,7 +94,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
-        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path + '/'))
+        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
 
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
             f = open(self.user_path + '/place_object.dat', 'rb')
@@ -122,9 +122,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
-            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu', self.gui_path + '/'))
-        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated',
-                                                                         self.gui_path + '/'))
+            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu', self.gui_path))
+        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
         if idx == 1:
             self.plot_time_series()
         elif idx == 2:
@@ -164,16 +163,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
         idx = self.time_series_stack.currentIndex() + 1
         button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*'))
-        active_icon = QtGui.QIcon()
-        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
-                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
-                              QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        inactive_icon = QtGui.QIcon()
-        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
-                                QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
-                                QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+
+        active_icon = icon_creation_function('filled_circle_icon.svg', self.gui_path)
+        inactive_icon = icon_creation_function('empty_circle_icon.svg', self.gui_path)
         for button in button_list:
             if idx == int(button.objectName()[-1:]):
                 button.setIcon(active_icon)
