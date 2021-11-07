@@ -162,35 +162,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def set_ts_stack_icon(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
         idx = self.time_series_stack.currentIndex() + 1
-        button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*'))
-
-        active_icon = icon_creation_function('filled_circle_icon.svg', self.gui_path)
-        inactive_icon = icon_creation_function('empty_circle_icon.svg', self.gui_path)
-        for button in button_list:
+        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*')):
             if idx == int(button.objectName()[-1:]):
-                button.setIcon(active_icon)
+                button.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path))
             else:
-                button.setIcon(inactive_icon)
+                button.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path))
 
     def set_fc_stack_icon(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_icon')
         idx = self.forecast_1h_stack.currentIndex() + 1
-        button_list = self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*'))
-        active_icon = QtGui.QIcon()
-        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
-                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        active_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/filled_circle_icon.svg"),
-                              QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        inactive_icon = QtGui.QIcon()
-        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
-                                QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        inactive_icon.addPixmap(QtGui.QPixmap(self.gui_path + "/icons/empty_circle_icon.svg"),
-                                QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        for button in button_list:
+        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*')):
             if idx == int(button.objectName()[-1:]):
-                button.setIcon(active_icon)
+                button.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path))
             else:
-                button.setIcon(inactive_icon)
+                button.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path))
 
     def set_time_date(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
