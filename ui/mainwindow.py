@@ -29,7 +29,7 @@ from functions.thread_functions.sensors_reading import DataCollectingThread, DBD
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
-                                     clean_6h_forecast_widgets)
+                                     clean_6h_forecast_widgets, set_mainwindow_icons)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -46,12 +46,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cursor = None
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont('fonts/SourceSansPro-SemiBold.ttf')
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, self.gui_path + '/')
+            set_mainwindow_icons(self)
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
+
         self.current_date = None
         self.figure_in = None
         self.figure_out = None

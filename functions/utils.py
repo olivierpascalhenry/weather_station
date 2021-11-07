@@ -48,6 +48,7 @@ def create_logging_handlers(config_dict, filename, default_path):
     logging.basicConfig(handlers=[RotatingFileHandler(log_filename, maxBytes=2000000, backupCount=5)],
                         level=getattr(logging, config_dict.get('LOG', 'level')),
                         format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.getLogger('matplotlib').setLevel(logging.WARNING)
     formatter = logging.Formatter('%(levelname)s : %(message)s')
     console = logging.StreamHandler()
     console.setLevel(logging.DEBUG)
@@ -61,13 +62,15 @@ def icon_creation_function(icon_filename, gui_path=''):
     logging.debug('gui - utils.py - icon_creation_function')
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(gui_path + 'icons/' + str(icon_filename)), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap(gui_path + 'icons/' + str(icon_filename)), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+    icon.addPixmap(QtGui.QPixmap(gui_path + 'icons/' + str(icon_filename)), QtGui.QIcon.Disabled, QtGui.QIcon.On)
     return icon
 
 
 def pictogramme_creation_function(icon_filename, gui_path=''):
     logging.debug('gui - utils.py - icon_creation_function')
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(gui_path + 'graphic_materials/pictogrammes/' + str(icon_filename)),
+    icon.addPixmap(QtGui.QPixmap(f'{gui_path}graphic_materials/pictogrammes/{icon_filename}'),
                    QtGui.QIcon.Normal, QtGui.QIcon.Off)
     return icon
 

@@ -35,22 +35,22 @@ def launch_station(gui_path, user_path):
     else:
         frozen = False
     logging.info('**********************************')
-    logging.info('WEATHER STATION ' + gui_version + ' is starting ...')
+    logging.info(f'WEATHER STATION {gui_version} is starting ...')
     logging.info('**********************************')
     system, release, version = platform.system_alias(platform.system(), platform.release(), platform.version())
-    logging.info('gui - operating system: ' + system + ' ' + release + ' (' + version + ')')
+    logging.info(f'gui - operating system: {system} {release} ({version})')
     python_version = str(sys.version_info[0]) + '.' + str(sys.version_info[1]) + '.' + str(sys.version_info[2])
-    logging.info('gui - python version: ' + python_version)
-    logging.info('gui - pyqt5 version: ' + QtCore.QT_VERSION_STR)
-    logging.info('gui - matplotlib version: ' + mpl_version)
-    logging.info('gui - markdown version: ' + mk_version)
-    logging.info('gui - psycopg2 version: ' + pg_version)
-    logging.info('gui - requests version: ' + rq_version)
+    logging.info(f'gui - python version: {python_version}')
+    logging.info(f'gui - pyqt5 version: {QtCore.QT_VERSION_STR}')
+    logging.info(f'gui - matplotlib version: {mpl_version}')
+    logging.info(f'gui - markdown version: {mk_version}')
+    logging.info(f'gui - psycopg2 version: {pg_version}')
+    logging.info(f'gui - requests version: {rq_version}')
     if platform.system() == 'Linux':
-        logging.info('gui - smbus2 version: ' + bu_version)
-        logging.info('gui - bme280 version: ' + bm_version)
-    logging.info('gui - gui frozen ? ' + str(frozen))
-    logging.info('gui - main path: ' + gui_path)
+        logging.info(f'gui - smbus2 version: {bu_version}')
+        logging.info(f'gui - bme280 version: {bm_version}')
+    logging.info(f'gui - gui frozen ? {frozen}')
+    logging.info(f'gui - main path: {gui_path}')
     ui = MainWindow(gui_path, user_path, config_dict)
     ui.show()
     # splash.finish(ui)
@@ -68,6 +68,4 @@ sys.excepthook = handle_exception
 
 
 if __name__ == '__main__':
-    user_path = str(pathlib.Path.home().joinpath('.weather_station'))
-    main_path = os.path.abspath(os.path.dirname(__file__))
-    launch_station(main_path, user_path)
+    launch_station(os.path.abspath(os.path.dirname(__file__)), str(pathlib.Path.home().joinpath('.weather_station')))
