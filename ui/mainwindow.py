@@ -194,8 +194,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             day = str(self.current_date.day())
             month = days_months_dictionary()['month'][self.current_date.month()]
             year = str(self.current_date.year())
-            date_string = '{week_day} {day}\n{month} {year}'.format(week_day=week_day, day=day, month=month, year=year)
-            self.date_label.setText(date_string)
+            self.date_label.setText(f'{week_day} {day}\n{month} {year}')
 
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
