@@ -295,22 +295,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def refresh_in_out_display(self, data_dict):
         dt = data_dict['datetime']
-        if (datetime.datetime.now() - dt).total_seconds() > 10800:
-            in_temp = 'No data'
-            in_minmax_temp = 'No data / No data'
-            out_temp = 'No data'
-            out_minmax_temp = 'No data / No data'
-            humid = 'No data'
-            pres = 'No data'
-            presmsl = 'No data'
-        else:
-            in_temp = 'No data'
-            in_minmax_temp = 'No data / No data'
-            out_temp = 'No data'
-            out_minmax_temp = 'No data / No data'
-            humid = 'No data'
-            pres = 'No data'
-            presmsl = 'No data'
+        in_temp = 'No data'
+        in_minmax_temp = 'No data / No data'
+        out_temp = 'No data'
+        out_minmax_temp = 'No data / No data'
+        humid = 'No data'
+        pres = 'No data'
+        presmsl = 'No data'
+        if (datetime.datetime.now() - dt).total_seconds() <= 10800:
             if data_dict['temp_norm_in'] is not None:
                 in_temp = f'{data_dict["temp_norm_in"]} °C'
             if data_dict['temp_minmax_in'] is not None:
@@ -331,7 +323,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_temperature_label.setText(f'{out_temp}')
         self.out_label_3.setText(f'{out_minmax_temp}')
         self.in_humidity_label_1.setText(f'Humidité : {humid}')
-        self.out_pressure_label_1.setText(f'Pression : {pres}\nPression MSL : {presmsl}')
+        pressure = (f"<html><head/><body><p align=\"center\">Pression : {pres}</p>"
+                    f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
+        self.out_pressure_label_1.setText(pressure)
 
     def plot_time_series(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
