@@ -17,6 +17,7 @@
     * changed string format implying variables.
     * change matplotlib logging level to warning.
     * added a function to correct icon and font path for the compiled linux version.
+    * changed path coding in utils.py for all functions.
 
 
 ### November 6 2021, Release version 0.7.6 ###
