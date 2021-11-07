@@ -21,6 +21,10 @@
     * changed the way icon are displayed in set_ts_stack_icon function.
     * modified set_ts_stack_icon and set_fc_stack_icon functions for better performance.
     * modified displayed date for better performance.
+    * modified display of in and out temperature, humidity and pressure.
+
+  * ADDED:
+    * both normal and MSL pressures have been added to the database.
 
 
 ### November 6 2021, Release version 0.7.6 ###
