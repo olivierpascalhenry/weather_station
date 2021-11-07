@@ -468,7 +468,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.mf_forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.gui_path + '/', self)
+        details_window = My1hFCDetails(forecast, self.gui_path, self)
         details_window.setGeometry(282, 110, 480, 380)
         details_window.exec_()
 
@@ -477,7 +477,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self.gui_path + '/', self)
+        details_window = My6hFCDetails(forecast, self.gui_path, self)
         details_window.setGeometry(52, 110, 920, 380)
         details_window.exec_()
 
