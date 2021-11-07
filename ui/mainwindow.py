@@ -335,21 +335,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # wait_window.exec_()
 
         try:
+
+            # add thread for data request and plot
+
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
             hours_list = mpl_hour_list()
             now = datetime.datetime.now()
             limit = now - datetime.timedelta(hours=24)
-            self.cursor.execute("select int_tp_time, int_tp_data from int_temp where "
-                                "int_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            self.cursor.execute(f"select int_tp_time, int_tp_data from int_temp where "
+                                f"int_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_tp_time")
             temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute("select ext_tp_time, ext_tp_data from ext_temp where "
-                                "ext_tp_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            self.cursor.execute(f"select ext_tp_time, ext_tp_data from ext_temp where "
+                                f"ext_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY ext_tp_time")
             temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute("select int_hd_time, int_hd_data from int_hum where "
-                                "int_hd_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            self.cursor.execute(f"select int_hd_time, int_hd_data from int_hum where "
+                                f"int_hd_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_hd_time")
             hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute("select int_ps_time, int_ps_data from int_pres where "
-                                "int_ps_time>='{time}' ORDER BY id".format(time=limit.strftime('%Y-%m-%d %H:%M:%S')))
+            self.cursor.execute(f"select int_ps_time, int_ps_data from int_pres where "
+                                f"int_ps_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_ps_time")
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
 
             self.plot_in.clear()
