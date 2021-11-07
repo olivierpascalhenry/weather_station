@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_warningWindow(object):
-    def setupUi(self, warningWindow, gui_path=''):
+    def setupUi(self, warningWindow):
         warningWindow.setObjectName("warningWindow")
         warningWindow.resize(630, 350)
         warningWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -23,7 +23,7 @@ class Ui_warningWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         warningWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/info_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/info_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         warningWindow.setWindowIcon(icon)
         warningWindow.setStyleSheet("QWidget#warningWindow {\n"
 "    background-color: rgb(230,230,230);\n"
@@ -49,7 +49,7 @@ class Ui_warningWindow(object):
 "}")
         self.warning_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/weather_warning_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/weather_warning_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.warning_button.setIcon(icon1)
         self.warning_button.setIconSize(QtCore.QSize(55, 55))
         self.warning_button.setObjectName("warning_button")
@@ -264,7 +264,7 @@ class Ui_warningWindow(object):
 "}")
         self.ok_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(gui_path + "icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon2)
         self.ok_button.setIconSize(QtCore.QSize(55, 55))
         self.ok_button.setObjectName("ok_button")

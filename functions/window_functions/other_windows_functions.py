@@ -566,16 +566,16 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
     def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarningUpdate - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
+        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         self.ok_button.clicked.connect(self.agree_update)
         self.cancel_button.clicked.connect(self.close_window)
         self.cancel = True
