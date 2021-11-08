@@ -24,7 +24,7 @@ from ui.Ui_connexionwindow import Ui_connexionWindow
 from ui.Ui_waitwindow import Ui_waitWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function,
-                             icon_creation_function)
+                             icon_creation_function, stylesheet_creation_function_pi)
 from functions.thread_functions.other_threads import DownloadFile
 from functions.gui_widgets import QtWaitingSpinner
 
@@ -77,11 +77,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def __init__(self, config_dict, user_path, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -108,8 +106,30 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_edit_bt_5.clicked.connect(self.display_numpad)
         self.ow_line_4.textChanged.connect(self.activate_search_button)
         self.ow_search_button.clicked.connect(self.search_place)
+        self.set_window_icons()
+        self.set_stylesheet()
         self.read_config_dict()
         self.ow_section_list.setCurrentRow(0)
+
+    def set_window_icons(self):
+        self.setWindowIcon(icon_creation_function('option_icon.svg', self.gui_path))
+        self.ow_openButton.setIcon(icon_creation_function('open_popup_icon.svg', self.gui_path))
+        self.ow_edit_bt_1.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_2.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_3.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_3.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_4.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_5.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
+        self.ow_cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
+
+    def set_stylesheet(self):
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            self.ow_combobox_1.setStyleSheet(stylesheet_creation_function_pi('qcombobox', self.gui_path))
+            self.ow_scroll_area_1.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            self.ow_scroll_area_2.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            self.ow_scroll_area_3.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            self.ow_section_list.setStyleSheet(stylesheet_creation_function_pi('qlistwidget', self.gui_path))
 
     def display_options(self, idx):
         self.ow_stacked_widget.setCurrentIndex(idx)
@@ -385,17 +405,18 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
     def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyNumpad - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.cancel = True
+        self.button_ret.setIcon(icon_creation_function('bwd_arrow.png', gui_path))
+        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
+        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
                 button.clicked.connect(self.confirm_num)
@@ -426,17 +447,19 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
     def __init__(self, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyKeyboard - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.cancel = True
+        self.button_min_2.setIcon(icon_creation_function('escape_icon.png', gui_path))
+        self.button_ret.setIcon(icon_creation_function('bwd_arrow.png', gui_path))
+        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
+        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
                 button.clicked.connect(self.confirm_word)
@@ -477,11 +500,9 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
     def __init__(self, place_list, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.gui_path = gui_path
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -508,8 +529,12 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
                 self.radio_bt_list[idx].setMinimumSize(QtCore.QSize(0, 40))
                 self.radio_bt_list[idx].setMaximumSize(QtCore.QSize(16777215, 40))
                 self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
-                stylesheet = stylesheet_creation_function('qradiobutton',
-                                                          self.gui_path + '/').replace('icons', self.gui_path + 'icons')
+
+                if platform.system() == 'Linux' and platform.node() != 'raspberry':
+                    stylesheet = stylesheet_creation_function_pi('qradiobutton', self.gui_path)
+                else:
+                    stylesheet = stylesheet_creation_function('qradiobutton', self.gui_path)
+
                 self.radio_bt_list[idx].setStyleSheet(stylesheet)
                 self.radio_bt_list[idx].setObjectName('place_' + str(idx))
                 self.radio_bt_list[idx].setText(place.name + ', ' + place.postal_code + ', '

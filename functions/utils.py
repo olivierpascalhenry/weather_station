@@ -108,6 +108,16 @@ def stylesheet_creation_function(stylesheet, gui_path):
     return stylesheet_str
 
 
+def stylesheet_creation_function_pi(stylesheet, gui_path):
+    logging.debug('gui - utils.py - stylesheet_creation_function')
+    path = pathlib.Path(gui_path).joinpath('graphic_materials/style_sheets/linux/').joinpath(stylesheet +
+                                                                                             '_stylesheet.dat')
+    f = open(path, 'r')
+    stylesheet_str = ''.join(f.readlines())
+    f.close()
+    return stylesheet_str
+
+
 def shadow_creation_function(offset, blur):
     shadow = QtWidgets.QGraphicsDropShadowEffect()
     shadow.setOffset(offset)

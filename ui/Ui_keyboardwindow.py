@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_keyboardWindow(object):
-    def setupUi(self, keyboardWindow, gui_path=''):
+    def setupUi(self, keyboardWindow):
         keyboardWindow.setObjectName("keyboardWindow")
         keyboardWindow.resize(588, 328)
         keyboardWindow.setMinimumSize(QtCore.QSize(588, 328))
@@ -867,7 +867,7 @@ class Ui_keyboardWindow(object):
 "}")
         self.button_min_2.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/escape_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/escape_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.button_min_2.setIcon(icon)
         self.button_min_2.setIconSize(QtCore.QSize(107, 40))
         self.button_min_2.setObjectName("button_min_2")
@@ -901,7 +901,7 @@ class Ui_keyboardWindow(object):
 "}")
         self.button_ret.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/bwd_arrow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/bwd_arrow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.button_ret.setIcon(icon1)
         self.button_ret.setIconSize(QtCore.QSize(40, 45))
         self.button_ret.setArrowType(QtCore.Qt.NoArrow)
@@ -941,7 +941,7 @@ class Ui_keyboardWindow(object):
 "}")
         self.ok_button.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(gui_path + "icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon2)
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
@@ -977,7 +977,7 @@ class Ui_keyboardWindow(object):
 "}")
         self.cancel_button.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(gui_path + "icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.cancel_button.setIcon(icon3)
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")

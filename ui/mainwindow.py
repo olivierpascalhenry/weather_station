@@ -210,7 +210,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_in.tick_params(axis='y', labelcolor=color_1)
         self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
         self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
-        self.figure_in.subplots_adjust(left=0.08, right=0.92, bottom=0.15, top=0.90)
+        self.figure_in.subplots_adjust(left=0.08, right=0.92, bottom=0.1, top=0.95)
         self.figure_out = plt.figure(facecolor='#FBE5D6')
         self.canvas_out = FigureCanvas(self.figure_out)
         self.plot_layout_3.addWidget(self.canvas_out)
@@ -223,7 +223,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.tick_params(axis='y', labelcolor=color_1)
         self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
         self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-        self.figure_out.subplots_adjust(left=0.08, right=0.92, bottom=0.15, top=0.90)
+        self.figure_out.subplots_adjust(left=0.08, right=0.92, bottom=0.1, top=0.95)
         self.plot_out.set_facecolor('None')
 
     def database_connection(self):
@@ -512,7 +512,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_string.seek(0)
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
-        option_window = MyOptions(config_dict_copy, self.user_path, self.gui_path + '/', self)
+        option_window = MyOptions(config_dict_copy, self.user_path, self.gui_path, self)
         option_window.setGeometry(162, 125, 700, 364)
         option_window.exec_()
         if not option_window.cancel:

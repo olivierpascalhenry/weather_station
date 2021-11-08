@@ -741,8 +741,8 @@ class Ui_MainWindow(object):
         self.gridLayout_6.setSpacing(0)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.in_label_4 = QtWidgets.QLabel(self.ts_frame_1)
-        self.in_label_4.setMinimumSize(QtCore.QSize(150, 25))
-        self.in_label_4.setMaximumSize(QtCore.QSize(16777215, 25))
+        self.in_label_4.setMinimumSize(QtCore.QSize(150, 40))
+        self.in_label_4.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
@@ -752,10 +752,16 @@ class Ui_MainWindow(object):
         self.in_label_4.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "    background: transparent;\n"
+"    border-top: 1px solid rgb(75,75,75);\n"
+"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    margin-left: 270px;\n"
+"    margin-right: 270px;\n"
+"    margin-top: 5px;\n"
+"    border-radius: 0px;\n"
 "}")
-        self.in_label_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.in_label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.in_label_4.setWordWrap(True)
-        self.in_label_4.setIndent(20)
+        self.in_label_4.setIndent(0)
         self.in_label_4.setObjectName("in_label_4")
         self.gridLayout_6.addWidget(self.in_label_4, 0, 0, 1, 1)
         self.plot_layout_1 = QtWidgets.QVBoxLayout()
@@ -787,8 +793,8 @@ class Ui_MainWindow(object):
         self.gridLayout_15.setSpacing(0)
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.out_label_5 = QtWidgets.QLabel(self.ts_frame_2)
-        self.out_label_5.setMinimumSize(QtCore.QSize(150, 25))
-        self.out_label_5.setMaximumSize(QtCore.QSize(16777215, 25))
+        self.out_label_5.setMinimumSize(QtCore.QSize(150, 40))
+        self.out_label_5.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
@@ -798,10 +804,16 @@ class Ui_MainWindow(object):
         self.out_label_5.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "    background: transparent;\n"
+"    border-top: 1px solid rgb(75,75,75);\n"
+"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    margin-left: 270px;\n"
+"    margin-right: 270px;\n"
+"    margin-top: 5px;\n"
+"    border-radius: 0px;\n"
 "}")
-        self.out_label_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.out_label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.out_label_5.setWordWrap(True)
-        self.out_label_5.setIndent(20)
+        self.out_label_5.setIndent(0)
         self.out_label_5.setObjectName("out_label_5")
         self.gridLayout_15.addWidget(self.out_label_5, 0, 0, 1, 1)
         self.plot_layout_3 = QtWidgets.QVBoxLayout()
