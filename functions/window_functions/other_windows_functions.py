@@ -33,19 +33,20 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
     def __init__(self, text, gui_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyAbout - __init__')
         QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setupUi(self, gui_path)
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_1.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        else:
-            self.setupUi(self)
+            self.browser_1.setStyleSheet(stylesheet_creation_function_pi('qtextbrowser', gui_path))
+            self.browser_2.setStyleSheet(stylesheet_creation_function_pi('qtextbrowser', gui_path))
         self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.browser_1.setHtml(text)
         scroll_1 = QtWidgets.QScroller.scroller(self.browser_1.viewport())
         scroll_1.grabGesture(self.browser_1.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)

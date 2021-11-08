@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_aboutlogWindow(object):
-    def setupUi(self, aboutlogWindow, gui_path=''):
+    def setupUi(self, aboutlogWindow):
         aboutlogWindow.setObjectName("aboutlogWindow")
         aboutlogWindow.setWindowModality(QtCore.Qt.WindowModal)
         aboutlogWindow.resize(700, 450)
@@ -26,10 +26,9 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         aboutlogWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/about_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         aboutlogWindow.setWindowIcon(icon)
-
-        stylesheet = ("QWidget#aboutlogWindow {\n"
+        aboutlogWindow.setStyleSheet("QWidget#aboutlogWindow {\n"
 "   background-color: rgb(230,230,230);\n"
 "   border: 1px solid rgb(75,75,75);\n"
 "}\n"
@@ -197,8 +196,6 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-
-        aboutlogWindow.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.gridLayout = QtWidgets.QGridLayout(aboutlogWindow)
         self.gridLayout.setObjectName("gridLayout")
         self.splitter = QtWidgets.QSplitter(aboutlogWindow)
@@ -263,8 +260,7 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_1.setFont(font)
         self.browser_1.setAcceptDrops(False)
-
-        stylesheet = ("QTextBrowser {\n"
+        self.browser_1.setStyleSheet("QTextBrowser {\n"
 "    border-radius: 3px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
 "    color: rgb(45,45,45);\n"
@@ -433,8 +429,6 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-
-        self.browser_1.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.browser_1.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.browser_1.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.browser_1.setObjectName("browser_1")
@@ -484,8 +478,7 @@ class Ui_aboutlogWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_2.setFont(font)
         self.browser_2.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
-
-        stylesheet = ("QTextBrowser {\n"
+        self.browser_2.setStyleSheet("QTextBrowser {\n"
 "    border-radius: 3px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
 "    color: rgb(45,45,45);\n"
@@ -654,8 +647,6 @@ class Ui_aboutlogWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-
-        self.browser_2.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.browser_2.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.browser_2.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.browser_2.setObjectName("browser_2")
@@ -694,7 +685,7 @@ class Ui_aboutlogWindow(object):
 "}")
         self.button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.button.setIcon(icon1)
         self.button.setIconSize(QtCore.QSize(45, 45))
         self.button.setObjectName("button")

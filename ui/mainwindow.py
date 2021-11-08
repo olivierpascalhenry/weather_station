@@ -484,7 +484,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
         if self.warning_button.objectName() == 'update_function':
-            update_window = MyWarningUpdate(self.gui_path + '/', self)
+            update_window = MyWarningUpdate(self.gui_path, self)
             update_window.setGeometry(182, 180, 660, 240)
             update_window.exec_()
             if not update_window.cancel:
@@ -530,7 +530,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - about_weather_station')
         text = (f'<p align=\"justify\">La Station Météo v{gui_version} a été développée à partir de Python et de '
                 f'PyQt.</p>')
-        about_window = MyAbout(text, self.gui_path + '/', self)
+        about_window = MyAbout(text, self.gui_path, self)
         about_window.setGeometry(162, 75, 700, 450)
         about_window.exec_()
 

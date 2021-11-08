@@ -25,7 +25,7 @@
     * improved the use of pathlib.Path in mainwindow.
     * added a function to correct icon in the connexion window.
     * icons path has been improved in both forecast windows, in the update window, in the weather warning window, in the
-     option window.
+     option window, in the aboutlog window.
     .
 
   * ADDED:
