@@ -6,8 +6,10 @@ import requests
 import pathlib
 import socket
 from distutils.version import LooseVersion
-from functions.utils import set_size
+import numpy as np
 from PyQt5 import QtCore
+from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
+
 
 username = 'olivierpascalhenry'
 token = '***REMOVED***'
@@ -153,4 +155,102 @@ class CheckInternetConnexion(QtCore.QThread):
         self.terminate()
 
 
+class RequestPlotDataThread(QtCore.QThread):
+    success = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(list)
 
+    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, cursor):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
+        self.canvas_in = canvas_in
+        self.canvas_out = canvas_out
+        self.plot_in_1 = plot_in_1
+        self.plot_in_2 = plot_in_2
+        self.plot_out_1 = plot_out_1
+        self.plot_out_2 = plot_out_2
+        self.cursor = cursor
+
+    def run(self):
+        try:
+            color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+            hours_list = mpl_hour_list()
+            now = datetime.datetime.now()
+            limit = now - datetime.timedelta(hours=24)
+            self.cursor.execute(f"select int_tp_time, int_tp_data from int_temp where "
+                                f"int_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_tp_time")
+            temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute(f"select ext_tp_time, ext_tp_data from ext_temp where "
+                                f"ext_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY ext_tp_time")
+            temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute(f"select int_hd_time, int_hd_data from int_hum where "
+                                f"int_hd_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_hd_time")
+            hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            self.cursor.execute(f"select int_ps_time, int_ps_data from int_pres where "
+                                f"int_ps_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_ps_time")
+            pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+
+            self.plot_in_1.clear()
+            self.plot_in_2.clear()
+            self.plot_out_1.clear()
+            self.plot_out_2.clear()
+            self.plot_in_1.set_ylabel('Température (°C)', color=color_1)
+            self.plot_in_1.tick_params(axis='y', labelcolor=color_1)
+            self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
+            self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
+            self.plot_out_1.set_ylabel('Température (°C)', color=color_1)
+            self.plot_out_1.tick_params(axis='y', labelcolor=color_1)
+            self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
+            self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
+            self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
+
+            if np.min(temp_in_y) < 10:
+                y_min = np.min(temp_in_y) - 5
+            else:
+                y_min = 10
+            if np.max(temp_in_y) > 30:
+                y_max = np.max(temp_in_y) + 5
+            else:
+                y_max = 30
+
+            self.plot_in_1.set_ylim(y_min, y_max)
+            self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
+            self.plot_in_2.set_ylim(0, 100)
+            self.plot_in_1.set_xlim(limit, now)
+            self.plot_in_1.set_xticks(hours_list)
+            self.plot_in_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
+
+            if np.min(temp_out_y) < 0:
+                y_min = np.min(temp_out_y) - 5
+            else:
+                y_min = 0
+            if np.max(temp_out_y) > 30:
+                y_max = np.max(temp_out_y) + 5
+            else:
+                y_max = 30
+
+            self.plot_out_1.set_ylim(y_min, y_max)
+            self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
+
+            if np.min(pres_in_y) < 990:
+                y_min = np.min(pres_in_y) - 10
+            else:
+                y_min = 990
+            if np.max(pres_in_y) > 1030:
+                y_max = np.max(pres_in_y) + 10
+            else:
+                y_max = 1030
+
+            self.plot_out_2.set_ylim(y_min, y_max)
+            self.plot_out_1.set_xlim(limit, now)
+            self.plot_out_1.set_xticks(hours_list)
+            self.plot_out_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.canvas_in.draw()
+            self.canvas_out.draw()
+            self.success.emit()
+        except Exception as e:
+            self.error.emit(['plot data', e])
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
+        self.terminate()
