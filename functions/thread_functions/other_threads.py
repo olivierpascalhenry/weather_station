@@ -152,3 +152,5 @@ class CheckInternetConnexion(QtCore.QThread):
         logging.debug('gui - other_threads.py - DownloadFile - stop')
         self.terminate()
 
+
+
