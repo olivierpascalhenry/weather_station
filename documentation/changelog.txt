@@ -31,6 +31,7 @@
   * ADDED:
     * both normal and MSL pressures have been added to the database.
     * a new pictogram has been added.
+    * new icons for battery and signal have been added
 
 
 ### November 6 2021, Release version 0.7.6 ###
