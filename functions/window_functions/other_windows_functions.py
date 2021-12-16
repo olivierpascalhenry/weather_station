@@ -695,9 +695,6 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
         self.retry = False
         self.ok_button.clicked.connect(self.retry_connexion)
         self.cancel_button.clicked.connect(self.close_window)
-        self.set_window_icons()
-
-    def set_window_icons(self):
         self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
         self.ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
         self.cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))

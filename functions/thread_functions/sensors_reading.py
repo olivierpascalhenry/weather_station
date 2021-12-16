@@ -199,3 +199,20 @@ class DBDataDisplayThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBDataDisplayThread - stop')
         self.terminate()
+
+
+class MqttToDbThread(QtCore.QThread):
+
+    def __init__(self, connector, cursor, config_dict):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - MqttToDbThread - __init__')
+        self.connector = connector
+        self.cursor = cursor
+
+    def run(self):
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
+
+
+    def stop(self):
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
+        self.terminate()

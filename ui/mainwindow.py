@@ -112,6 +112,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.database_connection()
         self.launch_clean_thread()
+        self.mqtt2db_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
         self.check_internet_connection()
@@ -241,6 +242,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
+
+    def mqtt2db_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
+        # self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
+        # self.db_cleaning_thread.error.connect(self.log_thread_error)
+        # self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
