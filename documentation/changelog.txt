@@ -4,6 +4,8 @@
 * add a thread to handle plots
 * handle nan in plots and keep empty data
 * find a way to handle gui_path and stylesheet for all windows without modifying it.
+* une fois l'humidité ajouté à l'extérieur, proposé une option pour afficher les deux pressions dans les 2 fenêtres
+extérieur et intérieur, ou pres ext ou pres sl ext.
 
   
 ### To fix list: ###
@@ -11,7 +13,7 @@
 * nothing.
 
 
-### November xx 2021, Release version 0.8.0 ###
+### December xx 2021, Release version 0.8.0 ###
 
   * MODIFIED:
     * changed string format implying variables.
@@ -24,9 +26,9 @@
     * modified display of in and out temperature, humidity and pressure.
     * improved the use of pathlib.Path in mainwindow.
     * added a function to correct icon in the connexion window.
-    * icons path and stylesheet havr been improved in both forecast windows, in the update window, in the weather
+    * icons path and stylesheet have been improved in both forecast windows, in the update window, in the weather
     warning window, in the option window, in the aboutlog window.
-    *
+    * the time series plotting function has been moved in a QThread.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.
