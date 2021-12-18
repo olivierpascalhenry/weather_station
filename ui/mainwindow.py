@@ -26,7 +26,8 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
                                                                 MyWait)
-from functions.thread_functions.sensors_reading import DataCollectingThread, DBDataDisplayThread
+from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, DBDataDisplayThread,
+                                                        BME280DataCollectingThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion,
                                                       RequestPlotDataThread)
@@ -64,7 +65,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2 = None
         self.spinner = None
         self.h_spin_lay = None
-        self.collect_sensors_data_thread = None
+        self.collect_ds18b20_data_thread = None
+        self.collect_bme180_data_thread = None
+        # self.collect_sensors_data_thread = None
         self.display_sensors_data_thread = None
         self.query_mf_forecast_thread = None
         self.db_cleaning_thread = None
@@ -116,10 +119,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.database_connection()
         self.launch_clean_thread()
-        self.mqtt2db_thread()
+        # self.mqtt2db_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
         self.check_internet_connection()
+
 
     def set_stack_widget_page(self, idx):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
@@ -217,15 +221,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def mqtt2db_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        # self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
-        # self.db_cleaning_thread.error.connect(self.log_thread_error)
-        # self.db_cleaning_thread.start()
+
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
-        self.collect_sensors_data_thread = DataCollectingThread(self.connector, self.cursor, self.config_dict)
-        self.collect_sensors_data_thread.error.connect(self.log_thread_error)
-        self.collect_sensors_data_thread.start()
+        self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.connector, self.cursor, self.config_dict)
+        self.collect_ds18b20_data_thread.error.connect(self.log_thread_error)
+        self.collect_ds18b20_data_thread.start()
+        self.collect_bme180_data_thread = BME280DataCollectingThread(self.connector, self.cursor, self.config_dict)
+        self.collect_bme180_data_thread.error.connect(self.log_thread_error)
+        self.collect_bme180_data_thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
@@ -280,20 +285,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pres = 'No data'
         presmsl = 'No data'
         if (datetime.datetime.now() - dt).total_seconds() <= 10800:
-            if data_dict['temp_norm_in'] is not None:
-                in_temp = f'{data_dict["temp_norm_in"]} °C'
+            if data_dict['temp_in'] is not None:
+                in_temp = f'{data_dict["temp_in"]} °C'
             if data_dict['temp_minmax_in'] is not None:
                 in_minmax_temp = f'{data_dict["temp_minmax_in"][0]} °C / {data_dict["temp_minmax_in"][1]} °C'
-            if data_dict['temp_norm_out'] is not None:
-                out_temp = f'{data_dict["temp_norm_out"]} °C'
+            if data_dict['temp_out'] is not None:
+                out_temp = f'{data_dict["temp_out"]} °C'
             if data_dict['temp_minmax_out'] is not None:
                 out_minmax_temp = f'{data_dict["temp_minmax_out"][0]} °C / {data_dict["temp_minmax_out"][1]} °C'
-            if data_dict['hum_norm_in'] is not None:
-                humid = f'{round(data_dict["hum_norm_in"])} %'
-            if data_dict['pres_norm_int'] is not None:
-                pres = f'{round(data_dict["pres_norm_int"])} hPa'
-            if data_dict['presmsl_norm_int'] is not None:
-                presmsl = f'{round(data_dict["presmsl_norm_int"])} hPa'
+            if data_dict['hum_in'] is not None:
+                humid = f'{round(data_dict["hum_in"])} %'
+            if data_dict['pres_in'] is not None:
+                pres = f'{round(data_dict["pres_in"])} hPa'
+            if data_dict['presmsl_in'] is not None:
+                presmsl = f'{round(data_dict["presmsl_in"])} hPa'
 
         self.in_temperature_label.setText(f'{in_temp}')
         self.in_label_3.setText(f'{in_minmax_temp}')
@@ -301,7 +306,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_label_3.setText(f'{out_minmax_temp}')
         self.in_humidity_label_1.setText(f'Humidité : {humid}')
         pressure = (f"<html><head/><body><p align=\"center\">Pression : {pres}</p>"
-                    f"<p align=\"center\">Pression SL : {presmsl}</p></body></html>")
+                    f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
         self.out_pressure_label_1.setText(pressure)
 
     def plot_time_series_start(self):

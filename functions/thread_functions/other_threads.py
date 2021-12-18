@@ -29,13 +29,11 @@ class CleaningThread(QtCore.QThread):
         while True:
             try:
                 time_limit = datetime.datetime.now() - datetime.timedelta(days=2)
-                self.cursor.execute('DELETE FROM int_temp WHERE int_tp_time <= %s', (time_limit, ))
-                self.cursor.execute('DELETE FROM ext_temp WHERE ext_tp_time <= %s', (time_limit,))
-                self.cursor.execute('DELETE FROM int_hum WHERE int_hd_time <= %s', (time_limit,))
-                self.cursor.execute('DELETE FROM int_pres WHERE int_ps_time <= %s', (time_limit,))
+                self.cursor.execute('DELETE FROM "BME280" WHERE date_time <= %s', (time_limit, ))
+                self.cursor.execute('DELETE FROM "DS18B20" WHERE date_time <= %s', (time_limit,))
                 self.connector.commit()
             except Exception as e:
-                self.error.emit(['update request', e])
+                self.error.emit(['cleaning data', e])
             time.sleep(3600)
 
     def stop(self):

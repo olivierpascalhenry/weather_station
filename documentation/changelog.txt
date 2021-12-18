@@ -1,9 +1,6 @@
 ### To do list: ###
 
-* remove ID in database tables
-* add a thread to handle plots
 * handle nan in plots and keep empty data
-* find a way to handle gui_path and stylesheet for all windows without modifying it.
 * une fois l'humidité ajouté à l'extérieur, proposé une option pour afficher les deux pressions dans les 2 fenêtres
 extérieur et intérieur, ou pres ext ou pres sl ext.
 
@@ -29,11 +26,13 @@ extérieur et intérieur, ou pres ext ou pres sl ext.
     * icons path and stylesheet have been improved in both forecast windows, in the update window, in the weather
     warning window, in the option window, in the aboutlog window.
     * the time series plotting function has been moved in a QThread.
+    * ID has been removed from the database.
+    * collecting thread has been split into different threads : one thread per captor.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.
     * a new pictogram has been added.
-    * new icons for battery and signal have been added
+    * new icons for battery and signal have been added.
 
 
 ### November 6 2021, Release version 0.7.6 ###
