@@ -27,7 +27,7 @@ from functions.window_functions.other_windows_functions import (MyAbout, MyOptio
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
                                                                 MyWait)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, DBDataDisplayThread,
-                                                        BME280DataCollectingThread)
+                                                        BME280DataCollectingThread, MqttToDbThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion,
                                                       RequestPlotDataThread)
@@ -67,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.h_spin_lay = None
         self.collect_ds18b20_data_thread = None
         self.collect_bme180_data_thread = None
-        # self.collect_sensors_data_thread = None
+        self.collect_mqtt_data_thread = None
         self.display_sensors_data_thread = None
         self.query_mf_forecast_thread = None
         self.db_cleaning_thread = None
@@ -119,11 +119,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.database_connection()
         self.launch_clean_thread()
-        # self.mqtt2db_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
         self.check_internet_connection()
-
 
     def set_stack_widget_page(self, idx):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
@@ -219,10 +217,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
-    def mqtt2db_thread(self):
-        logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-
-
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
         self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.connector, self.cursor, self.config_dict)
@@ -231,9 +225,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_bme180_data_thread = BME280DataCollectingThread(self.connector, self.cursor, self.config_dict)
         self.collect_bme180_data_thread.error.connect(self.log_thread_error)
         self.collect_bme180_data_thread.start()
+        self.collect_mqtt_data_thread = MqttToDbThread(self.connector, self.cursor, self.config_dict)
+        self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
+        self.collect_mqtt_data_thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
+
+        self.display_in_data_thread = DBInDataThread(self.cursor, self.config_dict)
+
+
         self.display_sensors_data_thread = DBDataDisplayThread(self.cursor, self.config_dict)
         self.display_sensors_data_thread.db_data.connect(self.refresh_in_out_display)
         self.display_sensors_data_thread.error.connect(self.log_thread_error)

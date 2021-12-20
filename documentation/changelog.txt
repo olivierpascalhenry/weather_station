@@ -29,10 +29,12 @@ extérieur et intérieur, ou pres ext ou pres sl ext.
     * ID has been removed from the database.
     * collecting thread has been split into different threads : one thread per captor.
 
+
   * ADDED:
     * both normal and MSL pressures have been added to the database.
     * a new pictogram has been added.
     * new icons for battery and signal have been added.
+    * a new thread to handle Zigbee2Mqtt and Aqara sensors has been added.
 
 
 ### November 6 2021, Release version 0.7.6 ###

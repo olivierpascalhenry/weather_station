@@ -19,3 +19,7 @@ COMMENT ON TABLE public."DS18B20" IS 'Table dédiée au capteur DS18B20';
 CREATE TABLE IF NOT EXISTS public."BME280" (date_time timestamp without time zone NOT NULL, temperature real, pression real, pression_msl real, humidite real, CONSTRAINT "BME280_pkey" PRIMARY KEY (date_time)) TABLESPACE pg_default;
 ALTER TABLE public."BME280" OWNER to weather_station;
 COMMENT ON TABLE public."BME280" IS 'Table dédiée au capteur BME280';
+
+CREATE TABLE IF NOT EXISTS public."AQARA_THP" (date_time timestamp without time zone NOT NULL, temperature real, humidite real, pression real, pression_msl real, batterie real, qualite real, CONSTRAINT "AQARA_THP_pkey" PRIMARY KEY (date_time)) TABLESPACE pg_default;
+ALTER TABLE public."AQARA_THP" OWNER to weather_station;
+COMMENT ON TABLE public."AQARA_THP" IS 'table dédiée au capteur Aqara de température, pression, humidité';

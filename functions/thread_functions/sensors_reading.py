@@ -2,12 +2,15 @@ import logging
 import random
 import datetime
 import time
+import json
 import psycopg2
 import platform
 from PyQt5 import QtCore
 if platform.system() == 'Linux':
     import smbus2
     import bme280
+    import paho.mqtt.client as mqtt
+
 
 
 class DS18B20DataCollectingThread(QtCore.QThread):
@@ -236,16 +239,80 @@ class DBDataDisplayThread(QtCore.QThread):
 
 
 class MqttToDbThread(QtCore.QThread):
+    error = QtCore.pyqtSignal(list)
 
     def __init__(self, connector, cursor, config_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - MqttToDbThread - __init__')
         self.connector = connector
         self.cursor = cursor
+        if config_dict.get('SYSTEM', 'place_altitude'):
+            self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
+        else:
+            self.place_altitude = None
 
     def run(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
+        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+            try:
+                client = mqtt.Client('weather_station')
+                client.on_message = parse_data
+                # client.on_connect = on_connect
+                client.username_pw_set(username="weather", password="mqtt_weather_password")
+                client.connect('127.0.0.1')
+                client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
+                client.loop_forever()
+            except Exception as e:
+                self.error.emit(['MQTT data collecting', e])
+                date_time = datetime.datetime.now().replace(microsecond=0)
+                self.add_data_to_db(date_time, None, None, None, None, None, None)
+        else:
+            while True:
+                date_time = datetime.datetime.now().replace(microsecond=0)
+                temp = self.collect_test_data(20., 5)
+                hum = self.collect_test_data(65., 20)
+                pres = self.collect_test_data(1013., 15)
+                pres_msl = self.collect_test_data(1013., 15)
+                bat = 75.
+                link = 97.
+                self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
+                time.sleep(600)
 
+    def parse_data(self, client, userdata, message):
+        date_time = datetime.datetime.now().replace(microsecond=0)
+        data = json.loads(str(message.payload.decode('utf-8')))
+        temp = data['temperature']
+        hum = data['humidity']
+        pres = data['pressure']
+        bat = data['battery']
+        link = data['linkquality']
+        if self.place_altitude is not None:
+            pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
+                               (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+            pres_msl = round(pres_msl, 1)
+        else:
+            pres_msl = None
+        pres = round(pres, 1)
+        temp = round(temp, 1)
+        hum = round(hum)
+        self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
+
+    def add_data_to_db(self, dt, tp, hm, ps, ps_msl, bt, lk):
+        try:
+            self.cursor.execute('insert into "AQARA_THP" (date_time, temperature, humidite, pression, pression_msl, '
+                                'batterie, qualite) values (%s, %s, %s, %s, %s, %s, %s)',
+                                (dt, tp, hm, ps, ps_msl, bt, lk))
+            self.connector.commit()
+        except (psycopg2.InterfaceError, psycopg2.OperationalError):
+            pass
+
+    @staticmethod
+    def collect_test_data(num, limit):
+        random.seed()
+        if random.randrange(1, 7, 1) == 1:
+            return None
+        else:
+            return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
