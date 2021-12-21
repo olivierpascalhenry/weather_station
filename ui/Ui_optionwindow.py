@@ -13,14 +13,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_optionWindow(object):
     def setupUi(self, optionWindow):
         optionWindow.setObjectName("optionWindow")
-        optionWindow.resize(700, 364)
+        optionWindow.resize(600, 364)
         optionWindow.setMinimumSize(QtCore.QSize(0, 0))
         optionWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(11)
         font.setBold(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         optionWindow.setFont(font)
@@ -31,8 +29,8 @@ class Ui_optionWindow(object):
 "    background-color: rgb(230,230,230);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
-        self.gridLayout_10 = QtWidgets.QGridLayout(optionWindow)
-        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.gridLayout_13 = QtWidgets.QGridLayout(optionWindow)
+        self.gridLayout_13.setObjectName("gridLayout_13")
         self.ow_splitter = QtWidgets.QSplitter(optionWindow)
         self.ow_splitter.setStyleSheet("QSplitter::handle {\n"
 "    background: rgb(220,220,220);\n"
@@ -59,7 +57,6 @@ class Ui_optionWindow(object):
         font.setFamily("Source Sans Pro")
         font.setPointSize(16)
         font.setBold(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_section_list.setFont(font)
@@ -269,14 +266,300 @@ class Ui_optionWindow(object):
         self.ow_section_list.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.ow_section_list.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.ow_section_list.addItem(item)
         self.ow_stacked_widget = QtWidgets.QStackedWidget(self.ow_splitter)
         self.ow_stacked_widget.setObjectName("ow_stacked_widget")
         self.page_1 = QtWidgets.QWidget()
         self.page_1.setObjectName("page_1")
-        self.gridLayout_5 = QtWidgets.QGridLayout(self.page_1)
+        self.gridLayout_12 = QtWidgets.QGridLayout(self.page_1)
+        self.gridLayout_12.setContentsMargins(10, 0, 0, 0)
+        self.gridLayout_12.setObjectName("gridLayout_12")
+        self.ow_scroll_area_4 = QtWidgets.QScrollArea(self.page_1)
+        self.ow_scroll_area_4.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
+"\n"
+"QScrollBar:vertical {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  margin: 21px 0px 21px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  margin: 0px 21px 0px 21px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-height: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::handle:horizontal {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-width: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"  border-top: 0px solid rgb(240,240,240);\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: bottom;\n"
+"  subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid rgb(240,240,240);\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: top;\n"
+"  subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"  image: url(icons/up_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical {\n"
+"  image: url(icons/down_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid rgb(240,240,240);\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: right;\n"
+"  subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid rgb(240,240,240);\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: left;\n"
+"  subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal {\n"
+"  image: url(icons/left_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal {\n"
+"  image: url(icons/right_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}")
+        self.ow_scroll_area_4.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.ow_scroll_area_4.setWidgetResizable(True)
+        self.ow_scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.ow_scroll_area_4.setObjectName("ow_scroll_area_4")
+        self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 378, 266))
+        self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.ow_vertical_layout_4 = QtWidgets.QVBoxLayout()
+        self.ow_vertical_layout_4.setObjectName("ow_vertical_layout_4")
+        self.horizontalLayout_21 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
+        self.ow_label_32 = QtWidgets.QLabel(self.scrollAreaWidgetContents_4)
+        self.ow_label_32.setMinimumSize(QtCore.QSize(0, 27))
+        self.ow_label_32.setMaximumSize(QtCore.QSize(16777215, 27))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        font.setItalic(True)
+        font.setUnderline(False)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_label_32.setFont(font)
+        self.ow_label_32.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_label_32.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ow_label_32.setObjectName("ow_label_32")
+        self.horizontalLayout_21.addWidget(self.ow_label_32)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_21.addItem(spacerItem)
+        self.ow_vertical_layout_4.addLayout(self.horizontalLayout_21)
+        self.horizontalLayout_22 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_22.setObjectName("horizontalLayout_22")
+        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_22.addItem(spacerItem1)
+        self.ow_label_33 = QtWidgets.QLabel(self.scrollAreaWidgetContents_4)
+        self.ow_label_33.setMinimumSize(QtCore.QSize(0, 40))
+        self.ow_label_33.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_label_33.setFont(font)
+        self.ow_label_33.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_label_33.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_label_33.setObjectName("ow_label_33")
+        self.horizontalLayout_22.addWidget(self.ow_label_33)
+        self.ow_line_7 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_4)
+        self.ow_line_7.setMinimumSize(QtCore.QSize(70, 40))
+        self.ow_line_7.setMaximumSize(QtCore.QSize(70, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_line_7.setFont(font)
+        self.ow_line_7.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_line_7.setText("")
+        self.ow_line_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_line_7.setReadOnly(False)
+        self.ow_line_7.setObjectName("ow_line_7")
+        self.horizontalLayout_22.addWidget(self.ow_line_7)
+        self.ow_label_34 = QtWidgets.QLabel(self.scrollAreaWidgetContents_4)
+        self.ow_label_34.setMinimumSize(QtCore.QSize(0, 50))
+        self.ow_label_34.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_label_34.setFont(font)
+        self.ow_label_34.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_label_34.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ow_label_34.setObjectName("ow_label_34")
+        self.horizontalLayout_22.addWidget(self.ow_label_34)
+        self.ow_edit_bt_5 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_4)
+        self.ow_edit_bt_5.setMinimumSize(QtCore.QSize(40, 40))
+        self.ow_edit_bt_5.setMaximumSize(QtCore.QSize(40, 40))
+        self.ow_edit_bt_5.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ow_edit_bt_5.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ow_edit_bt_5.setIcon(icon1)
+        self.ow_edit_bt_5.setIconSize(QtCore.QSize(36, 36))
+        self.ow_edit_bt_5.setObjectName("ow_edit_bt_5")
+        self.horizontalLayout_22.addWidget(self.ow_edit_bt_5)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_22.addItem(spacerItem2)
+        self.ow_vertical_layout_4.addLayout(self.horizontalLayout_22)
+        self.gridLayout_10.addLayout(self.ow_vertical_layout_4, 0, 0, 1, 1)
+        self.ow_scroll_area_4.setWidget(self.scrollAreaWidgetContents_4)
+        self.gridLayout_12.addWidget(self.ow_scroll_area_4, 0, 0, 1, 1)
+        self.ow_stacked_widget.addWidget(self.page_1)
+        self.page_2 = QtWidgets.QWidget()
+        self.page_2.setObjectName("page_2")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.page_2)
         self.gridLayout_5.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_5.setObjectName("gridLayout_5")
-        self.ow_scroll_area_1 = QtWidgets.QScrollArea(self.page_1)
+        self.ow_scroll_area_1 = QtWidgets.QScrollArea(self.page_2)
         self.ow_scroll_area_1.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -445,7 +728,7 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.ow_scroll_area_1.setObjectName("ow_scroll_area_1")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 445, 266))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 378, 266))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -463,7 +746,6 @@ class Ui_optionWindow(object):
         font.setBold(False)
         font.setItalic(True)
         font.setUnderline(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_label_1.setFont(font)
@@ -473,13 +755,13 @@ class Ui_optionWindow(object):
         self.ow_label_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ow_label_1.setObjectName("ow_label_1")
         self.horizontalLayout_3.addWidget(self.ow_label_1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem3)
         self.ow_vertical_layout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem1)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem4)
         self.gridLayout_3 = QtWidgets.QGridLayout()
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -515,9 +797,9 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ow_openButton.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ow_openButton.setIcon(icon1)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ow_openButton.setIcon(icon2)
         self.ow_openButton.setIconSize(QtCore.QSize(36, 36))
         self.ow_openButton.setAutoRaise(False)
         self.ow_openButton.setObjectName("ow_openButton")
@@ -562,7 +844,6 @@ class Ui_optionWindow(object):
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setBold(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_combobox_1.setFont(font)
@@ -638,21 +919,21 @@ class Ui_optionWindow(object):
         self.ow_combobox_1.addItem("")
         self.ow_combobox_1.addItem("")
         self.horizontalLayout_7.addWidget(self.ow_combobox_1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem2)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem5)
         self.gridLayout_3.addLayout(self.horizontalLayout_7, 0, 1, 1, 1)
         self.horizontalLayout_6.addLayout(self.gridLayout_3)
         self.ow_vertical_layout.addLayout(self.horizontalLayout_6)
         self.gridLayout_6.addLayout(self.ow_vertical_layout, 0, 0, 1, 1)
         self.ow_scroll_area_1.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_5.addWidget(self.ow_scroll_area_1, 0, 0, 1, 1)
-        self.ow_stacked_widget.addWidget(self.page_1)
-        self.page_2 = QtWidgets.QWidget()
-        self.page_2.setObjectName("page_2")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_2)
+        self.ow_stacked_widget.addWidget(self.page_2)
+        self.page_3 = QtWidgets.QWidget()
+        self.page_3.setObjectName("page_3")
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_3)
         self.gridLayout_9.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_9.setObjectName("gridLayout_9")
-        self.ow_scroll_area_3 = QtWidgets.QScrollArea(self.page_2)
+        self.ow_scroll_area_3 = QtWidgets.QScrollArea(self.page_3)
         self.ow_scroll_area_3.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -821,7 +1102,7 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.ow_scroll_area_3.setObjectName("ow_scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 485, 286))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, -41, 485, 286))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -839,7 +1120,6 @@ class Ui_optionWindow(object):
         font.setBold(False)
         font.setItalic(True)
         font.setUnderline(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_label_9.setFont(font)
@@ -862,7 +1142,6 @@ class Ui_optionWindow(object):
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setBold(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferDefault)
         self.ow_search_button.setFont(font)
@@ -892,13 +1171,13 @@ class Ui_optionWindow(object):
 "}")
         self.ow_search_button.setObjectName("ow_search_button")
         self.horizontalLayout_8.addWidget(self.ow_search_button)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem3)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem6)
         self.ow_vertical_layout_3.addLayout(self.horizontalLayout_8)
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem4)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem7)
         self.gridLayout_4 = QtWidgets.QGridLayout()
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
@@ -936,14 +1215,12 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ow_edit_bt_3.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ow_edit_bt_3.setIcon(icon2)
+        self.ow_edit_bt_3.setIcon(icon1)
         self.ow_edit_bt_3.setIconSize(QtCore.QSize(36, 36))
         self.ow_edit_bt_3.setObjectName("ow_edit_bt_3")
         self.horizontalLayout_10.addWidget(self.ow_edit_bt_3)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem5)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem8)
         self.gridLayout_4.addLayout(self.horizontalLayout_10, 0, 1, 1, 1)
         self.ow_label_10 = QtWidgets.QLabel(self.scrollAreaWidgetContents_3)
         self.ow_label_10.setMinimumSize(QtCore.QSize(0, 40))
@@ -1037,7 +1314,6 @@ class Ui_optionWindow(object):
         font.setBold(False)
         font.setItalic(True)
         font.setUnderline(False)
-        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ow_label_15.setFont(font)
@@ -1047,13 +1323,13 @@ class Ui_optionWindow(object):
         self.ow_label_15.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ow_label_15.setObjectName("ow_label_15")
         self.horizontalLayout_11.addWidget(self.ow_label_15)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_11.addItem(spacerItem6)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_11.addItem(spacerItem9)
         self.ow_vertical_layout_3.addLayout(self.horizontalLayout_11)
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
-        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_12.addItem(spacerItem7)
+        spacerItem10 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem10)
         self.ow_label_16 = QtWidgets.QLabel(self.scrollAreaWidgetContents_3)
         self.ow_label_16.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_16.setMaximumSize(QtCore.QSize(16777215, 50))
@@ -1117,23 +1393,23 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ow_edit_bt_4.setText("")
-        self.ow_edit_bt_4.setIcon(icon2)
+        self.ow_edit_bt_4.setIcon(icon1)
         self.ow_edit_bt_4.setIconSize(QtCore.QSize(36, 36))
         self.ow_edit_bt_4.setObjectName("ow_edit_bt_4")
         self.horizontalLayout_12.addWidget(self.ow_edit_bt_4)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_12.addItem(spacerItem8)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem11)
         self.ow_vertical_layout_3.addLayout(self.horizontalLayout_12)
         self.gridLayout_8.addLayout(self.ow_vertical_layout_3, 0, 0, 1, 1)
         self.ow_scroll_area_3.setWidget(self.scrollAreaWidgetContents_3)
         self.gridLayout_9.addWidget(self.ow_scroll_area_3, 0, 0, 1, 1)
-        self.ow_stacked_widget.addWidget(self.page_2)
-        self.page_3 = QtWidgets.QWidget()
-        self.page_3.setObjectName("page_3")
-        self.gridLayout_2 = QtWidgets.QGridLayout(self.page_3)
+        self.ow_stacked_widget.addWidget(self.page_3)
+        self.page_4 = QtWidgets.QWidget()
+        self.page_4.setObjectName("page_4")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.page_4)
         self.gridLayout_2.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.ow_scroll_area_2 = QtWidgets.QScrollArea(self.page_3)
+        self.ow_scroll_area_2 = QtWidgets.QScrollArea(self.page_4)
         self.ow_scroll_area_2.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -1302,7 +1578,7 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.ow_scroll_area_2.setObjectName("ow_scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 445, 266))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 398, 333))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -1328,13 +1604,13 @@ class Ui_optionWindow(object):
         self.ow_label_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ow_label_6.setObjectName("ow_label_6")
         self.horizontalLayout_4.addWidget(self.ow_label_6)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem9)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem12)
         self.ow_vertical_layout_2.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        spacerItem10 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem10)
+        spacerItem13 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem13)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.ow_label_7 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
@@ -1451,7 +1727,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ow_edit_bt_1.setText("")
-        self.ow_edit_bt_1.setIcon(icon2)
+        self.ow_edit_bt_1.setIcon(icon1)
         self.ow_edit_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ow_edit_bt_1.setObjectName("ow_edit_bt_1")
         self.gridLayout.addWidget(self.ow_edit_bt_1, 0, 3, 1, 1)
@@ -1469,19 +1745,19 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ow_edit_bt_2.setText("")
-        self.ow_edit_bt_2.setIcon(icon2)
+        self.ow_edit_bt_2.setIcon(icon1)
         self.ow_edit_bt_2.setIconSize(QtCore.QSize(36, 36))
         self.ow_edit_bt_2.setObjectName("ow_edit_bt_2")
         self.gridLayout.addWidget(self.ow_edit_bt_2, 1, 3, 1, 1)
         self.horizontalLayout_5.addLayout(self.gridLayout)
-        spacerItem11 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_5.addItem(spacerItem11)
+        spacerItem14 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem14)
         self.ow_vertical_layout_2.addLayout(self.horizontalLayout_5)
-        self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
-        self.ow_label_19 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.ow_label_19.setMinimumSize(QtCore.QSize(0, 27))
-        self.ow_label_19.setMaximumSize(QtCore.QSize(16777215, 27))
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        self.ow_label_21 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.ow_label_21.setMinimumSize(QtCore.QSize(0, 27))
+        self.ow_label_21.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
@@ -1489,23 +1765,25 @@ class Ui_optionWindow(object):
         font.setUnderline(False)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ow_label_19.setFont(font)
-        self.ow_label_19.setStyleSheet("QLabel {\n"
+        self.ow_label_21.setFont(font)
+        self.ow_label_21.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.ow_label_19.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.ow_label_19.setObjectName("ow_label_19")
-        self.horizontalLayout_14.addWidget(self.ow_label_19)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_14.addItem(spacerItem12)
-        self.ow_vertical_layout_2.addLayout(self.horizontalLayout_14)
+        self.ow_label_21.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ow_label_21.setObjectName("ow_label_21")
+        self.horizontalLayout_15.addWidget(self.ow_label_21)
+        spacerItem15 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_15.addItem(spacerItem15)
+        self.ow_vertical_layout_2.addLayout(self.horizontalLayout_15)
         self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        spacerItem13 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_13.addItem(spacerItem13)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_13.addItem(spacerItem16)
+        self.gridLayout_11 = QtWidgets.QGridLayout()
+        self.gridLayout_11.setObjectName("gridLayout_11")
         self.ow_label_18 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.ow_label_18.setMinimumSize(QtCore.QSize(0, 40))
-        self.ow_label_18.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.ow_label_18.setMinimumSize(QtCore.QSize(0, 50))
+        self.ow_label_18.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
@@ -1515,32 +1793,27 @@ class Ui_optionWindow(object):
         self.ow_label_18.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.ow_label_18.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_label_18.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ow_label_18.setObjectName("ow_label_18")
-        self.horizontalLayout_13.addWidget(self.ow_label_18)
-        self.ow_line_7 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.ow_line_7.setMinimumSize(QtCore.QSize(70, 40))
-        self.ow_line_7.setMaximumSize(QtCore.QSize(70, 40))
+        self.gridLayout_11.addWidget(self.ow_label_18, 0, 2, 1, 1)
+        self.ow_label_19 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.ow_label_19.setMinimumSize(QtCore.QSize(0, 50))
+        self.ow_label_19.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ow_line_7.setFont(font)
-        self.ow_line_7.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+        self.ow_label_19.setFont(font)
+        self.ow_label_19.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.ow_line_7.setText("")
-        self.ow_line_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ow_line_7.setReadOnly(False)
-        self.ow_line_7.setObjectName("ow_line_7")
-        self.horizontalLayout_13.addWidget(self.ow_line_7)
+        self.ow_label_19.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ow_label_19.setObjectName("ow_label_19")
+        self.gridLayout_11.addWidget(self.ow_label_19, 1, 2, 1, 1)
         self.ow_label_20 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.ow_label_20.setMinimumSize(QtCore.QSize(0, 50))
-        self.ow_label_20.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.ow_label_20.setMinimumSize(QtCore.QSize(0, 55))
+        self.ow_label_20.setMaximumSize(QtCore.QSize(16777215, 55))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
@@ -1550,13 +1823,68 @@ class Ui_optionWindow(object):
         self.ow_label_20.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.ow_label_20.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ow_label_20.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_label_20.setWordWrap(True)
         self.ow_label_20.setObjectName("ow_label_20")
-        self.horizontalLayout_13.addWidget(self.ow_label_20)
-        self.ow_edit_bt_5 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_2)
-        self.ow_edit_bt_5.setMinimumSize(QtCore.QSize(40, 40))
-        self.ow_edit_bt_5.setMaximumSize(QtCore.QSize(40, 40))
-        self.ow_edit_bt_5.setStyleSheet("QToolButton {\n"
+        self.gridLayout_11.addWidget(self.ow_label_20, 0, 0, 1, 1)
+        self.ow_label_22 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.ow_label_22.setMinimumSize(QtCore.QSize(0, 60))
+        self.ow_label_22.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_label_22.setFont(font)
+        self.ow_label_22.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_label_22.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_label_22.setWordWrap(True)
+        self.ow_label_22.setObjectName("ow_label_22")
+        self.gridLayout_11.addWidget(self.ow_label_22, 1, 0, 1, 1)
+        self.ow_line_6 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
+        self.ow_line_6.setMinimumSize(QtCore.QSize(50, 40))
+        self.ow_line_6.setMaximumSize(QtCore.QSize(50, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_line_6.setFont(font)
+        self.ow_line_6.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_line_6.setText("")
+        self.ow_line_6.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_line_6.setObjectName("ow_line_6")
+        self.gridLayout_11.addWidget(self.ow_line_6, 0, 1, 1, 1)
+        self.ow_line_8 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
+        self.ow_line_8.setMinimumSize(QtCore.QSize(50, 40))
+        self.ow_line_8.setMaximumSize(QtCore.QSize(50, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ow_line_8.setFont(font)
+        self.ow_line_8.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ow_line_8.setText("")
+        self.ow_line_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ow_line_8.setObjectName("ow_line_8")
+        self.gridLayout_11.addWidget(self.ow_line_8, 1, 1, 1, 1)
+        self.ow_edit_bt_6 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_2)
+        self.ow_edit_bt_6.setMinimumSize(QtCore.QSize(50, 50))
+        self.ow_edit_bt_6.setMaximumSize(QtCore.QSize(50, 50))
+        self.ow_edit_bt_6.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
 "    width: 27px;\n"
@@ -1566,21 +1894,40 @@ class Ui_optionWindow(object):
 "QToolButton:flat {\n"
 "    border: none;\n"
 "}")
-        self.ow_edit_bt_5.setText("")
-        self.ow_edit_bt_5.setIcon(icon2)
-        self.ow_edit_bt_5.setIconSize(QtCore.QSize(36, 36))
-        self.ow_edit_bt_5.setObjectName("ow_edit_bt_5")
-        self.horizontalLayout_13.addWidget(self.ow_edit_bt_5)
-        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_13.addItem(spacerItem14)
+        self.ow_edit_bt_6.setText("")
+        self.ow_edit_bt_6.setIcon(icon1)
+        self.ow_edit_bt_6.setIconSize(QtCore.QSize(36, 36))
+        self.ow_edit_bt_6.setObjectName("ow_edit_bt_6")
+        self.gridLayout_11.addWidget(self.ow_edit_bt_6, 0, 3, 1, 1)
+        self.ow_edit_bt_7 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_2)
+        self.ow_edit_bt_7.setMinimumSize(QtCore.QSize(50, 50))
+        self.ow_edit_bt_7.setMaximumSize(QtCore.QSize(50, 50))
+        self.ow_edit_bt_7.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ow_edit_bt_7.setText("")
+        self.ow_edit_bt_7.setIcon(icon1)
+        self.ow_edit_bt_7.setIconSize(QtCore.QSize(36, 36))
+        self.ow_edit_bt_7.setObjectName("ow_edit_bt_7")
+        self.gridLayout_11.addWidget(self.ow_edit_bt_7, 1, 3, 1, 1)
+        self.horizontalLayout_13.addLayout(self.gridLayout_11)
+        spacerItem17 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_13.addItem(spacerItem17)
         self.ow_vertical_layout_2.addLayout(self.horizontalLayout_13)
         self.gridLayout_7.addLayout(self.ow_vertical_layout_2, 0, 0, 1, 1)
         self.ow_scroll_area_2.setWidget(self.scrollAreaWidgetContents_2)
         self.gridLayout_2.addWidget(self.ow_scroll_area_2, 1, 0, 1, 1)
-        self.ow_stacked_widget.addWidget(self.page_3)
-        self.gridLayout_10.addWidget(self.ow_splitter, 0, 0, 1, 1)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_10.addItem(spacerItem15, 1, 0, 1, 1)
+        self.ow_stacked_widget.addWidget(self.page_4)
+        self.gridLayout_13.addWidget(self.ow_splitter, 0, 0, 1, 1)
+        spacerItem18 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_13.addItem(spacerItem18, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ow_ok_button = QtWidgets.QToolButton(optionWindow)
@@ -1593,7 +1940,6 @@ class Ui_optionWindow(object):
         self.ow_ok_button.setMinimumSize(QtCore.QSize(50, 50))
         self.ow_ok_button.setMaximumSize(QtCore.QSize(50, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(22)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1617,8 +1963,8 @@ class Ui_optionWindow(object):
         self.ow_ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ow_ok_button.setObjectName("ow_ok_button")
         self.horizontalLayout_2.addWidget(self.ow_ok_button)
-        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem16)
+        spacerItem19 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem19)
         self.ow_cancel_button = QtWidgets.QToolButton(optionWindow)
         self.ow_cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -1629,7 +1975,6 @@ class Ui_optionWindow(object):
         self.ow_cancel_button.setMinimumSize(QtCore.QSize(50, 50))
         self.ow_cancel_button.setMaximumSize(QtCore.QSize(50, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(22)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1653,9 +1998,9 @@ class Ui_optionWindow(object):
         self.ow_cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.ow_cancel_button.setObjectName("ow_cancel_button")
         self.horizontalLayout_2.addWidget(self.ow_cancel_button)
-        spacerItem17 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem17)
-        self.gridLayout_10.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
+        spacerItem20 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem20)
+        self.gridLayout_13.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(optionWindow)
         self.ow_stacked_widget.setCurrentIndex(0)
@@ -1667,12 +2012,17 @@ class Ui_optionWindow(object):
         __sortingEnabled = self.ow_section_list.isSortingEnabled()
         self.ow_section_list.setSortingEnabled(False)
         item = self.ow_section_list.item(0)
-        item.setText(_translate("optionWindow", "Log"))
+        item.setText(_translate("optionWindow", "Calculs"))
         item = self.ow_section_list.item(1)
-        item.setText(_translate("optionWindow", "Météo-France"))
+        item.setText(_translate("optionWindow", "Log"))
         item = self.ow_section_list.item(2)
-        item.setText(_translate("optionWindow", "System"))
+        item.setText(_translate("optionWindow", "Météo-France"))
+        item = self.ow_section_list.item(3)
+        item.setText(_translate("optionWindow", "Système"))
         self.ow_section_list.setSortingEnabled(__sortingEnabled)
+        self.ow_label_32.setText(_translate("optionWindow", "Calcul pression au niveau de la mer :"))
+        self.ow_label_33.setText(_translate("optionWindow", "Altitude :"))
+        self.ow_label_34.setText(_translate("optionWindow", "mètres"))
         self.ow_label_1.setText(_translate("optionWindow", "Options de log :"))
         self.ow_label_3.setText(_translate("optionWindow", "Chemin du log :"))
         self.ow_label_2.setText(_translate("optionWindow", "Niveau de log :"))
@@ -1689,11 +2039,13 @@ class Ui_optionWindow(object):
         self.ow_label_15.setText(_translate("optionWindow", "Requête des prévisions météo:"))
         self.ow_label_16.setText(_translate("optionWindow", "Intervalle :"))
         self.ow_label_17.setText(_translate("optionWindow", "minutes"))
-        self.ow_label_6.setText(_translate("optionWindow", "Températures intérieur/extérieur :"))
+        self.ow_label_6.setText(_translate("optionWindow", "Capteur intérieur :"))
         self.ow_label_7.setText(_translate("optionWindow", "secondes"))
         self.ow_label_8.setText(_translate("optionWindow", "secondes"))
         self.ow_label_4.setText(_translate("optionWindow", "Rafraichissement des sondes :"))
         self.ow_label_5.setText(_translate("optionWindow", "Rafraichissement de l\'affichage :"))
-        self.ow_label_19.setText(_translate("optionWindow", "Calcul pression au niveau de la mer :"))
-        self.ow_label_18.setText(_translate("optionWindow", "Altitude :"))
-        self.ow_label_20.setText(_translate("optionWindow", "mètres"))
+        self.ow_label_21.setText(_translate("optionWindow", "Capteur extérieur :"))
+        self.ow_label_18.setText(_translate("optionWindow", "secondes"))
+        self.ow_label_19.setText(_translate("optionWindow", "secondes"))
+        self.ow_label_20.setText(_translate("optionWindow", "Rafraichissement des sondes :"))
+        self.ow_label_22.setText(_translate("optionWindow", "Rafraichissement de l\'affichage :"))

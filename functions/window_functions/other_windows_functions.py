@@ -95,6 +95,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_vertical_layout.setAlignment(QtCore.Qt.AlignTop)
         self.ow_vertical_layout_2.setAlignment(QtCore.Qt.AlignTop)
         self.ow_vertical_layout_3.setAlignment(QtCore.Qt.AlignTop)
+        self.ow_vertical_layout_4.setAlignment(QtCore.Qt.AlignTop)
         self.ow_combobox_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ow_section_list.currentRowChanged.connect(self.display_options)
         self.ow_ok_button.clicked.connect(self.save_config_dict)
@@ -105,6 +106,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_edit_bt_3.clicked.connect(self.display_keyboard)
         self.ow_edit_bt_4.clicked.connect(self.display_numpad)
         self.ow_edit_bt_5.clicked.connect(self.display_numpad)
+        self.ow_edit_bt_6.clicked.connect(self.display_numpad)
+        self.ow_edit_bt_7.clicked.connect(self.display_numpad)
         self.ow_line_4.textChanged.connect(self.activate_search_button)
         self.ow_search_button.clicked.connect(self.search_place)
         self.set_window_icons()
@@ -121,6 +124,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_edit_bt_3.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
         self.ow_edit_bt_4.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
         self.ow_edit_bt_5.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_6.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
+        self.ow_edit_bt_7.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
         self.ow_ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
         self.ow_cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
 
@@ -140,8 +145,10 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_combobox_1.setCurrentIndex(self.ow_combobox_1.findText(self.config_dict.get('LOG', 'level')))
         self.ow_line_1.setText(self.config_dict.get('LOG', 'path'))
         self.ow_line_1.setCursorPosition(0)
-        self.ow_line_2.setText(self.config_dict.get('SYSTEM', 'sensors_rate'))
-        self.ow_line_3.setText(self.config_dict.get('SYSTEM', 'display_rate'))
+        self.ow_line_2.setText(self.config_dict.get('SYSTEM', 'in_sensors_rate'))
+        self.ow_line_3.setText(self.config_dict.get('SYSTEM', 'in_display_rate'))
+        self.ow_line_6.setText(self.config_dict.get('SYSTEM', 'out_sensors_rate'))
+        self.ow_line_8.setText(self.config_dict.get('SYSTEM', 'out_display_rate'))
         self.ow_line_7.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
         self.ow_line_5.setText(self.config_dict.get('METEOFRANCE', 'request_rate'))
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
@@ -162,8 +169,10 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         else:
             self.config_dict.set('LOG', 'level', str(self.ow_combobox_1.currentText()))
             self.config_dict.set('LOG', 'path', str(self.ow_line_1.text()))
-            self.config_dict.set('SYSTEM', 'sensors_rate', str(self.ow_line_2.text()))
-            self.config_dict.set('SYSTEM', 'display_rate', str(self.ow_line_3.text()))
+            self.config_dict.set('SYSTEM', 'in_sensors_rate', str(self.ow_line_2.text()))
+            self.config_dict.set('SYSTEM', 'in_display_rate', str(self.ow_line_3.text()))
+            self.config_dict.set('SYSTEM', 'out_sensors_rate', str(self.ow_line_6.text()))
+            self.config_dict.set('SYSTEM', 'out_display_rate', str(self.ow_line_8.text()))
             self.config_dict.set('METEOFRANCE', 'request_rate', str(self.ow_line_5.text()))
             self.config_dict.set('SYSTEM', 'place_altitude', str(self.ow_line_7.text()))
             if self.place_object is not None:
@@ -210,13 +219,6 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_13.setText(code_postal)
             self.ow_label_14.setText(departement)
 
-    # def button_info(self):
-    #     logging.debug('gui - other_windows_functions.py - MyOptions - button_info')
-    #     text = self.information_text[self.sender().objectName()]
-    #     text = 'no information yet'
-    #     info_window = MyInfo(text)
-    #     info_window.exec_()
-
     def display_numpad(self):
         numpad_window = MyNumpad(self.gui_path, self)
         numpad_window.setGeometry(227, 26, 246, 298)
@@ -230,6 +232,10 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ow_line_5.setText(numpad_window.num_line.text())
             elif self.sender().objectName() == 'ow_edit_bt_5':
                 self.ow_line_7.setText(numpad_window.num_line.text())
+            elif self.sender().objectName() == 'ow_edit_bt_6':
+                self.ow_line_6.setText(numpad_window.num_line.text())
+            elif self.sender().objectName() == 'ow_edit_bt_7':
+                self.ow_line_8.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
         keyboard_window = MyKeyboard(self.gui_path, self)
