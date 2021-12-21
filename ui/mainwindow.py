@@ -26,8 +26,8 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
                                                                 MyWait)
-from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, DBDataDisplayThread,
-                                                        BME280DataCollectingThread, MqttToDbThread)
+from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
+                                                        MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion,
                                                       RequestPlotDataThread)
@@ -70,6 +70,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_mqtt_data_thread = None
         self.display_sensors_data_thread = None
         self.query_mf_forecast_thread = None
+        self.display_in_data_thread = None
+        self.display_out_data_thread = None
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.request_plot_thread = None
@@ -233,12 +235,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
 
         self.display_in_data_thread = DBInDataThread(self.cursor, self.config_dict)
+        self.display_in_data_thread.db_data.connect(self.refresh_in_display)
+        self.display_in_data_thread.error.connect(self.log_thread_error)
+        self.display_in_data_thread.start()
 
-
-        self.display_sensors_data_thread = DBDataDisplayThread(self.cursor, self.config_dict)
-        self.display_sensors_data_thread.db_data.connect(self.refresh_in_out_display)
-        self.display_sensors_data_thread.error.connect(self.log_thread_error)
-        self.display_sensors_data_thread.start()
+        self.display_out_data_thread = DBOutDataThread(self.cursor, self.config_dict)
+        self.display_out_data_thread.db_data.connect(self.refresh_out_display)
+        self.display_out_data_thread.error.connect(self.log_thread_error)
+        self.display_out_data_thread.start()
 
     def check_internet_connection(self):
         self.check_internet = CheckInternetConnexion()
@@ -276,39 +280,77 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.error.connect(self.log_thread_error)
         self.check_update_thread.start()
 
-    def refresh_in_out_display(self, data_dict):
-        dt = data_dict['datetime']
-        in_temp = 'No data'
-        in_minmax_temp = 'No data / No data'
-        out_temp = 'No data'
-        out_minmax_temp = 'No data / No data'
-        humid = 'No data'
+    def refresh_in_display(self, data_dict):
+        temp = 'No data'
+        temp_minmax = 'No data / No data'
+        hum = 'No data'
         pres = 'No data'
-        presmsl = 'No data'
-        if (datetime.datetime.now() - dt).total_seconds() <= 10800:
-            if data_dict['temp_in'] is not None:
-                in_temp = f'{data_dict["temp_in"]} °C'
-            if data_dict['temp_minmax_in'] is not None:
-                in_minmax_temp = f'{data_dict["temp_minmax_in"][0]} °C / {data_dict["temp_minmax_in"][1]} °C'
-            if data_dict['temp_out'] is not None:
-                out_temp = f'{data_dict["temp_out"]} °C'
-            if data_dict['temp_minmax_out'] is not None:
-                out_minmax_temp = f'{data_dict["temp_minmax_out"][0]} °C / {data_dict["temp_minmax_out"][1]} °C'
-            if data_dict['hum_in'] is not None:
-                humid = f'{round(data_dict["hum_in"])} %'
-            if data_dict['pres_in'] is not None:
-                pres = f'{round(data_dict["pres_in"])} hPa'
-            if data_dict['presmsl_in'] is not None:
-                presmsl = f'{round(data_dict["presmsl_in"])} hPa'
+        if data_dict['temp'] is not None:
+            temp = f'{data_dict["temp"]} °C'
+        if data_dict['temp_minmax'] is not None:
+            temp_minmax = f'{data_dict["temp_minmax"][0]} °C / {data_dict["temp_minmax"][1]} °C'
+        if data_dict['hum'] is not None:
+            hum = f'{round(data_dict["hum"])} %'
+        if data_dict['pres'] is not None:
+            pres = f'{round(data_dict["pres"])} hPa'
+        self.in_temperature_label.setText(f'{temp}')
+        self.in_label_3.setText(f'{temp_minmax}')
+        hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
+                    f"<p align=\"center\">Pression : {pres}</p></body></html>")
+        self.in_humidity_label_1.setText(hum_pres)
 
-        self.in_temperature_label.setText(f'{in_temp}')
-        self.in_label_3.setText(f'{in_minmax_temp}')
-        self.out_temperature_label.setText(f'{out_temp}')
-        self.out_label_3.setText(f'{out_minmax_temp}')
-        self.in_humidity_label_1.setText(f'Humidité : {humid}')
-        pressure = (f"<html><head/><body><p align=\"center\">Pression : {pres}</p>"
+    def refresh_out_display(self, data_dict):
+        temp = 'No data'
+        temp_minmax = 'No data / No data'
+        hum = 'No data'
+        presmsl = 'No data'
+        if data_dict['temp'] is not None:
+            temp = f'{data_dict["temp"]} °C'
+        if data_dict['temp_minmax'] is not None:
+            temp_minmax = f'{data_dict["temp_minmax"][0]} °C / {data_dict["temp_minmax"][1]} °C'
+        if data_dict['hum'] is not None:
+            hum = f'{round(data_dict["hum"])} %'
+        if data_dict['presmsl'] is not None:
+            presmsl = f'{round(data_dict["presmsl"])} hPa'
+        self.out_temperature_label.setText(f'{temp}')
+        self.out_label_3.setText(f'{temp_minmax}')
+        hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
                     f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
-        self.out_pressure_label_1.setText(pressure)
+        self.out_pressure_label_1.setText(hum_pres)
+
+    # def refresh_in_out_display(self, data_dict):
+    #     dt = data_dict['datetime']
+    #     in_temp = 'No data'
+    #     in_minmax_temp = 'No data / No data'
+    #     out_temp = 'No data'
+    #     out_minmax_temp = 'No data / No data'
+    #     humid = 'No data'
+    #     pres = 'No data'
+    #     presmsl = 'No data'
+    #     if (datetime.datetime.now() - dt).total_seconds() <= 10800:
+    #         if data_dict['temp_in'] is not None:
+    #             in_temp = f'{data_dict["temp_in"]} °C'
+    #         if data_dict['temp_minmax_in'] is not None:
+    #             in_minmax_temp = f'{data_dict["temp_minmax_in"][0]} °C / {data_dict["temp_minmax_in"][1]} °C'
+    #         if data_dict['temp_out'] is not None:
+    #             out_temp = f'{data_dict["temp_out"]} °C'
+    #         if data_dict['temp_minmax_out'] is not None:
+    #             out_minmax_temp = f'{data_dict["temp_minmax_out"][0]} °C / {data_dict["temp_minmax_out"][1]} °C'
+    #         if data_dict['hum_in'] is not None:
+    #             humid = f'{round(data_dict["hum_in"])} %'
+    #         if data_dict['pres_in'] is not None:
+    #             pres = f'{round(data_dict["pres_in"])} hPa'
+    #         if data_dict['presmsl_in'] is not None:
+    #             presmsl = f'{round(data_dict["presmsl_in"])} hPa'
+    #
+    #     self.in_temperature_label.setText(f'{in_temp}')
+    #     self.in_label_3.setText(f'{in_minmax_temp}')
+    #     self.out_temperature_label.setText(f'{out_temp}')
+    #     self.out_label_3.setText(f'{out_minmax_temp}')
+    #     self.in_humidity_label_1.setText(f'Humidité : {humid}')
+    #     pressure = (f"<html><head/><body><p align=\"center\">Pression : {pres}</p>"
+    #                 f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
+    #     self.out_pressure_label_1.setText(pressure)
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')

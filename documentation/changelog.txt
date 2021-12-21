@@ -1,8 +1,6 @@
 ### To do list: ###
 
 * handle nan in plots and keep empty data
-* une fois l'humidité ajouté à l'extérieur, proposé une option pour afficher les deux pressions dans les 2 fenêtres
-extérieur et intérieur, ou pres ext ou pres sl ext.
 
   
 ### To fix list: ###
@@ -28,7 +26,9 @@ extérieur et intérieur, ou pres ext ou pres sl ext.
     * the time series plotting function has been moved in a QThread.
     * ID has been removed from the database.
     * collecting thread has been split into different threads : one thread per captor.
-
+    * displaying thread has been split into different thread : one thread for inside and outside.
+    * pressure and msl pressure have been separated in both exterior and interior frames.
+    * modified option window to separate in and out sensor/display options.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.

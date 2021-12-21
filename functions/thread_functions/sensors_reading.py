@@ -12,7 +12,6 @@ if platform.system() == 'Linux':
     import paho.mqtt.client as mqtt
 
 
-
 class DS18B20DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
@@ -21,7 +20,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
         self.connector = connector
         self.cursor = cursor
-        self.sensors_rate = int(config_dict.get('SYSTEM', 'sensors_rate'))
+        self.sensors_rate = int(config_dict.get('SYSTEM', 'out_sensors_rate'))
 
     def run(self):
         while True:
@@ -63,10 +62,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
     @staticmethod
     def collect_test_data(num, limit):
         random.seed()
-        if random.randrange(1, 7, 1) == 1:
-            return None
-        else:
-            return round(num + random.uniform(0, limit), 1)
+        return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - stop')
@@ -81,7 +77,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - __init__')
         self.connector = connector
         self.cursor = cursor
-        self.sensors_rate = int(config_dict.get('SYSTEM', 'sensors_rate'))
+        self.sensors_rate = int(config_dict.get('SYSTEM', 'in_sensors_rate'))
         self.cal_params = None
         self.bus = None
         self.address = None
@@ -147,94 +143,10 @@ class BME280DataCollectingThread(QtCore.QThread):
     @staticmethod
     def collect_test_data(num, limit):
         random.seed()
-        if random.randrange(1, 7, 1) == 1:
-            return None
-        else:
-            return round(num + random.uniform(0, limit), 1)
+        return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - stop')
-        self.terminate()
-
-
-class DBDataDisplayThread(QtCore.QThread):
-    db_data = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
-
-    def __init__(self, cursor, config_dict):
-        QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - DBDataDisplayThread - __init__')
-        self.cursor = cursor
-        self.display_rate = int(config_dict.get('SYSTEM', 'display_rate'))
-
-    def run(self):
-        logging.debug('gui - sensors_reading.py - DBDataDisplayThread - run')
-        time.sleep(self.display_rate / 2.)
-
-        temp_in = 'SELECT date_time, temperature FROM "BME280" ORDER BY date_time DESC LIMIT 1'
-        temp_minmax_in = 'SELECT MIN (temperature), MAX (temperature) FROM "BME280"'
-        temp_out = 'SELECT temperature FROM "DS18B20" ORDER BY date_time DESC LIMIT 1'
-        temp_minmax_out = 'SELECT MIN (temperature), MAX (temperature) FROM "DS18B20"'
-        hum_in = 'SELECT humidite FROM "BME280" ORDER BY date_time DESC LIMIT 1'
-        pres_in = 'SELECT pression FROM "BME280" ORDER BY date_time DESC LIMIT 1'
-        presmsl_in = 'SELECT pression_msl FROM "BME280" ORDER BY date_time DESC LIMIT 1'
-
-        while True:
-            try:
-                temp_dict = {'temp_in': None, 'temp_minmax_in': None, 'temp_out': None,
-                             'temp_minmax_out': None, 'hum_in': None, 'pres_in': None,
-                             'presmsl_in': None, 'datetime': None}
-                try:
-                    self.cursor.execute(temp_in)
-                    data = self.cursor.fetchone()
-                    temp_dict['temp_in'] = data[1]
-                    temp_dict['datetime'] = data[0]
-                except psycopg2.ProgrammingError:
-                    temp_dict['temp_in'] = None
-                    temp_dict['datetime'] = None
-                try:
-                    self.cursor.execute(temp_minmax_in)
-                    data = self.cursor.fetchone()
-                    temp_dict['temp_minmax_in'] = data
-                except psycopg2.ProgrammingError:
-                    temp_dict['temp_minmax_in'] = None
-                try:
-                    self.cursor.execute(temp_out)
-                    data = self.cursor.fetchone()
-                    temp_dict['temp_out'] = data[0]
-                except psycopg2.ProgrammingError:
-                    temp_dict['temp_out'] = None
-                try:
-                    self.cursor.execute(temp_minmax_out)
-                    data = self.cursor.fetchone()
-                    temp_dict['temp_minmax_out'] = data
-                except psycopg2.ProgrammingError:
-                    temp_dict['temp_minmax_out'] = None
-                try:
-                    self.cursor.execute(hum_in)
-                    data = self.cursor.fetchone()
-                    temp_dict['hum_in'] = data[0]
-                except psycopg2.ProgrammingError:
-                    temp_dict['hum_in'] = None
-                try:
-                    self.cursor.execute(pres_in)
-                    data = self.cursor.fetchone()
-                    temp_dict['pres_in'] = data[0]
-                except psycopg2.ProgrammingError:
-                    temp_dict['pres_in'] = None
-                try:
-                    self.cursor.execute(presmsl_in)
-                    data = self.cursor.fetchone()
-                    temp_dict['presmsl_in'] = data[0]
-                except psycopg2.ProgrammingError:
-                    temp_dict['presmsl_in'] = None
-                self.db_data.emit(temp_dict)
-            except Exception as e:
-                self.error.emit(['data display', e])
-            time.sleep(self.display_rate)
-
-    def stop(self):
-        logging.debug('gui - sensors_reading.py - DBDataDisplayThread - stop')
         self.terminate()
 
 
@@ -309,11 +221,93 @@ class MqttToDbThread(QtCore.QThread):
     @staticmethod
     def collect_test_data(num, limit):
         random.seed()
-        if random.randrange(1, 7, 1) == 1:
-            return None
-        else:
-            return round(num + random.uniform(0, limit), 1)
+        return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
+        self.terminate()
+
+
+class DBInDataThread(QtCore.QThread):
+    db_data = QtCore.pyqtSignal(dict)
+    error = QtCore.pyqtSignal(list)
+
+    def __init__(self, cursor, config_dict):
+        QtCore.QThread.__init__(self)
+        logging.debug('gui - sensors_reading.py - DBInDataThread - __init__')
+        self.cursor = cursor
+        self.display_rate = int(config_dict.get('SYSTEM', 'in_display_rate'))
+
+    def run(self):
+        logging.debug('gui - sensors_reading.py - DBInDataThread - run')
+        time.sleep(2)
+        database = 'BME280'
+        req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
+                    'hum': f'SELECT humidite FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'pres': f'SELECT pression FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'presmsl': f'SELECT pression_msl FROM "{database}" ORDER BY date_time DESC LIMIT 1'}
+        while True:
+            var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'presmsl': None}
+            for var, req in req_dict.items():
+                try:
+                    self.cursor.execute(req)
+                    data = self.cursor.fetchone()
+                    if var == 'temp_minmax':
+                        var_dict[var] = data
+                    else:
+                        var_dict[var] = data[0]
+                except psycopg2.ProgrammingError:
+                    var_dict[var] = None
+                except Exception as e:
+                    self.error.emit(['data in display', e])
+            self.db_data.emit(var_dict)
+            time.sleep(self.display_rate)
+
+    def stop(self):
+        logging.debug('gui - sensors_reading.py - DBInDataThread - stop')
+        self.terminate()
+
+
+class DBOutDataThread(QtCore.QThread):
+    db_data = QtCore.pyqtSignal(dict)
+    error = QtCore.pyqtSignal(list)
+
+    def __init__(self, cursor, config_dict):
+        QtCore.QThread.__init__(self)
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - __init__')
+        self.cursor = cursor
+        self.display_rate = int(config_dict.get('SYSTEM', 'out_display_rate'))
+
+    def run(self):
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - run')
+        time.sleep(4)
+        database = 'AQARA_THP'
+        req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
+                    'hum': f'SELECT humidite FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'pres': f'SELECT pression FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'presmsl': f'SELECT pression_msl FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'bat': f'SELECT batterie FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'link': f'SELECT qualite FROM "{database}" ORDER BY date_time DESC LIMIT 1'}
+        while True:
+            var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'presmsl': None, 'bat': None,
+                        'link': None}
+            for var, req in req_dict.items():
+                try:
+                    self.cursor.execute(req)
+                    data = self.cursor.fetchone()
+                    if var == 'temp_minmax':
+                        var_dict[var] = data
+                    else:
+                        var_dict[var] = data[0]
+                except psycopg2.ProgrammingError:
+                    var_dict[var] = None
+                except Exception as e:
+                    self.error.emit(['data out display', e])
+            self.db_data.emit(var_dict)
+            time.sleep(self.display_rate)
+
+    def stop(self):
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop')
         self.terminate()
