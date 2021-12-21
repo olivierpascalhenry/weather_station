@@ -233,12 +233,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-
         self.display_in_data_thread = DBInDataThread(self.cursor, self.config_dict)
         self.display_in_data_thread.db_data.connect(self.refresh_in_display)
         self.display_in_data_thread.error.connect(self.log_thread_error)
         self.display_in_data_thread.start()
-
         self.display_out_data_thread = DBOutDataThread(self.cursor, self.config_dict)
         self.display_out_data_thread.db_data.connect(self.refresh_out_display)
         self.display_out_data_thread.error.connect(self.log_thread_error)
@@ -304,6 +302,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         temp_minmax = 'No data / No data'
         hum = 'No data'
         presmsl = 'No data'
+        bat = None
+        link = None
         if data_dict['temp'] is not None:
             temp = f'{data_dict["temp"]} °C'
         if data_dict['temp_minmax'] is not None:
@@ -312,45 +312,47 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             hum = f'{round(data_dict["hum"])} %'
         if data_dict['presmsl'] is not None:
             presmsl = f'{round(data_dict["presmsl"])} hPa'
+        if data_dict['bat'] is not None:
+            bat = data_dict['bat']
+        if data_dict['link'] is not None:
+            link = data_dict['link']
         self.out_temperature_label.setText(f'{temp}')
         self.out_label_3.setText(f'{temp_minmax}')
         hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
                     f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
         self.out_pressure_label_1.setText(hum_pres)
 
-    # def refresh_in_out_display(self, data_dict):
-    #     dt = data_dict['datetime']
-    #     in_temp = 'No data'
-    #     in_minmax_temp = 'No data / No data'
-    #     out_temp = 'No data'
-    #     out_minmax_temp = 'No data / No data'
-    #     humid = 'No data'
-    #     pres = 'No data'
-    #     presmsl = 'No data'
-    #     if (datetime.datetime.now() - dt).total_seconds() <= 10800:
-    #         if data_dict['temp_in'] is not None:
-    #             in_temp = f'{data_dict["temp_in"]} °C'
-    #         if data_dict['temp_minmax_in'] is not None:
-    #             in_minmax_temp = f'{data_dict["temp_minmax_in"][0]} °C / {data_dict["temp_minmax_in"][1]} °C'
-    #         if data_dict['temp_out'] is not None:
-    #             out_temp = f'{data_dict["temp_out"]} °C'
-    #         if data_dict['temp_minmax_out'] is not None:
-    #             out_minmax_temp = f'{data_dict["temp_minmax_out"][0]} °C / {data_dict["temp_minmax_out"][1]} °C'
-    #         if data_dict['hum_in'] is not None:
-    #             humid = f'{round(data_dict["hum_in"])} %'
-    #         if data_dict['pres_in'] is not None:
-    #             pres = f'{round(data_dict["pres_in"])} hPa'
-    #         if data_dict['presmsl_in'] is not None:
-    #             presmsl = f'{round(data_dict["presmsl_in"])} hPa'
-    #
-    #     self.in_temperature_label.setText(f'{in_temp}')
-    #     self.in_label_3.setText(f'{in_minmax_temp}')
-    #     self.out_temperature_label.setText(f'{out_temp}')
-    #     self.out_label_3.setText(f'{out_minmax_temp}')
-    #     self.in_humidity_label_1.setText(f'Humidité : {humid}')
-    #     pressure = (f"<html><head/><body><p align=\"center\">Pression : {pres}</p>"
-    #                 f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
-    #     self.out_pressure_label_1.setText(pressure)
+        if 90 <= bat < 100:
+            icon = 'batterie_full_icon'
+        elif 70 <= bat < 90:
+            icon = 'batterie_4-5_icon'
+        elif 50 <= bat < 70:
+            icon = 'batterie_3-5_icon'
+        elif 30 <= bat < 50:
+            icon = 'batterie_2-5_icon'
+        elif 10 <= bat < 30:
+            icon = 'batterie_1-5_icon'
+        elif 0 <= bat < 10:
+            icon = 'batterie_0-5_icon'
+        else:
+            icon = 'batterie_0-5_icon'
+        self.out_battery.setIcon(icon_creation_function(f'{icon}.svg', self.gui_path))
+
+        if 200 <= link < 255:
+            icon = 'signal_full_icon'
+        elif 160 <= bat < 200:
+            icon = 'signal_4-5_icon'
+        elif 120 <= bat < 160:
+            icon = 'signal_3-5_icon'
+        elif 80 <= bat < 120:
+            icon = 'signal_2-5_icon'
+        elif 40 <= bat < 80:
+            icon = 'signal_1-5_icon'
+        elif 0 <= bat < 40:
+            icon = 'signal_0-5_icon'
+        else:
+            icon = 'signal_0-5_icon'
+        self.out_signal.setIcon(icon_creation_function(f'{icon}.svg', self.gui_path))
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
