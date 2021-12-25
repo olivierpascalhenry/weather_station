@@ -28,7 +28,7 @@ class CleaningThread(QtCore.QThread):
         logging.debug('gui - other_threads.py - CleaningThread - run')
         while True:
             try:
-                time_limit = datetime.datetime.now() - datetime.timedelta(days=2)
+                time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
                 self.cursor.execute('DELETE FROM "BME280" WHERE date_time <= %s', (time_limit, ))
                 self.cursor.execute('DELETE FROM "DS18B20" WHERE date_time <= %s', (time_limit,))
                 self.connector.commit()

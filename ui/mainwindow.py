@@ -322,7 +322,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
         self.out_pressure_label_1.setText(hum_pres)
 
-        if 90 <= bat < 100:
+        if 90 <= bat <= 100:
             icon = 'batterie_full_icon'
         elif 70 <= bat < 90:
             icon = 'batterie_4-5_icon'
@@ -375,12 +375,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                          QtWidgets.QSizePolicy.Expanding))
         self.spinner.start()
 
-        self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in, self.plot_in_2,
-                                                         self.plot_out,
-                                                         self.plot_out_2, self.cursor)
-        self.request_plot_thread.success.connect(self.plot_time_series_end)
-        self.request_plot_thread.error.connect(self.plot_time_series_error)
-        self.request_plot_thread.start()
+        # self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in, self.plot_in_2,
+        #                                                  self.plot_out,
+        #                                                  self.plot_out_2, self.cursor)
+        # self.request_plot_thread.success.connect(self.plot_time_series_end)
+        # self.request_plot_thread.error.connect(self.plot_time_series_error)
+        # self.request_plot_thread.start()
 
     def plot_time_series_end(self):
         self.spinner.stop()
