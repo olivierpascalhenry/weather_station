@@ -168,7 +168,7 @@ class MqttToDbThread(QtCore.QThread):
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             try:
                 client = mqtt.Client('weather_station')
-                client.on_message = parse_data
+                client.on_message = self.parse_data
                 # client.on_connect = on_connect
                 client.username_pw_set(username="weather", password="mqtt_weather_password")
                 client.connect('127.0.0.1')
