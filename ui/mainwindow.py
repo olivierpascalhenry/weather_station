@@ -22,7 +22,8 @@ from pyqtspinner.spinner import WaitingSpinner
 from ui.version import gui_version, python_version, pyqt5_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
-                             shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors)
+                             shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
+                             battery_value_icon_dict, link_value_icon_dict)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
                                                                 MyWait)
@@ -314,37 +315,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
         self.out_pressure_label_1.setText(hum_pres)
 
-        if 90 <= bat <= 100:
-            icon = 'batterie_full_icon'
-        elif 70 <= bat < 90:
-            icon = 'batterie_4-5_icon'
-        elif 50 <= bat < 70:
-            icon = 'batterie_3-5_icon'
-        elif 30 <= bat < 50:
-            icon = 'batterie_2-5_icon'
-        elif 10 <= bat < 30:
-            icon = 'batterie_1-5_icon'
-        elif 0 <= bat < 10:
-            icon = 'batterie_0-5_icon'
-        else:
-            icon = 'batterie_0-5_icon'
-        self.out_battery.setIcon(icon_creation_function(f'{icon}.svg', self.gui_path))
+        icon = 'batterie_0-5_icon.svg'
+        bat_list = sorted(list(battery_value_icon_dict().keys()))
+        for i, val in enumerate(bat_list[: -1]):
+            if bat_list[i] <= bat < bat_list[i + 1]:
+                icon = battery_value_icon_dict()[val]
+        self.out_battery.setIcon(icon_creation_function(icon, self.gui_path))
 
-        if 200 <= link < 255:
-            icon = 'signal_full_icon'
-        elif 160 <= bat < 200:
-            icon = 'signal_4-5_icon'
-        elif 120 <= bat < 160:
-            icon = 'signal_3-5_icon'
-        elif 80 <= bat < 120:
-            icon = 'signal_2-5_icon'
-        elif 40 <= bat < 80:
-            icon = 'signal_1-5_icon'
-        elif 0 <= bat < 40:
-            icon = 'signal_0-5_icon'
-        else:
-            icon = 'signal_0-5_icon'
-        self.out_signal.setIcon(icon_creation_function(f'{icon}.svg', self.gui_path))
+        icon = 'signal_0-5_icon.svg'
+        link_list = sorted(list(link_value_icon_dict().keys()))
+        for i, val in enumerate(link_list[: -1]):
+            if link_list[i] <= bat < link_list[i + 1]:
+                icon = link_value_icon_dict()[val]
+        self.out_signal.setIcon(icon_creation_function(icon, self.gui_path))
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
@@ -367,12 +350,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                          QtWidgets.QSizePolicy.Expanding))
         self.spinner.start()
 
-        # self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in, self.plot_in_2,
-        #                                                  self.plot_out,
-        #                                                  self.plot_out_2, self.cursor)
-        # self.request_plot_thread.success.connect(self.plot_time_series_end)
-        # self.request_plot_thread.error.connect(self.plot_time_series_error)
-        # self.request_plot_thread.start()
+        self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in, self.plot_in_2,
+                                                         self.plot_out, self.plot_out_2, self.db_dict)
+        self.request_plot_thread.success.connect(self.plot_time_series_end)
+        self.request_plot_thread.error.connect(self.plot_time_series_error)
+        self.request_plot_thread.start()
 
     def plot_time_series_end(self):
         self.spinner.stop()
@@ -552,15 +534,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
-
-        self.collect_ds18b20_data_thread.stop()
-        self.collect_bme180_data_thread.stop()
-        self.collect_mqtt_data_thread.stop()
-        self.db_cleaning_thread.stop()
-        self.display_in_data_thread.stop()
-        self.display_out_data_thread.stop()
-        self.timer.stop()
-
         if platform.system() == 'Windows':
             self.close()
         else:
@@ -577,6 +550,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
+        self.collect_ds18b20_data_thread.stop()
+        self.collect_bme180_data_thread.stop()
+        self.collect_mqtt_data_thread.stop()
+        self.db_cleaning_thread.stop()
+        self.display_in_data_thread.stop()
+        self.display_out_data_thread.stop()
+        self.timer.stop()
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')

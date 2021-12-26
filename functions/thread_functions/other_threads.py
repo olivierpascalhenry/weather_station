@@ -159,7 +159,7 @@ class RequestPlotDataThread(QtCore.QThread):
     success = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, cursor):
+    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
         self.canvas_in = canvas_in
@@ -168,7 +168,9 @@ class RequestPlotDataThread(QtCore.QThread):
         self.plot_in_2 = plot_in_2
         self.plot_out_1 = plot_out_1
         self.plot_out_2 = plot_out_2
-        self.cursor = cursor
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
 
     def run(self):
         try:
@@ -176,17 +178,17 @@ class RequestPlotDataThread(QtCore.QThread):
             hours_list = mpl_hour_list()
             now = datetime.datetime.now()
             limit = now - datetime.timedelta(hours=24)
-            self.cursor.execute(f"select int_tp_time, int_tp_data from int_temp where "
-                                f"int_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_tp_time")
+            self.cursor.execute(f'select date_time, temperature from "BME280"  where '
+                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f"select ext_tp_time, ext_tp_data from ext_temp where "
-                                f"ext_tp_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY ext_tp_time")
+            self.cursor.execute(f'select date_time, temperature from "AQARA_THP" where '
+                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f"select int_hd_time, int_hd_data from int_hum where "
-                                f"int_hd_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_hd_time")
+            self.cursor.execute(f'select date_time, humidite from "BME280" where '
+                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f"select int_ps_time, int_ps_data from int_pres where "
-                                f"int_ps_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY int_ps_time")
+            self.cursor.execute(f'select date_time, pression from "AQARA_THP" where '
+                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
 
             self.plot_in_1.clear()
@@ -247,10 +249,13 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
             self.canvas_in.draw()
             self.canvas_out.draw()
+            self.connector.close()
             self.success.emit()
         except Exception as e:
+            self.connector.close()
             self.error.emit(['plot data', e])
 
     def stop(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
+        self.connector.close()
         self.terminate()
