@@ -1,6 +1,6 @@
 ### To do list: ###
 
-* handle nan in plots and keep empty data
+* nothing.
 
   
 ### To fix list: ###
@@ -38,6 +38,7 @@
     * new icons for battery and signal have been added.
     * a new thread to handle Zigbee2Mqtt and Aqara sensors has been added.
     * battery and signal handling has been added to out data display.
+    * paho.mqtt version has been added into the logging system.
 
 
 ### November 6 2021, Release version 0.7.6 ###
