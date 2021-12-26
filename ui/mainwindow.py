@@ -236,12 +236,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display_out_data_thread.start()
 
     def check_internet_connection(self):
+        logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
         self.check_internet = CheckInternetConnexion()
         self.check_internet.connexion_alive.connect(self.start_internet_services)
         self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()
 
     def start_internet_services(self):
+        logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
         self.check_update()
         self.launch_fc_request_thread()
 
@@ -272,6 +274,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.start()
 
     def refresh_in_display(self, data_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_display')
         temp = 'No data'
         temp_minmax = 'No data / No data'
         hum = 'No data'
@@ -291,6 +294,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_humidity_label_1.setText(hum_pres)
 
     def refresh_out_display(self, data_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - refresh_out_display')
         temp = 'No data'
         temp_minmax = 'No data / No data'
         hum = 'No data'
@@ -325,12 +329,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         icon = 'signal_0-5_icon.svg'
         link_list = sorted(list(link_value_icon_dict().keys()))
         for i, val in enumerate(link_list[: -1]):
-            if link_list[i] <= bat < link_list[i + 1]:
+            if link_list[i] <= link < link_list[i + 1]:
                 icon = link_value_icon_dict()[val]
         self.out_signal.setIcon(icon_creation_function(icon, self.gui_path))
 
     def plot_time_series_start(self):
-        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series')
+        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
         self.setup_plot_area()
@@ -357,6 +361,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.request_plot_thread.start()
 
     def plot_time_series_end(self):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_end')
         self.spinner.stop()
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
@@ -364,6 +369,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_layout_3.addWidget(self.canvas_out)
 
     def plot_time_series_error(self, e):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_error')
         self.spinner.stop()
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
