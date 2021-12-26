@@ -8,7 +8,7 @@
 * nothing.
 
 
-### December xx 2021, Release version 0.8.0 ###
+### December 26 2021, Release version 0.8.0 ###
 
   * MODIFIED:
     * changed string format implying variables.
