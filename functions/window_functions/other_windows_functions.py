@@ -714,37 +714,3 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
     def close_window(self):
         logging.info('gui - other_windows_functions.py - MyConnexion - close_window')
         self.close()
-
-
-class MyWait(QtWidgets.QDialog, Ui_waitWindow):
-    def __init__(self, parent=None):
-        logging.debug('gui - other_windows_functions.py - MyWait - __init__')
-        QtWidgets.QWidget.__init__(self, parent)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        self.setupUi(self)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        # self.setAttribute(QtCore.Qt.WA_NoSystemBackground, True)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
-        self.spinner = None
-        self.setup_spinner()
-        logging.info('gui - other_windows_functions.py - MyWait - ready')
-
-    def setup_spinner(self):
-        logging.debug('gui - other_windows_functions.py - MyWait - setup_spinner')
-        self.spinner = QtWaitingSpinner(self, centerOnParent=False)
-        self.verticalLayout.addWidget(self.spinner)
-        self.spinner.setRoundness(70.0)
-        self.spinner.setMinimumTrailOpacity(15.0)
-        self.spinner.setTrailFadePercentage(70.0)
-        self.spinner.setNumberOfLines(12)
-        self.spinner.setLineLength(10)
-        self.spinner.setLineWidth(5)
-        self.spinner.setInnerRadius(10)
-        self.spinner.setRevolutionsPerSecond(1)
-        self.spinner.setColor(QtGui.QColor(45, 45, 45))
-        self.spinner.start()
-
-    def closeWindow(self):
-        logging.debug('gui - other_windows_functions.py - MyWait - closeWindow')
-        self.close()

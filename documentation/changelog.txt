@@ -31,6 +31,7 @@
     * modified option window to separate in and out sensor/display options.
     * each thread has now each own db connexion.
     * improved time series generation from database.
+    * MyWait window has been removed.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.
@@ -39,6 +40,7 @@
     * a new thread to handle Zigbee2Mqtt and Aqara sensors has been added.
     * battery and signal handling has been added to out data display.
     * paho.mqtt version has been added into the logging system.
+    * added more logging messages.
 
   * FIXED:
     * an issue with icons in the place window has been fixed.

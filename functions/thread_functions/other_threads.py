@@ -143,6 +143,7 @@ class CheckInternetConnexion(QtCore.QThread):
         self.ip_address = '1.1.1.1'
 
     def run(self):
+        logging.debug('gui - other_threads.py - DownloadFile - run')
         try:
             socket.create_connection((self.ip_address, 53))
             self.connexion_alive.emit()
@@ -173,6 +174,7 @@ class RequestPlotDataThread(QtCore.QThread):
         self.cursor = self.connector.cursor()
 
     def run(self):
+        logging.debug('gui - other_threads.py - RequestPlotDataThread - run')
         try:
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
             hours_list = mpl_hour_list()

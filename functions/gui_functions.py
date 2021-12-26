@@ -4,6 +4,7 @@ from functions.utils import (stylesheet_creation_function, weather_to_pictogramm
 
 
 def set_mainwindow_icons(self):
+    logging.debug('gui - gui_functions.py - set_mainwindow_icons')
     self.exit_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
     self.separator.setIcon(icon_creation_function('separator_icon_2.png', self.gui_path))
     self.option_button.setIcon(icon_creation_function('option_icon.svg', self.gui_path))
@@ -25,6 +26,7 @@ def set_mainwindow_icons(self):
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):
+    logging.debug('gui - gui_functions.py - add_1h_forecast_widget')
     self.fc_1h_fr_1.append(QtWidgets.QFrame())
     if self.fc_1h_nbr1 not in [0, 6, 12, 18]:
         self.fc_1h_fr_1[self.fc_1h_nbr1].setStyleSheet("QFrame {\n"
@@ -81,6 +83,7 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
 
 
 def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout):
+    logging.debug('gui - gui_functions.py - add_6h_forecast_widget')
     self.fc_6h_fr_1.append(QtWidgets.QFrame())
     if self.fc_6h_nbr1 not in [0, 3]:
         self.fc_6h_fr_1[self.fc_6h_nbr1].setStyleSheet("QFrame {\n"
@@ -142,6 +145,7 @@ def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout
 
 
 def clean_1h_forecast_widgets(self):
+    logging.debug('gui - gui_functions.py - clean_1h_forecast_widgets')
     clear_layout(self.prev1h_layout_1)
     clear_layout(self.prev1h_layout_2)
     clear_layout(self.prev1h_layout_3)
@@ -155,6 +159,7 @@ def clean_1h_forecast_widgets(self):
 
 
 def clean_6h_forecast_widgets(self):
+    logging.debug('gui - gui_functions.py - clean_6h_forecast_widgets')
     clear_layout(self.prev6h_layout_1)
     clear_layout(self.prev6h_layout_2)
     self.fc_6h_vert_lay_1 = []
