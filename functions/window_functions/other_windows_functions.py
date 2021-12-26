@@ -526,6 +526,8 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.ok_button.clicked.connect(self.confirm_place)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.setEnabled(False)
+        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
+        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         self.display_place_list()
 
     def display_place_list(self):

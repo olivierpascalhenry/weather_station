@@ -79,7 +79,7 @@ class DownloadFile(QtCore.QThread):
 
     def __init__(self, url, update_file):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - DownloadFile - __init__ - url ' + str(url))
+        logging.debug('gui - other_threads.py - DownloadFile - __init__ - url ' + str(url))
         self.url = url
         self.update_file = update_file
         self.filename = pathlib.Path(update_file).name
@@ -139,7 +139,7 @@ class CheckInternetConnexion(QtCore.QThread):
 
     def __init__(self):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - CheckInternetConnexion - __init__')
+        logging.debug('gui - other_threads.py - CheckInternetConnexion - __init__')
         self.ip_address = '1.1.1.1'
 
     def run(self):
@@ -161,7 +161,7 @@ class RequestPlotDataThread(QtCore.QThread):
 
     def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
+        logging.debug('gui - other_threads.py - RequestPlotDataThread - __init__')
         self.canvas_in = canvas_in
         self.canvas_out = canvas_out
         self.plot_in_1 = plot_in_1
