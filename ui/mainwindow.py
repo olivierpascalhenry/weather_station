@@ -78,6 +78,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.mf_forecast_data = None
         self.check_internet = None
         self.update_url = None
+        self.timer = None
+        self.db_dict = {'user': 'weather_station', 'password': '31weather64', 'host': '127.0.0.1',
+                        'database': 'weather_station_db'}
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -119,7 +122,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
 
-        self.database_connection()
         self.launch_clean_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
@@ -186,9 +188,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def set_time_date(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
-        timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.show_time_date)
-        timer.start(1000)
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.show_time_date)
+        self.timer.start(1000)
 
     def show_time_date(self):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
@@ -203,41 +205,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             year = str(self.current_date.year())
             self.date_label.setText(f'{week_day} {day}\n{month} {year}')
 
-    def database_connection(self):
-        logging.debug('gui - mainwindow.py - MainWindow - database_connection')
-        try:
-            self.connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                              database='weather_station_db')
-            self.cursor = self.connector.cursor()
-        except:
-            logging.exception('gui - mainwindow.py - MainWindow - database_connection - ERROR: impossible to connect '
-                              'to the database')
-
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        self.db_cleaning_thread = CleaningThread(self.connector, self.cursor)
+        self.db_cleaning_thread = CleaningThread(self.db_dict)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
-        self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.connector, self.cursor, self.config_dict)
+        self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.db_dict, self.config_dict)
         self.collect_ds18b20_data_thread.error.connect(self.log_thread_error)
         self.collect_ds18b20_data_thread.start()
-        self.collect_bme180_data_thread = BME280DataCollectingThread(self.connector, self.cursor, self.config_dict)
+        self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
         self.collect_bme180_data_thread.error.connect(self.log_thread_error)
         self.collect_bme180_data_thread.start()
-        self.collect_mqtt_data_thread = MqttToDbThread(self.connector, self.cursor, self.config_dict)
+        self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.config_dict)
         self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
         self.collect_mqtt_data_thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        self.display_in_data_thread = DBInDataThread(self.cursor, self.config_dict)
+        self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict)
         self.display_in_data_thread.db_data.connect(self.refresh_in_display)
         self.display_in_data_thread.error.connect(self.log_thread_error)
         self.display_in_data_thread.start()
-        self.display_out_data_thread = DBOutDataThread(self.cursor, self.config_dict)
+        self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict)
         self.display_out_data_thread.db_data.connect(self.refresh_out_display)
         self.display_out_data_thread.error.connect(self.log_thread_error)
         self.display_out_data_thread.start()
@@ -560,6 +552,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
+
+        self.collect_ds18b20_data_thread.stop()
+        self.collect_bme180_data_thread.stop()
+        self.collect_mqtt_data_thread.stop()
+        self.db_cleaning_thread.stop()
+        self.display_in_data_thread.stop()
+        self.display_out_data_thread.stop()
+        self.timer.stop()
+
         if platform.system() == 'Windows':
             self.close()
         else:
@@ -576,8 +577,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-        self.connector.close()
-        event.accept()
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
+        event.accept()
