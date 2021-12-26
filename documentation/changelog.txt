@@ -8,6 +8,12 @@
 * nothing.
 
 
+### December xx 2021, Release version 0.8.1 ###
+
+  * FIXED:
+    * logging wasn't imported in the gui_functions.py file.
+
+
 ### December 26 2021, Release version 0.8.0 ###
 
   * MODIFIED:
