@@ -5,6 +5,7 @@ from logging.handlers import RotatingFileHandler
 import pathlib
 import bisect
 import datetime
+from collections import OrderedDict
 from PyQt5 import QtGui, QtWidgets
 from numpy import nan
 
@@ -301,3 +302,17 @@ def set_size(bytes_size):
         i += 1
     f = ('%.2f' % bytes_size).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[i])
+
+
+def battery_value_icon_dict():
+    data_dict = {0: 'batterie_0-5_icon.svg', 10: 'batterie_1-5_icon.svg', 30: 'batterie_2-5_icon.svg',
+                 50: 'batterie_3-5_icon.svg', 70: 'batterie_4-5_icon.svg', 90: 'batterie_full_icon.svg',
+                 101: 'batterie_full_icon.svg'}
+    return data_dict
+
+
+def link_value_icon_dict():
+    data_dict = {0: 'signal_0-5_icon.svg', 40: 'signal_1-5_icon.svg', 80: 'signal_2-5_icon.svg',
+                 120: 'signal_3-5_icon.svg', 160: 'signal_4-5_icon.svg', 200: 'signal_full_icon.svg',
+                 256: 'signal_full_icon.svg'}
+    return data_dict

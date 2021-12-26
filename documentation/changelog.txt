@@ -30,6 +30,7 @@
     * pressure and msl pressure have been separated in both exterior and interior frames.
     * modified option window to separate in and out sensor/display options.
     * each thread has now each own db connexion.
+    * improved time series generation from database.
 
   * ADDED:
     * both normal and MSL pressures have been added to the database.
