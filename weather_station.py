@@ -15,6 +15,7 @@ from requests import __version__ as rq_version
 if platform.system() == 'Linux':
     from smbus2 import __version__ as bu_version
     from bme280 import __version__ as bm_version
+    from paho.mqtt import __version__ as mq_version
 
 
 def launch_station(gui_path, user_path):
@@ -49,6 +50,7 @@ def launch_station(gui_path, user_path):
     if platform.system() == 'Linux':
         logging.info(f'gui - smbus2 version: {bu_version}')
         logging.info(f'gui - bme280 version: {bm_version}')
+        logging.info(f'gui - paho.mqtt version: {mq_version}')
     logging.info(f'gui - gui frozen ? {frozen}')
     logging.info(f'gui - main path: {gui_path}')
     ui = MainWindow(gui_path, user_path, config_dict)
