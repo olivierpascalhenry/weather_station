@@ -15,14 +15,16 @@ if platform.system() == 'Linux':
 class DS18B20DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, connector, cursor, config_dict):
+    def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
-        self.connector = connector
-        self.cursor = cursor
         self.sensors_rate = int(config_dict.get('SYSTEM', 'out_sensors_rate'))
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
 
     def run(self):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - run')
         while True:
             dtime = datetime.datetime.now().replace(microsecond=0)
             try:
@@ -66,17 +68,19 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - stop')
+        self.connector.close()
         self.terminate()
 
 
 class BME280DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, connector, cursor, config_dict):
+    def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - __init__')
-        self.connector = connector
-        self.cursor = cursor
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
         self.sensors_rate = int(config_dict.get('SYSTEM', 'in_sensors_rate'))
         self.cal_params = None
         self.bus = None
@@ -147,17 +151,19 @@ class BME280DataCollectingThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - stop')
+        self.connector.close()
         self.terminate()
 
 
 class MqttToDbThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, connector, cursor, config_dict):
+    def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - MqttToDbThread - __init__')
-        self.connector = connector
-        self.cursor = cursor
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - __init__')
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
         if config_dict.get('SYSTEM', 'place_altitude'):
             self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
         else:
@@ -225,6 +231,7 @@ class MqttToDbThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
+        self.connector.close()
         self.terminate()
 
 
@@ -232,15 +239,16 @@ class DBInDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, cursor, config_dict):
+    def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - sensors_reading.py - DBInDataThread - __init__')
-        self.cursor = cursor
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
         self.display_rate = int(config_dict.get('SYSTEM', 'in_display_rate'))
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - run')
-        time.sleep(2)
         database = 'BME280'
         req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
                     'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
@@ -266,6 +274,7 @@ class DBInDataThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - stop')
+        self.connector.close()
         self.terminate()
 
 
@@ -273,15 +282,16 @@ class DBOutDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, cursor, config_dict):
+    def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - sensors_reading.py - DBOutDataThread - __init__')
-        self.cursor = cursor
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
         self.display_rate = int(config_dict.get('SYSTEM', 'out_display_rate'))
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - run')
-        time.sleep(4)
         database = 'AQARA_THP'
         req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
                     'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
@@ -310,4 +320,5 @@ class DBOutDataThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - stop')
+        self.connector.close()
         self.terminate()

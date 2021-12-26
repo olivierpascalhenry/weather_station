@@ -18,11 +18,12 @@ token = '***REMOVED***'
 class CleaningThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, connector, cursor):
+    def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.debug('gui - other_threads.py - CleaningThread - __init__')
-        self.connector = connector
-        self.cursor = cursor
+        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+                                          database=db_dict['database'])
+        self.cursor = self.connector.cursor()
 
     def run(self):
         logging.debug('gui - other_threads.py - CleaningThread - run')
@@ -38,6 +39,7 @@ class CleaningThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - CleaningThread - stop')
+        self.connector.close()
         self.terminate()
 
 
