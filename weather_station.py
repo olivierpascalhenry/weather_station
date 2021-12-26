@@ -20,9 +20,6 @@ if platform.system() == 'Linux':
 
 def launch_station(gui_path, user_path):
     app = QtWidgets.QApplication(sys.argv)
-    # splash_pix = QtGui.QPixmap('icons/egads_gui_splashscreen.png')
-    # splash = QtWidgets.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
-    # splash.show()
     app.processEvents()
     if not pathlib.Path(pathlib.Path(user_path).joinpath('weather_station.ini')).is_file():
         if not pathlib.Path(user_path).is_dir():
@@ -55,7 +52,6 @@ def launch_station(gui_path, user_path):
     logging.info(f'gui - main path: {gui_path}')
     ui = MainWindow(gui_path, user_path, config_dict)
     ui.show()
-    # splash.finish(ui)
     sys.exit(app.exec_())
 
 

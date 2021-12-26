@@ -25,8 +25,7 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
                              battery_value_icon_dict, link_value_icon_dict)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
-                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
-                                                                MyWait)
+                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest

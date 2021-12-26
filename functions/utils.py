@@ -112,7 +112,7 @@ def stylesheet_creation_function(stylesheet, gui_path):
 
 
 def stylesheet_creation_function_pi(stylesheet, gui_path):
-    logging.debug('gui - utils.py - stylesheet_creation_function')
+    logging.debug('gui - utils.py - stylesheet_creation_function_pi')
     path = pathlib.Path(gui_path).joinpath('graphic_materials/style_sheets/linux/').joinpath(stylesheet +
                                                                                              '_stylesheet.dat')
     f = open(path, 'r')
@@ -122,6 +122,7 @@ def stylesheet_creation_function_pi(stylesheet, gui_path):
 
 
 def shadow_creation_function(offset, blur):
+    logging.debug('gui - utils.py - shadow_creation_function')
     shadow = QtWidgets.QGraphicsDropShadowEffect()
     shadow.setOffset(offset)
     shadow.setBlurRadius(blur)
@@ -129,6 +130,7 @@ def shadow_creation_function(offset, blur):
 
 
 def days_months_dictionary():
+    logging.debug('gui - utils.py - days_months_dictionary')
     date_dict = {'day': {1: 'Lundi', 2: 'Mardi', 3: 'Mercredi', 4: 'Jeudi', 5: 'Vendredi', 6: 'Samedi', 7: 'Dimanche'},
                  'month': {1: 'Janvier', 2: 'Février', 3: 'Mars', 4: 'Avril', 5: 'Mai', 6: 'Juin', 7: 'Juillet',
                            8: 'Août', 9: 'Septembre', 10: 'Octobre', 11: 'Novembre', 12: 'Décembre'}}
@@ -136,6 +138,7 @@ def days_months_dictionary():
 
 
 def weather_to_pictogrammes(weather, gui_path):
+    logging.debug('gui - utils.py - weather_to_pictogrammes')
     available_weather = {'Eclaircies': 'eclaircies.svg', 'Très nuageux': 'tres_nuageux.svg',
                          'Ensoleillé': 'ensoleille.svg', 'Risque d\'orages': 'risque_orages.svg',
                          'Nuit claire': 'nuit_claire.svg', 'Couvert': 'couvert.svg',
@@ -160,6 +163,7 @@ def weather_to_pictogrammes(weather, gui_path):
 
 
 def wind_dir_to_pictogramme(dir_idx, gui_path):
+    logging.debug('gui - utils.py - wind_dir_to_pictogramme')
     path = pathlib.Path(gui_path).joinpath('graphic_materials/pictogrammes/wind_dir_images')
     path = str(path.joinpath(f'wind_dir_arrow_{dir_idx}.svg'))
     icon = QtGui.QIcon()
@@ -168,6 +172,7 @@ def wind_dir_to_pictogramme(dir_idx, gui_path):
 
 
 def code_to_departement():
+    logging.debug('gui - utils.py - code_to_departement')
     code_dict = {
         '01': 'Ain',
         '02': 'Aisne',
@@ -274,6 +279,7 @@ def code_to_departement():
 
 
 def mpl_hour_list():
+    logging.debug('gui - utils.py - mpl_hour_list')
     now = datetime.datetime.now()
     hours_list = [now]
     for h in [4, 8, 12, 16, 20, 24]:
@@ -283,6 +289,7 @@ def mpl_hour_list():
 
 
 def db_data_to_mpl_vectors(data):
+    logging.debug('gui - utils.py - db_data_to_mpl_vectors')
     t, x = [], []
     for tx in data:
         t.append(tx[0])
@@ -305,6 +312,7 @@ def set_size(bytes_size):
 
 
 def battery_value_icon_dict():
+    logging.debug('gui - utils.py - battery_value_icon_dict')
     data_dict = {0: 'batterie_0-5_icon.svg', 10: 'batterie_1-5_icon.svg', 30: 'batterie_2-5_icon.svg',
                  50: 'batterie_3-5_icon.svg', 70: 'batterie_4-5_icon.svg', 90: 'batterie_full_icon.svg',
                  101: 'batterie_full_icon.svg'}
@@ -312,6 +320,7 @@ def battery_value_icon_dict():
 
 
 def link_value_icon_dict():
+    logging.debug('gui - utils.py - link_value_icon_dict')
     data_dict = {0: 'signal_0-5_icon.svg', 40: 'signal_1-5_icon.svg', 80: 'signal_2-5_icon.svg',
                  120: 'signal_3-5_icon.svg', 160: 'signal_4-5_icon.svg', 200: 'signal_full_icon.svg',
                  256: 'signal_full_icon.svg'}
