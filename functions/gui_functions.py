@@ -22,8 +22,8 @@ def set_mainwindow_icons(self):
     self.fc_page_marker_1.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path))
     self.fc_page_marker_2.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path))
     self.right_fc_button.setIcon(icon_creation_function('right_icon.svg', self.gui_path))
-    self.out_battery.setIcon(icon_creation_function('batterie_full_icon.svg', self.gui_path))
-    self.out_signal.setIcon(icon_creation_function('signal_full_icon.svg', self.gui_path))
+    self.out_battery_bt.setIcon(icon_creation_function('batterie_full_icon.svg', self.gui_path))
+    self.out_signal_bt.setIcon(icon_creation_function('signal_full_icon.svg', self.gui_path))
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):

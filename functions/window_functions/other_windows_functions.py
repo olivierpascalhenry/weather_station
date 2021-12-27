@@ -130,11 +130,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
 
     def set_stylesheet(self):
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+        if platform.system() == 'Linux':
             self.ow_combobox_1.setStyleSheet(stylesheet_creation_function_pi('qcombobox', self.gui_path))
             self.ow_scroll_area_1.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
             self.ow_scroll_area_2.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
             self.ow_scroll_area_3.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            self.ow_scroll_area_4.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
             self.ow_section_list.setStyleSheet(stylesheet_creation_function_pi('qlistwidget', self.gui_path))
 
     def display_options(self, idx):
