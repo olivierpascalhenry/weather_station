@@ -54,7 +54,6 @@ class Ui_optionWindow(object):
         self.ow_section_list.setMinimumSize(QtCore.QSize(0, 0))
         self.ow_section_list.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(16)
         font.setBold(False)
         font.setKerning(True)
@@ -95,166 +94,6 @@ class Ui_optionWindow(object):
 "QListView::item:hover {\n"
 "    background: rgb(230,230,230);\n"
 "    border-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
 "}")
         self.ow_section_list.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.ow_section_list.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
@@ -278,167 +117,7 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_4 = QtWidgets.QScrollArea(self.page_1)
         self.ow_scroll_area_4.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
-"QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
+"QScrollArea > QWidget > QWidget { background: transparent; }")
         self.ow_scroll_area_4.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.ow_scroll_area_4.setWidgetResizable(True)
         self.ow_scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
@@ -457,7 +136,6 @@ class Ui_optionWindow(object):
         self.ow_label_32.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_32.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setItalic(True)
         font.setUnderline(False)
@@ -481,7 +159,6 @@ class Ui_optionWindow(object):
         self.ow_label_33.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_label_33.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -496,7 +173,6 @@ class Ui_optionWindow(object):
         self.ow_line_7.setMinimumSize(QtCore.QSize(70, 40))
         self.ow_line_7.setMaximumSize(QtCore.QSize(70, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -516,7 +192,6 @@ class Ui_optionWindow(object):
         self.ow_label_34.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_34.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -562,167 +237,7 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_1 = QtWidgets.QScrollArea(self.page_2)
         self.ow_scroll_area_1.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
-"QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
+"QScrollArea > QWidget > QWidget { background: transparent; }")
         self.ow_scroll_area_1.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.ow_scroll_area_1.setWidgetResizable(True)
         self.ow_scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
@@ -741,7 +256,6 @@ class Ui_optionWindow(object):
         self.ow_label_1.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_1.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setBold(False)
         font.setItalic(True)
@@ -770,7 +284,6 @@ class Ui_optionWindow(object):
         self.ow_line_1.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_line_1.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -809,7 +322,6 @@ class Ui_optionWindow(object):
         self.ow_label_3.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_label_3.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -824,7 +336,6 @@ class Ui_optionWindow(object):
         self.ow_label_2.setMinimumSize(QtCore.QSize(0, 39))
         self.ow_label_2.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -841,7 +352,6 @@ class Ui_optionWindow(object):
         self.ow_combobox_1.setMinimumSize(QtCore.QSize(120, 40))
         self.ow_combobox_1.setMaximumSize(QtCore.QSize(100, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setBold(False)
         font.setKerning(True)
@@ -937,172 +447,13 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_3.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
+"")
         self.ow_scroll_area_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.ow_scroll_area_3.setWidgetResizable(True)
         self.ow_scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.ow_scroll_area_3.setObjectName("ow_scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, -41, 485, 286))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 485, 286))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -1115,7 +466,6 @@ class Ui_optionWindow(object):
         self.ow_label_9.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_9.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setBold(False)
         font.setItalic(True)
@@ -1139,7 +489,6 @@ class Ui_optionWindow(object):
         self.ow_search_button.setMinimumSize(QtCore.QSize(160, 40))
         self.ow_search_button.setMaximumSize(QtCore.QSize(160, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setBold(False)
         font.setKerning(True)
@@ -1186,7 +535,6 @@ class Ui_optionWindow(object):
         self.ow_line_4.setMinimumSize(QtCore.QSize(250, 40))
         self.ow_line_4.setMaximumSize(QtCore.QSize(250, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1226,7 +574,6 @@ class Ui_optionWindow(object):
         self.ow_label_10.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_label_10.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1241,7 +588,6 @@ class Ui_optionWindow(object):
         self.ow_label_13.setMinimumSize(QtCore.QSize(80, 40))
         self.ow_label_13.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setItalic(True)
         font.setKerning(True)
@@ -1258,7 +604,6 @@ class Ui_optionWindow(object):
         self.ow_label_11.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_label_11.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1273,7 +618,6 @@ class Ui_optionWindow(object):
         self.ow_label_14.setMinimumSize(QtCore.QSize(250, 40))
         self.ow_label_14.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setItalic(True)
         font.setKerning(True)
@@ -1290,7 +634,6 @@ class Ui_optionWindow(object):
         self.ow_label_12.setMinimumSize(QtCore.QSize(0, 40))
         self.ow_label_12.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1309,7 +652,6 @@ class Ui_optionWindow(object):
         self.ow_label_15.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_15.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setBold(False)
         font.setItalic(True)
@@ -1334,7 +676,6 @@ class Ui_optionWindow(object):
         self.ow_label_16.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_16.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1349,7 +690,6 @@ class Ui_optionWindow(object):
         self.ow_line_5.setMinimumSize(QtCore.QSize(50, 50))
         self.ow_line_5.setMaximumSize(QtCore.QSize(50, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1368,7 +708,6 @@ class Ui_optionWindow(object):
         self.ow_label_17.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_17.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1413,172 +752,13 @@ class Ui_optionWindow(object):
         self.ow_scroll_area_2.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
+"")
         self.ow_scroll_area_2.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.ow_scroll_area_2.setWidgetResizable(True)
         self.ow_scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.ow_scroll_area_2.setObjectName("ow_scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 398, 333))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 419, 333))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
@@ -1591,7 +771,6 @@ class Ui_optionWindow(object):
         self.ow_label_6.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_6.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setItalic(True)
         font.setUnderline(False)
@@ -1617,7 +796,6 @@ class Ui_optionWindow(object):
         self.ow_label_7.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_7.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1632,7 +810,6 @@ class Ui_optionWindow(object):
         self.ow_label_8.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_8.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1647,7 +824,6 @@ class Ui_optionWindow(object):
         self.ow_label_4.setMinimumSize(QtCore.QSize(0, 55))
         self.ow_label_4.setMaximumSize(QtCore.QSize(16777215, 55))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1663,7 +839,6 @@ class Ui_optionWindow(object):
         self.ow_label_5.setMinimumSize(QtCore.QSize(0, 60))
         self.ow_label_5.setMaximumSize(QtCore.QSize(16777215, 60))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1679,7 +854,6 @@ class Ui_optionWindow(object):
         self.ow_line_2.setMinimumSize(QtCore.QSize(50, 40))
         self.ow_line_2.setMaximumSize(QtCore.QSize(50, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1698,7 +872,6 @@ class Ui_optionWindow(object):
         self.ow_line_3.setMinimumSize(QtCore.QSize(50, 40))
         self.ow_line_3.setMaximumSize(QtCore.QSize(50, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1759,7 +932,6 @@ class Ui_optionWindow(object):
         self.ow_label_21.setMinimumSize(QtCore.QSize(0, 27))
         self.ow_label_21.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         font.setItalic(True)
         font.setUnderline(False)
@@ -1785,7 +957,6 @@ class Ui_optionWindow(object):
         self.ow_label_18.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_18.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1800,7 +971,6 @@ class Ui_optionWindow(object):
         self.ow_label_19.setMinimumSize(QtCore.QSize(0, 50))
         self.ow_label_19.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1815,7 +985,6 @@ class Ui_optionWindow(object):
         self.ow_label_20.setMinimumSize(QtCore.QSize(0, 55))
         self.ow_label_20.setMaximumSize(QtCore.QSize(16777215, 55))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1831,7 +1000,6 @@ class Ui_optionWindow(object):
         self.ow_label_22.setMinimumSize(QtCore.QSize(0, 60))
         self.ow_label_22.setMaximumSize(QtCore.QSize(16777215, 60))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1847,7 +1015,6 @@ class Ui_optionWindow(object):
         self.ow_line_6.setMinimumSize(QtCore.QSize(50, 40))
         self.ow_line_6.setMaximumSize(QtCore.QSize(50, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -1866,7 +1033,6 @@ class Ui_optionWindow(object):
         self.ow_line_8.setMinimumSize(QtCore.QSize(50, 40))
         self.ow_line_8.setMaximumSize(QtCore.QSize(50, 40))
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)

@@ -352,16 +352,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.out_pressure_bt.setText('Pression : No data')
 
-        # if self.out_battery is not None:
-        #     bat = data_dict['bat']
-        # if self.out_signal is not None:
-        #     link = data_dict['link']
-        # self.out_temperature_label.setText(f'{temp}')
-        # self.out_label_3.setText(f'{temp_minmax}')
-        # hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
-        #             f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
-        # self.out_pressure_label_1.setText(hum_pres)
-
         icon = 'batterie_0-5_icon.svg'
         bat_list = sorted(list(battery_value_icon_dict().keys()))
         for i, val in enumerate(bat_list[: -1]):

@@ -13,6 +13,14 @@
   * MODIFIED:
     * all threads have been modified to handle exception logging messages.
     * changed the functions to display data to keep in memory those data and share them with other windows.
+    * scrollbar style has been removed from about and option windows as arrows weren't displayed properly at this time.
+    * battery and signal icons are now clickable to allow displaying new windows.
+
+  * FIXED:
+    * cursor wasn't blanked in both textbrowsers in about window.
+
+  * ADDED:
+    * a grid has been added to all graphs.
 
 
 ### December 27 2021, Release version 0.8.2 ###

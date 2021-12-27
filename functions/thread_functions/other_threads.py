@@ -267,6 +267,15 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_1.set_xlim(limit, now)
             self.plot_out_1.set_xticks(hours_list)
             self.plot_out_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+
+            self.plot_in_2.set_yticks(np.linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
+                                                  len(self.plot_in_1.get_yticks())))
+            self.plot_out_2.set_yticks(np.linspace(self.plot_out_2.get_yticks()[0], self.plot_out_2.get_yticks()[-1],
+                                                   len(self.plot_out_1.get_yticks())))
+
+            self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+            self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+
             self.canvas_in.draw()
             self.canvas_out.draw()
             self.connector.close()
