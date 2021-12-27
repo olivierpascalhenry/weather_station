@@ -34,12 +34,10 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         logging.debug('gui - other_windows_functions.py - MyAbout - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+        if platform.system() == 'Linux':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_1.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_2.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_1.setStyleSheet(stylesheet_creation_function_pi('qtextbrowser', gui_path))
-            self.browser_2.setStyleSheet(stylesheet_creation_function_pi('qtextbrowser', gui_path))
+            self.browser_1.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+            self.browser_2.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -79,7 +77,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+        if platform.system() == 'Linux':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -110,6 +108,14 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_edit_bt_7.clicked.connect(self.display_numpad)
         self.ow_line_4.textChanged.connect(self.activate_search_button)
         self.ow_search_button.clicked.connect(self.search_place)
+
+        scroll_1 = QtWidgets.QScroller.scroller(self.ow_scroll_area_2.viewport())
+        scroll_1.grabGesture(self.ow_scroll_area_2.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
+        properties_1 = scroll_1.scrollerProperties()
+        properties_1.setScrollMetric(QtWidgets.QScrollerProperties.VerticalOvershootPolicy,
+                                     QtWidgets.QScrollerProperties.OvershootAlwaysOff)
+        scroll_1.setScrollerProperties(properties_1)
+
         self.set_window_icons()
         self.set_stylesheet()
         self.read_config_dict()
@@ -132,11 +138,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def set_stylesheet(self):
         if platform.system() == 'Linux':
             self.ow_combobox_1.setStyleSheet(stylesheet_creation_function_pi('qcombobox', self.gui_path))
-            self.ow_scroll_area_1.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            self.ow_scroll_area_2.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            self.ow_scroll_area_3.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            self.ow_scroll_area_4.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            self.ow_section_list.setStyleSheet(stylesheet_creation_function_pi('qlistwidget', self.gui_path))
+            # self.ow_scroll_area_1.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            # self.ow_scroll_area_2.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            # self.ow_scroll_area_3.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            # self.ow_scroll_area_4.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
+            # self.ow_section_list.setStyleSheet(stylesheet_creation_function_pi('qlistwidget', self.gui_path))
 
     def display_options(self, idx):
         self.ow_stacked_widget.setCurrentIndex(idx)
