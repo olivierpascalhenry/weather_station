@@ -164,6 +164,7 @@ class MqttToDbThread(QtCore.QThread):
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
+        self.mqtt_client = None
         if config_dict.get('SYSTEM', 'place_altitude'):
             self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
         else:
@@ -173,13 +174,14 @@ class MqttToDbThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             try:
-                client = mqtt.Client('weather_station')
-                client.on_message = self.parse_data
-                # client.on_connect = on_connect
-                client.username_pw_set(username="weather", password="mqtt_weather_password")
-                client.connect('127.0.0.1')
-                client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
-                client.loop_forever()
+                self.mqtt_client = mqtt.Client('weather_station_thread')
+                self.mqtt_client.on_message = self.parse_data
+                self.mqtt_client.on_connect = self.on_connect
+                self.mqtt_client.on_disconnect = self.on_disconnect
+                self.mqtt_client.username_pw_set(username='weather', password='mqtt_weather_password')
+                self.mqtt_client.connect('127.0.0.1')
+                self.mqtt_client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
+                self.mqtt_client.loop_forever()
             except Exception as e:
                 self.error.emit(['MQTT data collecting', e])
                 date_time = datetime.datetime.now().replace(microsecond=0)
@@ -196,9 +198,17 @@ class MqttToDbThread(QtCore.QThread):
                 self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
                 time.sleep(600)
 
+    def on_connect(self, client, userdata, flags, rc):
+        logging.info(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
+
+    def on_disconnect(self, client, userdata, flags, rc):
+        logging.info(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code: {rc}')
+
     def parse_data(self, client, userdata, message):
-        date_time = datetime.datetime.now().replace(microsecond=0)
-        data = json.loads(str(message.payload.decode('utf-8')))
+        message = str(message.payload.decode('utf-8'))
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : {message}')
+        date_time = datetime.datetime.now()
+        data = json.loads(message)
         temp = data['temperature']
         hum = data['humidity']
         pres = data['pressure']
@@ -216,13 +226,15 @@ class MqttToDbThread(QtCore.QThread):
         self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_msl, bt, lk):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
+                      f'| {ps_msl} | {bt} | {lk} |')
         try:
             self.cursor.execute('insert into "AQARA_THP" (date_time, temperature, humidite, pression, pression_msl, '
                                 'batterie, qualite) values (%s, %s, %s, %s, %s, %s, %s)',
                                 (dt, tp, hm, ps, ps_msl, bt, lk))
             self.connector.commit()
-        except (psycopg2.InterfaceError, psycopg2.OperationalError):
-            pass
+        except Exception as e:
+            self.error.emit(['MQTT add data to db', e])
 
     @staticmethod
     def collect_test_data(num, limit):
@@ -231,6 +243,7 @@ class MqttToDbThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
+        self.self.mqtt_client.disconnect()
         self.connector.close()
         self.terminate()
 
