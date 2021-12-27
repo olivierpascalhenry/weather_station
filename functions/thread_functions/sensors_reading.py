@@ -17,7 +17,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
+        logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
         self.sensors_rate = int(config_dict.get('SYSTEM', 'out_sensors_rate'))
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
@@ -27,24 +27,21 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - run')
         while True:
             dtime = datetime.datetime.now().replace(microsecond=0)
-            try:
-                temp = self.collect_data()
-                self.add_data_to_db(dtime, temp)
-                time.sleep(self.sensors_rate)
-            except Exception as e:
-                self.error.emit(['DS18B20 data collecting', e])
-                self.add_data_to_db(dtime, None)
+            temp = self.collect_data()
+            self.add_data_to_db(dtime, temp)
+            time.sleep(self.sensors_rate)
 
     def add_data_to_db(self, dt, tp):
         try:
             self.cursor.execute('insert into "DS18B20" (date_time, temperature) values (%s, %s)', (dt, tp))
             self.connector.commit()
-        except (psycopg2.InterfaceError, psycopg2.OperationalError):
-            pass
+        except Exception:
+            logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
+                              'occurred when adding data to db')
 
     def collect_data(self):
         temp = None
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+        if platform.system() == 'Linux':
             try:
                 f = open('/sys/bus/w1/devices/28-012059b3456d/w1_slave', 'r')
                 lines = f.readlines()
@@ -55,7 +52,9 @@ class DS18B20DataCollectingThread(QtCore.QThread):
                         temp = round(float(lines[1][t_idx + 2:]) / 1000.0, 1)
                         if temp > 50:
                             temp = None
-            except:
+            except Exception:
+                logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
+                                  'occurred when collecting data')
                 temp = None
         else:
             temp = self.collect_test_data(25., 5)
@@ -77,7 +76,7 @@ class BME280DataCollectingThread(QtCore.QThread):
 
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - __init__')
+        logging.info('gui - sensors_reading.py - BME280DataCollectingThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -92,40 +91,36 @@ class BME280DataCollectingThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - run')
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            try:
-                self.bus = smbus2.SMBus(1)
-                self.address = 0x77
-                self.cal_params = self.prepare_bme280_bus()
-            except Exception as e:
-                self.error.emit(['BME280 data collecting', e])
+        if platform.system() == 'Linux':
+            self.set_bme280_parameters()
         while True:
             date_time = datetime.datetime.now().replace(microsecond=0)
-            try:
-                temp, hum, pres, pres_msl = self.collect_data()
-                self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
-                time.sleep(self.sensors_rate)
-            except Exception as e:
-                self.error.emit(['BME280 data collecting', e])
-                self.add_data_to_db(date_time, None, None, None, None)
+            temp, hum, pres, pres_msl = self.collect_data()
+            self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
+            time.sleep(self.sensors_rate)
 
     def collect_data(self):
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            data = bme280.sample(self.bus, self.address, self.cal_params)
-            temp = data.temperature
-            hum = data.humidity
-            pres = data.pressure
-            if self.place_altitude is not None:
-                pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
-                                   (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-                pres_msl = round(pres_msl, 1)
-            else:
-                pres_msl = None
-            pres = round(pres, 1)
-            temp = round(temp, 1)
-            hum = round(hum)
-            if temp > 50:
-                temp = None
+        if platform.system() == 'Linux':
+            try:
+                data = bme280.sample(self.bus, self.address, self.cal_params)
+                temp = data.temperature
+                hum = data.humidity
+                pres = data.pressure
+                if self.place_altitude is not None:
+                    pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
+                                       (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+                    pres_msl = round(pres_msl, 1)
+                else:
+                    pres_msl = None
+                pres = round(pres, 1)
+                temp = round(temp, 1)
+                hum = round(hum)
+                if temp > 50:
+                    temp = None
+            except Exception:
+                logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
+                                  'exception occurred when collecting bme280 data')
+                temp, hum, pres, pres_msl = None, None, None, None
         else:
             temp = self.collect_test_data(20., 5)
             hum = self.collect_test_data(65., 20)
@@ -138,11 +133,18 @@ class BME280DataCollectingThread(QtCore.QThread):
             self.cursor.execute('insert into "BME280" (date_time, temperature, humidite, pression, pression_msl) '
                                 'values (%s, %s, %s, %s, %s)', (dt, tp, hm, ps, ps_msl))
             self.connector.commit()
-        except (psycopg2.InterfaceError, psycopg2.OperationalError):
-            pass
+        except Exception:
+            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
+                              'exception occurred when adding data to db')
 
-    def prepare_bme280_bus(self):
-        return bme280.load_calibration_params(self.bus, self.address)
+    def set_bme280_parameters(self):
+        try:
+            self.bus = smbus2.SMBus(1)
+            self.address = 0x77
+            self.cal_params = bme280.load_calibration_params(self.bus, self.address)
+        except Exception:
+            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
+                              'exception occurred when setting bme280 parameters')
 
     @staticmethod
     def collect_test_data(num, limit):
@@ -160,7 +162,7 @@ class MqttToDbThread(QtCore.QThread):
 
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - __init__')
+        logging.info('gui - sensors_reading.py - MqttToDbThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -172,20 +174,8 @@ class MqttToDbThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            try:
-                self.mqtt_client = mqtt.Client('weather_station_thread')
-                self.mqtt_client.on_message = self.parse_data
-                self.mqtt_client.on_connect = self.on_connect
-                self.mqtt_client.on_disconnect = self.on_disconnect
-                self.mqtt_client.username_pw_set(username='weather', password='mqtt_weather_password')
-                self.mqtt_client.connect('127.0.0.1')
-                self.mqtt_client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
-                self.mqtt_client.loop_forever()
-            except Exception as e:
-                self.error.emit(['MQTT data collecting', e])
-                date_time = datetime.datetime.now().replace(microsecond=0)
-                self.add_data_to_db(date_time, None, None, None, None, None, None)
+        if platform.system() == 'Linux':
+            self.set_mqtt_client()
         else:
             while True:
                 date_time = datetime.datetime.now().replace(microsecond=0)
@@ -198,10 +188,29 @@ class MqttToDbThread(QtCore.QThread):
                 self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
                 time.sleep(600)
 
-    def on_connect(self, client, userdata, flags, rc):
+    def set_mqtt_client(self):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - set_mqtt_client')
+        try:
+            self.mqtt_client = mqtt.Client('weather_station_thread')
+            self.mqtt_client.on_message = self.parse_data
+            self.mqtt_client.on_connect = self.on_connect
+            self.mqtt_client.on_disconnect = self.on_disconnect
+            self.mqtt_client.username_pw_set(username='weather', password='mqtt_weather_password')
+            self.mqtt_client.connect('127.0.0.1')
+            self.mqtt_client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
+            self.mqtt_client.loop_forever()
+        except Exception:
+            logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
+                              'when setting mqtt client')
+            date_time = datetime.datetime.now()
+            self.add_data_to_db(date_time, None, None, None, None, None, None)
+
+    @staticmethod
+    def on_connect(client, userdata, flags, rc):
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
 
-    def on_disconnect(self, client, userdata, flags, rc):
+    @staticmethod
+    def on_disconnect(client, userdata, flags, rc):
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code: {rc}')
 
     def parse_data(self, client, userdata, message):
@@ -233,8 +242,9 @@ class MqttToDbThread(QtCore.QThread):
                                 'batterie, qualite) values (%s, %s, %s, %s, %s, %s, %s)',
                                 (dt, tp, hm, ps, ps_msl, bt, lk))
             self.connector.commit()
-        except Exception as e:
-            self.error.emit(['MQTT add data to db', e])
+        except Exception:
+            logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
+                              'when adding data to db')
 
     @staticmethod
     def collect_test_data(num, limit):
@@ -243,7 +253,8 @@ class MqttToDbThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
-        self.self.mqtt_client.disconnect()
+        if platform.system() == 'Linux':
+            self.mqtt_client.disconnect()
         self.connector.close()
         self.terminate()
 
@@ -254,7 +265,7 @@ class DBInDataThread(QtCore.QThread):
 
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - DBInDataThread - __init__')
+        logging.info('gui - sensors_reading.py - DBInDataThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -262,6 +273,10 @@ class DBInDataThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - run')
+        self.request_data()
+
+    def request_data(self):
+        logging.debug('gui - sensors_reading.py - DBInDataThread - request_data')
         database = 'BME280'
         req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
                     'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
@@ -278,10 +293,10 @@ class DBInDataThread(QtCore.QThread):
                         var_dict[var] = data
                     else:
                         var_dict[var] = data[0]
-                except psycopg2.ProgrammingError:
+                except Exception:
+                    logging.exception('gui - sensors_reading.py - DBInDataThread - request_data - an exception '
+                                      'occurred when requesting data from db')
                     var_dict[var] = None
-                except Exception as e:
-                    self.error.emit(['data in display', e])
             self.db_data.emit(var_dict)
             time.sleep(self.display_rate)
 
@@ -297,7 +312,7 @@ class DBOutDataThread(QtCore.QThread):
 
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - sensors_reading.py - DBOutDataThread - __init__')
+        logging.info('gui - sensors_reading.py - DBOutDataThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -305,6 +320,10 @@ class DBOutDataThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - run')
+        self.request_data()
+
+    def request_data(self):
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - request_data')
         database = 'AQARA_THP'
         req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
                     'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
@@ -324,10 +343,10 @@ class DBOutDataThread(QtCore.QThread):
                         var_dict[var] = data
                     else:
                         var_dict[var] = data[0]
-                except psycopg2.ProgrammingError:
+                except Exception:
+                    logging.exception('gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
+                                      'occurred when requesting data from db')
                     var_dict[var] = None
-                except Exception as e:
-                    self.error.emit(['data out display', e])
             self.db_data.emit(var_dict)
             time.sleep(self.display_rate)
 

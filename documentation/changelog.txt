@@ -1,11 +1,18 @@
 ### To do list: ###
 
 * rendre les icones de batterie et signal clickable pour avoir la valeur exact.
+* améliorer le logging des threads en déplaçant la majorité du code hors de run().
 
   
 ### To fix list: ###
 
 * nothing.
+
+
+### January xx 2021, Release version 0.9.0 ###
+
+  * MODIFIED:
+    * all threads have been modified to handle exception logging messages.
 
 
 ### December 27 2021, Release version 0.8.2 ###
