@@ -30,11 +30,11 @@ class Ui_MainWindow(object):
         MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout_24 = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout_24.setContentsMargins(0, 8, 0, 0)
-        self.gridLayout_24.setHorizontalSpacing(7)
-        self.gridLayout_24.setVerticalSpacing(0)
-        self.gridLayout_24.setObjectName("gridLayout_24")
+        self.gridLayout_21 = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout_21.setContentsMargins(0, 8, 0, 0)
+        self.gridLayout_21.setHorizontalSpacing(7)
+        self.gridLayout_21.setVerticalSpacing(0)
+        self.gridLayout_21.setObjectName("gridLayout_21")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(11, -1, -1, -1)
         self.horizontalLayout.setSpacing(10)
@@ -174,9 +174,9 @@ class Ui_MainWindow(object):
         self.date_label.setWordWrap(True)
         self.date_label.setObjectName("date_label")
         self.horizontalLayout.addWidget(self.date_label)
-        self.gridLayout_24.addLayout(self.horizontalLayout, 0, 0, 1, 3)
+        self.gridLayout_21.addLayout(self.horizontalLayout, 0, 0, 1, 3)
         spacerItem2 = QtWidgets.QSpacerItem(20, 8, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_24.addItem(spacerItem2, 1, 0, 1, 1)
+        self.gridLayout_21.addItem(spacerItem2, 1, 0, 1, 1)
         self.horizontal_line = QtWidgets.QFrame(self.centralwidget)
         self.horizontal_line.setStyleSheet("QFrame {\n"
 "   background: rgb(190,190,190);\n"
@@ -186,7 +186,7 @@ class Ui_MainWindow(object):
         self.horizontal_line.setFrameShape(QtWidgets.QFrame.HLine)
         self.horizontal_line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.horizontal_line.setObjectName("horizontal_line")
-        self.gridLayout_24.addWidget(self.horizontal_line, 2, 0, 2, 4)
+        self.gridLayout_21.addWidget(self.horizontal_line, 2, 0, 2, 3)
         self.vertical_line = QtWidgets.QFrame(self.centralwidget)
         self.vertical_line.setStyleSheet("QFrame {\n"
 "   background: rgb(190,190,190);\n"
@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.vertical_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.vertical_line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.vertical_line.setObjectName("vertical_line")
-        self.gridLayout_24.addWidget(self.vertical_line, 3, 1, 3, 1)
+        self.gridLayout_21.addWidget(self.vertical_line, 3, 1, 2, 1)
         self.menu_scroll_area = QtWidgets.QScrollArea(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -378,10 +378,10 @@ class Ui_MainWindow(object):
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setContentsMargins(6, -1, 0, 4)
-        self.verticalLayout.setSpacing(35)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.menu_layout = QtWidgets.QVBoxLayout()
+        self.menu_layout.setContentsMargins(6, -1, 0, 4)
+        self.menu_layout.setSpacing(30)
+        self.menu_layout.setObjectName("menu_layout")
         self.in_out_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.in_out_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.in_out_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -402,7 +402,7 @@ class Ui_MainWindow(object):
         self.in_out_bt.setIcon(icon4)
         self.in_out_bt.setIconSize(QtCore.QSize(128, 128))
         self.in_out_bt.setObjectName("in_out_bt")
-        self.verticalLayout.addWidget(self.in_out_bt)
+        self.menu_layout.addWidget(self.in_out_bt)
         self.time_series_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.time_series_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.time_series_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -423,7 +423,7 @@ class Ui_MainWindow(object):
         self.time_series_bt.setIcon(icon5)
         self.time_series_bt.setIconSize(QtCore.QSize(128, 128))
         self.time_series_bt.setObjectName("time_series_bt")
-        self.verticalLayout.addWidget(self.time_series_bt)
+        self.menu_layout.addWidget(self.time_series_bt)
         self.h1_prev_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.h1_prev_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.h1_prev_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -444,7 +444,7 @@ class Ui_MainWindow(object):
         self.h1_prev_bt.setIcon(icon6)
         self.h1_prev_bt.setIconSize(QtCore.QSize(128, 128))
         self.h1_prev_bt.setObjectName("h1_prev_bt")
-        self.verticalLayout.addWidget(self.h1_prev_bt)
+        self.menu_layout.addWidget(self.h1_prev_bt)
         self.h6_prev_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.h6_prev_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.h6_prev_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -465,10 +465,10 @@ class Ui_MainWindow(object):
         self.h6_prev_bt.setIcon(icon7)
         self.h6_prev_bt.setIconSize(QtCore.QSize(128, 128))
         self.h6_prev_bt.setObjectName("h6_prev_bt")
-        self.verticalLayout.addWidget(self.h6_prev_bt)
-        self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.menu_layout.addWidget(self.h6_prev_bt)
+        self.gridLayout.addLayout(self.menu_layout, 0, 0, 1, 1)
         self.menu_scroll_area.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout_24.addWidget(self.menu_scroll_area, 4, 0, 2, 1)
+        self.gridLayout_21.addWidget(self.menu_scroll_area, 4, 0, 1, 1)
         self.main_stacked_widget = QtWidgets.QStackedWidget(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -497,21 +497,60 @@ class Ui_MainWindow(object):
         self.in_frame.setObjectName("in_frame")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.in_frame)
         self.gridLayout_4.setObjectName("gridLayout_4")
-        self.in_label_2 = QtWidgets.QLabel(self.in_frame)
-        self.in_label_2.setMinimumSize(QtCore.QSize(150, 50))
-        self.in_label_2.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.in_humidity_bt = QtWidgets.QToolButton(self.in_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.in_humidity_bt.sizePolicy().hasHeightForWidth())
+        self.in_humidity_bt.setSizePolicy(sizePolicy)
+        self.in_humidity_bt.setMinimumSize(QtCore.QSize(150, 45))
+        self.in_humidity_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.in_humidity_bt.setFont(font)
+        self.in_humidity_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.in_humidity_bt.setObjectName("in_humidity_bt")
+        self.gridLayout_4.addWidget(self.in_humidity_bt, 1, 0, 1, 1)
+        self.in_lab_frame = QtWidgets.QFrame(self.in_frame)
+        self.in_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
+        self.in_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.in_lab_frame.setStyleSheet("QFrame#in_lab_frame {\n"
+"    border-top: 1px solid rgb(75,75,75);\n"
+"    border-bottom: 1px solid rgb(75,75,75);\n"
+"}")
+        self.in_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.in_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.in_lab_frame.setObjectName("in_lab_frame")
+        self.gridLayout_20 = QtWidgets.QGridLayout(self.in_lab_frame)
+        self.gridLayout_20.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_20.setObjectName("gridLayout_20")
+        self.in_label_1 = QtWidgets.QLabel(self.in_lab_frame)
+        self.in_label_1.setMinimumSize(QtCore.QSize(150, 25))
+        self.in_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.in_label_2.setFont(font)
-        self.in_label_2.setStyleSheet("QLabel {\n"
+        self.in_label_1.setFont(font)
+        self.in_label_1.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.in_label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.in_label_2.setWordWrap(True)
-        self.in_label_2.setObjectName("in_label_2")
-        self.gridLayout_4.addWidget(self.in_label_2, 3, 0, 1, 1)
+        self.in_label_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.in_label_1.setWordWrap(True)
+        self.in_label_1.setObjectName("in_label_1")
+        self.gridLayout_20.addWidget(self.in_label_1, 0, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.in_lab_frame, 0, 0, 1, 1)
         self.in_label_3 = QtWidgets.QLabel(self.in_frame)
         self.in_label_3.setMinimumSize(QtCore.QSize(150, 50))
         self.in_label_3.setMaximumSize(QtCore.QSize(16777215, 50))
@@ -526,27 +565,7 @@ class Ui_MainWindow(object):
         self.in_label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.in_label_3.setWordWrap(True)
         self.in_label_3.setObjectName("in_label_3")
-        self.gridLayout_4.addWidget(self.in_label_3, 4, 0, 1, 1)
-        self.in_humidity_label_1 = QtWidgets.QLabel(self.in_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.in_humidity_label_1.sizePolicy().hasHeightForWidth())
-        self.in_humidity_label_1.setSizePolicy(sizePolicy)
-        self.in_humidity_label_1.setMinimumSize(QtCore.QSize(150, 100))
-        self.in_humidity_label_1.setMaximumSize(QtCore.QSize(16777215, 100))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.in_humidity_label_1.setFont(font)
-        self.in_humidity_label_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.in_humidity_label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.in_humidity_label_1.setWordWrap(True)
-        self.in_humidity_label_1.setObjectName("in_humidity_label_1")
-        self.gridLayout_4.addWidget(self.in_humidity_label_1, 1, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.in_label_3, 5, 0, 1, 1)
         self.in_temperature_label = QtWidgets.QLabel(self.in_frame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -566,38 +585,47 @@ class Ui_MainWindow(object):
         self.in_temperature_label.setAlignment(QtCore.Qt.AlignCenter)
         self.in_temperature_label.setWordWrap(True)
         self.in_temperature_label.setObjectName("in_temperature_label")
-        self.gridLayout_4.addWidget(self.in_temperature_label, 2, 0, 1, 1)
-        self.in_lab_frame = QtWidgets.QFrame(self.in_frame)
-        self.in_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
-        self.in_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.in_lab_frame.setStyleSheet("QFrame#in_lab_frame {\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
-"}")
-        self.in_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.in_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.in_lab_frame.setObjectName("in_lab_frame")
-        self.gridLayout_20 = QtWidgets.QGridLayout(self.in_lab_frame)
-        self.gridLayout_20.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_20.setObjectName("gridLayout_20")
-        self.in_label_1 = QtWidgets.QLabel(self.in_lab_frame)
-        self.in_label_1.setMinimumSize(QtCore.QSize(150, 25))
-        self.in_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.gridLayout_4.addWidget(self.in_temperature_label, 3, 0, 1, 1)
+        self.in_label_2 = QtWidgets.QLabel(self.in_frame)
+        self.in_label_2.setMinimumSize(QtCore.QSize(150, 50))
+        self.in_label_2.setMaximumSize(QtCore.QSize(16777215, 50))
         font = QtGui.QFont()
         font.setPointSize(18)
-        font.setItalic(False)
-        font.setUnderline(False)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.in_label_1.setFont(font)
-        self.in_label_1.setStyleSheet("QLabel {\n"
+        self.in_label_2.setFont(font)
+        self.in_label_2.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
-        self.in_label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.in_label_1.setWordWrap(True)
-        self.in_label_1.setObjectName("in_label_1")
-        self.gridLayout_20.addWidget(self.in_label_1, 0, 0, 1, 1)
-        self.gridLayout_4.addWidget(self.in_lab_frame, 0, 0, 1, 1)
+        self.in_label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.in_label_2.setWordWrap(True)
+        self.in_label_2.setObjectName("in_label_2")
+        self.gridLayout_4.addWidget(self.in_label_2, 4, 0, 1, 1)
+        self.in_pressure_bt = QtWidgets.QToolButton(self.in_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.in_pressure_bt.sizePolicy().hasHeightForWidth())
+        self.in_pressure_bt.setSizePolicy(sizePolicy)
+        self.in_pressure_bt.setMinimumSize(QtCore.QSize(150, 45))
+        self.in_pressure_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.in_pressure_bt.setFont(font)
+        self.in_pressure_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.in_pressure_bt.setObjectName("in_pressure_bt")
+        self.gridLayout_4.addWidget(self.in_pressure_bt, 2, 0, 1, 1)
         self.gridLayout_3.addWidget(self.in_frame, 0, 0, 1, 1)
         spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_3.addItem(spacerItem3, 0, 1, 1, 1)
@@ -617,6 +645,136 @@ class Ui_MainWindow(object):
         self.out_frame.setObjectName("out_frame")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.out_frame)
         self.gridLayout_5.setObjectName("gridLayout_5")
+        self.out_label_3 = QtWidgets.QLabel(self.out_frame)
+        self.out_label_3.setMinimumSize(QtCore.QSize(150, 50))
+        self.out_label_3.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.out_label_3.setFont(font)
+        self.out_label_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.out_label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.out_label_3.setWordWrap(True)
+        self.out_label_3.setObjectName("out_label_3")
+        self.gridLayout_5.addWidget(self.out_label_3, 5, 0, 1, 1)
+        self.out_label_2 = QtWidgets.QLabel(self.out_frame)
+        self.out_label_2.setMinimumSize(QtCore.QSize(150, 50))
+        self.out_label_2.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.out_label_2.setFont(font)
+        self.out_label_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.out_label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.out_label_2.setWordWrap(True)
+        self.out_label_2.setObjectName("out_label_2")
+        self.gridLayout_5.addWidget(self.out_label_2, 4, 0, 1, 1)
+        self.out_lab_frame = QtWidgets.QFrame(self.out_frame)
+        self.out_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
+        self.out_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.out_lab_frame.setStyleSheet("QFrame#out_lab_frame {\n"
+"    border-top: 1px solid rgb(75,75,75);\n"
+"    border-bottom: 1px solid rgb(75,75,75);\n"
+"}")
+        self.out_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.out_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.out_lab_frame.setObjectName("out_lab_frame")
+        self.gridLayout_23 = QtWidgets.QGridLayout(self.out_lab_frame)
+        self.gridLayout_23.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_23.setObjectName("gridLayout_23")
+        self.out_battery_bt = QtWidgets.QToolButton(self.out_lab_frame)
+        self.out_battery_bt.setEnabled(True)
+        self.out_battery_bt.setMinimumSize(QtCore.QSize(45, 45))
+        self.out_battery_bt.setMaximumSize(QtCore.QSize(45, 45))
+        self.out_battery_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.out_battery_bt.setText("")
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        self.out_battery_bt.setIcon(icon8)
+        self.out_battery_bt.setIconSize(QtCore.QSize(30, 30))
+        self.out_battery_bt.setObjectName("out_battery_bt")
+        self.gridLayout_23.addWidget(self.out_battery_bt, 0, 2, 1, 1)
+        self.out_label_1 = QtWidgets.QLabel(self.out_lab_frame)
+        self.out_label_1.setMinimumSize(QtCore.QSize(150, 25))
+        self.out_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.out_label_1.setFont(font)
+        self.out_label_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.out_label_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.out_label_1.setWordWrap(True)
+        self.out_label_1.setObjectName("out_label_1")
+        self.gridLayout_23.addWidget(self.out_label_1, 0, 1, 1, 1)
+        self.out_signal_bt = QtWidgets.QToolButton(self.out_lab_frame)
+        self.out_signal_bt.setEnabled(True)
+        self.out_signal_bt.setMinimumSize(QtCore.QSize(45, 45))
+        self.out_signal_bt.setMaximumSize(QtCore.QSize(45, 45))
+        self.out_signal_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.out_signal_bt.setText("")
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        self.out_signal_bt.setIcon(icon9)
+        self.out_signal_bt.setIconSize(QtCore.QSize(30, 30))
+        self.out_signal_bt.setObjectName("out_signal_bt")
+        self.gridLayout_23.addWidget(self.out_signal_bt, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.out_lab_frame, 0, 0, 1, 1)
+        self.out_humidity_bt = QtWidgets.QToolButton(self.out_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.out_humidity_bt.sizePolicy().hasHeightForWidth())
+        self.out_humidity_bt.setSizePolicy(sizePolicy)
+        self.out_humidity_bt.setMinimumSize(QtCore.QSize(150, 45))
+        self.out_humidity_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.out_humidity_bt.setFont(font)
+        self.out_humidity_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.out_humidity_bt.setObjectName("out_humidity_bt")
+        self.gridLayout_5.addWidget(self.out_humidity_bt, 1, 0, 1, 1)
         self.out_temperature_label = QtWidgets.QLabel(self.out_frame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -636,134 +794,32 @@ class Ui_MainWindow(object):
         self.out_temperature_label.setAlignment(QtCore.Qt.AlignCenter)
         self.out_temperature_label.setWordWrap(True)
         self.out_temperature_label.setObjectName("out_temperature_label")
-        self.gridLayout_5.addWidget(self.out_temperature_label, 2, 0, 1, 1)
-        self.out_label_3 = QtWidgets.QLabel(self.out_frame)
-        self.out_label_3.setMinimumSize(QtCore.QSize(150, 50))
-        self.out_label_3.setMaximumSize(QtCore.QSize(16777215, 50))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.out_label_3.setFont(font)
-        self.out_label_3.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.out_label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.out_label_3.setWordWrap(True)
-        self.out_label_3.setObjectName("out_label_3")
-        self.gridLayout_5.addWidget(self.out_label_3, 4, 0, 1, 1)
-        self.out_label_2 = QtWidgets.QLabel(self.out_frame)
-        self.out_label_2.setMinimumSize(QtCore.QSize(150, 50))
-        self.out_label_2.setMaximumSize(QtCore.QSize(16777215, 50))
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.out_label_2.setFont(font)
-        self.out_label_2.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.out_label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.out_label_2.setWordWrap(True)
-        self.out_label_2.setObjectName("out_label_2")
-        self.gridLayout_5.addWidget(self.out_label_2, 3, 0, 1, 1)
-        self.out_pressure_label_1 = QtWidgets.QLabel(self.out_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_5.addWidget(self.out_temperature_label, 3, 0, 1, 1)
+        self.out_pressure_bt = QtWidgets.QToolButton(self.out_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.out_pressure_label_1.sizePolicy().hasHeightForWidth())
-        self.out_pressure_label_1.setSizePolicy(sizePolicy)
-        self.out_pressure_label_1.setMinimumSize(QtCore.QSize(150, 100))
-        self.out_pressure_label_1.setMaximumSize(QtCore.QSize(16777215, 100))
+        sizePolicy.setHeightForWidth(self.out_pressure_bt.sizePolicy().hasHeightForWidth())
+        self.out_pressure_bt.setSizePolicy(sizePolicy)
+        self.out_pressure_bt.setMinimumSize(QtCore.QSize(150, 45))
+        self.out_pressure_bt.setMaximumSize(QtCore.QSize(16777215, 45))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.out_pressure_label_1.setFont(font)
-        self.out_pressure_label_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.out_pressure_label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.out_pressure_label_1.setWordWrap(True)
-        self.out_pressure_label_1.setObjectName("out_pressure_label_1")
-        self.gridLayout_5.addWidget(self.out_pressure_label_1, 1, 0, 1, 1)
-        self.out_lab_frame = QtWidgets.QFrame(self.out_frame)
-        self.out_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
-        self.out_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
-        self.out_lab_frame.setStyleSheet("QFrame#out_lab_frame {\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
-"}")
-        self.out_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.out_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.out_lab_frame.setObjectName("out_lab_frame")
-        self.gridLayout_23 = QtWidgets.QGridLayout(self.out_lab_frame)
-        self.gridLayout_23.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_23.setObjectName("gridLayout_23")
-        self.out_battery = QtWidgets.QToolButton(self.out_lab_frame)
-        self.out_battery.setEnabled(False)
-        self.out_battery.setMinimumSize(QtCore.QSize(45, 45))
-        self.out_battery.setMaximumSize(QtCore.QSize(45, 45))
-        self.out_battery.setStyleSheet("QToolButton {\n"
+        self.out_pressure_bt.setFont(font)
+        self.out_pressure_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    border-radius: 10px;\n"
 "    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QToolButton:flat {\n"
 "    border: none;\n"
 "}")
-        self.out_battery.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.out_battery.setIcon(icon8)
-        self.out_battery.setIconSize(QtCore.QSize(30, 30))
-        self.out_battery.setObjectName("out_battery")
-        self.gridLayout_23.addWidget(self.out_battery, 0, 2, 1, 1)
-        self.out_label_1 = QtWidgets.QLabel(self.out_lab_frame)
-        self.out_label_1.setMinimumSize(QtCore.QSize(150, 25))
-        self.out_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        font.setItalic(False)
-        font.setUnderline(False)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.out_label_1.setFont(font)
-        self.out_label_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.out_label_1.setAlignment(QtCore.Qt.AlignCenter)
-        self.out_label_1.setWordWrap(True)
-        self.out_label_1.setObjectName("out_label_1")
-        self.gridLayout_23.addWidget(self.out_label_1, 0, 1, 1, 1)
-        self.out_signal = QtWidgets.QToolButton(self.out_lab_frame)
-        self.out_signal.setEnabled(False)
-        self.out_signal.setMinimumSize(QtCore.QSize(45, 45))
-        self.out_signal.setMaximumSize(QtCore.QSize(45, 45))
-        self.out_signal.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    border-radius: 10px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.out_signal.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.out_signal.setIcon(icon9)
-        self.out_signal.setIconSize(QtCore.QSize(30, 30))
-        self.out_signal.setObjectName("out_signal")
-        self.gridLayout_23.addWidget(self.out_signal, 0, 0, 1, 1)
-        self.gridLayout_5.addWidget(self.out_lab_frame, 0, 0, 1, 1)
+        self.out_pressure_bt.setObjectName("out_pressure_bt")
+        self.gridLayout_5.addWidget(self.out_pressure_bt, 2, 0, 1, 1)
         self.gridLayout_3.addWidget(self.out_frame, 0, 2, 1, 1)
         self.main_stacked_widget.addWidget(self.page_1)
         self.page_2 = QtWidgets.QWidget()
@@ -1219,7 +1275,7 @@ class Ui_MainWindow(object):
         self.gridLayout_12.addLayout(self.prev6h_layout_2, 0, 0, 1, 1)
         self.gridLayout_14.addWidget(self.prev6h_frame_2, 2, 0, 1, 1)
         self.main_stacked_widget.addWidget(self.page_4)
-        self.gridLayout_24.addWidget(self.main_stacked_widget, 5, 2, 1, 1)
+        self.gridLayout_21.addWidget(self.main_stacked_widget, 4, 2, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -1232,15 +1288,17 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         self.time_label.setText(_translate("MainWindow", "XX:XX:XX"))
         self.date_label.setText(_translate("MainWindow", "Vendredi 30 Septembre 2021"))
-        self.in_label_2.setText(_translate("MainWindow", "Min / Max"))
-        self.in_label_3.setText(_translate("MainWindow", "XX° C / XX° C"))
-        self.in_humidity_label_1.setText(_translate("MainWindow", "Humidité : XXX %"))
-        self.in_temperature_label.setText(_translate("MainWindow", "XX° C"))
+        self.in_humidity_bt.setText(_translate("MainWindow", "Humidité : XXX %"))
         self.in_label_1.setText(_translate("MainWindow", "Intérieur"))
-        self.out_temperature_label.setText(_translate("MainWindow", "XX° C"))
+        self.in_label_3.setText(_translate("MainWindow", "XX° C / XX° C"))
+        self.in_temperature_label.setText(_translate("MainWindow", "XX° C"))
+        self.in_label_2.setText(_translate("MainWindow", "Min / Max"))
+        self.in_pressure_bt.setText(_translate("MainWindow", "Pression : XXXX hPa"))
         self.out_label_3.setText(_translate("MainWindow", "XX° C / XX° C"))
         self.out_label_2.setText(_translate("MainWindow", "Min / Max"))
-        self.out_pressure_label_1.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Pression : XXXX hPa</p><p align=\"center\">Pression MSL : XXXX hPa</p></body></html>"))
         self.out_label_1.setText(_translate("MainWindow", "Extérieur"))
+        self.out_humidity_bt.setText(_translate("MainWindow", "Humidité : XXX %"))
+        self.out_temperature_label.setText(_translate("MainWindow", "XX° C"))
+        self.out_pressure_bt.setText(_translate("MainWindow", "Pression MSL: XXXX hPa"))
         self.in_label_4.setText(_translate("MainWindow", "Intérieur"))
         self.out_label_5.setText(_translate("MainWindow", "Extérieur"))

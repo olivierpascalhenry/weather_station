@@ -54,6 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         set_mainwindow_icons(self)
+        self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
@@ -81,6 +82,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timer = None
         self.db_dict = {'user': 'weather_station', 'password': '31weather64', 'host': '127.0.0.1',
                         'database': 'weather_station_db'}
+        self.in_temperature = None
+        self.in_temperature_min_max = None
+        self.in_humidity = None
+        self.in_pressure = None
+        self.in_pressure_msl = None
+        self.out_temperature = None
+        self.out_temperature_min_max = None
+        self.out_humidity = None
+        self.out_pressure = None
+        self.out_pressure_msl = None
+        self.out_battery = None
+        self.out_signal = None
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -116,8 +129,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
-        self.in_humidity_label_1.setGraphicsEffect(shadow_creation_function(2, 5))
-        self.out_pressure_label_1.setGraphicsEffect(shadow_creation_function(1, 5))
+        self.in_humidity_bt.setGraphicsEffect(shadow_creation_function(1, 5))
+        self.in_pressure_bt.setGraphicsEffect(shadow_creation_function(1, 5))
+        self.out_humidity_bt.setGraphicsEffect(shadow_creation_function(1, 5))
+        self.out_pressure_bt.setGraphicsEffect(shadow_creation_function(1, 5))
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
@@ -226,11 +241,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
         self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict)
-        self.display_in_data_thread.db_data.connect(self.refresh_in_display)
+        self.display_in_data_thread.db_data.connect(self.refresh_in_data)
         self.display_in_data_thread.error.connect(self.log_thread_error)
         self.display_in_data_thread.start()
         self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict)
-        self.display_out_data_thread.db_data.connect(self.refresh_out_display)
+        self.display_out_data_thread.db_data.connect(self.refresh_out_data)
         self.display_out_data_thread.error.connect(self.log_thread_error)
         self.display_out_data_thread.start()
 
@@ -272,65 +287,94 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.error.connect(self.log_thread_error)
         self.check_update_thread.start()
 
-    def refresh_in_display(self, data_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_display')
-        temp = 'No data'
-        temp_minmax = 'No data / No data'
-        hum = 'No data'
-        pres = 'No data'
-        if data_dict['temp'] is not None:
-            temp = f'{data_dict["temp"]} °C'
-        if data_dict['temp_minmax'] is not None:
-            temp_minmax = f'{data_dict["temp_minmax"][0]} °C / {data_dict["temp_minmax"][1]} °C'
-        if data_dict['hum'] is not None:
-            hum = f'{round(data_dict["hum"])} %'
-        if data_dict['pres'] is not None:
-            pres = f'{round(data_dict["pres"])} hPa'
-        self.in_temperature_label.setText(f'{temp}')
-        self.in_label_3.setText(f'{temp_minmax}')
-        hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
-                    f"<p align=\"center\">Pression : {pres}</p></body></html>")
-        self.in_humidity_label_1.setText(hum_pres)
+    def refresh_in_data(self, data_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_data')
+        self.in_temperature = data_dict['temp']
+        self.in_temperature_min_max = data_dict['temp_minmax']
+        self.in_humidity = data_dict['hum']
+        self.in_pressure = data_dict['pres']
+        self.in_pressure_msl = data_dict['presmsl']
+        self.refresh_in_display()
 
-    def refresh_out_display(self, data_dict):
+    def refresh_out_data(self, data_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - refresh_out_data')
+        self.out_temperature = data_dict['temp']
+        self.out_temperature_min_max = data_dict['temp_minmax']
+        self.out_humidity = data_dict['hum']
+        self.out_pressure = data_dict['pres']
+        self.out_pressure_msl = data_dict['presmsl']
+        self.out_battery = data_dict['bat']
+        self.out_signal = data_dict['link']
+        self.refresh_out_display()
+
+    def refresh_in_display(self):
+        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_display')
+        if self.in_temperature is not None:
+            self.in_temperature_label.setText(f'{self.in_temperature} °C')
+        else:
+            self.in_temperature_label.setText('No data')
+
+        if self.in_temperature_min_max is not None:
+            self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
+        else:
+            self.in_label_3.setText('No data / No data')
+
+        if self.in_humidity is not None:
+            self.in_humidity_bt.setText(f'Humidité : {round(self.in_humidity)} %')
+        else:
+            self.in_humidity_bt.setText('Humidité : No data')
+
+        if self.in_pressure is not None:
+            self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
+        else:
+            self.in_pressure_bt.setText('Pression : No data')
+
+    def refresh_out_display(self):
         logging.debug('gui - mainwindow.py - MainWindow - refresh_out_display')
-        temp = 'No data'
-        temp_minmax = 'No data / No data'
-        hum = 'No data'
-        presmsl = 'No data'
-        bat = None
-        link = None
-        if data_dict['temp'] is not None:
-            temp = f'{data_dict["temp"]} °C'
-        if data_dict['temp_minmax'] is not None:
-            temp_minmax = f'{data_dict["temp_minmax"][0]} °C / {data_dict["temp_minmax"][1]} °C'
-        if data_dict['hum'] is not None:
-            hum = f'{round(data_dict["hum"])} %'
-        if data_dict['presmsl'] is not None:
-            presmsl = f'{round(data_dict["presmsl"])} hPa'
-        if data_dict['bat'] is not None:
-            bat = data_dict['bat']
-        if data_dict['link'] is not None:
-            link = data_dict['link']
-        self.out_temperature_label.setText(f'{temp}')
-        self.out_label_3.setText(f'{temp_minmax}')
-        hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
-                    f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
-        self.out_pressure_label_1.setText(hum_pres)
+
+        if self.out_temperature is not None:
+            self.out_temperature_label.setText(f'{self.out_temperature} °C')
+        else:
+            self.out_temperature_label.setText('No data')
+
+        if self.out_temperature_min_max is not None:
+            self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
+        else:
+            self.out_label_3.setText('No data / No data')
+
+        if self.out_humidity is not None:
+            self.out_humidity_bt.setText(f'Humidité : {round(self.out_humidity)} %')
+        else:
+            self.out_humidity_bt.setText('Humidité : No data')
+
+        if self.out_pressure_msl is not None:
+            self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure_msl)} hPa')
+        else:
+            self.out_pressure_bt.setText('Pression : No data')
+
+        # if self.out_battery is not None:
+        #     bat = data_dict['bat']
+        # if self.out_signal is not None:
+        #     link = data_dict['link']
+        # self.out_temperature_label.setText(f'{temp}')
+        # self.out_label_3.setText(f'{temp_minmax}')
+        # hum_pres = (f"<html><head/><body><p align=\"center\">Humidité : {hum}</p>"
+        #             f"<p align=\"center\">Pression MSL : {presmsl}</p></body></html>")
+        # self.out_pressure_label_1.setText(hum_pres)
 
         icon = 'batterie_0-5_icon.svg'
         bat_list = sorted(list(battery_value_icon_dict().keys()))
         for i, val in enumerate(bat_list[: -1]):
-            if bat_list[i] <= bat < bat_list[i + 1]:
+            if bat_list[i] <= self.out_battery < bat_list[i + 1]:
                 icon = battery_value_icon_dict()[val]
-        self.out_battery.setIcon(icon_creation_function(icon, self.gui_path))
+        self.out_battery_bt.setIcon(icon_creation_function(icon, self.gui_path))
 
         icon = 'signal_0-5_icon.svg'
         link_list = sorted(list(link_value_icon_dict().keys()))
         for i, val in enumerate(link_list[: -1]):
-            if link_list[i] <= link < link_list[i + 1]:
+            if link_list[i] <= self.out_signal < link_list[i + 1]:
                 icon = link_value_icon_dict()[val]
-        self.out_signal.setIcon(icon_creation_function(icon, self.gui_path))
+        self.out_signal_bt.setIcon(icon_creation_function(icon, self.gui_path))
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
