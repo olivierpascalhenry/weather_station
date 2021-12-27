@@ -20,21 +20,26 @@ class CleaningThread(QtCore.QThread):
 
     def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - other_threads.py - CleaningThread - __init__')
+        logging.info('gui - other_threads.py - CleaningThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
 
     def run(self):
         logging.debug('gui - other_threads.py - CleaningThread - run')
+        self.clean_db()
+
+    def clean_db(self):
+        logging.debug('gui - other_threads.py - CleaningThread - clean_db')
         while True:
             try:
                 time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
-                self.cursor.execute('DELETE FROM "BME280" WHERE date_time <= %s', (time_limit, ))
-                self.cursor.execute('DELETE FROM "DS18B20" WHERE date_time <= %s', (time_limit,))
+                for table in ['BME280', 'DS18B20', 'AQARA_THP']:
+                    self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
                 self.connector.commit()
-            except Exception as e:
-                self.error.emit(['cleaning data', e])
+            except Exception:
+                logging.exception('gui - other_threads.py - CleaningThread - clean_db - an exception '
+                                  'occurred when cleaning db')
             time.sleep(3600)
 
     def stop(self):
@@ -49,12 +54,16 @@ class CheckUpdate(QtCore.QThread):
 
     def __init__(self, gui_version):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - other_threads.py - CheckUpdate - __init__')
+        logging.info('gui - other_threads.py - CheckUpdate - __init__')
         self.gui_version = gui_version
         self.url_dict = {}
 
     def run(self):
         logging.debug('gui - other_threads.py - CheckUpdate - run')
+        self.update_request()
+
+    def update_request(self):
+        logging.debug('gui - other_threads.py - CheckUpdate - update_request')
         url = 'https://api.github.com/repos/olivierpascalhenry/weather_station/releases'
         try:
             gh_session = requests.Session()
@@ -64,8 +73,9 @@ class CheckUpdate(QtCore.QThread):
                 self.url_dict['file'] = json_object['assets'][0]['name']
                 self.url_dict['url'] = json_object['assets'][0]['url']
             self.finished.emit(self.url_dict)
-        except Exception as e:
-            self.error.emit(['update request', e])
+        except Exception:
+            logging.exception('gui - other_threads.py - CheckUpdate - update_request - an exception occurred when '
+                              'requesting update')
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckUpdate - stop')
@@ -79,7 +89,7 @@ class DownloadFile(QtCore.QThread):
 
     def __init__(self, url, update_file):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - other_threads.py - DownloadFile - __init__ - url ' + str(url))
+        logging.info('gui - other_threads.py - DownloadFile - __init__ - url ' + str(url))
         self.url = url
         self.update_file = update_file
         self.filename = pathlib.Path(update_file).name
@@ -87,6 +97,10 @@ class DownloadFile(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - other_threads.py - DownloadFile - run')
+        self.download_request()
+
+    def download_request(self):
+        logging.debug('gui - other_threads.py - DownloadFile - download_request')
         download_text = 'Downloading %s at %s'
         pre_download_text = 'Downloading %s'
         self.download_update.emit([0, pre_download_text % self.filename])
@@ -139,7 +153,7 @@ class CheckInternetConnexion(QtCore.QThread):
 
     def __init__(self):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - other_threads.py - CheckInternetConnexion - __init__')
+        logging.info('gui - other_threads.py - CheckInternetConnexion - __init__')
         self.ip_address = '1.1.1.1'
 
     def run(self):
@@ -162,7 +176,7 @@ class RequestPlotDataThread(QtCore.QThread):
 
     def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - other_threads.py - RequestPlotDataThread - __init__')
+        logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
         self.canvas_in = canvas_in
         self.canvas_out = canvas_out
         self.plot_in_1 = plot_in_1
@@ -175,6 +189,10 @@ class RequestPlotDataThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - run')
+        self.request_plot_data()
+
+    def request_plot_data(self):
+        logging.debug('gui - other_threads.py - RequestPlotDataThread - request_plot_data')
         try:
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
             hours_list = mpl_hour_list()
@@ -253,9 +271,10 @@ class RequestPlotDataThread(QtCore.QThread):
             self.canvas_out.draw()
             self.connector.close()
             self.success.emit()
-        except Exception as e:
+        except Exception:
+            logging.exception('gui - other_threads.py - RequestPlotDataThread - request_plot_data - an exception '
+                              'occurred when ploting data')
             self.connector.close()
-            self.error.emit(['plot data', e])
 
     def stop(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
