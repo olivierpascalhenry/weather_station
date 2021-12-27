@@ -15,6 +15,7 @@
     * changed the functions to display data to keep in memory those data and share them with other windows.
     * scrollbar style has been removed from about and option windows as arrows weren't displayed properly at this time.
     * battery and signal icons are now clickable to allow displaying new windows.
+    * figures in plot section were moved a bit to fix style issues.
 
   * FIXED:
     * cursor wasn't blanked in both textbrowsers in about window.
