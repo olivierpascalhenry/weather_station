@@ -25,6 +25,7 @@
   * ADDED:
     * a grid has been added to all graphs.
     * a window for signal quality and battery has been added
+    * a window for pressure details has been added.
 
 
 ### December 27 2021, Release version 0.8.2 ###
