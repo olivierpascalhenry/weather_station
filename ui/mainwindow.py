@@ -26,7 +26,7 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
                              battery_value_icon_dict, link_value_icon_dict)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
-                                                                MyBatLink)
+                                                                MyBatLink, MyPressure)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
@@ -122,6 +122,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.out_battery_bt.clicked.connect(self.show_bat_link_details)
         self.out_signal_bt.clicked.connect(self.show_bat_link_details)
+        self.in_pressure_bt.clicked.connect(self.show_pressure_details)
+        self.out_pressure_bt.clicked.connect(self.show_pressure_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
@@ -515,6 +517,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_bat_link_details(self):
         bat_link = MyBatLink(self.out_battery, self.out_signal, self.gui_path, self)
         bat_link.setGeometry(359, 200, 306, 200)
+        bat_link.exec_()
+
+    def show_pressure_details(self):
+        if self.sender().objectName() == 'out_pressure_bt':
+            pres = int(round(self.out_pressure, 0))
+            presmsl = int(round(self.out_pressure_msl, 0))
+        else:
+            pres = int(round(self.in_pressure, 0))
+            presmsl = int(round(self.in_pressure_msl, 0))
+        if pres is None:
+            pres = 'No data'
+        if presmsl is None:
+            presmsl = 'No data'
+        if self.config_dict.get('SYSTEM', 'place_altitude'):
+            alt = int(self.config_dict.get('SYSTEM', 'place_altitude'))
+        else:
+            alt = 'No data'
+        bat_link = MyPressure(pres, presmsl, alt, self.gui_path, self)
+        bat_link.setGeometry(225, 179, 574, 242)
         bat_link.exec_()
 
     def warning_update_dispatch(self):
