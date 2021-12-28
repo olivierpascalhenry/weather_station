@@ -195,6 +195,9 @@ class RequestPlotDataThread(QtCore.QThread):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - request_plot_data')
         try:
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+            ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
+                            '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
+
             hours_list = mpl_hour_list()
             now = datetime.datetime.now()
             limit = now - datetime.timedelta(hours=24)
@@ -239,7 +242,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_in_2.set_ylim(0, 100)
             self.plot_in_1.set_xlim(limit, now)
             self.plot_in_1.set_xticks(hours_list)
-            self.plot_in_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.plot_in_1.set_xticklabels(ticks_labels)
             self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
 
             if np.min(temp_out_y) < 0:
@@ -266,7 +269,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_2.set_ylim(y_min, y_max)
             self.plot_out_1.set_xlim(limit, now)
             self.plot_out_1.set_xticks(hours_list)
-            self.plot_out_1.set_xticklabels(['-24h', '-20h', '-16h', '-12h', '-8h', '-4h', 'Now'])
+            self.plot_out_1.set_xticklabels(ticks_labels)
 
             self.plot_in_2.set_yticks(np.linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
                                                   len(self.plot_in_1.get_yticks())))

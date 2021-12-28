@@ -1,7 +1,6 @@
 ### To do list: ###
 
 * rendre les icones de batterie et signal clickable pour avoir la valeur exact.
-* remplacer pression par pression MSL dans les time series.
 
   
 ### To fix list: ###
@@ -18,6 +17,7 @@
     * battery and signal icons are now clickable to allow displaying new windows.
     * figures in plot section were moved a bit to fix style issues.
     * MSL pressure is now displayed in the time series section.
+    * major and minor ticks have been adjusted.
 
   * FIXED:
     * cursor wasn't blanked in both textbrowsers of the about window.
