@@ -25,7 +25,8 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
                              battery_value_icon_dict, link_value_icon_dict)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
-                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion)
+                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
+                                                                MyBatLink)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
@@ -119,6 +120,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.right_ts_button.clicked.connect(self.set_ts_stack_right)
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
+        self.out_battery_bt.clicked.connect(self.show_bat_link_details)
+        self.out_signal_bt.clicked.connect(self.show_bat_link_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
@@ -508,6 +511,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         details_window = My6hFCDetails(forecast, self.gui_path, self)
         details_window.setGeometry(52, 110, 920, 380)
         details_window.exec_()
+
+    def show_bat_link_details(self):
+        bat_link = MyBatLink(self.out_battery, self.out_signal, self.gui_path, self)
+        bat_link.setGeometry(359, 200, 306, 200)
+        bat_link.exec_()
 
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
