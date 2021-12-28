@@ -534,9 +534,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             alt = int(self.config_dict.get('SYSTEM', 'place_altitude'))
         else:
             alt = 'No data'
-        bat_link = MyPressure(pres, presmsl, alt, self.gui_path, self)
-        bat_link.setGeometry(225, 179, 574, 242)
-        bat_link.exec_()
+        pres_window = MyPressure(pres, presmsl, alt, self.gui_path, self)
+        pres_window.setGeometry(225, 179, 574, 242)
+        pres_window.exec_()
 
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
