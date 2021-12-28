@@ -282,7 +282,10 @@ def mpl_hour_list():
     logging.debug('gui - utils.py - mpl_hour_list')
     now = datetime.datetime.now()
     hours_list = [now]
-    for h in [4, 8, 12, 16, 20, 24]:
+    # for h in [4, 8, 12, 16, 20, 24]:
+    #     new_hour = now - datetime.timedelta(hours=h)
+    #     hours_list.append(new_hour)
+    for h in range(1, 25, 1):
         new_hour = now - datetime.timedelta(hours=h)
         hours_list.append(new_hour)
     return list(reversed(hours_list))
