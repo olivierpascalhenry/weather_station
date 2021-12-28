@@ -207,7 +207,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, humidite from "BME280" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, pression from "AQARA_THP" where '
+            self.cursor.execute(f'select date_time, pression_msl from "AQARA_THP" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
 

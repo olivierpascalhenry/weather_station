@@ -1,6 +1,7 @@
 ### To do list: ###
 
 * rendre les icones de batterie et signal clickable pour avoir la valeur exact.
+* remplacer pression par pression MSL dans les time series.
 
   
 ### To fix list: ###
@@ -16,9 +17,10 @@
     * scrollbar style has been removed from about and option windows as arrows weren't displayed properly at this time.
     * battery and signal icons are now clickable to allow displaying new windows.
     * figures in plot section were moved a bit to fix style issues.
+    * MSL pressure is now displayed in the time series section.
 
   * FIXED:
-    * cursor wasn't blanked in both textbrowsers in about window.
+    * cursor wasn't blanked in both textbrowsers of the about window.
 
   * ADDED:
     * a grid has been added to all graphs.

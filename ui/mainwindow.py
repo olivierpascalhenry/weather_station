@@ -437,7 +437,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2.spines['top'].set_visible(False)
         self.plot_out.set_ylabel('Température (°C)', color=color_1)
         self.plot_out.tick_params(axis='y', labelcolor=color_1)
-        self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
+        self.plot_out_2.set_ylabel('Pression MSL (hPa)', color=color_3)
         self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
         self.figure_out.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
         self.plot_out.set_facecolor('None')
