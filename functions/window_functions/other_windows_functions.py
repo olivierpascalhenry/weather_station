@@ -24,6 +24,7 @@ from ui.Ui_connexionwindow import Ui_connexionWindow
 from ui.Ui_waitwindow import Ui_waitWindow
 from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
+from ui.Ui_temphumwindow import Ui_temphumWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function,
                              icon_creation_function, stylesheet_creation_function_pi)
@@ -781,6 +782,38 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
         self.pressure_lb_4.setText(f'{self.pres} hPa')
         self.pressure_lb_5.setText(f'{self.pres_msl} hPa')
         self.pressure_lb_6.setText(f'{self.alt} m')
+
+    def close_window(self):
+        logging.debug('gui - other_windows_functions.py - MyPressure - close_window')
+        self.close()
+
+
+class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
+    def __init__(self, hum, temp, dew, gui_path, parent=None):
+        logging.debug('gui - other_windows_functions.py - MyPressure - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
+        if platform.system() == 'Linux':
+            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.gui_path = gui_path
+        self.hum = hum
+        self.temp = temp
+        self.dew = dew
+        self.ok_button.clicked.connect(self.close_window)
+        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
+        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
+        self.set_details()
+
+    def set_details(self):
+        logging.debug('gui - other_windows_functions.py - MyPressure - set_details')
+        self.hum_lb.setText(f'{self.hum} %')
+        self.temp_lb.setText(f'{self.temp} °C')
+        self.dew_lb.setText(f'{self.dew} °C')
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - MyPressure - close_window')
