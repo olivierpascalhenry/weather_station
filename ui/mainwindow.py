@@ -27,7 +27,7 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
                              battery_value_icon_dict, link_value_icon_dict)
 from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
                                                                 My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
-                                                                MyBatLink, MyPressure)
+                                                                MyBatLink, MyPressure, MyTempHum)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
@@ -545,13 +545,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def show_hum_temp_details(self):
         if self.sender().objectName() == 'in_humidity_bt':
             temp = self.in_temperature
-            hum = self.in_humidity / 100.
+            hum = self.in_humidity
         else:
             temp = self.out_temperature
-            hum = self.out_humidity / 100.
+            hum = self.out_humidity
         a, b = 17.27, 237.7
-        temp_ros = (b * (((a * temp) / (b + temp)) + math.log(hum))) / (a - (((a * temp) / (b + temp)) + math.log(hum)))
-
+        temp_ros = ((b * (((a * temp) / (b + temp)) + math.log(hum / 100.))) / (a - (((a * temp) / (b + temp)) +
+                                                                                     math.log(hum / 100.))))
+        temp_window = MyTempHum(hum, temp, round(temp_ros, 1), self.gui_path, self)
+        temp_window.setGeometry(342, 177, 340, 246)
+        temp_window.exec_()
 
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
