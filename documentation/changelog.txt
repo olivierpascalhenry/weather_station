@@ -21,6 +21,7 @@
 
   * FIXED:
     * cursor wasn't blanked in both textbrowsers of the about window.
+    * when clicking on time series button, the first index of the time series stack is now displayed.
 
   * ADDED:
     * a grid has been added to all graphs.

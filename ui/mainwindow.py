@@ -2,6 +2,7 @@ import collections
 import io
 import os
 import sys
+import math
 import pickle
 import platform
 import logging
@@ -124,6 +125,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_signal_bt.clicked.connect(self.show_bat_link_details)
         self.in_pressure_bt.clicked.connect(self.show_pressure_details)
         self.out_pressure_bt.clicked.connect(self.show_pressure_details)
+        self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
+        self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
         if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
@@ -373,6 +376,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
+        self.time_series_stack.setCurrentIndex(0)
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
         self.setup_plot_area()
@@ -537,6 +541,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pres_window = MyPressure(pres, presmsl, alt, self.gui_path, self)
         pres_window.setGeometry(225, 179, 574, 242)
         pres_window.exec_()
+
+    def show_hum_temp_details(self):
+        if self.sender().objectName() == 'in_humidity_bt':
+            temp = self.in_temperature
+            hum = self.in_humidity / 100.
+        else:
+            temp = self.out_temperature
+            hum = self.out_humidity / 100.
+        a, b = 17.27, 237.7
+        temp_ros = (b * (((a * temp) / (b + temp)) + math.log(hum))) / (a - (((a * temp) / (b + temp)) + math.log(hum)))
+
 
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
