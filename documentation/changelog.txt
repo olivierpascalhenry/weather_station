@@ -1,6 +1,9 @@
 ### To do list: ###
 
-* Nothing
+* proposer une interface comme prosim pour activer les différents capteurs, dans les options.
+* proposer une partie extérieur et intérieur, pour sélectionner les capteurs, dans les options.
+* voir s'il est possible d'implémenter OpenWeather API
+* avant de lancer les threads de récupération de données, vérifier la présence des capteurs.
 
   
 ### To fix list: ###
@@ -8,7 +11,7 @@
 * nothing.
 
 
-### January xx 2021, Release version 0.9.0 ###
+### February 6 2021, Release version 0.9.0 ###
 
   * MODIFIED:
     * all threads have been modified to handle exception logging messages.
