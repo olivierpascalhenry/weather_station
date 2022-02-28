@@ -54,7 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.showFullScreen()
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
+            QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BlankCursor)
         self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
         self.current_date = None
         self.figure_in = None

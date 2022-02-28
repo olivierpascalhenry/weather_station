@@ -17,6 +17,7 @@
     * a solution has been found to avoid absolute path for stylesheet and images in all windows.
     * options have been transferred from dev branch to master branch.
     * a new way to compute the position of all windows has been introduced.
+    * cursor on raspberry pi is now hidden from the mainwindow.
 
 
 ### February 6 2021, Release version 0.9.0 ###
