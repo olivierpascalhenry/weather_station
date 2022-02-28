@@ -172,7 +172,7 @@ class CheckInternetConnexion(QtCore.QThread):
 
 class RequestPlotDataThread(QtCore.QThread):
     success = QtCore.pyqtSignal()
-    error = QtCore.pyqtSignal(list)
+    error = QtCore.pyqtSignal()
 
     def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict):
         QtCore.QThread.__init__(self)
@@ -287,6 +287,7 @@ class RequestPlotDataThread(QtCore.QThread):
             logging.exception('gui - other_threads.py - RequestPlotDataThread - request_plot_data - an exception '
                               'occurred when ploting data')
             self.connector.close()
+            self.error.emit()
 
     def stop(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
