@@ -18,6 +18,7 @@
     * options have been transferred from dev branch to master branch.
     * a new way to compute the position of all windows has been introduced.
     * cursor on raspberry pi is now hidden from the mainwindow.
+    * if error happens during the rendering of time series, the spinner widget is now cleared.
 
 
 ### February 6 2021, Release version 0.9.0 ###

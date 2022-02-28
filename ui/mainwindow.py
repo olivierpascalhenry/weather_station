@@ -412,12 +412,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_layout_3.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
                                                          QtWidgets.QSizePolicy.Fixed))
 
-    def plot_time_series_error(self, e):
+    def plot_time_series_error(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_error')
         self.spinner.stop()
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
-        self.log_thread_error(e)
 
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
