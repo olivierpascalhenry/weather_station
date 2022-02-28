@@ -38,10 +38,6 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.gui_path = gui_path
-        if platform.system() == 'Linux':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_1.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-            self.browser_2.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -81,8 +77,6 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -239,8 +233,6 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.iw_label_1.setText(info_text)
         self.iw_okButton.clicked.connect(self.close_window)
         logging.info('gui - other_windows_functions.py - MyInfo - ready')
@@ -261,8 +253,6 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
         self.exit = False
         self.shutdown = False
@@ -300,8 +290,6 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -347,8 +335,6 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -395,8 +381,6 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
         logging.debug('gui - other_windows_functions.py - MyNumpad - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -435,8 +419,6 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         logging.debug('gui - other_windows_functions.py - MyKeyboard - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -485,8 +467,6 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         logging.debug('gui - other_windows_functions.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -548,8 +528,6 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
         logging.debug('gui - other_windows_functions.py - MyWarning - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -569,8 +547,6 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
         logging.debug('gui - other_windows_functions.py - MyWarningUpdate - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -597,8 +573,6 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
         logging.debug('gui - other_windows_functions.py - MyDownload - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -659,8 +633,6 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
         logging.debug('gui - other_windows_functions.py - MyConnexion - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
@@ -685,8 +657,6 @@ class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
         logging.debug('gui - other_windows_functions.py - MyBatLink - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
@@ -713,8 +683,6 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
         logging.debug('gui - other_windows_functions.py - MyPressure - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
@@ -743,8 +711,6 @@ class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
         logging.debug('gui - other_windows_functions.py - MyPressure - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if platform.system() == 'Linux':
-            self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
