@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_optionWindow(object):
     def setupUi(self, optionWindow):
         optionWindow.setObjectName("optionWindow")
-        optionWindow.resize(600, 364)
+        optionWindow.resize(700, 364)
         optionWindow.setMinimumSize(QtCore.QSize(0, 0))
         optionWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()

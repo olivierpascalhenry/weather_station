@@ -11,6 +11,14 @@
 * nothing.
 
 
+### February xx 2021, Release version 0.9.1 ###
+
+  * MODIFIED:
+    * a solution has been found to avoid absolute path for stylesheet and images in all windows.
+    * options have been transferred from dev branch to master branch.
+    * a new way to compute the position of all windows has been introduced.
+
+
 ### February 6 2021, Release version 0.9.0 ###
 
   * MODIFIED:

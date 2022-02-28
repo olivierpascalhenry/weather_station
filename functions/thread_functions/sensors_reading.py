@@ -18,7 +18,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
     def __init__(self, db_dict, config_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
-        self.sensors_rate = int(config_dict.get('SYSTEM', 'out_sensors_rate'))
+        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -80,7 +80,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
-        self.sensors_rate = int(config_dict.get('SYSTEM', 'in_sensors_rate'))
+        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
         self.cal_params = None
         self.bus = None
         self.address = None
@@ -269,7 +269,7 @@ class DBInDataThread(QtCore.QThread):
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
-        self.display_rate = int(config_dict.get('SYSTEM', 'in_display_rate'))
+        self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - run')
@@ -316,7 +316,7 @@ class DBOutDataThread(QtCore.QThread):
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
-        self.display_rate = int(config_dict.get('SYSTEM', 'out_display_rate'))
+        self.display_rate = int(config_dict.get('DISPLAY', 'out_display_rate'))
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - run')

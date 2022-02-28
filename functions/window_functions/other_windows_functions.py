@@ -27,7 +27,7 @@ from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
                              code_to_departement, stylesheet_creation_function, font_creation_function,
-                             icon_creation_function, stylesheet_creation_function_pi)
+                             icon_creation_function)
 from functions.thread_functions.other_threads import DownloadFile
 from functions.gui_widgets import QtWaitingSpinner
 
@@ -37,17 +37,18 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         logging.debug('gui - other_windows_functions.py - MyAbout - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
+        self.gui_path = gui_path
         if platform.system() == 'Linux':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_1.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
             self.browser_2.viewport().setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+
         self.browser_1.setHtml(text)
         scroll_1 = QtWidgets.QScroller.scroller(self.browser_1.viewport())
         scroll_1.grabGesture(self.browser_1.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
@@ -76,18 +77,18 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
-    def __init__(self, config_dict, user_path, gui_path, parent=None):
+    def __init__(self, config_dict, user_path, parent=None):
         logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         if platform.system() == 'Linux':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        self.gui_path = gui_path
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.config_dict = config_dict
         self.ow_splitter.setSizes([180, 520])
         self.user_path = user_path
@@ -111,41 +112,14 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_edit_bt_7.clicked.connect(self.display_numpad)
         self.ow_line_4.textChanged.connect(self.activate_search_button)
         self.ow_search_button.clicked.connect(self.search_place)
-
         scroll_1 = QtWidgets.QScroller.scroller(self.ow_scroll_area_2.viewport())
         scroll_1.grabGesture(self.ow_scroll_area_2.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
         properties_1 = scroll_1.scrollerProperties()
         properties_1.setScrollMetric(QtWidgets.QScrollerProperties.VerticalOvershootPolicy,
                                      QtWidgets.QScrollerProperties.OvershootAlwaysOff)
         scroll_1.setScrollerProperties(properties_1)
-
-        self.set_window_icons()
-        self.set_stylesheet()
         self.read_config_dict()
         self.ow_section_list.setCurrentRow(0)
-
-    def set_window_icons(self):
-        self.setWindowIcon(icon_creation_function('option_icon.svg', self.gui_path))
-        self.ow_openButton.setIcon(icon_creation_function('open_popup_icon.svg', self.gui_path))
-        self.ow_edit_bt_1.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_2.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_3.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_3.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_4.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_5.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_6.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_edit_bt_7.setIcon(icon_creation_function('edit_icon.svg', self.gui_path))
-        self.ow_ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
-        self.ow_cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
-
-    def set_stylesheet(self):
-        if platform.system() == 'Linux':
-            self.ow_combobox_1.setStyleSheet(stylesheet_creation_function_pi('qcombobox', self.gui_path))
-            # self.ow_scroll_area_1.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            # self.ow_scroll_area_2.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            # self.ow_scroll_area_3.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            # self.ow_scroll_area_4.setStyleSheet(stylesheet_creation_function_pi('qscrollarea', self.gui_path))
-            # self.ow_section_list.setStyleSheet(stylesheet_creation_function_pi('qlistwidget', self.gui_path))
 
     def display_options(self, idx):
         self.ow_stacked_widget.setCurrentIndex(idx)
@@ -155,13 +129,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_combobox_1.setCurrentIndex(self.ow_combobox_1.findText(self.config_dict.get('LOG', 'level')))
         self.ow_line_1.setText(self.config_dict.get('LOG', 'path'))
         self.ow_line_1.setCursorPosition(0)
-        self.ow_line_2.setText(self.config_dict.get('SYSTEM', 'in_sensors_rate'))
-        self.ow_line_3.setText(self.config_dict.get('SYSTEM', 'in_display_rate'))
-        self.ow_line_6.setText(self.config_dict.get('SYSTEM', 'out_sensors_rate'))
-        self.ow_line_8.setText(self.config_dict.get('SYSTEM', 'out_display_rate'))
+        self.ow_line_2.setText(self.config_dict.get('SENSOR', 'sensors_rate'))
+        self.ow_line_3.setText(self.config_dict.get('DISPLAY', 'in_display_rate'))
+        self.ow_line_8.setText(self.config_dict.get('DISPLAY', 'out_display_rate'))
         self.ow_line_7.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
-        self.ow_line_5.setText(self.config_dict.get('METEOFRANCE', 'request_rate'))
-        if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
+        self.ow_line_5.setText(self.config_dict.get('API', 'request_rate'))
+        if self.config_dict.getboolean('API', 'user_place'):
             f = open(self.user_path + '/place_object.dat', 'rb')
             self.place_object = pickle.load(f)
             f.close()
@@ -177,18 +150,18 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             info_window = MyInfo(text)
             info_window.exec_()
         else:
+
             self.config_dict.set('LOG', 'level', str(self.ow_combobox_1.currentText()))
             self.config_dict.set('LOG', 'path', str(self.ow_line_1.text()))
-            self.config_dict.set('SYSTEM', 'in_sensors_rate', str(self.ow_line_2.text()))
-            self.config_dict.set('SYSTEM', 'in_display_rate', str(self.ow_line_3.text()))
-            self.config_dict.set('SYSTEM', 'out_sensors_rate', str(self.ow_line_6.text()))
-            self.config_dict.set('SYSTEM', 'out_display_rate', str(self.ow_line_8.text()))
-            self.config_dict.set('METEOFRANCE', 'request_rate', str(self.ow_line_5.text()))
+            self.config_dict.set('SENSOR', 'sensors_rate', str(self.ow_line_2.text()))
+            self.config_dict.set('DISPLAY', 'in_display_rate', str(self.ow_line_3.text()))
+            self.config_dict.set('DISPLAY', 'out_display_rate', str(self.ow_line_8.text()))
+            self.config_dict.set('API', 'request_rate', str(self.ow_line_5.text()))
             self.config_dict.set('SYSTEM', 'place_altitude', str(self.ow_line_7.text()))
             if self.place_object is not None:
-                self.config_dict.set('METEOFRANCE', 'user_place', 'True')
+                self.config_dict.set('API', 'user_place', 'True')
             else:
-                self.config_dict.set('METEOFRANCE', 'user_place', 'False')
+                self.config_dict.set('API', 'user_place', 'False')
             self.cancel = False
             self.close_window()
 
@@ -209,7 +182,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         place, ville, code_postal, departement = None, None, None, None
         list_places = MeteoFranceClient().search_places(str(self.ow_line_4.text()))
         if len(list_places) > 1:
-            place_search = MyTown(list_places, self.gui_path, None)
+            place_search = MyTown(list_places, None)
             place_search.setGeometry(260, 157, 504, 286)
             place_search.exec_()
             if not place_search.cancel:
@@ -230,7 +203,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_14.setText(departement)
 
     def display_numpad(self):
-        numpad_window = MyNumpad(self.gui_path, self)
+        numpad_window = MyNumpad(self)
         numpad_window.setGeometry(227, 26, 246, 298)
         numpad_window.exec_()
         if not numpad_window.cancel:
@@ -248,7 +221,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ow_line_8.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
-        keyboard_window = MyKeyboard(self.gui_path, self)
+        keyboard_window = MyKeyboard(self)
         keyboard_window.setGeometry(56, 11, 588, 328)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
@@ -265,6 +238,7 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
         QtWidgets.QWidget.__init__(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.iw_label_1.setText(info_text)
@@ -286,6 +260,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.cancel = True
@@ -321,7 +296,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
 
 
 class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
-    def __init__(self, forecast, gui_path, parent=None):
+    def __init__(self, forecast, parent=None):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -332,10 +307,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.gui_path = gui_path
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.forecast = forecast
         self.ok_button.clicked.connect(self.close_window)
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.parse_forecast()
 
     def parse_forecast(self):
@@ -350,9 +324,9 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
             else:
                 wdir += 180
             idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-            icon = wind_dir_to_pictogramme(idx, self.gui_path)
+            icon = wind_dir_to_pictogramme(idx)
         else:
-            icon = wind_dir_to_pictogramme(0, self.gui_path)
+            icon = wind_dir_to_pictogramme(0)
         self.dir_ln.setIcon(icon)
         self.date_label.setText(date)
         self.hour_label.setText(str(dt.hour) + 'h')
@@ -361,7 +335,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.speed_ln.setText(str(wspeed) + ' km/h')
         self.cover_ln.setText(str(self.forecast['cover']) + ' %')
         self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
-        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], self.gui_path))
+        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather']))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My1hFCDetails - close_window')
@@ -369,7 +343,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
 
 
 class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
-    def __init__(self, forecast, gui_path, parent=None):
+    def __init__(self, forecast, parent=None):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -380,9 +354,8 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.gui_path = gui_path
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.forecast = forecast
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.ok_button.clicked.connect(self.close)
         self.parse_forecast()
 
@@ -390,16 +363,15 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         for i, fc in enumerate(self.forecast):
             wspeed = round(fc[1]['w_spd'] * 3600 / 1000)
             wdir = fc[1]['w_dir']
-
             if wspeed > 5:
                 if wdir > 180:
                     wdir -= 180
                 else:
                     wdir += 180
                 idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-                icon = wind_dir_to_pictogramme(idx, self.gui_path)
+                icon = wind_dir_to_pictogramme(idx)
             else:
-                icon = wind_dir_to_pictogramme(0, self.gui_path)
+                icon = wind_dir_to_pictogramme(0)
             if i == 0:
                 dt = fc[0]
                 date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
@@ -411,7 +383,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
             self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed) + ' km/h')
             self.findChild(QtWidgets.QToolButton, 'dir_ln_' + str(i + 1)).setIcon(icon)
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
-                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], self.gui_path))
+                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather']))
 
     def close_window(self):
         logging.debug('gui - other_windows_functions.py - My6hFCDetails - close_window')
@@ -419,7 +391,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
 
 
 class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
-    def __init__(self, gui_path, parent=None):
+    def __init__(self, parent=None):
         logging.debug('gui - other_windows_functions.py - MyNumpad - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -430,10 +402,8 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.cancel = True
-        self.button_ret.setIcon(icon_creation_function('bwd_arrow.png', gui_path))
-        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
-        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
                 button.clicked.connect(self.confirm_num)
@@ -461,7 +431,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
 
 
 class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
-    def __init__(self, gui_path, parent=None):
+    def __init__(self, parent=None):
         logging.debug('gui - other_windows_functions.py - MyKeyboard - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -472,11 +442,8 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.cancel = True
-        self.button_min_2.setIcon(icon_creation_function('escape_icon.png', gui_path))
-        self.button_ret.setIcon(icon_creation_function('bwd_arrow.png', gui_path))
-        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
-        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
                 button.clicked.connect(self.confirm_word)
@@ -514,18 +481,18 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
 
 
 class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
-    def __init__(self, place_list, gui_path, parent=None):
+    def __init__(self, place_list, parent=None):
         logging.debug('gui - other_windows_functions.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.gui_path = gui_path
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.cancel = True
         self.place_list = place_list
         self.radio_bt_list = []
@@ -536,8 +503,6 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.ok_button.clicked.connect(self.confirm_place)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.setEnabled(False)
-        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
-        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
         self.display_place_list()
 
     def display_place_list(self):
@@ -548,13 +513,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
                 self.radio_bt_list[idx].setMinimumSize(QtCore.QSize(0, 40))
                 self.radio_bt_list[idx].setMaximumSize(QtCore.QSize(16777215, 40))
                 self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
-
-                if platform.system() == 'Linux' and platform.node() != 'raspberry':
-                    stylesheet = stylesheet_creation_function_pi('qradiobutton', self.gui_path)
-                else:
-                    stylesheet = stylesheet_creation_function('qradiobutton', self.gui_path)
-
-                self.radio_bt_list[idx].setStyleSheet(stylesheet)
+                self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton'))
                 self.radio_bt_list[idx].setObjectName('place_' + str(idx))
                 self.radio_bt_list[idx].setText(place.name + ', ' + place.postal_code + ', '
                                                 + code_to_departement()[place.admin2])
@@ -585,7 +544,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
 
 
 class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
-    def __init__(self, warning_object, gui_path, parent=None):
+    def __init__(self, warning_object, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarning - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -596,9 +555,7 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', gui_path))
-        self.warning_button.setIcon(icon_creation_function('weather_warning_icon.png', gui_path))
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', gui_path))
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.ok_button.clicked.connect(self.close_window)
         self.text_edit.setText(warning_object)
 
@@ -608,7 +565,7 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
 
 
 class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
-    def __init__(self, gui_path, parent=None):
+    def __init__(self, parent=None):
         logging.debug('gui - other_windows_functions.py - MyWarningUpdate - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -619,8 +576,7 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', gui_path))
-        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', gui_path))
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.ok_button.clicked.connect(self.agree_update)
         self.cancel_button.clicked.connect(self.close_window)
         self.cancel = True
@@ -648,6 +604,7 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.temp_folder = folder
         self.url = url_dict['url']
         self.update_file = pathlib.Path(folder).joinpath(url_dict['file'])
@@ -698,7 +655,7 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
 
 
 class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
-    def __init__(self, gui_path, parent=None):
+    def __init__(self, parent=None):
         logging.debug('gui - other_windows_functions.py - MyConnexion - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -708,14 +665,11 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.gui_path = gui_path
         self.retry = False
         self.ok_button.clicked.connect(self.retry_connexion)
         self.cancel_button.clicked.connect(self.close_window)
-        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
-        self.ok_button.setIcon(icon_creation_function('validate_icon.svg', self.gui_path))
-        self.cancel_button.setIcon(icon_creation_function('del_icon.svg', self.gui_path))
 
     def retry_connexion(self):
         self.retry = True
@@ -727,7 +681,7 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
 
 
 class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
-    def __init__(self, bat, link, gui_path, parent=None):
+    def __init__(self, bat, link, parent=None):
         logging.debug('gui - other_windows_functions.py - MyBatLink - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -737,13 +691,11 @@ class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.gui_path = gui_path
         self.bat = bat
         self.link = link
         self.ok_button.clicked.connect(self.close_window)
-        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.set_details()
 
     def set_details(self):
@@ -757,7 +709,7 @@ class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
 
 
 class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
-    def __init__(self, pres, pres_msl, alt, gui_path, parent=None):
+    def __init__(self, pres, pres_msl, alt, parent=None):
         logging.debug('gui - other_windows_functions.py - MyPressure - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -767,14 +719,12 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.gui_path = gui_path
         self.pres = pres
         self.pres_msl = pres_msl
         self.alt = alt
         self.ok_button.clicked.connect(self.close_window)
-        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.set_details()
 
     def set_details(self):
@@ -789,7 +739,7 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
 
 
 class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
-    def __init__(self, hum, temp, dew, gui_path, parent=None):
+    def __init__(self, hum, temp, dew, parent=None):
         logging.debug('gui - other_windows_functions.py - MyPressure - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -799,14 +749,12 @@ class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.gui_path = gui_path
         self.hum = hum
         self.temp = temp
         self.dew = dew
         self.ok_button.clicked.connect(self.close_window)
-        self.setWindowIcon(icon_creation_function('info_popup_icon.svg', self.gui_path))
-        self.ok_button.setIcon(icon_creation_function('exit_icon.svg', self.gui_path))
         self.set_details()
 
     def set_details(self):

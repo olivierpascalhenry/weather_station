@@ -17,7 +17,7 @@ class MFForecastRequest(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.debug('gui - forecast_resquest.py - MFForecastRequest - __init__')
         self.user_place = user_place
-        self.request_rate = int(config_dict.get('METEOFRANCE', 'request_rate')) * 60
+        self.request_rate = int(config_dict.get('API', 'request_rate')) * 60
         self.forecast = {}
 
     def run(self):

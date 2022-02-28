@@ -34,7 +34,7 @@ from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion,
                                                       RequestPlotDataThread)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
-                                     clean_6h_forecast_widgets, set_mainwindow_icons)
+                                     clean_6h_forecast_widgets)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -55,7 +55,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if platform.system() == 'Linux' and platform.node() != 'raspberry':
             self.showFullScreen()
             self.setCursor(QtGui.QCursor(QtCore.Qt.BlankCursor))
-        set_mainwindow_icons(self)
         self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
         self.current_date = None
         self.figure_in = None
@@ -128,8 +127,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
-        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
-        if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
+        self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+        if self.config_dict.getboolean('API', 'user_place'):
             f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
             self.place_object = pickle.load(f)
             self.old_place_object = self.place_object
@@ -154,8 +153,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
-            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu', self.gui_path))
-        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated', self.gui_path))
+            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
+        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         if idx == 1:
             self.plot_time_series_start()
         elif idx == 2:
@@ -196,18 +195,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         idx = self.time_series_stack.currentIndex() + 1
         for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*')):
             if idx == int(button.objectName()[-1:]):
-                button.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path))
+                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
             else:
-                button.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path))
+                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
 
     def set_fc_stack_icon(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_icon')
         idx = self.forecast_1h_stack.currentIndex() + 1
         for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*')):
             if idx == int(button.objectName()[-1:]):
-                button.setIcon(icon_creation_function('filled_circle_icon.svg', self.gui_path))
+                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
             else:
-                button.setIcon(icon_creation_function('empty_circle_icon.svg', self.gui_path))
+                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
 
     def set_time_date(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
@@ -272,8 +271,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
-        connexion_window = MyConnexion(self.gui_path, self)
-        connexion_window.setGeometry(197, 160, 630, 280)
+        connexion_window = MyConnexion(self)
         connexion_window.exec_()
         if connexion_window.retry:
             self.check_internet_connection()
@@ -365,14 +363,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for i, val in enumerate(bat_list[: -1]):
             if bat_list[i] <= self.out_battery < bat_list[i + 1]:
                 icon = battery_value_icon_dict()[val]
-        self.out_battery_bt.setIcon(icon_creation_function(icon, self.gui_path))
+        self.out_battery_bt.setIcon(icon_creation_function(icon))
 
         icon = 'signal_0-5_icon.svg'
         link_list = sorted(list(link_value_icon_dict().keys()))
         for i, val in enumerate(link_list[: -1]):
             if link_list[i] <= self.out_signal < link_list[i + 1]:
                 icon = link_value_icon_dict()[val]
-        self.out_signal_bt.setIcon(icon_creation_function(icon, self.gui_path))
+        self.out_signal_bt.setIcon(icon_creation_function(icon))
 
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
@@ -457,7 +455,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.mf_forecast_data = fc_data
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
-                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg', self.gui_path))
+                self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
 
     def display_fc_1h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
@@ -505,8 +503,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.mf_forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.gui_path, self)
-        details_window.setGeometry(282, 110, 480, 380)
+        details_window = My1hFCDetails(forecast, self)
         details_window.exec_()
 
     def display_6h_forecast_details(self, dt_list):
@@ -514,13 +511,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self.gui_path, self)
-        details_window.setGeometry(52, 110, 920, 380)
+        details_window = My6hFCDetails(forecast, self)
         details_window.exec_()
 
     def show_bat_link_details(self):
-        bat_link = MyBatLink(self.out_battery, self.out_signal, self.gui_path, self)
-        bat_link.setGeometry(359, 200, 306, 200)
+        bat_link = MyBatLink(self.out_battery, self.out_signal, self)
         bat_link.exec_()
 
     def show_pressure_details(self):
@@ -538,8 +533,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             alt = int(self.config_dict.get('SYSTEM', 'place_altitude'))
         else:
             alt = 'No data'
-        pres_window = MyPressure(pres, presmsl, alt, self.gui_path, self)
-        pres_window.setGeometry(225, 179, 574, 242)
+        pres_window = MyPressure(pres, presmsl, alt, self)
         pres_window.exec_()
 
     def show_hum_temp_details(self):
@@ -552,20 +546,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         a, b = 17.27, 237.7
         temp_ros = ((b * (((a * temp) / (b + temp)) + math.log(hum / 100.))) / (a - (((a * temp) / (b + temp)) +
                                                                                      math.log(hum / 100.))))
-        temp_window = MyTempHum(hum, temp, round(temp_ros, 1), self.gui_path, self)
-        temp_window.setGeometry(342, 177, 340, 246)
+        temp_window = MyTempHum(hum, temp, round(temp_ros, 1), self)
         temp_window.exec_()
 
     def warning_update_dispatch(self):
         logging.debug('gui - mainwindow.py - MainWindow - warning_update_dispatch')
         if self.warning_button.objectName() == 'update_function':
-            update_window = MyWarningUpdate(self.gui_path, self)
-            update_window.setGeometry(182, 180, 660, 240)
+            update_window = MyWarningUpdate(self)
             update_window.exec_()
             if not update_window.cancel:
                 temp_folder = tempfile.gettempdir()
                 download_window = MyDownload(self.update_url, temp_folder, self)
-                download_window.setGeometry(237, 217, 550, 166)
                 download_window.exec_()
                 if download_window.success:
                     install_path = pathlib.Path(self.gui_path)
@@ -576,8 +567,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     time.sleep(1.5)
                     self.close()
         elif self.warning_button.objectName() == 'warning_function':
-            warning_window = MyWarning(self.mf_forecast_data['warning'], self.gui_path, self)
-            warning_window.setGeometry(197, 175, 630, 350)
+            warning_window = MyWarning(self.mf_forecast_data['warning'], self)
             warning_window.exec_()
 
     def open_options(self):
@@ -587,15 +577,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_string.seek(0)
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
-        option_window = MyOptions(config_dict_copy, self.user_path, self.gui_path, self)
-        option_window.setGeometry(162, 125, 700, 364)
+        option_window = MyOptions(config_dict_copy, self.user_path, self)
         option_window.exec_()
         if not option_window.cancel:
             self.config_dict = option_window.config_dict
             ini_file = open(pathlib.Path(self.user_path).joinpath('weather_station.ini'), 'w')
             self.config_dict.write(ini_file)
             ini_file.close()
-            if self.config_dict.getboolean('METEOFRANCE', 'user_place'):
+            if self.config_dict.getboolean('API', 'user_place'):
                 self.place_object = option_window.place_object
                 f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'wb')
                 pickle.dump(self.place_object, f)
@@ -606,7 +595,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         text = (f'<p align=\"justify\">La Station Météo v{gui_version} a été développée à partir de Python et de '
                 f'PyQt.</p>')
         about_window = MyAbout(text, self.gui_path, self)
-        about_window.setGeometry(162, 75, 700, 450)
         about_window.exec_()
 
     def display_gui_update_button(self, url_dict):
@@ -615,7 +603,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':
                 self.warning_button.setObjectName('update_function')
-                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg', self.gui_path))
+                self.warning_button.setIcon(icon_creation_function('weather_station_update.svg'))
 
     @staticmethod
     def log_thread_error(e_list):
@@ -628,7 +616,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.close()
         else:
             exit_window = MyExit(self)
-            exit_window.setGeometry(369, 209, 286, 182)
             exit_window.exec_()
             if not exit_window.cancel:
                 if exit_window.exit:
