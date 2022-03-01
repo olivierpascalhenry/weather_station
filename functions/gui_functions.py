@@ -1,7 +1,7 @@
 import logging
-from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore
 from functions.utils import (stylesheet_creation_function, weather_to_pictogrammes, font_creation_function,
-                             clear_layout, icon_creation_function)
+                             clear_layout)
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):

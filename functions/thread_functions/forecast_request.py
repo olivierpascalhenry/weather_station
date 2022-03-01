@@ -3,7 +3,7 @@ import logging
 import collections
 import datetime
 import meteofrance_api
-from functions.utils import weather_to_pictogrammes, days_months_dictionary
+from functions.utils import days_months_dictionary
 
 
 from PyQt5 import QtCore

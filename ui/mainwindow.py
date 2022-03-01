@@ -20,7 +20,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
 from pyqtspinner.spinner import WaitingSpinner
-from ui.version import gui_version, python_version, pyqt5_version
+from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
