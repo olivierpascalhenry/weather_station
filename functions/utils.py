@@ -1,11 +1,8 @@
-import os
 import configparser
 import logging
 from logging.handlers import RotatingFileHandler
 import pathlib
-import bisect
 import datetime
-from collections import OrderedDict
 from PyQt5 import QtGui, QtWidgets
 from numpy import nan
 

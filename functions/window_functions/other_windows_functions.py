@@ -1,13 +1,12 @@
 import pickle
 import logging
 import pathlib
-import platform
 import markdown
 from numpy import arange
 import bisect
 import time
 from meteofrance_api import MeteoFranceClient
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from ui.Ui_aboutlogwindow import Ui_aboutlogWindow
 from ui.Ui_optionwindow import Ui_optionWindow
 from ui.Ui_infowindow import Ui_infoWindow
@@ -21,15 +20,12 @@ from ui.Ui_warningwindow import Ui_warningWindow
 from ui.Ui_updatewindow import Ui_updateWindow
 from ui.Ui_downloadwindow import Ui_downloadWindow
 from ui.Ui_connexionwindow import Ui_connexionWindow
-from ui.Ui_waitwindow import Ui_waitWindow
 from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from functions.utils import (weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme,
-                             code_to_departement, stylesheet_creation_function, font_creation_function,
-                             icon_creation_function)
+                             code_to_departement, stylesheet_creation_function, font_creation_function)
 from functions.thread_functions.other_threads import DownloadFile
-from functions.gui_widgets import QtWaitingSpinner
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
