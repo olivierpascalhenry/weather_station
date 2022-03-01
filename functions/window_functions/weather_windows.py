@@ -9,7 +9,7 @@ from functions.utils import weather_to_pictogrammes, days_months_dictionary, win
 
 class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
     def __init__(self, forecast, parent=None):
-        logging.debug('gui - other_windows.py - My1hFCDetails - __init__')
+        logging.info('gui - weather_windows.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -23,6 +23,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.parse_forecast()
 
     def parse_forecast(self):
+        logging.debug('gui - weather_windows.py - My1hFCDetails - parse_forecast')
         wspeed = round(self.forecast['w_spd'] * 3600 / 1000)
         wdir = self.forecast['w_dir']
         dt = self.forecast['datetime']
@@ -48,13 +49,13 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather']))
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - My1hFCDetails - close_window')
+        logging.debug('gui - weather_windows.py - My1hFCDetails - close_window')
         self.close()
 
 
 class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
     def __init__(self, forecast, parent=None):
-        logging.debug('gui - other_windows.py - My6hFCDetails - __init__')
+        logging.info('gui - weather_windows.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -68,6 +69,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         self.parse_forecast()
 
     def parse_forecast(self):
+        logging.debug('gui - weather_windows.py - My6hFCDetails - parse_forecast')
         for i, fc in enumerate(self.forecast):
             wspeed = round(fc[1]['w_spd'] * 3600 / 1000)
             wdir = fc[1]['w_dir']
@@ -94,5 +96,5 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                            + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather']))
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - My6hFCDetails - close_window')
+        logging.debug('gui - weather_windows.py - My6hFCDetails - close_window')
         self.close()

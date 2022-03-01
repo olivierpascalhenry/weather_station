@@ -15,7 +15,7 @@ class MFForecastRequest(QtCore.QThread):
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
-        logging.debug('gui - forecast_resquest.py - MFForecastRequest - __init__')
+        logging.info('gui - forecast_resquest.py - MFForecastRequest - __init__')
         self.user_place = user_place
         self.request_rate = int(config_dict.get('API', 'request_rate')) * 60
         self.forecast = {}
@@ -55,7 +55,8 @@ class MFForecastRequest(QtCore.QThread):
                 self.forecast['hourly'] = fc_1h
 
                 fc_6h = collections.OrderedDict()
-                dt = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
+                dt = (datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                      + datetime.timedelta(days=1))
                 day_time_list = [dt]
                 for i in range(19):
                     dt += datetime.timedelta(hours=6)

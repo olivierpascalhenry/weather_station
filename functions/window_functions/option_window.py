@@ -10,7 +10,7 @@ from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboar
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def __init__(self, config_dict, user_path, parent=None):
-        logging.debug('gui - other_windows.py - MyOptions - __init__ ')
+        logging.info('gui - option_window.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -53,10 +53,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ow_section_list.setCurrentRow(0)
 
     def display_options(self, idx):
+        logging.debug(f'gui - option_window.py - MyOptions - display_options - idx: {idx}')
         self.ow_stacked_widget.setCurrentIndex(idx)
 
     def read_config_dict(self):
-        logging.debug('gui - option_window_functions.py - MyOptions - read_config_dict')
+        logging.debug('gui - option_window.py - MyOptions - read_config_dict')
         self.ow_combobox_1.setCurrentIndex(self.ow_combobox_1.findText(self.config_dict.get('LOG', 'level')))
         self.ow_line_1.setText(self.config_dict.get('LOG', 'path'))
         self.ow_line_1.setCursorPosition(0)
@@ -74,7 +75,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_14.setText(code_to_departement()[self.place_object.admin2])
 
     def save_config_dict(self):
-        logging.debug('gui - option_window_functions.py - MyOptions - save_config_dict')
+        logging.debug('gui - option_window.py - MyOptions - save_config_dict')
         if not pathlib.Path(str(self.ow_line_1.text())).exists():
             text = ('After checking, it appears that the path for the log file is not valid. Thus it is not possible '
                     'to save the new configuration. Please correct it and try again.')
@@ -97,19 +98,21 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.close_window()
 
     def get_folder_path(self):
-        logging.debug('gui - other_windows.py - MyOptions - get_folder_path')
+        logging.debug('gui - option_window.py - MyOptions - get_folder_path')
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Sélectionner un répertoire')
         if folder_path:
             self.ow_line_1.setText(str(pathlib.Path(folder_path)))
             self.ow_line_1.setCursorPosition(0)
 
     def activate_search_button(self):
+        logging.debug('gui - option_window.py - MyOptions - activate_search_button')
         if self.ow_line_4.text():
             self.ow_search_button.setEnabled(True)
         else:
             self.ow_search_button.setEnabled(False)
 
     def search_place(self):
+        logging.debug('gui - option_window.py - MyOptions - search_place')
         place, ville, code_postal, departement = None, None, None, None
         list_places = MeteoFranceClient().search_places(str(self.ow_line_4.text()))
         if len(list_places) > 1:
@@ -133,6 +136,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_14.setText(departement)
 
     def display_numpad(self):
+        logging.debug('gui - option_window.py - MyOptions - display_numpad')
         numpad_window = MyNumpad(self.mainparent)
         numpad_window.exec_()
         if not numpad_window.cancel:
@@ -150,11 +154,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ow_line_8.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
+        logging.debug('gui - option_window.py - MyOptions - display_keyboard')
         keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
             self.ow_line_4.setText(keyboard_window.num_line.text())
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - MyAbout - close_window')
+        logging.debug('gui - option_window.py - MyOptions - close_window')
         self.close()

@@ -59,17 +59,17 @@ def create_logging_handlers(config_dict, filename, default_path):
 
 
 def check_postgresql_server():
-    installed = False
-    database = False
-    tables = False
-
+    logging.debug('gui - utils.py - check_postgresql_server')
+    installed, database, tables = False, False, False
     if platform.system() == 'Linux':
         res = subprocess.run(['which', '-s', 'psql'])
         if res.returncode == 0:
             installed = True
+        else:
+            logging.error('gui - utils.py - check_postgresql_server - which -s psql returned 1, postgresql is not '
+                          'installed')
     else:
         installed = True
-
     if installed:
         try:
             connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
@@ -83,7 +83,6 @@ def check_postgresql_server():
             connector.close()
         except psycopg2.OperationalError:
             pass
-
     return installed, database, tables
 
 
@@ -306,9 +305,6 @@ def mpl_hour_list():
     logging.debug('gui - utils.py - mpl_hour_list')
     now = datetime.datetime.now()
     hours_list = [now]
-    # for h in [4, 8, 12, 16, 20, 24]:
-    #     new_hour = now - datetime.timedelta(hours=h)
-    #     hours_list.append(new_hour)
     for h in range(1, 25, 1):
         new_hour = now - datetime.timedelta(hours=h)
         hours_list.append(new_hour)

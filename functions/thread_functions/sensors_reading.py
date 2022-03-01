@@ -1,10 +1,10 @@
-import logging
-import random
-import datetime
-import time
 import json
-import psycopg2
+import time
+import random
+import logging
+import datetime
 import platform
+import psycopg2
 from PyQt5 import QtCore
 if platform.system() == 'Linux':
     import smbus2
@@ -32,6 +32,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
             time.sleep(self.sensors_rate)
 
     def add_data_to_db(self, dt, tp):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db')
         try:
             self.cursor.execute('insert into "DS18B20" (date_time, temperature) values (%s, %s)', (dt, tp))
             self.connector.commit()
@@ -40,6 +41,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
                               'occurred when adding data to db')
 
     def collect_data(self):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data')
         temp = None
         if platform.system() == 'Linux':
             try:
@@ -62,6 +64,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
     @staticmethod
     def collect_test_data(num, limit):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_test_data')
         random.seed()
         return round(num + random.uniform(0, limit), 1)
 
@@ -100,6 +103,7 @@ class BME280DataCollectingThread(QtCore.QThread):
             time.sleep(self.sensors_rate)
 
     def collect_data(self):
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_data')
         if platform.system() == 'Linux':
             try:
                 data = bme280.sample(self.bus, self.address, self.cal_params)
@@ -129,6 +133,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         return temp, hum, pres, pres_msl
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_msl):
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - add_data_to_db')
         try:
             self.cursor.execute('insert into "BME280" (date_time, temperature, humidite, pression, pression_msl) '
                                 'values (%s, %s, %s, %s, %s)', (dt, tp, hm, ps, ps_msl))
@@ -138,6 +143,7 @@ class BME280DataCollectingThread(QtCore.QThread):
                               'exception occurred when adding data to db')
 
     def set_bme280_parameters(self):
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters')
         try:
             self.bus = smbus2.SMBus(1)
             self.address = 0x77
@@ -148,6 +154,7 @@ class BME280DataCollectingThread(QtCore.QThread):
 
     @staticmethod
     def collect_test_data(num, limit):
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_test_data')
         random.seed()
         return round(num + random.uniform(0, limit), 1)
 
@@ -248,6 +255,7 @@ class MqttToDbThread(QtCore.QThread):
 
     @staticmethod
     def collect_test_data(num, limit):
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - collect_test_data')
         random.seed()
         return round(num + random.uniform(0, limit), 1)
 

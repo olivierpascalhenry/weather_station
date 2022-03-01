@@ -42,11 +42,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.config_dict = config_dict
         self.place_object = None
         self.old_place_object = None
-
-
         self.database_ok = False
-
-
         self.connector = None
         self.cursor = None
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
@@ -144,9 +140,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
-        # self.launch_clean_thread()
-        # self.collect_sensors_data()
-        # self.display_sensors_data()
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -164,6 +157,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_internet.start()
 
     def parse_posgresql_check(self, results):
+        logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
         if results[0] and results[1] and results[2]:
             self.database_ok = True
             self.launch_clean_thread()
@@ -190,7 +184,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.launch_fc_request_thread()
 
     def set_stack_widget_page(self, idx):
-        logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
+        logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
         self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
@@ -545,10 +539,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         details_window.exec_()
 
     def show_bat_link_details(self):
+        logging.debug('gui - mainwindow.py - MainWindow - show_bat_link_details')
         bat_link = MyBatLink(self.out_battery, self.out_signal, self)
         bat_link.exec_()
 
     def show_pressure_details(self):
+        logging.debug('gui - mainwindow.py - MainWindow - show_pressure_details')
         if self.sender().objectName() == 'out_pressure_bt':
             pres = int(round(self.out_pressure, 0))
             presmsl = int(round(self.out_pressure_msl, 0))
@@ -567,6 +563,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         pres_window.exec_()
 
     def show_hum_temp_details(self):
+        logging.debug('gui - mainwindow.py - MainWindow - show_hum_temp_details')
         if self.sender().objectName() == 'in_humidity_bt':
             temp = self.in_temperature
             hum = self.in_humidity

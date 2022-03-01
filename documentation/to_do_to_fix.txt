@@ -6,7 +6,6 @@
 * avant de lancer les threads de récupération de données, vérifier la présence des capteurs (0.11)
 * lorsque la station météo est lancée pour la première fois : pas de base de données, création des tables à la volée en fonction des capteurs (0.11)
 * lorsque les capteurs sont choisis, lors du prochain démarrage, il faut créer les tables de données correspondantes (0.11)
-* avant de lancer les threads, vérifier la base de données et proposer de la créer si elle n'existe pas.
 
 
 ### To fix list: ###

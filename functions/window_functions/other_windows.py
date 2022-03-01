@@ -22,7 +22,7 @@ from functions.thread_functions.other_threads import DownloadFile
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
     def __init__(self, text, gui_path, parent=None):
-        logging.debug('gui - other_windows.py - MyAbout - __init__')
+        logging.info('gui - other_windows.py - MyAbout - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.gui_path = gui_path
@@ -48,9 +48,9 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         self.button.clicked.connect(self.close_window)
         self.splitter.setSizes([100, 200])
         self.read_markdown_file()
-        logging.info('gui - other_windows.py - MyAbout - ready')
 
     def read_markdown_file(self):
+        logging.debug('gui - other_windows.py - MyAbout - read_markdown_file')
         changelog = open(pathlib.Path(self.gui_path).joinpath('documentation').joinpath('changelog.txt')).read()
         self.browser_2.setHtml(markdown.markdown(changelog))
 
@@ -61,7 +61,7 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
 
 class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
     def __init__(self, info_text, parent=None):
-        logging.debug('gui - other_windows.py - MyInfo - __init__ : infoText ' + str(info_text))
+        logging.info(f'gui - other_windows.py - MyInfo - __init__ - infoText: {info_text}')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -72,7 +72,6 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.label.setText(info_text)
         self.exit_button.clicked.connect(self.close_window)
-        logging.info('gui - other_windows.py - MyInfo - ready')
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyInfo - closeWindow')
@@ -81,7 +80,7 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
 
 class MyExit(QtWidgets.QDialog, Ui_closeWindow):
     def __init__(self, parent=None):
-        logging.debug('gui - other_windows.py - MyExit - __init__')
+        logging.info('gui - other_windows.py - MyExit - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
@@ -124,7 +123,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
 
 class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
     def __init__(self, parent=None):
-        logging.debug('gui - other_windows.py - MyNumpad - __init__')
+        logging.info('gui - other_windows.py - MyNumpad - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -151,6 +150,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
         self.num_line.setText(self.num_line.text()[:-1])
 
     def confirm_num(self):
+        logging.debug('gui - other_windows.py - MyNumpad - confirm_num')
         if self.num_line.text():
             self.cancel = False
             self.close_window()
@@ -162,7 +162,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
 
 class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
     def __init__(self, parent=None):
-        logging.debug('gui - other_windows.py - MyKeyboard - __init__')
+        logging.info('gui - other_windows.py - MyKeyboard - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -199,6 +199,7 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         self.num_line.setText(self.num_line.text()[:-1])
 
     def confirm_word(self):
+        logging.debug('gui - other_windows.py - MyKeyboard - confirm_word')
         if self.num_line.text():
             self.cancel = False
             self.close_window()
@@ -210,7 +211,7 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
 
 class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
     def __init__(self, place_list, parent=None):
-        logging.debug('gui - other_windows.py - MyTown - __init__')
+        logging.info('gui - other_windows.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -232,6 +233,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.display_place_list()
 
     def display_place_list(self):
+        logging.debug('gui - other_windows.py - MyTown - display_place_list')
         idx = 0
         for place in self.place_list:
             if place.country == 'FR':
@@ -250,6 +252,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.verticalLayout.setAlignment(QtCore.Qt.AlignTop)
 
     def set_place(self):
+        logging.debug('gui - other_windows.py - MyTown - set_place')
         idx = int(self.sender().objectName()[6:])
         self.ville = self.place_list[idx].name
         self.code_postal = self.place_list[idx].postal_code
@@ -257,21 +260,23 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.place = self.place_list[idx]
 
     def activate_ok(self):
+        logging.debug('gui - other_windows.py - MyTown - activate_ok')
         self.ok_button.setEnabled(True)
 
     def confirm_place(self):
+        logging.debug('gui - other_windows.py - MyTown - confirm_place')
         if self.ville is not None:
             self.cancel = False
             self.close_window()
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - MyKeyboard - close_window')
+        logging.debug('gui - other_windows.py - MyTown - close_window')
         self.close()
 
 
 class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
     def __init__(self, warning_object, parent=None):
-        logging.debug('gui - other_windows.py - MyWarning - __init__')
+        logging.info('gui - other_windows.py - MyWarning - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -290,7 +295,7 @@ class MyWarning(QtWidgets.QDialog, Ui_warningWindow):
 
 class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
     def __init__(self, parent=None):
-        logging.debug('gui - other_windows.py - MyWarningUpdate - __init__')
+        logging.info('gui - other_windows.py - MyWarningUpdate - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -302,7 +307,6 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
         self.ok_button.clicked.connect(self.agree_update)
         self.cancel_button.clicked.connect(self.close_window)
         self.cancel = True
-        logging.info('gui - other_windows.py - MyWarningUpdate - ready')
 
     def agree_update(self):
         logging.debug('gui - other_windows.py - MyWarningUpdate - agree_update')
@@ -316,7 +320,7 @@ class MyWarningUpdate(QtWidgets.QDialog, Ui_updateWindow):
 
 class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
     def __init__(self, url_dict, folder, parent=None):
-        logging.debug('gui - other_windows.py - MyDownload - __init__')
+        logging.info('gui - other_windows.py - MyDownload - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -370,13 +374,13 @@ class MyDownload(QtWidgets.QDialog, Ui_downloadWindow):
         self.cancel_download()
 
     def close_window(self):
-        logging.info('gui - other_windows.py - MyDownload - close_window')
+        logging.debug('gui - other_windows.py - MyDownload - close_window')
         self.close()
 
 
 class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
     def __init__(self, parent=None):
-        logging.debug('gui - other_windows.py - MyConnexion - __init__')
+        logging.info('gui - other_windows.py - MyConnexion - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -390,17 +394,18 @@ class MyConnexion(QtWidgets.QDialog, Ui_connexionWindow):
         self.cancel_button.clicked.connect(self.close_window)
 
     def retry_connexion(self):
+        logging.debug('gui - other_windows.py - MyConnexion - retry_connexion')
         self.retry = True
         self.close_window()
 
     def close_window(self):
-        logging.info('gui - other_windows.py - MyConnexion - close_window')
+        logging.debug('gui - other_windows.py - MyConnexion - close_window')
         self.close()
 
 
 class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
     def __init__(self, bat, link, parent=None):
-        logging.debug('gui - other_windows.py - MyBatLink - __init__')
+        logging.info('gui - other_windows.py - MyBatLink - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -426,7 +431,7 @@ class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
 
 class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
     def __init__(self, pres, pres_msl, alt, parent=None):
-        logging.debug('gui - other_windows.py - MyPressure - __init__')
+        logging.info('gui - other_windows.py - MyPressure - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -454,7 +459,7 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
 
 class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
     def __init__(self, hum, temp, dew, parent=None):
-        logging.debug('gui - other_windows.py - MyPressure - __init__')
+        logging.info('gui - other_windows.py - MyTempHum - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
@@ -470,11 +475,11 @@ class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
         self.set_details()
 
     def set_details(self):
-        logging.debug('gui - other_windows.py - MyPressure - set_details')
+        logging.debug('gui - other_windows.py - MyTempHum - set_details')
         self.hum_lb.setText(f'{self.hum} %')
         self.temp_lb.setText(f'{self.temp} °C')
         self.dew_lb.setText(f'{self.dew} °C')
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - MyPressure - close_window')
+        logging.debug('gui - other_windows.py - MyTempHum - close_window')
         self.close()
