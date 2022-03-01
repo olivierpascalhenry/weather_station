@@ -5,12 +5,12 @@ from meteofrance_api import MeteoFranceClient
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_optionwindow import Ui_optionWindow
 from functions.utils import code_to_departement
-from functions.window_functions.other_windows_functions import MyInfo, MyNumpad, MyKeyboard, MyTown
+from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def __init__(self, config_dict, user_path, parent=None):
-        logging.debug('gui - other_windows_functions.py - MyOptions - __init__ ')
+        logging.debug('gui - other_windows.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -97,7 +97,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.close_window()
 
     def get_folder_path(self):
-        logging.debug('gui - other_windows_functions.py - MyOptions - get_folder_path')
+        logging.debug('gui - other_windows.py - MyOptions - get_folder_path')
         folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Sélectionner un répertoire')
         if folder_path:
             self.ow_line_1.setText(str(pathlib.Path(folder_path)))
@@ -156,5 +156,5 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_line_4.setText(keyboard_window.num_line.text())
 
     def close_window(self):
-        logging.debug('gui - other_windows_functions.py - MyAbout - close_window')
+        logging.debug('gui - other_windows.py - MyAbout - close_window')
         self.close()

@@ -25,9 +25,10 @@ from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
                              shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
                              battery_value_icon_dict, link_value_icon_dict)
-from functions.window_functions.other_windows_functions import (MyAbout, MyOptions, MyExit, My1hFCDetails, MyDownload,
-                                                                My6hFCDetails, MyWarning, MyWarningUpdate, MyConnexion,
-                                                                MyBatLink, MyPressure, MyTempHum)
+from functions.window_functions.option_window import MyOptions
+from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails
+from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
+                                                      MyConnexion, MyBatLink, MyPressure, MyTempHum)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest

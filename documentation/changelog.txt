@@ -21,6 +21,8 @@
     * cursor blanking has been removed from the about window.
     * if error happens during the rendering of time series, the spinner widget is now cleared.
     * moved the option window to its own py file.
+    * moved all weather windows to their own py file.
+    * renamed the other windows py file.
 
   * FIXED:
     * fixed an issue with the option dictionary.
