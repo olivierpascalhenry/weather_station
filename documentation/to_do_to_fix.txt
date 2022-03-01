@@ -1,0 +1,14 @@
+### To do list: ###
+
+* proposer une interface comme prosim pour activer les différents capteurs, dans les options (0.11)
+* proposer une partie extérieur et intérieur, pour sélectionner les capteurs, dans les options (0.11)
+* implémenter OpenWeather API (0.10)
+* avant de lancer les threads de récupération de données, vérifier la présence des capteurs (0.11)
+* lorsque la station météo est lancée pour la première fois : pas de base de données, création des tables à la volée en fonction des capteurs (0.11)
+* lorsque les capteurs sont choisis, lors du prochain démarrage, il faut créer les tables de données correspondantes (0.11)
+
+
+### To fix list: ###
+
+* nothing.
+
