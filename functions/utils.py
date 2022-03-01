@@ -42,7 +42,7 @@ def create_option_file(user_path):
     config_dict.set('SYSTEM', 'place_altitude', '')
     config_dict.set('API', 'api_used', 'meteofrance')
     config_dict.set('API', 'api_key', '')
-    config_dict.set('API', 'user_place', 'True')
+    config_dict.set('API', 'user_place', 'False')
     config_dict.set('API', 'request_rate', '30')
     config_dict.write(ini_file)
     ini_file.close()
