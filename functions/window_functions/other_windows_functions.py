@@ -40,7 +40,6 @@ class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
-
         self.browser_1.setHtml(text)
         scroll_1 = QtWidgets.QScroller.scroller(self.browser_1.viewport())
         scroll_1.grabGesture(self.browser_1.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
