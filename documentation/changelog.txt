@@ -1,4 +1,4 @@
-### February xx 2021, Release version 0.9.1 ###
+### March 1 2021, Release version 0.9.1 ###
 
   * MODIFIED:
     * a solution has been found to avoid absolute path for stylesheet and images in all windows.

@@ -1,21 +1,10 @@
-import configparser
 import logging
-from logging.handlers import RotatingFileHandler
 import pathlib
 import datetime
+import configparser
+from logging.handlers import RotatingFileHandler
 from PyQt5 import QtGui, QtWidgets
 from numpy import nan
-
-
-def clear_layout(layout):
-    logging.debug('gui - utils.py - clear_layout')
-    for i in reversed(range(layout.count())):
-        item = layout.itemAt(i)
-        if isinstance(item, QtWidgets.QWidgetItem):
-            item.widget().deleteLater()
-        elif isinstance(item, QtWidgets.QLayout):
-            clear_layout(item.layout())
-        layout.removeItem(item)
 
 
 def create_option_file(user_path):
@@ -64,6 +53,17 @@ def create_logging_handlers(config_dict, filename, default_path):
     logging.getLogger('').addHandler(console)
     if using_default_path:
         logging.error('gui - logging system - path from ini file not found, using default path')
+
+
+def clear_layout(layout):
+    logging.debug('gui - utils.py - clear_layout')
+    for i in reversed(range(layout.count())):
+        item = layout.itemAt(i)
+        if isinstance(item, QtWidgets.QWidgetItem):
+            item.widget().deleteLater()
+        elif isinstance(item, QtWidgets.QLayout):
+            clear_layout(item.layout())
+        layout.removeItem(item)
 
 
 def icon_creation_function(icon_filename):

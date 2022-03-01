@@ -4,7 +4,7 @@ import logging
 import pathlib
 import platform
 import configparser
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 from ui.mainwindow import MainWindow
 from ui.version import gui_version
 from functions.utils import create_option_file, create_logging_handlers
