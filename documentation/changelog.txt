@@ -20,6 +20,7 @@
     * cursor on raspberry pi is now hidden from the mainwindow.
     * cursor blanking has been removed from the about window.
     * if error happens during the rendering of time series, the spinner widget is now cleared.
+    * moved the option window to its own py file.
 
   * FIXED:
     * fixed an issue with the option dictionary.
