@@ -89,7 +89,7 @@ class DownloadFile(QtCore.QThread):
 
     def __init__(self, url, update_file):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - DownloadFile - __init__ - url ' + str(url))
+        logging.info(f'gui - other_threads.py - DownloadFile - __init__ - url: {url}')
         self.url = url
         self.update_file = update_file
         self.filename = pathlib.Path(update_file).name
