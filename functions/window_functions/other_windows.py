@@ -63,11 +63,15 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
     def __init__(self, info_text, parent=None):
         logging.debug('gui - other_windows.py - MyInfo - __init__ : infoText ' + str(info_text))
         QtWidgets.QWidget.__init__(self, parent)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
-        self.iw_label_1.setText(info_text)
-        self.iw_okButton.clicked.connect(self.close_window)
+        self.label.setText(info_text)
+        self.exit_button.clicked.connect(self.close_window)
         logging.info('gui - other_windows.py - MyInfo - ready')
 
     def close_window(self):

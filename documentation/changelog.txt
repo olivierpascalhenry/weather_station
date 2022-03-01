@@ -6,7 +6,8 @@
   * MODIFIED:
     * time series are ploted only if a connection to the database is successful.
     * the function to test postgresql server, database and tables is now connected to mainwindow, it will
-    control the display of data and time series, and the work of sensors
+    control the display of data and time series, and the work of sensors.
+    * the infowindow has been modified for better handling.
 
 
 ### March 1 2021, Release version 0.9.1 ###
