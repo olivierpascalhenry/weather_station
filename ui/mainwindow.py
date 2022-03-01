@@ -16,9 +16,9 @@ import matplotlib.pyplot as plt
 from pyqtspinner.spinner import WaitingSpinner
 from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
-from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout, mpl_hour_list,
-                             shadow_creation_function, icon_creation_function, db_data_to_mpl_vectors,
-                             battery_value_icon_dict, link_value_icon_dict)
+from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
+                             shadow_creation_function, icon_creation_function, battery_value_icon_dict,
+                             link_value_icon_dict, check_postgresql_server)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
@@ -26,7 +26,7 @@ from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownloa
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
-from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, DownloadFile, CheckInternetConnexion,
+from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
                                                       RequestPlotDataThread)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
@@ -42,12 +42,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.config_dict = config_dict
         self.place_object = None
         self.old_place_object = None
+
+
+        self.database_ok = False
+
+
         self.connector = None
         self.cursor = None
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
-        if platform.system() == 'Linux' and platform.node() != 'raspberry':
+        if platform.system() == 'Linux':
             self.showFullScreen()
             QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BlankCursor)
         self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
@@ -138,11 +143,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
-
         self.launch_clean_thread()
         self.collect_sensors_data()
         self.display_sensors_data()
         self.check_internet_connection()
+
+    def check_internet_connection(self):
+        logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
+        self.check_internet = CheckInternetConnexion()
+        self.check_internet.connexion_alive.connect(self.start_internet_services)
+        self.check_internet.no_connexion.connect(self.no_internet_message)
+        self.check_internet.start()
 
     def set_stack_widget_page(self, idx):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
@@ -250,13 +261,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display_out_data_thread.db_data.connect(self.refresh_out_data)
         self.display_out_data_thread.error.connect(self.log_thread_error)
         self.display_out_data_thread.start()
-
-    def check_internet_connection(self):
-        logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
-        self.check_internet = CheckInternetConnexion()
-        self.check_internet.connexion_alive.connect(self.start_internet_services)
-        self.check_internet.no_connexion.connect(self.no_internet_message)
-        self.check_internet.start()
 
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
@@ -388,12 +392,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
                                                          QtWidgets.QSizePolicy.Expanding))
         self.spinner.start()
-
-        self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in, self.plot_in_2,
-                                                         self.plot_out, self.plot_out_2, self.db_dict)
-        self.request_plot_thread.success.connect(self.plot_time_series_end)
-        self.request_plot_thread.error.connect(self.plot_time_series_error)
-        self.request_plot_thread.start()
+        if self.database_ok:
+            self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in,
+                                                             self.plot_in_2, self.plot_out, self.plot_out_2,
+                                                             self.db_dict)
+            self.request_plot_thread.success.connect(self.plot_time_series_end)
+            self.request_plot_thread.error.connect(self.plot_time_series_error)
+            self.request_plot_thread.start()
+        else:
+            self.plot_time_series_error()
 
     def plot_time_series_end(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_end')
