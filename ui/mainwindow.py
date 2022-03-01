@@ -144,9 +144,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
 
-        self.launch_clean_thread()
-        self.collect_sensors_data()
-        self.display_sensors_data()
+        # self.launch_clean_thread()
+        # self.collect_sensors_data()
+        # self.display_sensors_data()
         self.check_internet_connection()
 
     def set_stack_widget_page(self, idx):
@@ -626,12 +626,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-        self.collect_ds18b20_data_thread.stop()
-        self.collect_bme180_data_thread.stop()
-        self.collect_mqtt_data_thread.stop()
-        self.db_cleaning_thread.stop()
-        self.display_in_data_thread.stop()
-        self.display_out_data_thread.stop()
+        if self.collect_ds18b20_data_thread is not None:
+            self.collect_ds18b20_data_thread.stop()
+        if self.collect_bme180_data_thread is not None:
+            self.collect_bme180_data_thread.stop()
+        if self.collect_mqtt_data_thread is not None:
+            self.collect_mqtt_data_thread.stop()
+        if self.db_cleaning_thread is not None:
+            self.db_cleaning_thread.stop()
+        if self.display_in_data_thread is not None:
+            self.display_in_data_thread.stop()
+        if self.display_out_data_thread is not None:
+            self.display_out_data_thread.stop()
         self.timer.stop()
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
