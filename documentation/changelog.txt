@@ -1,13 +1,16 @@
-### March xx 2021, Release version 0.9.2 ###
+### March 1 2021, Release version 0.9.2 ###
 
   * ADDED:
     * a function to test postgresql server, database and tables has been added.
 
   * MODIFIED:
-    * time series are ploted only if a connection to the database is successful.
+    * time series are plotted only if a connection to the database is successful.
     * the function to test postgresql server, database and tables is now connected to mainwindow, it will
     control the display of data and time series, and the work of sensors.
-    * the infowindow has been modified for better handling.
+    * the info window has been modified for better handling.
+    * code has been cleaned.
+    * logging messages have been cleaned.
+    * QWaitSpinner widget has been removed.
 
 
 ### March 1 2021, Release version 0.9.1 ###
