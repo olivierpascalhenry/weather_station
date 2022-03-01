@@ -22,7 +22,7 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
-                                                      MyConnexion, MyBatLink, MyPressure, MyTempHum)
+                                                      MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
@@ -171,12 +171,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_sensors_data()
         else:
             if not results[0]:
-                print('postgresql is not installed')
+                text = ('La station météo n\'a pas trouvé PostgreSQL. Veuillez l\'installer ou vérifier son '
+                        'installation. PostgreSQL est obligatoire pour gérer la base de données des capteurs.')
             else:
                 if not results[1]:
-                    print('database and/or user haven\'t been created')
+                    text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
+                            'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
+                            'connecter.')
                 else:
-                    print('tables haven\'t been created')
+                    text = ('La station météo n\'a pas trouvé les tables dédiées aux capteurs. Veuillez les créer '
+                            'avant d\'utiliser la station météo.')
+            info_window = MyInfo(text, self)
+            info_window.exec_()
 
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
