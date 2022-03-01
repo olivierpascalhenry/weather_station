@@ -18,7 +18,7 @@ from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict, check_postgresql_server)
+                             link_value_icon_dict)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
@@ -27,7 +27,7 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
 from functions.thread_functions.forecast_request import MFForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
-                                                      RequestPlotDataThread)
+                                                      RequestPlotDataThread, CheckPostgresqlConnexion)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
@@ -79,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.request_plot_thread = None
         self.mf_forecast_data = None
         self.check_internet = None
+        self.check_posgresql = None
         self.update_url = None
         self.timer = None
         self.db_dict = {'user': 'weather_station', 'password': '31weather64', 'host': '127.0.0.1',
@@ -143,10 +144,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
-        self.launch_clean_thread()
-        self.collect_sensors_data()
-        self.display_sensors_data()
+        # self.launch_clean_thread()
+        # self.collect_sensors_data()
+        # self.display_sensors_data()
+        self.check_postgresql_connection()
         self.check_internet_connection()
+
+    def check_postgresql_connection(self):
+        logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
+        self.check_posgresql = CheckPostgresqlConnexion()
+        self.check_posgresql.results.connect(self.parse_posgresql_check)
+        self.check_posgresql.start()
 
     def check_internet_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
@@ -154,6 +162,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_internet.connexion_alive.connect(self.start_internet_services)
         self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()
+
+    def parse_posgresql_check(self, results):
+        if results[0] and results[1] and results[2]:
+            self.database_ok = True
+            self.launch_clean_thread()
+            self.collect_sensors_data()
+            self.display_sensors_data()
+        else:
+            if not results[0]:
+                print('postgresql is not installed')
+            else:
+                if not results[1]:
+                    print('database and/or user haven\'t been created')
+                else:
+                    print('tables haven\'t been created')
+
+    def start_internet_services(self):
+        logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
+        self.check_update()
+        self.launch_fc_request_thread()
 
     def set_stack_widget_page(self, idx):
         logging.debug('gui - mainwindow.py - MainWindow - set_stack_widget_page - idx ' + str(idx))
@@ -261,11 +289,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.display_out_data_thread.db_data.connect(self.refresh_out_data)
         self.display_out_data_thread.error.connect(self.log_thread_error)
         self.display_out_data_thread.start()
-
-    def start_internet_services(self):
-        logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
-        self.check_update()
-        self.launch_fc_request_thread()
 
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '

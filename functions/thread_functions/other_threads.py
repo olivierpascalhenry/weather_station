@@ -1,14 +1,14 @@
-import logging
-import datetime
 import time
+import socket
+import logging
+import pathlib
+import datetime
 import psycopg2
 import requests
-import pathlib
-import socket
 from distutils.version import LooseVersion
-import numpy as np
+from numpy import min, max, linspace
 from PyQt5 import QtCore
-from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
+from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors, check_postgresql_server
 
 
 username = 'olivierpascalhenry'
@@ -157,7 +157,7 @@ class CheckInternetConnexion(QtCore.QThread):
         self.ip_address = '1.1.1.1'
 
     def run(self):
-        logging.debug('gui - other_threads.py - DownloadFile - run')
+        logging.debug('gui - other_threads.py - CheckInternetConnexion - run')
         try:
             socket.create_connection((self.ip_address, 53))
             self.connexion_alive.emit()
@@ -166,7 +166,23 @@ class CheckInternetConnexion(QtCore.QThread):
             self.no_connexion.emit()
 
     def stop(self):
-        logging.debug('gui - other_threads.py - DownloadFile - stop')
+        logging.debug('gui - other_threads.py - CheckInternetConnexion - stop')
+        self.terminate()
+
+
+class CheckPostgresqlConnexion(QtCore.QThread):
+    results = QtCore.pyqtSignal(list)
+
+    def __init__(self):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - CheckPostgresqlConnexion - __init__')
+
+    def run(self):
+        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - run')
+        self.results.emit(list(check_postgresql_server()))
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
         self.terminate()
 
 
@@ -228,12 +244,12 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
             self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
 
-            if np.min(temp_in_y) < 10:
-                y_min = np.min(temp_in_y) - 5
+            if min(temp_in_y) < 10:
+                y_min = min(temp_in_y) - 5
             else:
                 y_min = 10
-            if np.max(temp_in_y) > 30:
-                y_max = np.max(temp_in_y) + 5
+            if max(temp_in_y) > 30:
+                y_max = max(temp_in_y) + 5
             else:
                 y_max = 30
 
@@ -245,24 +261,24 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_in_1.set_xticklabels(ticks_labels)
             self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
 
-            if np.min(temp_out_y) < 0:
-                y_min = np.min(temp_out_y) - 5
+            if min(temp_out_y) < 0:
+                y_min = min(temp_out_y) - 5
             else:
                 y_min = 0
-            if np.max(temp_out_y) > 30:
-                y_max = np.max(temp_out_y) + 5
+            if max(temp_out_y) > 30:
+                y_max = max(temp_out_y) + 5
             else:
                 y_max = 30
 
             self.plot_out_1.set_ylim(y_min, y_max)
             self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
 
-            if np.min(pres_in_y) < 990:
-                y_min = np.min(pres_in_y) - 10
+            if min(pres_in_y) < 990:
+                y_min = min(pres_in_y) - 10
             else:
                 y_min = 990
-            if np.max(pres_in_y) > 1030:
-                y_max = np.max(pres_in_y) + 10
+            if max(pres_in_y) > 1030:
+                y_max = max(pres_in_y) + 10
             else:
                 y_max = 1030
 
@@ -271,10 +287,10 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_1.set_xticks(hours_list)
             self.plot_out_1.set_xticklabels(ticks_labels)
 
-            self.plot_in_2.set_yticks(np.linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
-                                                  len(self.plot_in_1.get_yticks())))
-            self.plot_out_2.set_yticks(np.linspace(self.plot_out_2.get_yticks()[0], self.plot_out_2.get_yticks()[-1],
-                                                   len(self.plot_out_1.get_yticks())))
+            self.plot_in_2.set_yticks(linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
+                                               len(self.plot_in_1.get_yticks())))
+            self.plot_out_2.set_yticks(linspace(self.plot_out_2.get_yticks()[0], self.plot_out_2.get_yticks()[-1],
+                                                len(self.plot_out_1.get_yticks())))
 
             self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
