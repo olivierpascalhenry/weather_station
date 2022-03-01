@@ -90,7 +90,6 @@ class Ui_aboutlogWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_1.setFont(font)
-        self.browser_1.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.browser_1.setAcceptDrops(False)
         self.browser_1.setStyleSheet("QTextBrowser {\n"
 "    border-radius: 3px;\n"
@@ -143,7 +142,6 @@ class Ui_aboutlogWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_2.setFont(font)
-        self.browser_2.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.BlankCursor))
         self.browser_2.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         self.browser_2.setStyleSheet("QTextBrowser {\n"
 "    border-radius: 3px;\n"
