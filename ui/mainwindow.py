@@ -1,20 +1,14 @@
-import collections
 import io
 import os
-import sys
 import math
 import pickle
 import platform
 import logging
 import pathlib
 import configparser
-import datetime
-import psycopg2
-import requests
 import tempfile
 import shutil
 import time
-import numpy as np
 from PyQt5 import QtWidgets, QtCore, QtGui
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -145,9 +139,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
 
-        # self.launch_clean_thread()
-        # self.collect_sensors_data()
-        # self.display_sensors_data()
+        self.launch_clean_thread()
+        self.collect_sensors_data()
+        self.display_sensors_data()
         self.check_internet_connection()
 
     def set_stack_widget_page(self, idx):
