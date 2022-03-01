@@ -24,6 +24,7 @@
   * FIXED:
     * fixed an issue with the option dictionary.
     * if threads are not launched at startup, it throws an error when exiting. It has been fixed.
+    * new position computation has been corrected for keyboard, numpad and town windows.
 
 
 ### February 6 2021, Release version 0.9.0 ###
