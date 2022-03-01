@@ -77,6 +77,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
+        self.mainparent = parent
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.config_dict = config_dict
         self.ow_splitter.setSizes([180, 520])
@@ -171,8 +172,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         place, ville, code_postal, departement = None, None, None, None
         list_places = MeteoFranceClient().search_places(str(self.ow_line_4.text()))
         if len(list_places) > 1:
-            place_search = MyTown(list_places, None)
-            place_search.setGeometry(260, 157, 504, 286)
+            place_search = MyTown(list_places, self.mainparent)
             place_search.exec_()
             if not place_search.cancel:
                 place = place_search.place
@@ -192,8 +192,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ow_label_14.setText(departement)
 
     def display_numpad(self):
-        numpad_window = MyNumpad(self)
-        numpad_window.setGeometry(227, 26, 246, 298)
+        numpad_window = MyNumpad(self.mainparent)
         numpad_window.exec_()
         if not numpad_window.cancel:
             if self.sender().objectName() == 'ow_edit_bt_1':
@@ -210,8 +209,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ow_line_8.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
-        keyboard_window = MyKeyboard(self)
-        keyboard_window.setGeometry(56, 11, 588, 328)
+        keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
             self.ow_line_4.setText(keyboard_window.num_line.text())
@@ -222,9 +220,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
 
 class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
-    def __init__(self, info_text):
+    def __init__(self, info_text, parent=None):
         logging.debug('gui - other_windows_functions.py - MyInfo - __init__ : infoText ' + str(info_text))
-        QtWidgets.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self, parent)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setupUi(self)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
@@ -381,7 +379,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
@@ -419,7 +417,7 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
         self.cancel = True
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
@@ -467,7 +465,7 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
-        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
         self.cancel = True
         self.place_list = place_list
         self.radio_bt_list = []
