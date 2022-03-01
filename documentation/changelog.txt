@@ -23,6 +23,7 @@
     * moved the option window to its own py file.
     * moved all weather windows to their own py file.
     * renamed the other windows py file.
+    * scrollbar has been reintegrated in all windows.
 
   * FIXED:
     * fixed an issue with the option dictionary.
