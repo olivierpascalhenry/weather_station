@@ -342,7 +342,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.in_temperature_label.setText('No data')
 
-        if self.in_temperature_min_max is not None:
+        if self.in_temperature_min_max[0] is not None:
             self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
         else:
             self.in_label_3.setText('No data / No data')
@@ -365,7 +365,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.out_temperature_label.setText('No data')
 
-        if self.out_temperature_min_max is not None:
+        if self.out_temperature_min_max[0] is not None:
             self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
         else:
             self.out_label_3.setText('No data / No data')
