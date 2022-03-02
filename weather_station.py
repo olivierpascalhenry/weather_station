@@ -7,7 +7,7 @@ import configparser
 from PyQt5 import QtWidgets, QtCore
 from ui.mainwindow import MainWindow
 from ui.version import gui_version
-from functions.utils import create_option_file, create_logging_handlers
+from functions.utils import create_option_file, create_logging_handlers, sync_graphic_folders
 from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
 from psycopg2 import __version__ as pg_version
@@ -50,6 +50,7 @@ def launch_station(gui_path, user_path):
         logging.info(f'gui - paho.mqtt version: {mq_version}')
     logging.info(f'gui - gui frozen ? {frozen}')
     logging.info(f'gui - main path: {gui_path}')
+    sync_graphic_folders(gui_path)
     ui = MainWindow(gui_path, user_path, config_dict)
     ui.show()
     sys.exit(app.exec_())
