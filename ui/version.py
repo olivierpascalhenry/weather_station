@@ -1,5 +1,5 @@
-gui_version = '0.9.3'
-gui_branch = 'Master'
+gui_version = '0.10.3'
+gui_branch = 'Development'
 pycharm_version = '2021.3'
 python_version = '3.7.8'
 pyqt5_version = '5.15.0'
