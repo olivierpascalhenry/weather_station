@@ -381,17 +381,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_pressure_bt.setText('Pression : No data')
 
         icon = 'batterie_0-5_icon.svg'
-        bat_list = sorted(list(battery_value_icon_dict().keys()))
-        for i, val in enumerate(bat_list[: -1]):
-            if bat_list[i] <= self.out_battery < bat_list[i + 1]:
-                icon = battery_value_icon_dict()[val]
+        if self.out_battery is not None:
+            bat_list = sorted(list(battery_value_icon_dict().keys()))
+            for i, val in enumerate(bat_list[: -1]):
+                if bat_list[i] <= self.out_battery < bat_list[i + 1]:
+                    icon = battery_value_icon_dict()[val]
         self.out_battery_bt.setIcon(icon_creation_function(icon))
 
         icon = 'signal_0-5_icon.svg'
-        link_list = sorted(list(link_value_icon_dict().keys()))
-        for i, val in enumerate(link_list[: -1]):
-            if link_list[i] <= self.out_signal < link_list[i + 1]:
-                icon = link_value_icon_dict()[val]
+        if self.out_signal is not None:
+            link_list = sorted(list(link_value_icon_dict().keys()))
+            for i, val in enumerate(link_list[: -1]):
+                if link_list[i] <= self.out_signal < link_list[i + 1]:
+                    icon = link_value_icon_dict()[val]
         self.out_signal_bt.setIcon(icon_creation_function(icon))
 
     def plot_time_series_start(self):
