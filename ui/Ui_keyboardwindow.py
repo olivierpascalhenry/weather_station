@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_keyboardWindow(object):
     def setupUi(self, keyboardWindow):
         keyboardWindow.setObjectName("keyboardWindow")
-        keyboardWindow.resize(588, 328)
-        keyboardWindow.setMinimumSize(QtCore.QSize(588, 328))
-        keyboardWindow.setMaximumSize(QtCore.QSize(588, 328))
+        keyboardWindow.resize(588, 378)
+        keyboardWindow.setMinimumSize(QtCore.QSize(588, 378))
+        keyboardWindow.setMaximumSize(QtCore.QSize(588, 378))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(11)
@@ -55,6 +55,296 @@ class Ui_keyboardWindow(object):
         self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
+        self.button_1 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_1.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_1.sizePolicy().hasHeightForWidth())
+        self.button_1.setSizePolicy(sizePolicy)
+        self.button_1.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_1.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_1.setFont(font)
+        self.button_1.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_1.setObjectName("button_1")
+        self.gridLayout.addWidget(self.button_1, 0, 0, 1, 1)
+        self.button_2 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_2.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_2.sizePolicy().hasHeightForWidth())
+        self.button_2.setSizePolicy(sizePolicy)
+        self.button_2.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_2.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_2.setFont(font)
+        self.button_2.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_2.setObjectName("button_2")
+        self.gridLayout.addWidget(self.button_2, 0, 1, 1, 1)
+        self.button_3 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_3.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_3.sizePolicy().hasHeightForWidth())
+        self.button_3.setSizePolicy(sizePolicy)
+        self.button_3.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_3.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_3.setFont(font)
+        self.button_3.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_3.setObjectName("button_3")
+        self.gridLayout.addWidget(self.button_3, 0, 2, 1, 1)
+        self.button_4 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_4.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_4.sizePolicy().hasHeightForWidth())
+        self.button_4.setSizePolicy(sizePolicy)
+        self.button_4.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_4.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_4.setFont(font)
+        self.button_4.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_4.setObjectName("button_4")
+        self.gridLayout.addWidget(self.button_4, 0, 3, 1, 1)
+        self.button_5 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_5.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_5.sizePolicy().hasHeightForWidth())
+        self.button_5.setSizePolicy(sizePolicy)
+        self.button_5.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_5.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_5.setFont(font)
+        self.button_5.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_5.setObjectName("button_5")
+        self.gridLayout.addWidget(self.button_5, 0, 4, 1, 1)
+        self.button_6 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_6.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_6.sizePolicy().hasHeightForWidth())
+        self.button_6.setSizePolicy(sizePolicy)
+        self.button_6.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_6.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_6.setFont(font)
+        self.button_6.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_6.setObjectName("button_6")
+        self.gridLayout.addWidget(self.button_6, 0, 5, 1, 1)
+        self.button_7 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_7.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_7.sizePolicy().hasHeightForWidth())
+        self.button_7.setSizePolicy(sizePolicy)
+        self.button_7.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_7.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_7.setFont(font)
+        self.button_7.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_7.setObjectName("button_7")
+        self.gridLayout.addWidget(self.button_7, 0, 6, 1, 1)
+        self.button_8 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_8.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_8.sizePolicy().hasHeightForWidth())
+        self.button_8.setSizePolicy(sizePolicy)
+        self.button_8.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_8.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_8.setFont(font)
+        self.button_8.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_8.setObjectName("button_8")
+        self.gridLayout.addWidget(self.button_8, 0, 7, 1, 1)
+        self.button_9 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_9.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_9.sizePolicy().hasHeightForWidth())
+        self.button_9.setSizePolicy(sizePolicy)
+        self.button_9.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_9.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_9.setFont(font)
+        self.button_9.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_9.setObjectName("button_9")
+        self.gridLayout.addWidget(self.button_9, 0, 8, 1, 1)
+        self.button_0 = QtWidgets.QToolButton(keyboardWindow)
+        self.button_0.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.button_0.sizePolicy().hasHeightForWidth())
+        self.button_0.setSizePolicy(sizePolicy)
+        self.button_0.setMinimumSize(QtCore.QSize(50, 50))
+        self.button_0.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.button_0.setFont(font)
+        self.button_0.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: rgb(200,200,200);\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.button_0.setObjectName("button_0")
+        self.gridLayout.addWidget(self.button_0, 0, 9, 1, 1)
         self.button_a = QtWidgets.QToolButton(keyboardWindow)
         self.button_a.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -83,7 +373,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_a.setObjectName("button_a")
-        self.gridLayout.addWidget(self.button_a, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_a, 1, 0, 1, 1)
         self.button_z = QtWidgets.QToolButton(keyboardWindow)
         self.button_z.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -112,7 +402,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_z.setObjectName("button_z")
-        self.gridLayout.addWidget(self.button_z, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.button_z, 1, 1, 1, 1)
         self.button_e = QtWidgets.QToolButton(keyboardWindow)
         self.button_e.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -141,7 +431,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_e.setObjectName("button_e")
-        self.gridLayout.addWidget(self.button_e, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.button_e, 1, 2, 1, 1)
         self.button_r = QtWidgets.QToolButton(keyboardWindow)
         self.button_r.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -170,7 +460,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_r.setObjectName("button_r")
-        self.gridLayout.addWidget(self.button_r, 0, 3, 1, 1)
+        self.gridLayout.addWidget(self.button_r, 1, 3, 1, 1)
         self.button_t = QtWidgets.QToolButton(keyboardWindow)
         self.button_t.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -199,7 +489,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_t.setObjectName("button_t")
-        self.gridLayout.addWidget(self.button_t, 0, 4, 1, 1)
+        self.gridLayout.addWidget(self.button_t, 1, 4, 1, 1)
         self.button_y = QtWidgets.QToolButton(keyboardWindow)
         self.button_y.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -228,7 +518,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_y.setObjectName("button_y")
-        self.gridLayout.addWidget(self.button_y, 0, 5, 1, 1)
+        self.gridLayout.addWidget(self.button_y, 1, 5, 1, 1)
         self.button_u = QtWidgets.QToolButton(keyboardWindow)
         self.button_u.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -257,7 +547,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_u.setObjectName("button_u")
-        self.gridLayout.addWidget(self.button_u, 0, 6, 1, 1)
+        self.gridLayout.addWidget(self.button_u, 1, 6, 1, 1)
         self.button_i = QtWidgets.QToolButton(keyboardWindow)
         self.button_i.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -286,7 +576,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_i.setObjectName("button_i")
-        self.gridLayout.addWidget(self.button_i, 0, 7, 1, 1)
+        self.gridLayout.addWidget(self.button_i, 1, 7, 1, 1)
         self.button_o = QtWidgets.QToolButton(keyboardWindow)
         self.button_o.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -315,7 +605,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_o.setObjectName("button_o")
-        self.gridLayout.addWidget(self.button_o, 0, 8, 1, 1)
+        self.gridLayout.addWidget(self.button_o, 1, 8, 1, 1)
         self.button_p = QtWidgets.QToolButton(keyboardWindow)
         self.button_p.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -344,7 +634,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_p.setObjectName("button_p")
-        self.gridLayout.addWidget(self.button_p, 0, 9, 1, 1)
+        self.gridLayout.addWidget(self.button_p, 1, 9, 1, 1)
         self.button_q = QtWidgets.QToolButton(keyboardWindow)
         self.button_q.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -373,7 +663,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_q.setObjectName("button_q")
-        self.gridLayout.addWidget(self.button_q, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_q, 2, 0, 1, 1)
         self.button_s = QtWidgets.QToolButton(keyboardWindow)
         self.button_s.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -402,7 +692,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_s.setObjectName("button_s")
-        self.gridLayout.addWidget(self.button_s, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.button_s, 2, 1, 1, 1)
         self.button_d = QtWidgets.QToolButton(keyboardWindow)
         self.button_d.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -431,7 +721,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_d.setObjectName("button_d")
-        self.gridLayout.addWidget(self.button_d, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.button_d, 2, 2, 1, 1)
         self.button_f = QtWidgets.QToolButton(keyboardWindow)
         self.button_f.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -460,7 +750,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_f.setObjectName("button_f")
-        self.gridLayout.addWidget(self.button_f, 1, 3, 1, 1)
+        self.gridLayout.addWidget(self.button_f, 2, 3, 1, 1)
         self.button_g = QtWidgets.QToolButton(keyboardWindow)
         self.button_g.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -489,7 +779,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_g.setObjectName("button_g")
-        self.gridLayout.addWidget(self.button_g, 1, 4, 1, 1)
+        self.gridLayout.addWidget(self.button_g, 2, 4, 1, 1)
         self.button_h = QtWidgets.QToolButton(keyboardWindow)
         self.button_h.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -518,7 +808,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_h.setObjectName("button_h")
-        self.gridLayout.addWidget(self.button_h, 1, 5, 1, 1)
+        self.gridLayout.addWidget(self.button_h, 2, 5, 1, 1)
         self.button_j = QtWidgets.QToolButton(keyboardWindow)
         self.button_j.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -547,7 +837,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_j.setObjectName("button_j")
-        self.gridLayout.addWidget(self.button_j, 1, 6, 1, 1)
+        self.gridLayout.addWidget(self.button_j, 2, 6, 1, 1)
         self.button_k = QtWidgets.QToolButton(keyboardWindow)
         self.button_k.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -576,7 +866,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_k.setObjectName("button_k")
-        self.gridLayout.addWidget(self.button_k, 1, 7, 1, 1)
+        self.gridLayout.addWidget(self.button_k, 2, 7, 1, 1)
         self.button_l = QtWidgets.QToolButton(keyboardWindow)
         self.button_l.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -605,7 +895,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_l.setObjectName("button_l")
-        self.gridLayout.addWidget(self.button_l, 1, 8, 1, 1)
+        self.gridLayout.addWidget(self.button_l, 2, 8, 1, 1)
         self.button_m = QtWidgets.QToolButton(keyboardWindow)
         self.button_m.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -634,7 +924,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_m.setObjectName("button_m")
-        self.gridLayout.addWidget(self.button_m, 1, 9, 1, 1)
+        self.gridLayout.addWidget(self.button_m, 2, 9, 1, 1)
         self.button_w = QtWidgets.QToolButton(keyboardWindow)
         self.button_w.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -663,7 +953,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_w.setObjectName("button_w")
-        self.gridLayout.addWidget(self.button_w, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_w, 3, 0, 1, 1)
         self.button_x = QtWidgets.QToolButton(keyboardWindow)
         self.button_x.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -692,7 +982,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_x.setObjectName("button_x")
-        self.gridLayout.addWidget(self.button_x, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.button_x, 3, 1, 1, 1)
         self.button_c = QtWidgets.QToolButton(keyboardWindow)
         self.button_c.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -721,7 +1011,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_c.setObjectName("button_c")
-        self.gridLayout.addWidget(self.button_c, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.button_c, 3, 2, 1, 1)
         self.button_v = QtWidgets.QToolButton(keyboardWindow)
         self.button_v.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -750,7 +1040,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_v.setObjectName("button_v")
-        self.gridLayout.addWidget(self.button_v, 2, 3, 1, 1)
+        self.gridLayout.addWidget(self.button_v, 3, 3, 1, 1)
         self.button_b = QtWidgets.QToolButton(keyboardWindow)
         self.button_b.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -779,7 +1069,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_b.setObjectName("button_b")
-        self.gridLayout.addWidget(self.button_b, 2, 4, 1, 1)
+        self.gridLayout.addWidget(self.button_b, 3, 4, 1, 1)
         self.button_n = QtWidgets.QToolButton(keyboardWindow)
         self.button_n.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -808,7 +1098,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_n.setObjectName("button_n")
-        self.gridLayout.addWidget(self.button_n, 2, 5, 1, 1)
+        self.gridLayout.addWidget(self.button_n, 3, 5, 1, 1)
         self.button_min = QtWidgets.QToolButton(keyboardWindow)
         self.button_min.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -837,7 +1127,7 @@ class Ui_keyboardWindow(object):
 "    border: none;\n"
 "}")
         self.button_min.setObjectName("button_min")
-        self.gridLayout.addWidget(self.button_min, 2, 6, 1, 1)
+        self.gridLayout.addWidget(self.button_min, 3, 6, 1, 1)
         self.button_min_2 = QtWidgets.QToolButton(keyboardWindow)
         self.button_min_2.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -871,7 +1161,7 @@ class Ui_keyboardWindow(object):
         self.button_min_2.setIcon(icon)
         self.button_min_2.setIconSize(QtCore.QSize(107, 40))
         self.button_min_2.setObjectName("button_min_2")
-        self.gridLayout.addWidget(self.button_min_2, 2, 7, 1, 2)
+        self.gridLayout.addWidget(self.button_min_2, 3, 7, 1, 2)
         self.button_ret = QtWidgets.QToolButton(keyboardWindow)
         self.button_ret.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -906,7 +1196,7 @@ class Ui_keyboardWindow(object):
         self.button_ret.setIconSize(QtCore.QSize(40, 45))
         self.button_ret.setArrowType(QtCore.Qt.NoArrow)
         self.button_ret.setObjectName("button_ret")
-        self.gridLayout.addWidget(self.button_ret, 2, 9, 1, 1)
+        self.gridLayout.addWidget(self.button_ret, 3, 9, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 2, 0, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(20, 7, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem1, 3, 0, 1, 1)
@@ -991,6 +1281,16 @@ class Ui_keyboardWindow(object):
 
     def retranslateUi(self, keyboardWindow):
         _translate = QtCore.QCoreApplication.translate
+        self.button_1.setText(_translate("keyboardWindow", "1"))
+        self.button_2.setText(_translate("keyboardWindow", "2"))
+        self.button_3.setText(_translate("keyboardWindow", "3"))
+        self.button_4.setText(_translate("keyboardWindow", "4"))
+        self.button_5.setText(_translate("keyboardWindow", "5"))
+        self.button_6.setText(_translate("keyboardWindow", "6"))
+        self.button_7.setText(_translate("keyboardWindow", "7"))
+        self.button_8.setText(_translate("keyboardWindow", "8"))
+        self.button_9.setText(_translate("keyboardWindow", "9"))
+        self.button_0.setText(_translate("keyboardWindow", "0"))
         self.button_a.setText(_translate("keyboardWindow", "a"))
         self.button_z.setText(_translate("keyboardWindow", "z"))
         self.button_e.setText(_translate("keyboardWindow", "e"))

@@ -203,6 +203,41 @@ def weather_to_pictogrammes(weather):
     return icon
 
 
+def openweather_to_mf_desc(item):
+    logging.debug(f'gui - utils.py - openweather_to_mf_desc - item : {item}')
+    conversion = {'800n': 'Nuit claire', '800d': 'Ensoleillé', '801d': 'Eclaircies', '801n': 'Eclaircies',
+                  '802d': 'Très nuageux', '802n': 'Très nuageux', '803d': 'Très nuageux',
+                  '803n': 'Très nuageux', '804d': 'Couvert', '804n': 'Couvert', '500d': 'Pluies éparses',
+                  '500n': 'Pluies éparses', '501d': 'Pluie', '501n': 'Pluie', '502d': 'Pluie', '502n': 'Pluie',
+                  '503d': 'Pluie', '503n': 'Pluie', '504d': 'Pluie', '504n': 'Pluie',
+                  '511d': 'Pluies verglaçantes', '511n': 'Pluies verglaçantes',
+                  '520d': 'Rares averses', '520n': 'Rares averses', '521d': 'Averses', '521n': 'Averses',
+                  '522d': 'Averses', '522n': 'Averses', '531d': 'Averses', '531n': 'Averses',
+                  '701d': 'Brume', '701n': 'Brume', '711d': 'Brouillard', '711n': 'Brouillard',
+                  '721d': 'Brouillard', '721n': 'Brouillard', '731d': 'Brouillard', '731n': 'Brouillard',
+                  '741d': 'Brouillard', '741n': 'Brouillard', '751d': 'Brouillard', '751n': 'Brouillard',
+                  '761d': 'Brouillard', '761n': 'Brouillard', '762d': 'Brouillard', '762n': 'Brouillard',
+                  '771d': 'Brouillard', '771n': 'Brouillard', '781d': 'Brouillard', '781n': 'Brouillard',
+                  '200d': 'Pluies orageuses', '200n': 'Pluies orageuses', '201d': 'Averses orageuses',
+                  '201n': 'Averses orageuses', '202d': 'Averses orageuses', '202n': 'Averses orageuses',
+                  '210d': 'Risque d\'orages', '210n': 'Risque d\'orages', '211d': 'Orages', '211n': 'Orages',
+                  '212d': 'Orages', '212n': 'Orages', '221d': 'Orages', '221n': 'Orages',
+                  '230d': 'Risque de grèle', '230n': 'Risque de grèle', '231d': 'Risque de grèle',
+                  '231n': 'Risque de grèle', '232d': 'Risque de grèle', '232n': 'Risque de grèle',
+                  '300d': 'Averses', '300n': 'Averses', '301d': 'Averses', '301n': 'Averses',
+                  '302d': 'Averses', '302n': 'Averses', '310d': 'Averses', '310n': 'Averses',
+                  '311d': 'Averses', '311n': 'Averses', '312d': 'Averses', '312n': 'Averses',
+                  '313d': 'Averses', '313n': 'Averses', '314d': 'Averses', '314n': 'Averses',
+                  '321d': 'Averses', '321n': 'Averses'}
+
+    try:
+        weather = conversion[item]
+    except KeyError:
+        weather = 'none'
+
+    return weather
+
+
 def wind_dir_to_pictogramme(dir_idx):
     logging.debug('gui - utils.py - wind_dir_to_pictogramme')
     path = f'graphic_materials/pictogrammes/wind_dir_images/wind_dir_arrow_{dir_idx}.svg'

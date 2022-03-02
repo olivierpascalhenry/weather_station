@@ -2,6 +2,10 @@
 
   * ADDED:
     * OpenWeather has been added as a weather forecast provider.
+    * a new version of the option window has been introduced.
+
+  * MODIFIED:
+    * Openweather has been integrated in all widgets.
 
 
 ### March 2 2021, Release version 0.9.3 ###
