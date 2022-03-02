@@ -2,6 +2,7 @@ import json
 import time
 import random
 import logging
+import pathlib
 import datetime
 import platform
 import psycopg2
@@ -19,17 +20,28 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
         self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
+        self.sensor_file = pathlib.Path('/sys/bus/w1/devices/28-012059b3456d/w1_slave')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - run')
-        while True:
-            dtime = datetime.datetime.now().replace(microsecond=0)
-            temp = self.collect_data()
-            self.add_data_to_db(dtime, temp)
-            time.sleep(self.sensors_rate)
+        if platform.system() == 'Linux':
+            if self.check_sensor():
+                while True:
+                    dtime = datetime.datetime.now().replace(microsecond=0)
+                    temp = self.collect_data()
+                    self.add_data_to_db(dtime, temp)
+                    time.sleep(self.sensors_rate)
+            else:
+                logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - run - no sensor detected')
+        else:
+            while True:
+                dtime = datetime.datetime.now().replace(microsecond=0)
+                temp = self.collect_data_test()
+                self.add_data_to_db(dtime, temp)
+                time.sleep(self.sensors_rate)
 
     def add_data_to_db(self, dt, tp):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db')
@@ -43,24 +55,33 @@ class DS18B20DataCollectingThread(QtCore.QThread):
     def collect_data(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data')
         temp = None
-        if platform.system() == 'Linux':
-            try:
-                f = open('/sys/bus/w1/devices/28-012059b3456d/w1_slave', 'r')
-                lines = f.readlines()
-                f.close()
-                if lines[0].strip()[-3:] == 'YES':
-                    t_idx = lines[1].find('t=')
-                    if t_idx != -1:
-                        temp = round(float(lines[1][t_idx + 2:]) / 1000.0, 1)
-                        if temp > 50:
-                            temp = None
-            except Exception:
-                logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
-                                  'occurred when collecting data')
-                temp = None
-        else:
-            temp = self.collect_test_data(25., 5)
+        try:
+            f = open(self.sensor_file, 'r')
+            lines = f.readlines()
+            f.close()
+            if lines[0].strip()[-3:] == 'YES':
+                t_idx = lines[1].find('t=')
+                if t_idx != -1:
+                    temp = round(float(lines[1][t_idx + 2:]) / 1000.0, 1)
+                    if temp > 50:
+                        temp = None
+        except Exception:
+            logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
+                              'occurred when collecting data')
+            temp = None
         return temp
+
+    def collect_data_test(self):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data_test')
+        temp = self.collect_test_data(25., 5)
+        return temp
+
+    def check_sensor(self):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - check_sensor')
+        if self.sensor_file.exists():
+            return True
+        else:
+            return False
 
     @staticmethod
     def collect_test_data(num, limit):
@@ -95,41 +116,49 @@ class BME280DataCollectingThread(QtCore.QThread):
     def run(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - run')
         if platform.system() == 'Linux':
-            self.set_bme280_parameters()
-        while True:
-            date_time = datetime.datetime.now().replace(microsecond=0)
-            temp, hum, pres, pres_msl = self.collect_data()
-            self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
-            time.sleep(self.sensors_rate)
+            if self.set_bme280_parameters():
+                while True:
+                    date_time = datetime.datetime.now().replace(microsecond=0)
+                    temp, hum, pres, pres_msl = self.collect_data()
+                    self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
+                    time.sleep(self.sensors_rate)
+        else:
+            while True:
+                date_time = datetime.datetime.now().replace(microsecond=0)
+                temp, hum, pres, pres_msl = self.collect_data_test()
+                self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
+                time.sleep(self.sensors_rate)
 
     def collect_data(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_data')
-        if platform.system() == 'Linux':
-            try:
-                data = bme280.sample(self.bus, self.address, self.cal_params)
-                temp = data.temperature
-                hum = data.humidity
-                pres = data.pressure
-                if self.place_altitude is not None:
-                    pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
-                                       (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-                    pres_msl = round(pres_msl, 1)
-                else:
-                    pres_msl = None
-                pres = round(pres, 1)
-                temp = round(temp, 1)
-                hum = round(hum)
-                if temp > 50:
-                    temp = None
-            except Exception:
-                logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
-                                  'exception occurred when collecting bme280 data')
-                temp, hum, pres, pres_msl = None, None, None, None
-        else:
-            temp = self.collect_test_data(20., 5)
-            hum = self.collect_test_data(65., 20)
-            pres = self.collect_test_data(1013., 15)
-            pres_msl = self.collect_test_data(1013., 15)
+        try:
+            data = bme280.sample(self.bus, self.address, self.cal_params)
+            temp = data.temperature
+            hum = data.humidity
+            pres = data.pressure
+            if self.place_altitude is not None:
+                pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
+                                   (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+                pres_msl = round(pres_msl, 1)
+            else:
+                pres_msl = None
+            pres = round(pres, 1)
+            temp = round(temp, 1)
+            hum = round(hum)
+            if temp > 50:
+                temp = None
+        except Exception:
+            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
+                              'exception occurred when collecting bme280 data')
+            temp, hum, pres, pres_msl = None, None, None, None
+        return temp, hum, pres, pres_msl
+
+    def collect_data_test(self):
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_data_test')
+        temp = self.collect_test_data(20., 5)
+        hum = self.collect_test_data(65., 20)
+        pres = self.collect_test_data(1013., 15)
+        pres_msl = self.collect_test_data(1013., 15)
         return temp, hum, pres, pres_msl
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_msl):
@@ -148,9 +177,14 @@ class BME280DataCollectingThread(QtCore.QThread):
             self.bus = smbus2.SMBus(1)
             self.address = 0x77
             self.cal_params = bme280.load_calibration_params(self.bus, self.address)
+            return True
+        except OSError:
+            logging.info('gui - sensors_reading.py - BME280DataCollectingThread - run - no sensor detected')
+            return False
         except Exception:
             logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
                               'exception occurred when setting bme280 parameters')
+            return False
 
     @staticmethod
     def collect_test_data(num, limit):
