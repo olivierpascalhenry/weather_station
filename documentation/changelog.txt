@@ -3,6 +3,7 @@
   * ADDED:
     * OpenWeather has been added as a weather forecast provider.
     * a new version of the option window has been introduced.
+    * meteofrance api and openweather api versions have been added to log.
 
   * MODIFIED:
     * Openweather has been integrated in all widgets.
