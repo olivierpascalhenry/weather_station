@@ -3,7 +3,9 @@ import logging
 import collections
 import datetime
 import meteofrance_api
-from functions.utils import days_months_dictionary
+from pyowm.owm import OWM
+from pyowm.utils.config import get_default_config
+from functions.utils import days_months_dictionary, openweather_to_mf_desc
 
 
 from PyQt5 import QtCore
@@ -18,7 +20,7 @@ class MFForecastRequest(QtCore.QThread):
         logging.info('gui - forecast_resquest.py - MFForecastRequest - __init__')
         self.user_place = user_place
         self.request_rate = int(config_dict.get('API', 'request_rate')) * 60
-        self.forecast = {}
+        self.forecast = {'api': 'meteofrance'}
 
     def run(self):
         logging.debug('gui - forecast_resquest.py - MFForecastRequest - run')
@@ -139,7 +141,10 @@ class OWForecastRequest(QtCore.QThread):
                     dt = datetime.datetime.utcfromtimestamp(fc.reference_time())
                     if now <= dt <= limite:
                         if fc.rain:
-                            rain = fc.rain['all']
+                            try:
+                                rain = fc.rain['1h']
+                            except Exception:
+                                rain = 0
                         else:
                             rain = 0
                         weather = openweather_to_mf_desc(str(fc.weather_code) + fc.weather_icon_name[-1:])
@@ -164,7 +169,10 @@ class OWForecastRequest(QtCore.QThread):
                     if now.replace(hour=0) < dt.replace(hour=0) <= now.replace(hour=0) + datetime.timedelta(days=5):
                         weather = openweather_to_mf_desc(str(fc.weather_code) + fc.weather_icon_name[-1:])
                         if fc.rain:
-                            rain = fc.rain['all']
+                            try:
+                                rain = fc.rain['all']
+                            except Exception:
+                                rain = 0
                         else:
                             rain = 0
                         fc_6h[dt] = {'datetime': dt,

@@ -60,7 +60,7 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
     self.fc_1h_nbr1 += 1
 
 
-def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout):
+def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, api='meteofrance'):
     logging.debug('gui - gui_functions.py - add_6h_forecast_widget')
     self.fc_6h_fr_1.append(QtWidgets.QFrame())
     if self.fc_6h_nbr1 not in [0, 3]:
@@ -117,7 +117,10 @@ def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout
     self.fc_6h_lb_2[self.fc_6h_nbr1].setText(temp)
     self.fc_6h_vert_lay_1[self.fc_6h_nbr1].addWidget(self.fc_6h_lb_2[self.fc_6h_nbr1])
     horizontal_layout.addLayout(self.fc_6h_vert_lay_1[self.fc_6h_nbr1])
-    self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_6h_forecast_details(dt_list))
+    if api == 'meteofrance':
+        self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_6h_forecast_details(dt_list))
+    else:
+        self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_1d_forecast_details(dt_list))
     self.fc_6h_nbr1 += 1
 
 

@@ -16,6 +16,7 @@ from ui.Ui_connexionwindow import Ui_connexionWindow
 from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
+from ui.Ui_apiwindow import Ui_apiWindow
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
 from functions.thread_functions.other_threads import DownloadFile
 
@@ -210,11 +211,12 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
 
 
 class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
-    def __init__(self, place_list, parent=None):
+    def __init__(self, place_list, api, parent=None):
         logging.info('gui - other_windows.py - MyTown - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.api = api
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
         shadow.setBlurRadius(25)
@@ -224,16 +226,18 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.place_list = place_list
         self.radio_bt_list = []
         self.ville = None
-        self.code_postal = None
-        self.departement = None
+        self.cp_id = None
+        self.dp_gps = None
         self.place = None
         self.ok_button.clicked.connect(self.confirm_place)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.setEnabled(False)
-        self.display_place_list()
+        if api == 'meteofrance':
+            self.display_place_list_mf()
+        elif api == 'openweather':
+            self.display_place_list_ow()
 
-    def display_place_list(self):
-        logging.debug('gui - other_windows.py - MyTown - display_place_list')
+    def display_place_list_mf(self):
         idx = 0
         for place in self.place_list:
             if place.country == 'FR':
@@ -243,34 +247,64 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
                 self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
                 self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton'))
                 self.radio_bt_list[idx].setObjectName('place_' + str(idx))
-                self.radio_bt_list[idx].setText(place.name + ', ' + place.postal_code + ', '
-                                                + code_to_departement()[place.admin2])
+                self.radio_bt_list[idx].setText(f'{place.name}, {place.postal_code}, '
+                                                f'{code_to_departement()[place.admin2]}')
                 self.verticalLayout.addWidget(self.radio_bt_list[idx])
                 self.radio_bt_list[idx].clicked.connect(self.set_place)
                 self.radio_bt_list[idx].clicked.connect(self.activate_ok)
                 idx += 1
         self.verticalLayout.setAlignment(QtCore.Qt.AlignTop)
 
+    def display_place_list_ow(self):
+        idx = 0
+        for place in self.place_list:
+            self.radio_bt_list.append(QtWidgets.QRadioButton())
+            self.radio_bt_list[idx].setMinimumSize(QtCore.QSize(0, 40))
+            self.radio_bt_list[idx].setMaximumSize(QtCore.QSize(16777215, 40))
+            self.radio_bt_list[idx].setFont(font_creation_function('medium_big'))
+            self.radio_bt_list[idx].setStyleSheet(stylesheet_creation_function('qradiobutton'))
+            self.radio_bt_list[idx].setObjectName('place_' + str(idx))
+            lon = str(place.lon)
+            if lon[0] == '-':
+                lon = lon[1:] + '°W'
+            else:
+                lon += '°E'
+            lat = str(place.lat)
+            if lat[0] == '-':
+                lat = lat[1:] + '°S'
+            else:
+                lat += '°N'
+            self.radio_bt_list[idx].setText(f'{place.name} ; Lon : {lon} ; Lat : '
+                                            f'{lat}')
+            self.verticalLayout.addWidget(self.radio_bt_list[idx])
+            self.radio_bt_list[idx].clicked.connect(self.set_place)
+            self.radio_bt_list[idx].clicked.connect(self.activate_ok)
+            idx += 1
+        self.verticalLayout.setAlignment(QtCore.Qt.AlignTop)
+
     def set_place(self):
-        logging.debug('gui - other_windows.py - MyTown - set_place')
         idx = int(self.sender().objectName()[6:])
-        self.ville = self.place_list[idx].name
-        self.code_postal = self.place_list[idx].postal_code
-        self.departement = code_to_departement()[self.place_list[idx].admin2]
-        self.place = self.place_list[idx]
+        if self.api == 'meteofrance':
+            self.ville = self.place_list[idx].name
+            self.cp_id = self.place_list[idx].postal_code
+            self.dp_gps = code_to_departement()[self.place_list[idx].admin2]
+            self.place = self.place_list[idx]
+        elif self.api == 'openweather':
+            self.ville = self.place_list[idx].name
+            self.cp_id = self.place_list[idx].id
+            self.dp_gps = {'lon': self.place_list[idx].lon, 'lat': self.place_list[idx].lat}
+            self.place = self.place_list[idx]
 
     def activate_ok(self):
-        logging.debug('gui - other_windows.py - MyTown - activate_ok')
         self.ok_button.setEnabled(True)
 
     def confirm_place(self):
-        logging.debug('gui - other_windows.py - MyTown - confirm_place')
         if self.ville is not None:
             self.cancel = False
             self.close_window()
 
     def close_window(self):
-        logging.debug('gui - other_windows.py - MyTown - close_window')
+        logging.debug('gui - other_windows.py - MyKeyboard - close_window')
         self.close()
 
 
@@ -482,4 +516,42 @@ class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyTempHum - close_window')
+        self.close()
+
+
+class MyAPI(QtWidgets.QDialog, Ui_apiWindow):
+    def __init__(self, key, parent=None):
+        logging.debug('gui - other_windows.py - MyAPI - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.mainparent = parent
+        self.setGraphicsEffect(shadow)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.move(int((self.mainparent.width() - self.width()) / 2),
+                  int((self.mainparent.height() - self.height()) / 2))
+        self.cancel = True
+        self.key = key
+        self.line_edit.setText(key)
+        self.ok_button.clicked.connect(self.validate_key)
+        self.cancel_button.clicked.connect(self.close_window)
+        self.edit_button.clicked.connect(self.display_keyboard)
+
+    def display_keyboard(self):
+        logging.debug('gui - other_windows.py - MyAPI - display_keyboard')
+        keyboard_window = MyKeyboard(self.mainparent)
+        keyboard_window.exec_()
+        if not keyboard_window.cancel:
+            self.line_edit.setText(keyboard_window.num_line.text())
+
+    def validate_key(self):
+        logging.debug('gui - other_windows.py - MyAPI - validate_key')
+        self.key = str(self.line_edit.text())
+        self.cancel = False
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows.py - MyAPI - close_window')
         self.close()

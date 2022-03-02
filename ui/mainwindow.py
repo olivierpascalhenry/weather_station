@@ -20,12 +20,12 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
                              link_value_icon_dict)
 from functions.window_functions.option_window import MyOptions
-from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails
+from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread)
-from functions.thread_functions.forecast_request import MFForecastRequest
+from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.user_path = user_path
         self.config_dict = config_dict
         self.place_object = None
-        self.old_place_object = None
+        # self.old_place_object = None
         self.database_ok = False
         self.connector = None
         self.cursor = None
@@ -68,12 +68,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_mqtt_data_thread = None
         self.display_sensors_data_thread = None
         self.query_mf_forecast_thread = None
+        self.query_ow_forecast_thread = None
         self.display_in_data_thread = None
         self.display_out_data_thread = None
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.request_plot_thread = None
-        self.mf_forecast_data = None
+        self.forecast_data = None
         self.check_internet = None
         self.check_posgresql = None
         self.update_url = None
@@ -125,11 +126,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
-        if self.config_dict.getboolean('API', 'user_place'):
-            f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
-            self.place_object = pickle.load(f)
-            self.old_place_object = self.place_object
-            f.close()
+        # if self.config_dict.getboolean('API', 'user_place'):
+        #     f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
+        #     self.place_object = pickle.load(f)
+        #     self.old_place_object = self.place_object
+        #     f.close()
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -140,6 +141,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
+
+        self.load_place_data()
+
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -181,7 +185,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
         self.check_update()
-        self.launch_fc_request_thread()
+        self.launch_weather_request()
+
+    def load_place_data(self):
+        logging.debug('gui - mainwindow.py - MainWindow - load_place_data')
+        if self.config_dict.getboolean('API', 'user_place'):
+            try:
+                f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
+                self.place_object = pickle.load(f)
+                f.close()
+            except FileNotFoundError:
+                logging.exception('gui - mainwindow.py - MainWindow - load_place_data - place_object.dat has not been '
+                                  'found')
+        else:
+            logging.warning('gui - mainwindow.py - MainWindow - load_place_data - no user_place, self.place_object is '
+                            'None')
 
     def set_stack_widget_page(self, idx):
         logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
@@ -298,15 +316,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if connexion_window.retry:
             self.check_internet_connection()
 
-    def launch_fc_request_thread(self):
-        logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
-        if self.place_object is not None:
-            self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
-            self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
-            self.query_mf_forecast_thread.error.connect(self.log_thread_error)
-            self.query_mf_forecast_thread.start()
+    def launch_weather_request(self):
+        if self.config_dict.get('API', 'api_used') and self.place_object is not None:
+            if self.config_dict.get('API', 'api_used') == 'meteofrance':
+                self.launch_mf_request_thread()
+            elif self.config_dict.get('API', 'api_used') == 'openweather':
+                self.launch_ow_request_thread()
         else:
-            logging.warning('gui - mainwindow.py - MainWindow - launch_fc_request_thread : self.place_object is None')
+            logging.warning('gui - mainwindow.py - MainWindow - launch_weather_request : no API registered in options'
+                            ' and/or  self.place_object is None')
+
+    def launch_mf_request_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
+        self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
+        self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
+        self.query_mf_forecast_thread.error.connect(self.log_thread_error)
+        self.query_mf_forecast_thread.start()
+
+    def launch_ow_request_thread(self):
+        self.query_ow_forecast_thread = OWForecastRequest(self.place_object, self.config_dict)
+        self.query_ow_forecast_thread.fc_data.connect(self.parse_forecast_data)
+        self.query_ow_forecast_thread.error.connect(self.log_thread_error)
+        self.query_ow_forecast_thread.start()
 
     def check_update(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_update')
@@ -478,17 +509,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def parse_forecast_data(self, fc_data):
         logging.debug('gui - mainwindow.py - MainWindow - parse_forecast_data')
         if fc_data:
-            self.mf_forecast_data = fc_data
+            self.forecast_data = fc_data
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
                 self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
 
     def display_fc_1h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
-        if self.mf_forecast_data:
+        if self.forecast_data:
             clean_1h_forecast_widgets(self)
             lim = 0
-            for t, forecast in self.mf_forecast_data['hourly'].items():
+            for t, forecast in self.forecast_data['hourly'].items():
                 hour = str(t.hour)
                 weather = forecast['weather']
                 temp = str(round(forecast['temp']))
@@ -507,36 +538,56 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_fc_6h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
-        if self.mf_forecast_data:
+        if self.forecast_data:
             clean_6h_forecast_widgets(self)
 
             logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
-                          f'{len(self.mf_forecast_data["quaterly"])}')
-
-            for i in [0, 4, 8, 12, 16]:
-                dt_list = list(self.mf_forecast_data['quaterly'].keys())[i: i + 4]
-                dt = dt_list[2]
-                weather = self.mf_forecast_data['quaterly'][dt]['weather']
-                temp_list = [self.mf_forecast_data['quaterly'][t]['temp'] for t in dt_list]
-                date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
-                temp = f'{round(min(temp_list))}°C / {round(max(temp_list))}°C'
-                if i < 12:
-                    horizontal_layout = self.prev6h_layout_1
-                else:
-                    horizontal_layout = self.prev6h_layout_2
-                add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout)
+                          f'{len(self.forecast_data["quaterly"])}')
+            if self.forecast_data['api'] == 'meteofrance':
+                for i in [0, 4, 8, 12, 16]:
+                    dt_list = list(self.forecast_data['quaterly'].keys())[i: i + 4]
+                    dt = dt_list[2]
+                    weather = self.forecast_data['quaterly'][dt]['weather']
+                    temp_list = [self.forecast_data['quaterly'][t]['temp'] for t in dt_list]
+                    date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
+                    temp = f'{round(min(temp_list))}°C / {round(max(temp_list))}°C'
+                    if i < 12:
+                        horizontal_layout = self.prev6h_layout_1
+                    else:
+                        horizontal_layout = self.prev6h_layout_2
+                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout)
+            else:
+                i = 0
+                for dt, fc in self.forecast_data['quaterly'].items():
+                    date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
+                    weather = fc['weather']
+                    temp = f'{round(fc["temp"]["min"])}°C / {round(fc["temp"]["max"])}°C'
+                    if i < 3:
+                        horizontal_layout = self.prev6h_layout_1
+                    else:
+                        horizontal_layout = self.prev6h_layout_2
+                    data = {'temp': temp, 'date': dt, 'weather': weather, 'cover': fc['cover'], 'pres': fc['pres'],
+                            'rain': fc['rain'], 'w_spd': fc['w_spd'], 'w_dir': fc['w_dir']}
+                    add_6h_forecast_widget(self, date, weather, temp, data, horizontal_layout=horizontal_layout,
+                                           api='openweather')
+                    i += 1
 
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
-        forecast = self.mf_forecast_data['hourly'][full_dt]
+        forecast = self.forecast_data['hourly'][full_dt]
         details_window = My1hFCDetails(forecast, self)
+        details_window.exec_()
+
+    def display_1d_forecast_details(self, data):
+        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        details_window = My1dFCDetails(data, self)
         details_window.exec_()
 
     def display_6h_forecast_details(self, dt_list):
         logging.debug('gui - mainwindow.py - MainWindow - display_6h_forecast_details')
         forecast = []
         for dt in dt_list:
-            forecast.append([dt, self.mf_forecast_data['quaterly'][dt]])
+            forecast.append([dt, self.forecast_data['quaterly'][dt]])
         details_window = My6hFCDetails(forecast, self)
         details_window.exec_()
 
