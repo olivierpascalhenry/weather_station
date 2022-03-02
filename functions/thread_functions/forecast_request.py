@@ -88,14 +88,14 @@ class MFForecastRequest(QtCore.QThread):
                         warn_bool = True
                         color = meteofrance_api.helpers.get_warning_text_status_from_indice_color(color_id)
                         phenomenon = meteofrance_api.helpers.get_phenomenon_name_from_indice(phenomenon_id)
-                        warn_str += 'Alerte {color} pour {phenomenon}\n\n'.format(color=color, phenomenon=phenomenon)
+                        warn_str += f'Alerte {color} pour {phenomenon}\n\n'
 
                 if warn_bool:
                     dt = datetime.datetime.utcfromtimestamp(place_warning.end_validity_time)
                     date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
                             + days_months_dictionary()['month'][dt.month] + ' ' + str(dt.year))
                     hour = dt.strftime('%Hh%M')
-                    warn_str += 'Fin de l\'alerte : à {hour}, le {date}'.format(hour=hour, date=date)
+                    warn_str += f'Fin de l\'alerte : à {hour}, le {date}'
                     self.forecast['warning'] = warn_str
                 else:
                     self.forecast['warning'] = ''
@@ -107,4 +107,83 @@ class MFForecastRequest(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - forecast_resquest.py - MFForecastRequest - stop')
+        self.terminate()
+
+
+class OWForecastRequest(QtCore.QThread):
+    fc_data = QtCore.pyqtSignal(dict)
+    error = QtCore.pyqtSignal(list)
+
+    def __init__(self, user_place, config_dict):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - forecast_resquest.py - OWForecastRequest - __init__')
+        self.user_place = user_place
+        self.request_rate = int(config_dict.get('API', 'request_rate')) * 60
+        self.api_key = config_dict.get('API', 'api_key')
+        self.forecast = {'api': 'openweather', 'warning': ''}
+
+    def run(self):
+        logging.debug('gui - forecast_resquest.py - OWForecastRequest - run')
+        while True:
+            try:
+                config_dict = get_default_config()
+                config_dict['language'] = 'fr'
+                owm = OWM(self.api_key)
+                mgr = owm.weather_manager()
+                one_call = mgr.one_call(lon=self.user_place.lon, lat=self.user_place.lat, exclude='minutely',
+                                        units='metric')
+                fc_1h = collections.OrderedDict()
+                now = datetime.datetime.now().replace(minute=0, second=0)
+                limite = now + datetime.timedelta(hours=24)
+                for i, fc in enumerate(one_call.forecast_hourly):
+                    dt = datetime.datetime.utcfromtimestamp(fc.reference_time())
+                    if now <= dt <= limite:
+                        if fc.rain:
+                            rain = fc.rain['all']
+                        else:
+                            rain = 0
+                        weather = openweather_to_mf_desc(str(fc.weather_code) + fc.weather_icon_name[-1:])
+                        fc_1h[dt] = {'datetime': dt,
+                                     'temp': fc.temperature()['temp'],
+                                     'hum': fc.humidity,
+                                     'pres': fc.pressure['press'],
+                                     'w_spd': fc.wnd['speed'],
+                                     'w_dir': fc.wnd['deg'],
+                                     'w_gst': fc.wnd['gust'],
+                                     'rain': rain,
+                                     'snow': fc.snow,
+                                     'weather': weather,
+                                     'cover': fc.clouds}
+                    if dt > limite:
+                        break
+                self.forecast['hourly'] = fc_1h
+
+                fc_6h = collections.OrderedDict()
+                for i, fc in enumerate(one_call.forecast_daily):
+                    dt = datetime.datetime.utcfromtimestamp(fc.reference_time())
+                    if now.replace(hour=0) < dt.replace(hour=0) <= now.replace(hour=0) + datetime.timedelta(days=5):
+                        weather = openweather_to_mf_desc(str(fc.weather_code) + fc.weather_icon_name[-1:])
+                        if fc.rain:
+                            rain = fc.rain['all']
+                        else:
+                            rain = 0
+                        fc_6h[dt] = {'datetime': dt,
+                                     'temp': {'min': fc.temperature()['min'], 'max': fc.temperature()['max']},
+                                     'hum': fc.humidity,
+                                     'pres': fc.pressure['press'],
+                                     'w_spd': fc.wnd['speed'],
+                                     'w_dir': fc.wnd['deg'],
+                                     'w_gst': fc.wnd['gust'],
+                                     'weather': weather,
+                                     'cover': fc.clouds,
+                                     'rain': rain}
+
+                self.forecast['quaterly'] = fc_6h
+                self.fc_data.emit(self.forecast)
+            except Exception as e:
+                self.error.emit(['forecast request', e])
+            time.sleep(self.request_rate)
+
+    def stop(self):
+        logging.debug('gui - forecast_resquest.py - OWForecastRequest - stop')
         self.terminate()
