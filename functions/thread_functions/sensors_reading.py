@@ -217,7 +217,7 @@ class MqttToDbThread(QtCore.QThread):
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
 
     @staticmethod
-    def on_disconnect(client, userdata, flags, rc):
+    def on_disconnect(client, userdata, rc):
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code: {rc}')
 
     def parse_data(self, client, userdata, message):
