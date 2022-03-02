@@ -1,3 +1,4 @@
+import shutil
 import logging
 import pathlib
 import datetime
@@ -5,13 +6,14 @@ import platform
 import psycopg2
 import subprocess
 import configparser
+from dirsync import sync
 from logging.handlers import RotatingFileHandler
 from PyQt5 import QtGui, QtWidgets
 from numpy import nan
 
 
 def create_option_file(user_path):
-    ini_file = open(str(pathlib.Path(user_path).joinpath('weather_station.ini')), 'w')
+    ini_file = open(pathlib.Path(user_path).joinpath('weather_station.ini'), 'w')
     config_dict = configparser.ConfigParser()
     config_dict.add_section('LOG')
     config_dict.add_section('SYSTEM')
@@ -62,7 +64,7 @@ def check_postgresql_server():
     logging.debug('gui - utils.py - check_postgresql_server')
     installed, database, tables = False, False, False
     if platform.system() == 'Linux':
-        res = subprocess.run(['which', '-s', 'psql'])
+        res = subprocess.run(['which', 'psql'])
         if res.returncode == 0:
             installed = True
         else:
@@ -84,6 +86,21 @@ def check_postgresql_server():
         except psycopg2.OperationalError:
             pass
     return installed, database, tables
+
+
+def sync_graphic_folders(gui_path):
+    logging.debug('gui - utils.py - sync_graphic_folders')
+    if platform.system() == 'Linux':
+        path = pathlib.Path('/home/pi')
+        gui_path = pathlib.Path(gui_path)
+        if path.joinpath('icons').exists():
+            logging.debug('gui - utils.py - sync_graphic_folders - synchronizing graphic folders')
+            sync(str(gui_path.joinpath('icons')), path.joinpath('icons'), 'sync')
+            sync(str(gui_path.joinpath('graphic_materials')), path.joinpath('graphic_materials'), 'sync')
+        else:
+            logging.debug('gui - utils.py - sync_graphic_folders - coping graphic folders')
+            shutil.copytree(str(gui_path.joinpath('icons')), path.joinpath('icons'))
+            shutil.copytree(str(gui_path.joinpath('graphic_materials')), path.joinpath('graphic_materials'))
 
 
 def clear_layout(layout):

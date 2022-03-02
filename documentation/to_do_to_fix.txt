@@ -7,6 +7,7 @@
 * lorsque la station météo est lancée pour la première fois : pas de base de données, création des tables à la volée en fonction des capteurs (0.11)
 * lorsque les capteurs sont choisis, lors du prochain démarrage, il faut créer les tables de données correspondantes (0.11)
 
+* ajouter la possibilité de rentrer mot de passe et user pour mqtt dans la fenêtre d'option
 
 ### To fix list: ###
 

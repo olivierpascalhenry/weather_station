@@ -1,7 +1,13 @@
+### March xx 2021, Release version 0.9.3 ###
+
+
+
+
 ### March 1 2021, Release version 0.9.2 ###
 
   * ADDED:
     * a function to test postgresql server, database and tables has been added.
+    * a function to sync graphic materials has been added (to avoid icons and stylesheet issues).
 
   * MODIFIED:
     * time series are plotted only if a connection to the database is successful.
