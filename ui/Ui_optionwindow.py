@@ -32,6 +32,7 @@ class Ui_optionWindow(object):
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout_24 = QtWidgets.QGridLayout(optionWindow)
+        self.gridLayout_24.setContentsMargins(-1, -1, 1, -1)
         self.gridLayout_24.setObjectName("gridLayout_24")
         self.splitter = QtWidgets.QSplitter(optionWindow)
         font = QtGui.QFont()
@@ -129,7 +130,7 @@ class Ui_optionWindow(object):
         self.gridLayout_2.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scroll_area_1 = QtWidgets.QScrollArea(self.page_1)
-        self.scroll_area_1.setStyleSheet("QScrollArea { background: transparent; }\n"
+        self.scroll_area_1.setStyleSheet("QScrollArea { background: transparent;}\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
 "\n"
@@ -301,7 +302,7 @@ class Ui_optionWindow(object):
         self.scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_1.setObjectName("scroll_area_1")
         self.scrollAreaWidgetContents_1 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 621, 380))
+        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 628, 380))
         self.scrollAreaWidgetContents_1.setObjectName("scrollAreaWidgetContents_1")
         self.gridLayout_15 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_1)
         self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
@@ -313,6 +314,18 @@ class Ui_optionWindow(object):
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         self.af_gb_int.setFont(font)
+        self.af_gb_int.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.af_gb_int.setObjectName("af_gb_int")
         self.gridLayout_11 = QtWidgets.QGridLayout(self.af_gb_int)
         self.gridLayout_11.setObjectName("gridLayout_11")
@@ -495,6 +508,18 @@ class Ui_optionWindow(object):
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
         self.af_gb_ext.setFont(font)
+        self.af_gb_ext.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.af_gb_ext.setObjectName("af_gb_ext")
         self.gridLayout_13 = QtWidgets.QGridLayout(self.af_gb_ext)
         self.gridLayout_13.setObjectName("gridLayout_13")
@@ -852,7 +877,7 @@ class Ui_optionWindow(object):
         self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_2.setObjectName("scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 621, 380))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 628, 380))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -939,6 +964,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ca_gb_1.setFont(font)
+        self.ca_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.ca_gb_1.setObjectName("ca_gb_1")
         self.gridLayout_7 = QtWidgets.QGridLayout(self.ca_gb_1)
         self.gridLayout_7.setObjectName("gridLayout_7")
@@ -1248,7 +1285,7 @@ class Ui_optionWindow(object):
         self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_3.setObjectName("scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 621, 380))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 628, 380))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -1262,6 +1299,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.lo_gb_1.setFont(font)
+        self.lo_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.lo_gb_1.setObjectName("lo_gb_1")
         self.gridLayout_17 = QtWidgets.QGridLayout(self.lo_gb_1)
         self.gridLayout_17.setObjectName("gridLayout_17")
@@ -1606,7 +1655,7 @@ class Ui_optionWindow(object):
         self.scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_4.setObjectName("scroll_area_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 600, 456))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 607, 441))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -1620,6 +1669,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ap_gb_1.setFont(font)
+        self.ap_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.ap_gb_1.setObjectName("ap_gb_1")
         self.gridLayout_21 = QtWidgets.QGridLayout(self.ap_gb_1)
         self.gridLayout_21.setObjectName("gridLayout_21")
@@ -1762,6 +1823,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ap_gb_2.setFont(font)
+        self.ap_gb_2.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.ap_gb_2.setObjectName("ap_gb_2")
         self.gridLayout_22 = QtWidgets.QGridLayout(self.ap_gb_2)
         self.gridLayout_22.setObjectName("gridLayout_22")
@@ -1772,7 +1845,7 @@ class Ui_optionWindow(object):
         self.ap_gb_2_ln_1 = QtWidgets.QLineEdit(self.ap_gb_2)
         self.ap_gb_2_ln_1.setEnabled(False)
         self.ap_gb_2_ln_1.setMinimumSize(QtCore.QSize(200, 40))
-        self.ap_gb_2_ln_1.setMaximumSize(QtCore.QSize(200, 40))
+        self.ap_gb_2_ln_1.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
@@ -1856,8 +1929,6 @@ class Ui_optionWindow(object):
 "}")
         self.ap_gb_2_bt_2.setObjectName("ap_gb_2_bt_2")
         self.horizontalLayout_10.addWidget(self.ap_gb_2_bt_2)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem9)
         self.gridLayout_4.addLayout(self.horizontalLayout_10, 0, 1, 1, 1)
         self.ap_gb_2_lb_1 = QtWidgets.QLabel(self.ap_gb_2)
         self.ap_gb_2_lb_1.setMinimumSize(QtCore.QSize(0, 40))
@@ -1949,6 +2020,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.ap_gb_5.setFont(font)
+        self.ap_gb_5.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.ap_gb_5.setObjectName("ap_gb_5")
         self.gridLayout_20 = QtWidgets.QGridLayout(self.ap_gb_5)
         self.gridLayout_20.setObjectName("gridLayout_20")
@@ -2021,8 +2104,8 @@ class Ui_optionWindow(object):
         self.ap_gb_3_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_3_bt_1.setObjectName("ap_gb_3_bt_1")
         self.horizontalLayout_12.addWidget(self.ap_gb_3_bt_1)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_12.addItem(spacerItem10)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem9)
         self.gridLayout_20.addLayout(self.horizontalLayout_12, 0, 0, 1, 1)
         self.ap_vl.addWidget(self.ap_gb_5)
         self.gridLayout_8.addLayout(self.ap_vl, 0, 0, 1, 1)
@@ -2207,7 +2290,7 @@ class Ui_optionWindow(object):
         self.scroll_area_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_5.setObjectName("scroll_area_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 621, 380))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 628, 380))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -2221,6 +2304,18 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.sy_gb_1.setFont(font)
+        self.sy_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
         self.sy_gb_1.setObjectName("sy_gb_1")
         self.gridLayout_19 = QtWidgets.QGridLayout(self.sy_gb_1)
         self.gridLayout_19.setObjectName("gridLayout_19")
@@ -2294,8 +2389,8 @@ class Ui_optionWindow(object):
         self.sy_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.sy_gb_bt_1.setObjectName("sy_gb_bt_1")
         self.horizontalLayout_22.addWidget(self.sy_gb_bt_1)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_22.addItem(spacerItem11)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_22.addItem(spacerItem10)
         self.gridLayout_19.addLayout(self.horizontalLayout_22, 0, 0, 1, 1)
         self.sy_vl.addWidget(self.sy_gb_1)
         self.gridLayout_10.addLayout(self.sy_vl, 0, 0, 1, 1)
@@ -2303,8 +2398,8 @@ class Ui_optionWindow(object):
         self.gridLayout_12.addWidget(self.scroll_area_5, 0, 0, 1, 1)
         self.stack_widget.addWidget(self.page_5)
         self.gridLayout_24.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem12 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_24.addItem(spacerItem12, 1, 0, 1, 1)
+        spacerItem11 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_24.addItem(spacerItem11, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ok_button = QtWidgets.QToolButton(optionWindow)
@@ -2340,8 +2435,8 @@ class Ui_optionWindow(object):
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem13 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem13)
+        spacerItem12 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem12)
         self.cancel_button = QtWidgets.QToolButton(optionWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -2375,8 +2470,8 @@ class Ui_optionWindow(object):
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem14 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem14)
+        spacerItem13 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem13)
         self.gridLayout_24.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(optionWindow)
