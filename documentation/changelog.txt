@@ -1,4 +1,4 @@
-### March xx 2021, Release version 0.10.0 ###
+### March 5 2021, Release version 0.10.0 ###
 
   * ADDED:
     * OpenWeather has been added as a weather forecast provider.
