@@ -24,9 +24,6 @@ class Ui_optionWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         optionWindow.setFont(font)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/option_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        optionWindow.setWindowIcon(icon)
         optionWindow.setStyleSheet("QWidget#optionWindow {\n"
 "    background-color: rgb(230,230,230);\n"
 "    border: 1px solid rgb(75,75,75);\n"
@@ -492,9 +489,9 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.af_gb_int_bt_1.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.af_gb_int_bt_1.setIcon(icon1)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.af_gb_int_bt_1.setIcon(icon)
         self.af_gb_int_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.af_gb_int_bt_1.setObjectName("af_gb_int_bt_1")
         self.horizontalLayout_4.addWidget(self.af_gb_int_bt_1)
@@ -686,7 +683,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.af_gb_ext_bt_1.setText("")
-        self.af_gb_ext_bt_1.setIcon(icon1)
+        self.af_gb_ext_bt_1.setIcon(icon)
         self.af_gb_ext_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.af_gb_ext_bt_1.setObjectName("af_gb_ext_bt_1")
         self.horizontalLayout_5.addWidget(self.af_gb_ext_bt_1)
@@ -877,7 +874,7 @@ class Ui_optionWindow(object):
         self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_2.setObjectName("scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 628, 380))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 390, 291))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -950,7 +947,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ca_bt_1.setText("")
-        self.ca_bt_1.setIcon(icon1)
+        self.ca_bt_1.setIcon(icon)
         self.ca_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ca_bt_1.setObjectName("ca_bt_1")
         self.horizontalLayout_13.addWidget(self.ca_bt_1)
@@ -1014,7 +1011,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ca_gc_bt_1.setText("")
-        self.ca_gc_bt_1.setIcon(icon1)
+        self.ca_gc_bt_1.setIcon(icon)
         self.ca_gc_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ca_gc_bt_1.setObjectName("ca_gc_bt_1")
         self.horizontalLayout_8.addWidget(self.ca_gc_bt_1)
@@ -1054,7 +1051,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ca_gc_bt_2.setText("")
-        self.ca_gc_bt_2.setIcon(icon1)
+        self.ca_gc_bt_2.setIcon(icon)
         self.ca_gc_bt_2.setIconSize(QtCore.QSize(36, 36))
         self.ca_gc_bt_2.setObjectName("ca_gc_bt_2")
         self.horizontalLayout_6.addWidget(self.ca_gc_bt_2)
@@ -1094,7 +1091,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ca_gc_bt_3.setText("")
-        self.ca_gc_bt_3.setIcon(icon1)
+        self.ca_gc_bt_3.setIcon(icon)
         self.ca_gc_bt_3.setIconSize(QtCore.QSize(36, 36))
         self.ca_gc_bt_3.setObjectName("ca_gc_bt_3")
         self.horizontalLayout_3.addWidget(self.ca_gc_bt_3)
@@ -1285,7 +1282,7 @@ class Ui_optionWindow(object):
         self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_3.setObjectName("scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 628, 380))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 354, 143))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_6 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
@@ -1379,9 +1376,9 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.lo_gb_bt_1.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.lo_gb_bt_1.setIcon(icon2)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.lo_gb_bt_1.setIcon(icon1)
         self.lo_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.lo_gb_bt_1.setAutoRaise(False)
         self.lo_gb_bt_1.setObjectName("lo_gb_bt_1")
@@ -1655,7 +1652,7 @@ class Ui_optionWindow(object):
         self.scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_4.setObjectName("scroll_area_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 607, 441))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 598, 441))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -1792,7 +1789,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ap_gb_bt_1.setText("")
-        self.ap_gb_bt_1.setIcon(icon1)
+        self.ap_gb_bt_1.setIcon(icon)
         self.ap_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_bt_1.setObjectName("ap_gb_bt_1")
         self.horizontalLayout_18.addWidget(self.ap_gb_bt_1)
@@ -1882,7 +1879,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ap_gb_2_bt_1.setText("")
-        self.ap_gb_2_bt_1.setIcon(icon1)
+        self.ap_gb_2_bt_1.setIcon(icon)
         self.ap_gb_2_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_2_bt_1.setObjectName("ap_gb_2_bt_1")
         self.horizontalLayout_10.addWidget(self.ap_gb_2_bt_1)
@@ -2100,7 +2097,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ap_gb_3_bt_1.setText("")
-        self.ap_gb_3_bt_1.setIcon(icon1)
+        self.ap_gb_3_bt_1.setIcon(icon)
         self.ap_gb_3_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_3_bt_1.setObjectName("ap_gb_3_bt_1")
         self.horizontalLayout_12.addWidget(self.ap_gb_3_bt_1)
@@ -2290,7 +2287,7 @@ class Ui_optionWindow(object):
         self.scroll_area_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_5.setObjectName("scroll_area_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 628, 380))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 369, 102))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -2385,7 +2382,7 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.sy_gb_bt_1.setText("")
-        self.sy_gb_bt_1.setIcon(icon1)
+        self.sy_gb_bt_1.setIcon(icon)
         self.sy_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.sy_gb_bt_1.setObjectName("sy_gb_bt_1")
         self.horizontalLayout_22.addWidget(self.sy_gb_bt_1)
@@ -2429,9 +2426,9 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.ok_button.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ok_button.setIcon(icon3)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ok_button.setIcon(icon2)
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
@@ -2464,9 +2461,9 @@ class Ui_optionWindow(object):
 "    border: none;\n"
 "}")
         self.cancel_button.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.cancel_button.setIcon(icon4)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.cancel_button.setIcon(icon3)
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
@@ -2480,7 +2477,6 @@ class Ui_optionWindow(object):
 
     def retranslateUi(self, optionWindow):
         _translate = QtCore.QCoreApplication.translate
-        optionWindow.setWindowTitle(_translate("optionWindow", "Options"))
         __sortingEnabled = self.section_list.isSortingEnabled()
         self.section_list.setSortingEnabled(False)
         item = self.section_list.item(0)
