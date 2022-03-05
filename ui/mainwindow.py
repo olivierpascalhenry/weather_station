@@ -1,6 +1,9 @@
 import io
 import os
+import copy
+import json
 import math
+import time
 import pickle
 import platform
 import logging
@@ -8,7 +11,6 @@ import pathlib
 import configparser
 import tempfile
 import shutil
-import time
 from PyQt5 import QtWidgets, QtCore, QtGui
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -33,15 +35,15 @@ from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_wid
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, path, user_path, config_dict, parent=None):
+    def __init__(self, path, user_path, config_dict, sensor_dict, parent=None):
         logging.debug('gui - mainwindow.py - MainWindow - __init__')
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.gui_path = path
         self.user_path = user_path
         self.config_dict = config_dict
+        self.sensor_dict = sensor_dict
         self.place_object = None
-        # self.old_place_object = None
         self.database_ok = False
         self.connector = None
         self.cursor = None
@@ -660,9 +662,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_string.seek(0)
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
-        option_window = MyOptions(config_dict_copy, self.user_path, self)
+        option_window = MyOptions(config_dict_copy, copy.deepcopy(self.sensor_dict), self.user_path, self)
         option_window.exec_()
         if not option_window.cancel:
+            self.sensor_dict = option_window.sensor_dict
+            self.sensor_dict['modification_date'] = datetime.datetime.now().strftime('%d/%m/%Y')
+            f = open(pathlib.Path(self.user_path).joinpath('sensor_file.json'), 'w')
+            json.dump(self.sensor_dict, f, indent=4)
+            f.close()
             self.config_dict = option_window.config_dict
             ini_file = open(pathlib.Path(self.user_path).joinpath('weather_station.ini'), 'w')
             self.config_dict.write(ini_file)

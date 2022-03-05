@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import logging
 import pathlib
 import platform
@@ -7,7 +8,7 @@ import configparser
 from PyQt5 import QtWidgets, QtCore
 from ui.mainwindow import MainWindow
 from ui.version import gui_version
-from functions.utils import create_option_file, create_logging_handlers, sync_graphic_folders
+from functions.utils import create_option_file, create_logging_handlers, sync_graphic_folders, create_sensor_file
 from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
 from psycopg2 import __version__ as pg_version
@@ -28,6 +29,11 @@ def launch_station(gui_path, user_path):
         create_option_file(user_path)
     config_dict = configparser.ConfigParser()
     config_dict.read(str(pathlib.Path(user_path).joinpath('weather_station.ini')))
+    if not pathlib.Path(pathlib.Path(user_path).joinpath('sensor_file.json')).is_file():
+        create_sensor_file(user_path)
+    f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'r')
+    sensor_dict = json.load(f)
+    f.close()
     create_logging_handlers(config_dict, 'weather_station.log', user_path)
     if getattr(sys, 'frozen', False):
         frozen = True
@@ -55,7 +61,7 @@ def launch_station(gui_path, user_path):
     logging.info(f'gui - gui frozen ? {frozen}')
     logging.info(f'gui - main path: {gui_path}')
     sync_graphic_folders(gui_path)
-    ui = MainWindow(gui_path, user_path, config_dict)
+    ui = MainWindow(gui_path, user_path, config_dict, sensor_dict)
     ui.show()
     sys.exit(app.exec_())
 
