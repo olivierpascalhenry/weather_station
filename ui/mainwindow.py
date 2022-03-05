@@ -640,9 +640,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 download_window.exec_()
                 if download_window.success:
                     install_path = pathlib.Path(self.gui_path)
-                    shutil.copy(str(install_path.joinpath('/functions/unzip_update.py')), temp_folder)
+                    shutil.copy(str(install_path.joinpath('functions/unzip_update.py')), temp_folder)
                     script_path = pathlib.Path(temp_folder).joinpath('unzip_update.py')
                     update_path = pathlib.Path(temp_folder).joinpath(self.update_url['file'])
+                    logging.debug(f'gui - mainwindow.py - MainWindow - warning_update_dispatch - '
+                                  f'install_path:{install_path} ; script_path: {script_path} '
+                                  f'; update_path: {update_path}')
                     os.system(f'lxterminal -e python3 {script_path} {update_path} {install_path}')
                     time.sleep(1.5)
                     self.close()
