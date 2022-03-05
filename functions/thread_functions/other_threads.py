@@ -12,7 +12,7 @@ from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors, che
 
 
 username = 'olivierpascalhenry'
-token = '***REMOVED***'
+token = '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'
 
 
 class CleaningThread(QtCore.QThread):
