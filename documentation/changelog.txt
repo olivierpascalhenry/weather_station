@@ -1,3 +1,11 @@
+### March xx 2021, Release version 0.11.0 ###
+
+  * ADDED:
+    * a new numpad has been introduced.
+    * a new keyboard has been introduced.
+    * a new widget has been introduced.
+
+
 
 ### March 5 2021, Release version 0.10.1 ###
 
