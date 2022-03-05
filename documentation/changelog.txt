@@ -4,6 +4,7 @@
     * a new numpad has been introduced.
     * a new keyboard has been introduced.
     * a new widget has been introduced.
+    * a json file dedicated to sensors has been added.
 
 
 

@@ -1,3 +1,4 @@
+import json
 import shutil
 import logging
 import pathlib
@@ -23,9 +24,6 @@ def create_option_file(user_path):
     config_dict.set('LOG', 'level', 'DEBUG')
     config_dict.set('LOG', 'path', str(user_path))
     config_dict.set('SENSOR', 'sensors_rate', '30')
-    config_dict.set('SENSOR', 'bme280', 'False')
-    config_dict.set('SENSOR', 'ds18b20', 'False')
-    config_dict.set('SENSOR', 'mqtt', 'False')
     config_dict.set('DISPLAY', 'in_display_rate', '30')
     config_dict.set('DISPLAY', 'in_sensor', '')
     config_dict.set('DISPLAY', 'out_display_rate', '30')
@@ -37,6 +35,15 @@ def create_option_file(user_path):
     config_dict.set('API', 'request_rate', '30')
     config_dict.write(ini_file)
     ini_file.close()
+
+
+def create_sensor_file(user_path):
+    date = datetime.datetime.now().strftime('%d/%m/%Y')
+    json_dict = {'creation_date': date, 'modification_date': date, 'DS18B20': {}, 'BME280': {},
+                 'MQTT': {'username': '', 'password': '', 'address': '', 'main_topic': '', 'devices': {}}}
+    f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'w')
+    json.dump(json_dict, f, indent=4)
+    f.close()
 
 
 def create_logging_handlers(config_dict, filename, default_path):

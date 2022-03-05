@@ -7,11 +7,11 @@ from pyowm.utils.config import get_default_config
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_optionwindow import Ui_optionWindow
 from functions.utils import code_to_departement
-from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI
+from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI, MqttManager
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
-    def __init__(self, config_dict, user_path, parent=None):
+    def __init__(self, config_dict, sensor_dict, user_path, parent=None):
         logging.info('gui - option_window.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -53,6 +53,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                                    QtWidgets.QScrollerProperties.OvershootAlwaysOff)
         scroll.setScrollerProperties(properties)
         self.config_dict = config_dict
+        self.sensor_dict = sensor_dict
         self.splitter.setSizes([180, 732])
         self.user_path = user_path
         self.cancel = True
@@ -76,6 +77,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_3_bt_1.clicked.connect(self.display_numpad)
         self.sy_gb_bt_1.clicked.connect(self.display_numpad)
         self.ap_gb_2_bt_1.clicked.connect(self.display_keyboard)
+
+        self.ca_gc_bt_3.clicked.connect(self.show_mqtt_manager)
 
         self.ap_gb_2_ln_1.textChanged.connect(self.activate_search_button)
         self.ap_gb_rb_1.clicked.connect(self.activate_place_search)
@@ -169,6 +172,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
             self.cancel = False
             self.close_window()
+
+    def show_mqtt_manager(self):
+        mqtt_manager = MqttManager(self.mainparent)
+        mqtt_manager.exec_()
+
+
 
     def get_folder_path(self):
         logging.debug('gui - option_window.py - MyOptions - get_folder_path')
