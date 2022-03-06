@@ -18,6 +18,7 @@ from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from ui.Ui_apiwindow import Ui_apiWindow
+from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
 from functions.thread_functions.other_threads import DownloadFile
 
@@ -585,4 +586,128 @@ class MyAPI(QtWidgets.QDialog, Ui_apiWindow):
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyAPI - close_window')
+        self.close()
+
+
+class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
+    def __init__(self, mqtt_dict, parent=None):
+        logging.info('gui - other_windows.py - MqttManager - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
+        self.cancel = True
+        self.mqtt_dict = mqtt_dict
+        self.cancel_button.clicked.connect(self.close_window)
+        self.ok_button.clicked.connect(self.confirm_device_dict)
+        self.sensor_list.itemClicked.connect(self.show_device_information)
+        self.add_sensor.clicked.connect(self.add_device)
+        self.del_sensor.clicked.connect(self.del_device)
+        self.username_ln.textChanged.connect(self.add_text_to_dict)
+        self.password_ln.textChanged.connect(self.add_text_to_dict)
+        self.address_ln.textChanged.connect(self.add_text_to_dict)
+        self.main_topic_ln.textChanged.connect(self.add_text_to_dict)
+        self.temperature_ln.textChanged.connect(self.add_text_to_dict)
+        self.humidity_ln.textChanged.connect(self.add_text_to_dict)
+        self.pressure_ln.textChanged.connect(self.add_text_to_dict)
+        self.battery_ln.textChanged.connect(self.add_text_to_dict)
+        self.signal_ln.textChanged.connect(self.add_text_to_dict)
+        for button in self.findChildren(QtWidgets.QToolButton):
+            if button.objectName()[: 3] not in ['del', 'add', 'ok_', 'can']:
+                button.clicked.connect(self.display_keyboard)
+        self.parse_mqtt_dict()
+
+    def parse_mqtt_dict(self):
+        logging.debug('gui - other_windows.py - MqttManager - parse_mqtt_dict')
+        self.username_ln.setText(self.mqtt_dict['username'])
+        self.password_ln.setText(self.mqtt_dict['password'])
+        self.address_ln.setText(self.mqtt_dict['address'])
+        self.main_topic_ln.setText(self.mqtt_dict['main_topic'])
+        for device, ddict in self.mqtt_dict['devices'].items():
+            self.sensor_list.addItem(device)
+
+    def show_device_information(self, item):
+        logging.debug('gui - other_windows.py - MqttManager - show_device_information')
+        self.del_sensor.setEnabled(True)
+        self.temperature_ln.setEnabled(True)
+        self.pressure_ln.setEnabled(True)
+        self.humidity_ln.setEnabled(True)
+        self.battery_ln.setEnabled(True)
+        self.signal_ln.setEnabled(True)
+        self.temperature_ln.setText(self.mqtt_dict['devices'][item.text()]['temperature'])
+        self.pressure_ln.setText(self.mqtt_dict['devices'][item.text()]['pressure'])
+        self.humidity_ln.setText(self.mqtt_dict['devices'][item.text()]['humidity'])
+        self.battery_ln.setText(self.mqtt_dict['devices'][item.text()]['battery'])
+        self.signal_ln.setText(self.mqtt_dict['devices'][item.text()]['signal'])
+        self.temperature_bt.setEnabled(True)
+        self.pressure_bt.setEnabled(True)
+        self.humidity_bt.setEnabled(True)
+        self.battery_bt.setEnabled(True)
+        self.signal_bt.setEnabled(True)
+
+    def add_device(self):
+        logging.debug('gui - other_windows.py - MqttManager - add_device')
+        keyboard_window = MyKeyboard(self)
+        keyboard_window.exec_()
+        if not keyboard_window.cancel:
+            name = str(keyboard_window.num_line.text())
+            if not self.sensor_list.findItems(name, QtCore.Qt.MatchFixedString):
+                self.sensor_list.addItem(name)
+                tmp_dict = {'temperature': '', 'humidity': '', 'pressure': '', 'battery': '', 'signal': ''}
+                self.mqtt_dict['devices'][name] = tmp_dict
+
+    def del_device(self):
+        logging.debug('gui - other_windows.py - MqttManager - del_device')
+        item = self.sensor_list.takeItem(self.sensor_list.currentRow())
+        del self.mqtt_dict['devices'][item.text()]
+        if not self.sensor_list.selectedItems():
+            self.del_sensor.setEnabled(False)
+            self.temperature_ln.setEnabled(False)
+            self.pressure_ln.setEnabled(False)
+            self.humidity_ln.setEnabled(False)
+            self.battery_ln.setEnabled(False)
+            self.signal_ln.setEnabled(False)
+            self.temperature_bt.setEnabled(False)
+            self.pressure_bt.setEnabled(False)
+            self.humidity_bt.setEnabled(False)
+            self.battery_bt.setEnabled(False)
+            self.signal_bt.setEnabled(False)
+            self.temperature_ln.setText('')
+            self.pressure_ln.setText('')
+            self.humidity_ln.setText('')
+            self.battery_ln.setText('')
+            self.signal_ln.setText('')
+        else:
+            self.show_device_information(self.sensor_list.currentItem())
+
+    def add_text_to_dict(self):
+        logging.debug('gui - other_windows.py - MqttManager - add_text_to_dict')
+        try:
+            if self.sender().objectName()[: -3] in ['temperature', 'humidity', 'pressure', 'battery', 'signal']:
+                device = str(self.sensor_list.currentItem().text())
+                self.mqtt_dict['devices'][device][self.sender().objectName()[: -3]] = str(self.sender().text())
+            else:
+                self.mqtt_dict[self.sender().objectName()[: -3]] = str(self.sender().text())
+        except AttributeError:
+            pass
+
+    def display_keyboard(self):
+        logging.debug('gui - other_windows.py - MqttManager - display_keyboard')
+        lineedit = self.findChild(QtWidgets.QLineEdit, self.sender().objectName()[: -2] + 'ln')
+        keyboard_window = MyKeyboard(self)
+        keyboard_window.exec_()
+        if not keyboard_window.cancel:
+            lineedit.setText(keyboard_window.num_line.text())
+
+    def confirm_device_dict(self):
+        logging.debug('gui - other_windows.py - MqttManager - confirm_device_dict')
+        self.cancel = False
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows.py - MqttManager - close_window')
         self.close()

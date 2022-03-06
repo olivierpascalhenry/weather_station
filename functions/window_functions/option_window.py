@@ -1,3 +1,5 @@
+import copy
+
 import pickle
 import logging
 import pathlib
@@ -174,10 +176,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.close_window()
 
     def show_mqtt_manager(self):
-        mqtt_manager = MqttManager(self.mainparent)
+        mqtt_dict = copy.deepcopy(self.sensor_dict['MQTT'])
+        mqtt_manager = MqttManager(mqtt_dict, self.mainparent)
         mqtt_manager.exec_()
-
-
+        if not mqtt_manager.cancel:
+            self.sensor_dict['MQTT'] = mqtt_manager.mqtt_dict
 
     def get_folder_path(self):
         logging.debug('gui - option_window.py - MyOptions - get_folder_path')

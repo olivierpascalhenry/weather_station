@@ -10,5 +10,5 @@
 
 ### To fix list: ###
 
-* nothing.
+* augmenter la taille du levier du splitter dans la fenêter option et mqtt
 
