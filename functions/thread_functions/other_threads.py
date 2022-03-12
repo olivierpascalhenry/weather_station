@@ -5,6 +5,7 @@ import pathlib
 import datetime
 import psycopg2
 import requests
+import platform
 from distutils.version import LooseVersion
 from numpy import min, max, linspace
 from PyQt5 import QtCore
@@ -173,13 +174,56 @@ class CheckInternetConnexion(QtCore.QThread):
 class CheckPostgresqlConnexion(QtCore.QThread):
     results = QtCore.pyqtSignal(list)
 
-    def __init__(self):
+    def __init__(self, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CheckPostgresqlConnexion - __init__')
+        self.sensor_dict = sensor_dict
 
     def run(self):
         logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - run')
-        self.results.emit(list(check_postgresql_server()))
+
+        installed, database, tables = False, False, False
+        if platform.system() == 'Linux':
+            res = subprocess.run(['which', 'psql'])
+            if res.returncode == 0:
+                installed = True
+            else:
+                logging.error('gui - other_threads.py - CheckPostgresqlConnexion - which -s psql returned 1, '
+                              'postgresql is not installed')
+        else:
+            installed = True
+        if installed:
+            try:
+                connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
+                                             database='weather_station_db', connect_timeout=1)
+                database = True
+                connector.close()
+            except psycopg2.OperationalError:
+                logging.error('gui - other_threads.py - CheckPostgresqlConnexion - database is not installed')
+
+        if installed and database:
+            ds18_dict = self.sensor_dict['DS18B20']
+            bme280_dict = self.sensor_dict['BME280']
+            mqtt_dict = self.sensor_dict['MQTT']['devices']
+            table_list = []
+            connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
+                                         database='weather_station_db', connect_timeout=1)
+            cursor = connector.cursor()
+            cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
+            for table in cursor.fetchall():
+                table_list = table[0]
+
+            for device, ddict in mqtt_dict.items():
+                if device not in table_list:
+                    query = (f'CREATE TABLE IF NOT EXISTS public."{device}" (date_time timestamp without time zone NOT '
+                             f'NULL, temperature real, humidity real, pressure real, battery real, signal real, '
+                             f'CONSTRAINT "{device}_pkey" PRIMARY KEY (date_time)) TABLESPACE pg_default;'
+                             f'ALTER TABLE public."{device}" OWNER to weather_station;')
+                    cursor.execute(query)
+                    connector.commit()
+            cursor.close()
+            connector.close()
+        self.results.emit([installed, database])
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
@@ -226,7 +270,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, humidite from "BME280" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, pression_msl from "AQARA_THP" where '
+            self.cursor.execute(f'select date_time, pressure from "AQARA_THP" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
 

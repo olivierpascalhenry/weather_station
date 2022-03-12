@@ -7,6 +7,9 @@
     * a json file dedicated to sensors has been added.
     * a window and a dictionary to manage mqtt based sensors have been added.
 
+  * MODIFIED:
+    * mqtt thread has been modified to handle new based sensors.
+
 
 ### March 5 2021, Release version 0.10.1 ###
 
