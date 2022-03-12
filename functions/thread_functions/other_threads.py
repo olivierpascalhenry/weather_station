@@ -9,7 +9,7 @@ import platform
 from distutils.version import LooseVersion
 from numpy import min, max, linspace
 from PyQt5 import QtCore
-from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors, check_postgresql_server
+from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
 
 
 username = 'olivierpascalhenry'
@@ -213,7 +213,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
             for table in cursor.fetchall():
                 table_list = table[0]
 
-            for device, ddict in mqtt_dict.items():
+            for device, _ in mqtt_dict.items():
                 if device not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{device}" (date_time timestamp without time zone NOT '
                              f'NULL, temperature real, humidity real, pressure real, battery real, signal real, '
@@ -221,6 +221,16 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                              f'ALTER TABLE public."{device}" OWNER to weather_station;')
                     cursor.execute(query)
                     connector.commit()
+
+            for device, ddict in ds18_dict.items():
+                if ddict['table'] not in table_list:
+                    query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
+                             f'time zone NOT NULL, temperature real, humidity real, pressure real, battery real, '
+                             f'signal real, CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KEY (date_time)) TABLESPACE '
+                             f'pg_default; ALTER TABLE public."{ddict["table"]}" OWNER to weather_station;')
+                    cursor.execute(query)
+                    connector.commit()
+
             cursor.close()
             connector.close()
         self.results.emit([installed, database])

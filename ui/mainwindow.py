@@ -68,6 +68,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2 = None
         self.spinner = None
         self.h_spin_lay = None
+
+        self.ds18b20_data_threads = []
+        self.bme280_data_threads = []
+
         self.collect_ds18b20_data_thread = None
         self.collect_bme180_data_thread = None
         self.collect_mqtt_data_thread = None
@@ -131,11 +135,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
-        # if self.config_dict.getboolean('API', 'user_place'):
-        #     f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
-        #     self.place_object = pickle.load(f)
-        #     self.old_place_object = self.place_object
-        #     f.close()
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -169,7 +168,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
         if results[0] and results[1]:
             self.database_ok = True
-
 
 
             # self.launch_clean_thread()
@@ -292,17 +290,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
         if platform.system() == 'Linux':
-            self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.db_dict, self.config_dict)
-            self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
+
+            for _, ddict in self.sensor_dict['DS18B20']:
+                self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
+
+            for _, ddict in self.sensor_dict['BME280']:
+                self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict))
+
             self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
         else:
-            self.collect_ds18b20_data_thread = DS18B20DataCollectingTestThread(self.db_dict, self.config_dict)
-            self.collect_bme180_data_thread = BME280DataCollectingTestThread(self.db_dict, self.config_dict)
-            self.collect_mqtt_data_thread = MqttToDbTestThread(self.db_dict, self.sensor_dict['MQTT'])
-        self.collect_ds18b20_data_thread.error.connect(self.log_thread_error)
-        self.collect_ds18b20_data_thread.start()
-        self.collect_bme180_data_thread.error.connect(self.log_thread_error)
-        self.collect_bme180_data_thread.start()
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
+            self.collect_mqtt_data_thread = MqttToDbTestThread(self.db_dict)
+
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
+            thread.error.connect(self.log_thread_error)
+            thread.start()
+
         self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
         self.collect_mqtt_data_thread.start()
 
@@ -727,10 +731,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-        if self.collect_ds18b20_data_thread is not None:
-            self.collect_ds18b20_data_thread.stop()
-        if self.collect_bme180_data_thread is not None:
-            self.collect_bme180_data_thread.stop()
+
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
+            thread.stop()
+
         if self.collect_mqtt_data_thread is not None:
             self.collect_mqtt_data_thread.stop()
         if self.db_cleaning_thread is not None:

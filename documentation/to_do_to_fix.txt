@@ -1,6 +1,5 @@
 ### To do list: ###
 
-* proposer une interface comme prosim pour activer les différents capteurs, dans les options (0.11)
 * proposer une partie extérieur et intérieur, pour sélectionner les capteurs, dans les options (0.11)
 * avant de lancer les threads de récupération de données, vérifier la présence des capteurs (0.11)
 * lorsque la station météo est lancée pour la première fois : pas de base de données, création des tables à la volée en fonction des capteurs (0.11)
@@ -8,6 +7,8 @@
 
 * ajouter la possibilité de rentrer mot de passe et user pour mqtt dans la fenêtre d'option
 * modifier le script de nettoyage des tables pour prendre en compte le dictionnaire des capteurs et les tables de test
+
+* ajouter onglet ephemerides, avec phase de la lune, heure lever coucher soleil / lune, durée ensoleillement, durée nuit
 
 ### To fix list: ###
 
