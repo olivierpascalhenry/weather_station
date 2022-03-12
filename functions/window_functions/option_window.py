@@ -9,7 +9,8 @@ from pyowm.utils.config import get_default_config
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_optionwindow import Ui_optionWindow
 from functions.utils import code_to_departement
-from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI, MqttManager
+from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI
+from functions.window_functions.sensor_windows import MqttManager, W1SensorManager
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
@@ -81,6 +82,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_2_bt_1.clicked.connect(self.display_keyboard)
 
         self.ca_gc_bt_3.clicked.connect(self.show_mqtt_manager)
+        self.ca_gc_bt_1.clicked.connect(self.show_1w_manager)
 
         self.ap_gb_2_ln_1.textChanged.connect(self.activate_search_button)
         self.ap_gb_rb_1.clicked.connect(self.activate_place_search)
@@ -176,11 +178,16 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.close_window()
 
     def show_mqtt_manager(self):
-        mqtt_dict = copy.deepcopy(self.sensor_dict['MQTT'])
-        mqtt_manager = MqttManager(mqtt_dict, self.mainparent)
+        mqtt_manager = MqttManager(copy.deepcopy(self.sensor_dict['MQTT']), self.mainparent)
         mqtt_manager.exec_()
         if not mqtt_manager.cancel:
             self.sensor_dict['MQTT'] = mqtt_manager.mqtt_dict
+
+    def show_1w_manager(self):
+        manager_window = W1SensorManager(copy.deepcopy(self.sensor_dict['DS18B20']), self.mainparent)
+        manager_window.exec_()
+        if not manager_window.cancel:
+            self.sensor_dict['DS18B20'] = manager_window.sensor_dict
 
     def get_folder_path(self):
         logging.debug('gui - option_window.py - MyOptions - get_folder_path')
