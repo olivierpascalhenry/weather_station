@@ -1,3 +1,4 @@
+import os
 import json
 import time
 import random
@@ -201,17 +202,14 @@ class BME280DataCollectingThread(QtCore.QThread):
 class MqttToDbThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict):
+    def __init__(self, db_dict, mqtt_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - MqttToDbThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
+        self.mqtt_dict = mqtt_dict
         self.mqtt_client = None
-        if config_dict.get('SYSTEM', 'place_altitude'):
-            self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
-        else:
-            self.place_altitude = None
 
     def run(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
@@ -219,15 +217,15 @@ class MqttToDbThread(QtCore.QThread):
             self.set_mqtt_client()
         else:
             while True:
+                database = 'AQARA_THP'
                 date_time = datetime.datetime.now().replace(microsecond=0)
-                temp = self.collect_test_data(20., 5)
-                hum = self.collect_test_data(65., 20)
-                pres = self.collect_test_data(1013., 15)
-                pres_msl = self.collect_test_data(1013., 15)
-                bat = 75.
-                link = 97.
-                self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
-                time.sleep(600)
+                temperature = self.collect_test_data(20., 5)
+                humidity = self.collect_test_data(65., 20)
+                pressure = self.collect_test_data(1013., 15)
+                batterie = 75.
+                signal = 97.
+                self.add_data_to_db(date_time, temperature, humidity, pressure, batterie, signal, database)
+                time.sleep(60)
 
     def set_mqtt_client(self):
         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - set_mqtt_client')
@@ -236,9 +234,12 @@ class MqttToDbThread(QtCore.QThread):
             self.mqtt_client.on_message = self.parse_data
             self.mqtt_client.on_connect = self.on_connect
             self.mqtt_client.on_disconnect = self.on_disconnect
-            self.mqtt_client.username_pw_set(username='weather', password='mqtt_weather_password')
-            self.mqtt_client.connect('127.0.0.1')
-            self.mqtt_client.subscribe('zigbee2mqtt/Aqara_T_H_P_sensor', qos=0)
+            self.mqtt_client.username_pw_set(username=self.mqtt_dict['username'], password=self.mqtt_dict['password'])
+            self.mqtt_client.connect(self.mqtt_dict['address'])
+            topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
+            # for device, ddict in self.mqtt_dict['devices'].items():
+            #     topics_list.append((f'{self.mqtt_dict["main_topic"]}/{device}', 0))
+            self.mqtt_client.subscribe(topics_list)
             self.mqtt_client.loop_forever()
         except Exception:
             logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
@@ -256,32 +257,49 @@ class MqttToDbThread(QtCore.QThread):
 
     def parse_data(self, client, userdata, message):
         message = str(message.payload.decode('utf-8'))
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : {message}')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : {message} ; '
+                      f'from {message.topic}')
         date_time = datetime.datetime.now()
         data = json.loads(message)
-        temp = data['temperature']
-        hum = data['humidity']
-        pres = data['pressure']
-        bat = data['battery']
-        link = data['linkquality']
-        if self.place_altitude is not None:
-            pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
-                               (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-            pres_msl = round(pres_msl, 1)
-        else:
-            pres_msl = None
-        pres = round(pres, 1)
-        temp = round(temp, 1)
-        hum = round(hum)
-        self.add_data_to_db(date_time, temp, hum, pres, pres_msl, bat, link)
 
-    def add_data_to_db(self, dt, tp, hm, ps, ps_msl, bt, lk):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
-                      f'| {ps_msl} | {bt} | {lk} |')
+        database = os.path.basename(message.topic)
+
         try:
-            self.cursor.execute('insert into "AQARA_THP" (date_time, temperature, humidite, pression, pression_msl, '
-                                'batterie, qualite) values (%s, %s, %s, %s, %s, %s, %s)',
-                                (dt, tp, hm, ps, ps_msl, bt, lk))
+            temperature = round(data['temperature'], 1)
+        except KeyError:
+            temperature = None
+        try:
+            humidity = round(data['humidity'], 1)
+        except KeyError:
+            humidity = None
+        try:
+            pressure = round(data['pressure'], 1)
+        except KeyError:
+            pressure = None
+        try:
+            battery = data['battery']
+        except KeyError:
+            battery = None
+        try:
+            signal = data['linkquality']
+        except KeyError:
+            signal = None
+
+        # if self.place_altitude is not None:
+        #     pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
+        #                        (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
+        #     pres_msl = round(pres_msl, 1)
+        # else:
+        #     pres_msl = None
+        self.add_data_to_db(date_time, temperature, humidity, pressure, battery, signal, database)
+
+    def add_data_to_db(self, dt, tp, hm, ps, bt, lk, db):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
+                      f'| {bt} | {lk} | {db}')
+        try:
+            self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, battery, '
+                                f'signal) values (%s, %s, %s, %s, %s, %s)',
+                                (dt, tp, hm, ps, bt, lk))
             self.connector.commit()
         except Exception:
             logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
@@ -369,11 +387,10 @@ class DBOutDataThread(QtCore.QThread):
         database = 'AQARA_THP'
         req_dict = {'temp': f'SELECT temperature FROM "{database}" ORDER BY date_time DESC LIMIT 1',
                     'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{database}"',
-                    'hum': f'SELECT humidite FROM "{database}" ORDER BY date_time DESC LIMIT 1',
-                    'pres': f'SELECT pression FROM "{database}" ORDER BY date_time DESC LIMIT 1',
-                    'presmsl': f'SELECT pression_msl FROM "{database}" ORDER BY date_time DESC LIMIT 1',
-                    'bat': f'SELECT batterie FROM "{database}" ORDER BY date_time DESC LIMIT 1',
-                    'link': f'SELECT qualite FROM "{database}" ORDER BY date_time DESC LIMIT 1'}
+                    'hum': f'SELECT humidity FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'pres': f'SELECT pressure FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'bat': f'SELECT battery FROM "{database}" ORDER BY date_time DESC LIMIT 1',
+                    'link': f'SELECT signal FROM "{database}" ORDER BY date_time DESC LIMIT 1'}
         while True:
             var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'presmsl': None, 'bat': None,
                         'link': None}

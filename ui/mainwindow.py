@@ -152,7 +152,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
-        self.check_posgresql = CheckPostgresqlConnexion()
+        self.check_posgresql = CheckPostgresqlConnexion(self.sensor_dict)
         self.check_posgresql.results.connect(self.parse_posgresql_check)
         self.check_posgresql.start()
 
@@ -165,7 +165,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def parse_posgresql_check(self, results):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
-        if results[0] and results[1] and results[2]:
+        if results[0] and results[1]:
             self.database_ok = True
             self.launch_clean_thread()
             self.collect_sensors_data()
@@ -175,13 +175,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 text = ('La station météo n\'a pas trouvé PostgreSQL. Veuillez l\'installer ou vérifier son '
                         'installation. PostgreSQL est obligatoire pour gérer la base de données des capteurs.')
             else:
-                if not results[1]:
-                    text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
-                            'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
-                            'connecter.')
-                else:
-                    text = ('La station météo n\'a pas trouvé les tables dédiées aux capteurs. Veuillez les créer '
-                            'avant d\'utiliser la station météo.')
+                text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
+                        'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
+                        'connecter.')
             info_window = MyInfo(text, self)
             info_window.exec_()
 
@@ -296,7 +292,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
         self.collect_bme180_data_thread.error.connect(self.log_thread_error)
         self.collect_bme180_data_thread.start()
-        self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.config_dict)
+        self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
         self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
         self.collect_mqtt_data_thread.start()
 
@@ -409,10 +405,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.out_humidity_bt.setText('Humidité : No data')
 
-        if self.out_pressure_msl is not None:
-            self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure_msl)} hPa')
-        else:
-            self.out_pressure_bt.setText('Pression : No data')
+        self.out_pressure_bt.setText('Pression : No data')
+        if self.out_pressure is not None and self.out_temperature is not None:
+            if self.config_dict.get('SYSTEM', 'place_altitude'):
+                place_altitude = int(self.config_dict.get('SYSTEM', 'place_altitude'))
+                pres_msl = self.out_pressure + ((self.out_pressure * 9.80665 * place_altitude) /
+                                                (287.0531 * (273.15 + self.out_temperature + (place_altitude / 400))))
+                self.out_pressure_bt.setText(f'Pression : {round(pres_msl)} hPa')
 
         icon = 'batterie_0-5_icon.svg'
         if self.out_battery is not None:
