@@ -7,6 +7,7 @@
 * lorsque les capteurs sont choisis, lors du prochain démarrage, il faut créer les tables de données correspondantes (0.11)
 
 * ajouter la possibilité de rentrer mot de passe et user pour mqtt dans la fenêtre d'option
+* modifier le script de nettoyage des tables pour prendre en compte le dictionnaire des capteurs et les tables de test
 
 ### To fix list: ###
 
