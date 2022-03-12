@@ -291,24 +291,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
         if platform.system() == 'Linux':
 
-            for _, ddict in self.sensor_dict['DS18B20']:
+            for _, ddict in self.sensor_dict['DS18B20'].items():
                 self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
 
-            for _, ddict in self.sensor_dict['BME280']:
+            for _, ddict in self.sensor_dict['BME280'].items():
                 self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict))
 
-            self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
+            if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
+                    self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
+                    self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
+                self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
+                self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
+                self.collect_mqtt_data_thread.start()
         else:
             self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
             self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
             self.collect_mqtt_data_thread = MqttToDbTestThread(self.db_dict)
+            self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
+            self.collect_mqtt_data_thread.start()
 
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.error.connect(self.log_thread_error)
             thread.start()
-
-        self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
-        self.collect_mqtt_data_thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')

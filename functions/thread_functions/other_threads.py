@@ -6,6 +6,7 @@ import datetime
 import psycopg2
 import requests
 import platform
+import subprocess
 from distutils.version import LooseVersion
 from numpy import min, max, linspace
 from PyQt5 import QtCore

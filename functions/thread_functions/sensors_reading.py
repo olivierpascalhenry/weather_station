@@ -38,7 +38,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
             logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - run - no sensor detected')
 
     def add_data_to_db(self, dt, tp):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db')
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db _ dt: {dt} ; tp: {tp}')
         try:
             self.cursor.execute('insert into "DS18B20" (date_time, temperature) values (%s, %s)', (dt, tp))
             self.connector.commit()
@@ -283,21 +283,15 @@ class MqttToDbThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
-        try:
-            self.mqtt_client = mqtt.Client('weather_station_thread')
-            self.mqtt_client.on_message = self.parse_data
-            self.mqtt_client.on_connect = self.on_connect
-            self.mqtt_client.on_disconnect = self.on_disconnect
-            self.mqtt_client.username_pw_set(username=self.mqtt_dict['username'], password=self.mqtt_dict['password'])
-            self.mqtt_client.connect(self.mqtt_dict['address'])
-            topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
-            self.mqtt_client.subscribe(topics_list)
-            self.mqtt_client.loop_forever()
-        except Exception:
-            logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
-                              'when setting mqtt client')
-            date_time = datetime.datetime.now()
-            self.add_data_to_db(date_time, None, None, None, None, None, None)
+        self.mqtt_client = mqtt.Client('weather_station_thread')
+        self.mqtt_client.on_message = self.parse_data
+        self.mqtt_client.on_connect = self.on_connect
+        self.mqtt_client.on_disconnect = self.on_disconnect
+        self.mqtt_client.username_pw_set(username=self.mqtt_dict['username'], password=self.mqtt_dict['password'])
+        self.mqtt_client.connect(self.mqtt_dict['address'])
+        topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
+        self.mqtt_client.subscribe(topics_list)
+        self.mqtt_client.loop_forever()
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):
