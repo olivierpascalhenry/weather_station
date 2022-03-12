@@ -35,7 +35,7 @@ class CleaningThread(QtCore.QThread):
         while True:
             try:
                 time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
-                for table in ['BME280', 'DS18B20', 'AQARA_THP']:
+                for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
                     self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
                 self.connector.commit()
             except Exception:

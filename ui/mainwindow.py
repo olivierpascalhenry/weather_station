@@ -27,7 +27,9 @@ from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDeta
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
-                                                        MqttToDbThread, DBInDataThread, DBOutDataThread)
+                                                        MqttToDbThread, DBInDataThread, DBOutDataThread,
+                                                        DS18B20DataCollectingTestThread, MqttToDbTestThread,
+                                                        BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion)
@@ -167,7 +169,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
         if results[0] and results[1]:
             self.database_ok = True
-            self.launch_clean_thread()
+
+
+
+            # self.launch_clean_thread()
             self.collect_sensors_data()
             self.display_sensors_data()
         else:
@@ -286,13 +291,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
-        self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.db_dict, self.config_dict)
+        if platform.system() == 'Linux':
+            self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.db_dict, self.config_dict)
+            self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
+            self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
+        else:
+            self.collect_ds18b20_data_thread = DS18B20DataCollectingTestThread(self.db_dict, self.config_dict)
+            self.collect_bme180_data_thread = BME280DataCollectingTestThread(self.db_dict, self.config_dict)
+            self.collect_mqtt_data_thread = MqttToDbTestThread(self.db_dict, self.sensor_dict['MQTT'])
         self.collect_ds18b20_data_thread.error.connect(self.log_thread_error)
         self.collect_ds18b20_data_thread.start()
-        self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
         self.collect_bme180_data_thread.error.connect(self.log_thread_error)
         self.collect_bme180_data_thread.start()
-        self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
         self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
         self.collect_mqtt_data_thread.start()
 
