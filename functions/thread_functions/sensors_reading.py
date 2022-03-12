@@ -17,32 +17,25 @@ if platform.system() == 'Linux':
 class DS18B20DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict):
+    def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
-        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
-        self.sensor_file = pathlib.Path('/sys/bus/w1/devices/28-012059b3456d/w1_slave')
+        self.sensors_rate = int(sensor_dict['refresh'])
+        self.sensor_file = pathlib.Path(f'/sys/bus/w1/devices/{sensor_dict["id"]}/w1_slave')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - run')
-        if platform.system() == 'Linux':
-            if self.check_sensor():
-                while True:
-                    dtime = datetime.datetime.now().replace(microsecond=0)
-                    temp = self.collect_data()
-                    self.add_data_to_db(dtime, temp)
-                    time.sleep(self.sensors_rate)
-            else:
-                logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - run - no sensor detected')
-        else:
+        if self.check_sensor():
             while True:
                 dtime = datetime.datetime.now().replace(microsecond=0)
-                temp = self.collect_data_test()
+                temp = self.collect_data()
                 self.add_data_to_db(dtime, temp)
                 time.sleep(self.sensors_rate)
+        else:
+            logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - run - no sensor detected')
 
     def add_data_to_db(self, dt, tp):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db')
@@ -72,23 +65,12 @@ class DS18B20DataCollectingThread(QtCore.QThread):
             temp = None
         return temp
 
-    def collect_data_test(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data_test')
-        temp = self.collect_test_data(25., 5)
-        return temp
-
     def check_sensor(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - check_sensor')
         if self.sensor_file.exists():
             return True
         else:
             return False
-
-    @staticmethod
-    def collect_test_data(num, limit):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_test_data')
-        random.seed()
-        return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - stop')
@@ -99,10 +81,10 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 class DS18B20DataCollectingTestThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict):
+    def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingTestThread - __init__')
-        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
+        self.sensors_rate = 30
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -242,13 +224,13 @@ class BME280DataCollectingThread(QtCore.QThread):
 class BME280DataCollectingTestThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict):
+    def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - BME280DataCollectingTestThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
-        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
+        self.sensors_rate = 30
 
     def run(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - run')
@@ -386,7 +368,7 @@ class MqttToDbThread(QtCore.QThread):
 class MqttToDbTestThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, mqtt_dict):
+    def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - MqttToDbTestThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],

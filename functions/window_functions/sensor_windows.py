@@ -163,7 +163,6 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.table_ln.textChanged.connect(self.set_sensor_dict_info)
         self.store_ln.textChanged.connect(self.set_sensor_dict_info)
 
-
         self.parse_sensor_dict()
 
     def parse_sensor_dict(self):
@@ -186,7 +185,8 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget = QtWidgets.QListWidgetItem()
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
-                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': 30, 'store': 24}
+                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': 30, 'store': 24,
+                                                          'id': sensor_window.sensor}
 
     def delete_sensor(self):
         item = self.section_list.selectedItems()[0]
@@ -205,7 +205,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             self.refresh_bt.setEnabled(True)
             self.table_bt.setEnabled(True)
             self.store_bt.setEnabled(True)
-            self.id_ln.setText(sensor)
+            self.id_ln.setText(self.sensor_dict[sensor]['id'])
             try:
                 self.name_ln.setText(self.sensor_dict[sensor]['name'])
             except KeyError:

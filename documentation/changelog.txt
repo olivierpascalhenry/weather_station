@@ -11,6 +11,7 @@
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
+    * ds18b20 and bme280 threads has been modified to handle current 1wire based sensors and future bme280 sensors.
 
 
 ### March 5 2021, Release version 0.10.1 ###

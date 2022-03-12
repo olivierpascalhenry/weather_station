@@ -67,34 +67,6 @@ def create_logging_handlers(config_dict, filename, default_path):
         logging.error('gui - logging system - path from ini file not found, using default path')
 
 
-def check_postgresql_server():
-    logging.debug('gui - utils.py - check_postgresql_server')
-    installed, database, tables = False, False, False
-    if platform.system() == 'Linux':
-        res = subprocess.run(['which', 'psql'])
-        if res.returncode == 0:
-            installed = True
-        else:
-            logging.error('gui - utils.py - check_postgresql_server - which -s psql returned 1, postgresql is not '
-                          'installed')
-    else:
-        installed = True
-    if installed:
-        try:
-            connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                         database='weather_station_db', connect_timeout=1)
-            database = True
-            cursor = connector.cursor()
-            cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
-            if cursor.fetchall():
-                tables = True
-            cursor.close()
-            connector.close()
-        except psycopg2.OperationalError:
-            pass
-    return installed, database, tables
-
-
 def sync_graphic_folders(gui_path):
     logging.debug('gui - utils.py - sync_graphic_folders')
     if platform.system() == 'Linux':
