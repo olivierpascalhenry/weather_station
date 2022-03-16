@@ -168,9 +168,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
         if results[0] and results[1]:
             self.database_ok = True
-
-
-            # self.launch_clean_thread()
+            self.launch_clean_thread()
             self.collect_sensors_data()
             self.display_sensors_data()
         else:
@@ -283,7 +281,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        self.db_cleaning_thread = CleaningThread(self.db_dict)
+        self.db_cleaning_thread = CleaningThread(self.db_dict, self.sensor_dict)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
@@ -735,10 +733,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.stop()
-
         if self.collect_mqtt_data_thread is not None:
             self.collect_mqtt_data_thread.stop()
         if self.db_cleaning_thread is not None:

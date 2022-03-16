@@ -80,7 +80,8 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
             name = str(keyboard_window.num_line.text())
             if not self.sensor_list.findItems(name, QtCore.Qt.MatchFixedString):
                 self.sensor_list.addItem(name)
-                tmp_dict = {'temperature': '', 'humidity': '', 'pressure': '', 'battery': '', 'signal': ''}
+                tmp_dict = {'temperature': '', 'humidity': '', 'pressure': '', 'battery': '', 'signal': '',
+                            'store': '48'}
                 self.mqtt_dict['devices'][name] = tmp_dict
 
     def del_device(self):
@@ -187,7 +188,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget = QtWidgets.QListWidgetItem()
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
-                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': 30, 'store': 24,
+                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
                                                           'id': sensor_window.sensor}
 
     def delete_sensor(self):
@@ -213,7 +214,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
             try:
-                self.refresh_ln.setText(str(self.sensor_dict[sensor]['refresh']))
+                self.refresh_ln.setText(self.sensor_dict[sensor]['refresh'])
             except KeyError:
                 pass
             try:
@@ -221,7 +222,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
             try:
-                self.store_ln.setText(str(self.sensor_dict[sensor]['store']))
+                self.store_ln.setText(self.sensor_dict[sensor]['store'])
             except KeyError:
                 pass
         else:
@@ -333,7 +334,6 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         else:
             sensor_list.append('id-1-0x77')
 
-        # sensor_list = [item.name for item in path.glob('*') if item.name != 'w1_bus_master1']
         registered_list = [self.section_list.item(idx).text() for idx in range(self.section_list.count())]
         sensor_window = AvailableSensorsWindow(sensor_list, self.mainparent)
         sensor_window.exec_()
@@ -342,7 +342,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget = QtWidgets.QListWidgetItem()
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
-                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': 30, 'store': 24,
+                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
                                                           'id': sensor_window.sensor, 'bus': 1}
 
     def delete_sensor(self):
@@ -368,7 +368,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
             try:
-                self.refresh_ln.setText(str(self.sensor_dict[sensor]['refresh']))
+                self.refresh_ln.setText(self.sensor_dict[sensor]['refresh'])
             except KeyError:
                 pass
             try:
@@ -376,7 +376,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
             try:
-                self.store_ln.setText(str(self.sensor_dict[sensor]['store']))
+                self.store_ln.setText(self.sensor_dict[sensor]['store'])
             except KeyError:
                 pass
         else:
