@@ -1,12 +1,15 @@
 import logging
 import platform
 import pathlib
+
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from ui.Ui_1wiremanagerwindow import Ui_sensormanagerWindow
 from ui.Ui_townsearchwindow import Ui_townsearchWindow
 from functions.window_functions.other_windows import MyKeyboard, MyNumpad
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
+if platform.system() == 'Linux':
+    import pigpio
 
 
 class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
@@ -162,7 +165,6 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.refresh_ln.textChanged.connect(self.set_sensor_dict_info)
         self.table_ln.textChanged.connect(self.set_sensor_dict_info)
         self.store_ln.textChanged.connect(self.set_sensor_dict_info)
-
         self.parse_sensor_dict()
 
     def parse_sensor_dict(self):
@@ -274,6 +276,162 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
     def close_window(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - close_window')
         self.close()
+
+
+class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
+    def __init__(self, sensor_dict, parent=None):
+        logging.debug('gui - sensor_window.py - W1SensorManager - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
+        self.mainparent = parent
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        self.splitter.setSizes([270, 508])
+        self.cancel = True
+        self.sensor_dict = sensor_dict
+        self.section_list.itemClicked.connect(self.display_information)
+        self.section_list.itemClicked.connect(self.activate_delete_button)
+        self.cancel_button.clicked.connect(self.close_window)
+        self.ok_button.clicked.connect(self.save_sensor_dict)
+        self.name_bt.clicked.connect(self.display_keyboard)
+        self.table_bt.clicked.connect(self.display_keyboard)
+        self.refresh_bt.clicked.connect(self.display_numpad)
+        self.store_bt.clicked.connect(self.display_numpad)
+        self.add_sensor.clicked.connect(self.display_available_sensors)
+        self.del_sensor.clicked.connect(self.delete_sensor)
+        self.name_ln.textChanged.connect(self.set_sensor_dict_info)
+        self.refresh_ln.textChanged.connect(self.set_sensor_dict_info)
+        self.table_ln.textChanged.connect(self.set_sensor_dict_info)
+        self.store_ln.textChanged.connect(self.set_sensor_dict_info)
+        self.parse_sensor_dict()
+
+    def parse_sensor_dict(self):
+        for sensor, _ in self.sensor_dict.items():
+            widget = QtWidgets.QListWidgetItem()
+            widget.setText(sensor)
+            self.section_list.addItem(widget)
+
+    def display_available_sensors(self):
+        sensor_list = []
+        if platform.system() == 'Linux':
+            pi = pigpio.pi()
+            for device in range(128):
+                h = pi.i2c_open(1, device)
+                try:
+                    pi.i2c_read_byte(h)
+                    sensor_id = f'id-1-{hex(device)}'
+                    sensor_list.append(sensor_id)
+                except:
+                    pass
+                pi.i2c_close(h)
+
+            pi.stop
+        else:
+            sensor_list.append('id-1-0x77')
+
+        # sensor_list = [item.name for item in path.glob('*') if item.name != 'w1_bus_master1']
+        registered_list = [self.section_list.item(idx).text() for idx in range(self.section_list.count())]
+        sensor_window = AvailableSensorsWindow(sensor_list, self.mainparent)
+        sensor_window.exec_()
+        if not sensor_window.cancel:
+            if sensor_window.sensor not in registered_list:
+                widget = QtWidgets.QListWidgetItem()
+                widget.setText(sensor_window.sensor)
+                self.section_list.addItem(widget)
+                self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': 30, 'store': 24,
+                                                          'id': sensor_window.sensor, 'bus': 1}
+
+    def delete_sensor(self):
+        item = self.section_list.selectedItems()[0]
+        self.section_list.takeItem(self.section_list.row(item))
+        self.display_information()
+
+    def display_information(self):
+        items = self.section_list.selectedItems()
+        if items:
+            sensor = items[0].text()
+            self.name_ln.setEnabled(True)
+            self.refresh_ln.setEnabled(True)
+            self.table_ln.setEnabled(True)
+            self.store_ln.setEnabled(True)
+            self.name_bt.setEnabled(True)
+            self.refresh_bt.setEnabled(True)
+            self.table_bt.setEnabled(True)
+            self.store_bt.setEnabled(True)
+            self.id_ln.setText(self.sensor_dict[sensor]['id'])
+            try:
+                self.name_ln.setText(self.sensor_dict[sensor]['name'])
+            except KeyError:
+                pass
+            try:
+                self.refresh_ln.setText(str(self.sensor_dict[sensor]['refresh']))
+            except KeyError:
+                pass
+            try:
+                self.table_ln.setText(self.sensor_dict[sensor]['table'])
+            except KeyError:
+                pass
+            try:
+                self.store_ln.setText(str(self.sensor_dict[sensor]['store']))
+            except KeyError:
+                pass
+        else:
+            self.name_ln.setEnabled(False)
+            self.refresh_ln.setEnabled(False)
+            self.table_ln.setEnabled(False)
+            self.store_ln.setEnabled(False)
+            self.name_bt.setEnabled(False)
+            self.refresh_bt.setEnabled(False)
+            self.table_bt.setEnabled(False)
+            self.store_bt.setEnabled(False)
+            self.name_ln.clear()
+            self.refresh_ln.clear()
+            self.table_ln.clear()
+            self.store_ln.clear()
+            self.id_ln.clear()
+
+    def set_sensor_dict_info(self):
+        if self.section_list.selectedItems():
+            sensor = self.section_list.selectedItems()[0].text()
+            item = self.sender().objectName()[: -3]
+            self.sensor_dict[sensor][item] = str(self.sender().text())
+
+    def display_keyboard(self):
+        keyboard_window = MyKeyboard(self.mainparent)
+        keyboard_window.exec_()
+        if not keyboard_window.cancel:
+            if self.sender().objectName() == 'name_bt':
+                self.name_ln.setText(keyboard_window.num_line.text())
+            elif self.sender().objectName() == 'table_bt':
+                self.table_ln.setText(keyboard_window.num_line.text())
+
+    def display_numpad(self):
+        numpad_window = MyNumpad(self.mainparent)
+        numpad_window.exec_()
+        if not numpad_window.cancel:
+            if self.sender().objectName() == 'refresh_bt':
+                self.refresh_ln.setText(numpad_window.num_line.text())
+            elif self.sender().objectName() == 'store_bt':
+                self.store_ln.setText(numpad_window.num_line.text())
+
+    def activate_delete_button(self):
+        if self.section_list.selectedItems():
+            self.del_sensor.setEnabled(True)
+        else:
+            self.del_sensor.setEnabled(False)
+
+    def save_sensor_dict(self):
+        self.cancel = False
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - close_window')
+        self.close()
+
 
 
 class AvailableSensorsWindow(QtWidgets.QDialog, Ui_townsearchWindow):

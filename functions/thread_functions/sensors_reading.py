@@ -131,25 +131,14 @@ class BME280DataCollectingThread(QtCore.QThread):
         self.cal_params = None
         self.bus = None
         self.address = None
-        if config_dict.get('SYSTEM', 'place_altitude'):
-            self.place_altitude = int(config_dict.get('SYSTEM', 'place_altitude'))
-        else:
-            self.place_altitude = None
 
     def run(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - run')
-        if platform.system() == 'Linux':
-            if self.set_bme280_parameters():
-                while True:
-                    date_time = datetime.datetime.now().replace(microsecond=0)
-                    temp, hum, pres, pres_msl = self.collect_data()
-                    self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
-                    time.sleep(self.sensors_rate)
-        else:
+        if self.set_bme280_parameters():
             while True:
                 date_time = datetime.datetime.now().replace(microsecond=0)
-                temp, hum, pres, pres_msl = self.collect_data_test()
-                self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
+                temp, hum, pres = self.collect_data()
+                self.add_data_to_db(date_time, temp, hum, pres)
                 time.sleep(self.sensors_rate)
 
     def collect_data(self):
@@ -159,12 +148,6 @@ class BME280DataCollectingThread(QtCore.QThread):
             temp = data.temperature
             hum = data.humidity
             pres = data.pressure
-            if self.place_altitude is not None:
-                pres_msl = pres + ((pres * 9.80665 * self.place_altitude) /
-                                   (287.0531 * (273.15 + temp + (self.place_altitude / 400))))
-                pres_msl = round(pres_msl, 1)
-            else:
-                pres_msl = None
             pres = round(pres, 1)
             temp = round(temp, 1)
             hum = round(hum)
@@ -174,21 +157,13 @@ class BME280DataCollectingThread(QtCore.QThread):
             logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
                               'exception occurred when collecting bme280 data')
             temp, hum, pres, pres_msl = None, None, None, None
-        return temp, hum, pres, pres_msl
+        return temp, hum, pres
 
-    def collect_data_test(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_data_test')
-        temp = self.collect_test_data(20., 5)
-        hum = self.collect_test_data(65., 20)
-        pres = self.collect_test_data(1013., 15)
-        pres_msl = self.collect_test_data(1013., 15)
-        return temp, hum, pres, pres_msl
-
-    def add_data_to_db(self, dt, tp, hm, ps, ps_msl):
+    def add_data_to_db(self, dt, tp, hm, ps):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - add_data_to_db')
         try:
-            self.cursor.execute('insert into "BME280" (date_time, temperature, humidite, pression, pression_msl) '
-                                'values (%s, %s, %s, %s, %s)', (dt, tp, hm, ps, ps_msl))
+            self.cursor.execute('insert into "BME280" (date_time, temperature, humidite, pression) '
+                                'values (%s, %s, %s, %s)', (dt, tp, hm, ps))
             self.connector.commit()
         except Exception:
             logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '

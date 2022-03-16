@@ -9,7 +9,7 @@ from PyQt5 import QtCore, QtWidgets
 from ui.Ui_optionwindow import Ui_optionWindow
 from functions.utils import code_to_departement
 from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI
-from functions.window_functions.sensor_windows import MqttManager, W1SensorManager
+from functions.window_functions.sensor_windows import MqttManager, W1SensorManager, BME280SensorManager
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
@@ -82,6 +82,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
         self.ca_gc_bt_3.clicked.connect(self.show_mqtt_manager)
         self.ca_gc_bt_1.clicked.connect(self.show_1w_manager)
+        self.ca_gc_bt_2.clicked.connect(self.show_bme280_manager)
 
         self.ap_gb_2_ln_1.textChanged.connect(self.activate_search_button)
         self.ap_gb_rb_1.clicked.connect(self.activate_place_search)
@@ -187,6 +188,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         manager_window.exec_()
         if not manager_window.cancel:
             self.sensor_dict['DS18B20'] = manager_window.sensor_dict
+
+    def show_bme280_manager(self):
+        manager_window = BME280SensorManager(copy.deepcopy(self.sensor_dict['BME280']), self.mainparent)
+        manager_window.exec_()
+        if not manager_window.cancel:
+            self.sensor_dict['BME280'] = manager_window.sensor_dict
 
     def get_folder_path(self):
         logging.debug('gui - option_window.py - MyOptions - get_folder_path')
