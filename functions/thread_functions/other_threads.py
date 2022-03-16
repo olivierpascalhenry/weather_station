@@ -211,10 +211,11 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                                          database='weather_station_db', connect_timeout=1)
             cursor = connector.cursor()
             cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
-            for table in cursor.fetchall():
-                table_list = table[0]
+            db_table_list = [table[0] for table in cursor.fetchall()]
 
+            fl_table_list = []
             for device, _ in mqtt_dict.items():
+                fl_table_list.append(device)
                 if device not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{device}" (date_time timestamp without time zone NOT '
                              f'NULL, temperature real, humidity real, pressure real, battery real, signal real, '
@@ -224,6 +225,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                     connector.commit()
 
             for device, ddict in ds18_dict.items():
+                fl_table_list.append(ddict['table'])
                 if ddict['table'] not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
                              f'time zone NOT NULL, temperature real, humidity real, pressure real, battery real, '
@@ -232,8 +234,25 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                     cursor.execute(query)
                     connector.commit()
 
+            for device, ddict in bme280_dict.items():
+                fl_table_list.append(ddict['table'])
+                if ddict['table'] not in table_list:
+                    query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
+                             f'time zone NOT NULL, temperature real, humidity real, pressure real, '
+                             f'CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KEY (date_time)) TABLESPACE '
+                             f'pg_default; ALTER TABLE public."{ddict["table"]}" OWNER to weather_station;')
+                    cursor.execute(query)
+                    connector.commit()
+
+            for table in db_table_list:
+                if table not in fl_table_list and 'TEST' not in table:
+                    query = f'drop TABLE public."{table}";'
+                    cursor.execute(query)
+                    connector.commit()
+
             cursor.close()
             connector.close()
+
         self.results.emit([installed, database])
 
     def stop(self):

@@ -7,11 +7,13 @@
     * a json file dedicated to sensors has been added.
     * a window and a dictionary to manage mqtt based sensors have been added.
     * a window and a dictionary to manage 1wire based sensors have been added.
+    * a window and a dictionary to manage bme280 based sensors have been added.
     * specific threads have been added for testing purpose.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
-    * ds18b20 and bme280 threads has been modified to handle current 1wire based sensors and future bme280 sensors.
+    * ds18b20 and bme280 threads has been modified to handle current 1wire based sensors and bme280 sensors.
+    * tables are now automatically handled by the weather station.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
