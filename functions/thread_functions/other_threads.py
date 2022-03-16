@@ -20,9 +20,10 @@ token = '***REMOVED***'
 class CleaningThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict):
+    def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CleaningThread - __init__')
+        self.sensor_dict = sensor_dict
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -38,6 +39,21 @@ class CleaningThread(QtCore.QThread):
                 time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
                 for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
                     self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
+
+                for device, ddict in self.sensor_dict['DS18B20'].items():
+                    table = ddict['table']
+                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                    self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
+
+                for device, ddict in self.sensor_dict['BME280'].items():
+                    table = ddict['table']
+                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                    self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
+
+                for device, ddict in self.sensor_dict['MQTT']['devices'].items():
+                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                    self.cursor.execute(f'DELETE FROM "{device}" WHERE date_time <= %s', (time_limit,))
+
                 self.connector.commit()
             except Exception:
                 logging.exception('gui - other_threads.py - CleaningThread - clean_db - an exception '
@@ -291,16 +307,16 @@ class RequestPlotDataThread(QtCore.QThread):
             hours_list = mpl_hour_list()
             now = datetime.datetime.now()
             limit = now - datetime.timedelta(hours=24)
-            self.cursor.execute(f'select date_time, temperature from "BME280"  where '
+            self.cursor.execute(f'select date_time, temperature from "BME280_TEST"  where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, temperature from "AQARA_THP" where '
+            self.cursor.execute(f'select date_time, temperature from "AQARA_THP_TEST" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, humidite from "BME280" where '
+            self.cursor.execute(f'select date_time, humidite from "BME280_TEST" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, pressure from "AQARA_THP" where '
+            self.cursor.execute(f'select date_time, pressure from "AQARA_THP_TEST" where '
                                 f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
 
