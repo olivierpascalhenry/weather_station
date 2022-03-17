@@ -1,11 +1,7 @@
 ### To do list: ###
 
-* proposer une partie extérieur et intérieur, pour sélectionner les capteurs, dans les options (0.11)
-* avant de lancer les threads de récupération de données, vérifier la présence des capteurs (0.11)
-* modifier le script de nettoyage des tables pour prendre en compte le dictionnaire des capteurs et les tables de test
 * ajouter onglet ephemerides, avec phase de la lune, heure lever coucher soleil / lune, durée ensoleillement, durée nuit
 * ajouter un champ "durée de stockage" pour chaque capteur MQTT
-* prévoir un onglet dans les options pour gérer les series temporelles et les tables à requêter
 
 ### To fix list: ###
 

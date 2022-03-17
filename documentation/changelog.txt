@@ -9,7 +9,7 @@
     * a window and a dictionary to manage 1wire based sensors have been added.
     * a window and a dictionary to manage bme280 based sensors have been added.
     * specific threads have been added for testing purpose.
-    * options to control data feed for time series and MSL pressure have been introduced.
+    * options to control data feed for time series and the computation of MSL pressure have been introduced.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
@@ -19,6 +19,7 @@
     * option window can handle options to control MSL pressure and sensors for display and time series.
     * thread to display data can handle different tables based on options.
     * GUI is now handling different sensors for in and out.
+    * time series section can now handle different sensors for in and out temperature, pressure and humidity.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

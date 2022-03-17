@@ -1,4 +1,5 @@
 import time
+import numpy
 import socket
 import logging
 import pathlib
@@ -280,7 +281,8 @@ class RequestPlotDataThread(QtCore.QThread):
     success = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal()
 
-    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict):
+    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict,  config_dict,
+                 sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
         self.canvas_in = canvas_in
@@ -289,6 +291,8 @@ class RequestPlotDataThread(QtCore.QThread):
         self.plot_in_2 = plot_in_2
         self.plot_out_1 = plot_out_1
         self.plot_out_2 = plot_out_2
+        self.config_dict = config_dict
+        self.sensor_dict = sensor_dict
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -303,23 +307,19 @@ class RequestPlotDataThread(QtCore.QThread):
             color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
             ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
                             '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
-
             hours_list = mpl_hour_list()
             now = datetime.datetime.now()
             limit = now - datetime.timedelta(hours=24)
-            self.cursor.execute(f'select date_time, temperature from "BME280_TEST"  where '
-                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
-            temp_in_x, temp_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, temperature from "AQARA_THP_TEST" where '
-                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
-            temp_out_x, temp_out_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, humidite from "BME280_TEST" where '
-                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
-            hum_in_x, hum_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            self.cursor.execute(f'select date_time, pressure from "AQARA_THP_TEST" where '
-                                f"date_time>='{limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
-            pres_in_x, pres_in_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-
+            in_temp_table, in_hum_table, out_temp_table, out_pres_table = self.get_device_table()
+            temp_in_x, temp_in_y = self.query_table_for_data('temperature', in_temp_table, limit)
+            temp_out_x, temp_out_y = self.query_table_for_data('temperature', out_temp_table, limit)
+            hum_in_x, hum_in_y = self.query_table_for_data('humidity', in_hum_table, limit)
+            pres_out_x, pres_out_y = self.query_table_for_data('pressure', out_pres_table, limit)
+            if (self.config_dict.getboolean('TIMESERIES', 'msl_pressure') and temp_out_y is not None
+                    and self.config_dict.get('SYSTEM', 'place_altitude') and pres_out_y is not None):
+                alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
+                pres_out_y = pres_out_y + ((pres_out_y * 9.80665 * alt) / (287.0531 * (273.15 + temp_out_y + (alt /
+                                                                                                              400))))
             self.plot_in_1.clear()
             self.plot_in_2.clear()
             self.plot_out_1.clear()
@@ -328,63 +328,58 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_in_1.tick_params(axis='y', labelcolor=color_1)
             self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
             self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
+            self.plot_in_2.set_ylim(0, 100)
             self.plot_out_1.set_ylabel('Température (°C)', color=color_1)
             self.plot_out_1.tick_params(axis='y', labelcolor=color_1)
             self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
             self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-            self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
-
-            if min(temp_in_y) < 10:
-                y_min = min(temp_in_y) - 5
-            else:
-                y_min = 10
-            if max(temp_in_y) > 30:
-                y_max = max(temp_in_y) + 5
-            else:
-                y_max = 30
-
-            self.plot_in_1.set_ylim(y_min, y_max)
-            self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
-            self.plot_in_2.set_ylim(0, 100)
+            if temp_in_y is not None:
+                self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
+                if min(temp_in_y) < 10:
+                    y_min = min(temp_in_y) - 5
+                else:
+                    y_min = 10
+                if max(temp_in_y) > 30:
+                    y_max = max(temp_in_y) + 5
+                else:
+                    y_max = 30
+                self.plot_in_1.set_ylim(y_min, y_max)
+            if hum_in_y is not None:
+                self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
+            if temp_out_y is not None:
+                self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
+                if min(temp_out_y) < 0:
+                    y_min = min(temp_out_y) - 5
+                else:
+                    y_min = 0
+                if max(temp_out_y) > 30:
+                    y_max = max(temp_out_y) + 5
+                else:
+                    y_max = 30
+                self.plot_out_1.set_ylim(y_min, y_max)
+            if pres_out_y is not None:
+                self.plot_out_2.plot(pres_out_x, pres_out_y, color=color_3, linewidth=1.)
+                if min(pres_out_y) < 990:
+                    y_min = min(pres_out_y) - 10
+                else:
+                    y_min = 990
+                if max(pres_out_y) > 1030:
+                    y_max = max(pres_out_y) + 10
+                else:
+                    y_max = 1030
+                self.plot_out_2.set_ylim(y_min, y_max)
             self.plot_in_1.set_xlim(limit, now)
             self.plot_in_1.set_xticks(hours_list)
             self.plot_in_1.set_xticklabels(ticks_labels)
-            self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
-
-            if min(temp_out_y) < 0:
-                y_min = min(temp_out_y) - 5
-            else:
-                y_min = 0
-            if max(temp_out_y) > 30:
-                y_max = max(temp_out_y) + 5
-            else:
-                y_max = 30
-
-            self.plot_out_1.set_ylim(y_min, y_max)
-            self.plot_out_2.plot(pres_in_x, pres_in_y, color=color_3, linewidth=1.)
-
-            if min(pres_in_y) < 990:
-                y_min = min(pres_in_y) - 10
-            else:
-                y_min = 990
-            if max(pres_in_y) > 1030:
-                y_max = max(pres_in_y) + 10
-            else:
-                y_max = 1030
-
-            self.plot_out_2.set_ylim(y_min, y_max)
             self.plot_out_1.set_xlim(limit, now)
             self.plot_out_1.set_xticks(hours_list)
             self.plot_out_1.set_xticklabels(ticks_labels)
-
             self.plot_in_2.set_yticks(linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
                                                len(self.plot_in_1.get_yticks())))
             self.plot_out_2.set_yticks(linspace(self.plot_out_2.get_yticks()[0], self.plot_out_2.get_yticks()[-1],
                                                 len(self.plot_out_1.get_yticks())))
-
             self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
-
             self.canvas_in.draw()
             self.canvas_out.draw()
             self.connector.close()
@@ -394,6 +389,50 @@ class RequestPlotDataThread(QtCore.QThread):
                               'occurred when ploting data')
             self.connector.close()
             self.error.emit()
+
+    def get_device_table(self):
+        in_temp, in_hum, out_temp, out_pres = None, None, None, None
+        if self.config_dict.get('TIMESERIES', 'in_temperature'):
+            in_temp = self.get_table(self.config_dict.get('TIMESERIES', 'in_temperature'))
+        if self.config_dict.get('TIMESERIES', 'in_humidity'):
+            in_hum = self.get_table(self.config_dict.get('TIMESERIES', 'in_humidity'))
+        if self.config_dict.get('TIMESERIES', 'out_temperature'):
+            out_temp = self.get_table(self.config_dict.get('TIMESERIES', 'out_temperature'))
+        if self.config_dict.get('TIMESERIES', 'out_pressure'):
+            out_pres = self.get_table(self.config_dict.get('TIMESERIES', 'out_pressure'))
+        return in_temp, in_hum, out_temp, out_pres
+
+    def get_table(self, device_name):
+        table = None
+        if platform.system() == 'Windows':
+            table = device_name
+        else:
+            for _, ddict in self.sensor_dict['DS18B20'].items():
+                if device_name == ddict['name']:
+                    table = ddict['table']
+                    break
+            if table is None:
+                for _, ddict in self.sensor_dict['BME280'].items():
+                    if device_name == ddict['name']:
+                        table = ddict['table']
+                        break
+            if table is None:
+                for device, _ in self.sensor_dict['MQTT']['devices'].items():
+                    if device_name == device:
+                        table = device
+                        break
+        return table
+
+    def query_table_for_data(self, column, table, time_limit):
+        data_x, data_y = None, None
+        self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
+        column_list = [column[0] for column in self.cursor.fetchall()]
+        if column in column_list:
+            self.cursor.execute(f'select date_time, {column} from "{table}"  where '
+                                f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
+            data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            data_x, data_y = numpy.asarray(data_x), numpy.asarray(data_y)
+        return data_x, data_y
 
     def stop(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
