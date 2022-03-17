@@ -1,3 +1,5 @@
+import platform
+
 import copy
 import pickle
 import logging
@@ -107,6 +109,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def create_sensor_list(self):
         self.sensor_list.clear()
+
+        if platform.system() == 'Windows':
+            self.sensor_list.append('DS18B20_TEST')
+            self.sensor_list.append('BME280_TEST')
+            self.sensor_list.append('AQARA_THP_TEST')
+
         for _, ddict in self.sensor_dict['DS18B20'].items():
             self.sensor_list.append(ddict['name'])
         for _, ddict in self.sensor_dict['BME280'].items():

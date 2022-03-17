@@ -95,6 +95,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_humidity = None
         self.in_pressure = None
         self.in_pressure_msl = None
+        self.in_battery = None
+        self.in_signal = None
         self.out_temperature = None
         self.out_temperature_min_max = None
         self.out_humidity = None
@@ -145,9 +147,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
-
         self.load_place_data()
-
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -288,7 +288,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
         if platform.system() == 'Linux':
-
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
 
@@ -314,11 +313,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict)
+        self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict, self.sensor_dict)
         self.display_in_data_thread.db_data.connect(self.refresh_in_data)
         self.display_in_data_thread.error.connect(self.log_thread_error)
         self.display_in_data_thread.start()
-        self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict)
+        self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
         self.display_out_data_thread.db_data.connect(self.refresh_out_data)
         self.display_out_data_thread.error.connect(self.log_thread_error)
         self.display_out_data_thread.start()
@@ -367,7 +366,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
         self.in_pressure = data_dict['pres']
-        self.in_pressure_msl = data_dict['presmsl']
+        self.in_battery = data_dict['bat']
+        self.in_signal = data_dict['sig']
+        # self.in_pressure_msl = data_dict['presmsl']
         self.refresh_in_display()
 
     def refresh_out_data(self, data_dict):
@@ -376,9 +377,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
         self.out_pressure = data_dict['pres']
-        self.out_pressure_msl = data_dict['presmsl']
+        # self.out_pressure_msl = data_dict['presmsl']
         self.out_battery = data_dict['bat']
-        self.out_signal = data_dict['link']
+        self.out_signal = data_dict['sig']
         self.refresh_out_display()
 
     def refresh_in_display(self):
