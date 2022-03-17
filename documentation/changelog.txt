@@ -23,6 +23,7 @@
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
+    * the size of all splitter handlers has been fixed.
 
 ### March 5 2021, Release version 0.10.1 ###
 
