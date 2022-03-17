@@ -61,6 +61,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.cancel = True
         self.place_object = None
         self.api_key = None
+        self.sensor_list = []
         self.af_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ca_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
@@ -95,12 +96,53 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_rb_1.clicked.connect(self.change_place_info)
         self.ap_gb_rb_2.clicked.connect(self.change_place_info)
         self.ap_gb_bt_1.clicked.connect(self.set_openweather_key)
+        self.create_sensor_list()
+        self.parse_sensor_list_in_cb()
         self.read_config_dict()
         self.section_list.setCurrentRow(0)
 
     def display_options(self, idx):
         logging.debug(f'gui - option_window.py - MyOptions - display_options - idx: {idx}')
         self.stack_widget.setCurrentIndex(idx)
+
+    def create_sensor_list(self):
+        self.sensor_list.clear()
+        for _, ddict in self.sensor_dict['DS18B20'].items():
+            self.sensor_list.append(ddict['name'])
+        for _, ddict in self.sensor_dict['BME280'].items():
+            self.sensor_list.append(ddict['name'])
+        for device, _ in self.sensor_dict['MQTT']['devices'].items():
+            self.sensor_list.append(device)
+
+    def parse_sensor_list_in_cb(self):
+        cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
+                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
+        if self.sensor_list:
+            for cb in cb_list:
+                cb.clear()
+                cb.addItem('Choisir un capteur')
+                cb.addItems(sorted(self.sensor_list))
+        else:
+            for cb in cb_list:
+                cb.clear()
+                cb.addItem('Pas de capteur')
+
+    def update_cb_with_sensor_list(self):
+        self.create_sensor_list()
+        cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
+                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
+        if self.sensor_list:
+            for cb in cb_list:
+                device = cb.currentText()
+                cb.clear()
+                cb.addItem('Choisir un capteur')
+                cb.addItems(sorted(self.sensor_list))
+                if device in self.sensor_list:
+                    cb.setCurrentIndex(cb.findText(device))
+        else:
+            for cb in cb_list:
+                cb.clear()
+                cb.addItem('Pas de capteur')
 
     def read_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - read_config_dict')
@@ -116,7 +158,24 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_5_ln_1.setText(self.config_dict.get('API', 'request_rate'))
         self.sy_gb_ln_1.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
         self.ts_gb_ext_ck_1.setChecked(self.config_dict.getboolean('TIMESERIES', 'msl_pressure'))
-
+        if self.config_dict.get('DISPLAY', 'in_sensor') in self.sensor_list:
+            self.af_gb_int_cb_1.setCurrentIndex(self.af_gb_int_cb_1.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'in_sensor')))
+        if self.config_dict.get('DISPLAY', 'out_sensor') in self.sensor_list:
+            self.af_gb_ext_cb_1.setCurrentIndex(self.af_gb_ext_cb_1.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'out_sensor')))
+        if self.config_dict.get('TIMESERIES', 'in_temperature') in self.sensor_list:
+            self.ts_gb_int_cb_1.setCurrentIndex(self.ts_gb_int_cb_1.findText(self.config_dict.get('TIMESERIES',
+                                                                                                  'in_temperature')))
+        if self.config_dict.get('TIMESERIES', 'in_humidity') in self.sensor_list:
+            self.ts_gb_int_cb_2.setCurrentIndex(self.ts_gb_int_cb_2.findText(self.config_dict.get('TIMESERIES',
+                                                                                                  'in_humidity')))
+        if self.config_dict.get('TIMESERIES', 'out_temperature') in self.sensor_list:
+            self.ts_gb_ext_cb_1.setCurrentIndex(self.ts_gb_ext_cb_1.findText(self.config_dict.get('TIMESERIES',
+                                                                                                  'out_temperature')))
+        if self.config_dict.get('TIMESERIES', 'out_pressure') in self.sensor_list:
+            self.ts_gb_ext_cb_2.setCurrentIndex(self.ts_gb_ext_cb_2.findText(self.config_dict.get('TIMESERIES',
+                                                                                                  'out_pressure')))
         if self.config_dict.get('API', 'api_used') == 'meteofrance':
             api = 'meteofrance'
             self.ap_gb_rb_1.click()
@@ -125,13 +184,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ap_gb_rb_2.click()
             self.api_key = self.config_dict.get('API', 'api_key')
             self.ap_gb_lb_1.setText(self.config_dict.get('API', 'api_key'))
-
         if self.config_dict.getboolean('API', 'user_place'):
             f = open(self.user_path + '/place_object.dat', 'rb')
             self.place_object = pickle.load(f)
             f.close()
             self.ap_gb_2_ln_1.setText(self.place_object.name)
-
             if api == 'meteofrance':
                 self.ap_gb_2_lb_4.setText(str(self.place_object.postal_code))
                 self.ap_gb_2_lb_5.setText(code_to_departement()[self.place_object.admin2])
@@ -167,6 +224,30 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.config_dict.set('SENSOR', 'sensors_rate', self.ca_ln_1.text())
             self.config_dict.set('API', 'request_rate', self.ap_gb_5_ln_1.text())
             self.config_dict.set('SYSTEM', 'place_altitude', self.sy_gb_ln_1.text())
+            if self.ts_gb_int_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('TIMESERIES', 'in_temperature', str(self.ts_gb_int_cb_1.currentText()))
+            else:
+                self.config_dict.set('TIMESERIES', 'in_temperature', '')
+            if self.ts_gb_int_cb_2.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('TIMESERIES', 'in_humidity', str(self.ts_gb_int_cb_2.currentText()))
+            else:
+                self.config_dict.set('TIMESERIES', 'in_humidity', '')
+            if self.ts_gb_ext_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('TIMESERIES', 'out_temperature', str(self.ts_gb_ext_cb_1.currentText()))
+            else:
+                self.config_dict.set('TIMESERIES', 'out_temperature', '')
+            if self.ts_gb_ext_cb_2.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('TIMESERIES', 'out_pressure', str(self.ts_gb_ext_cb_2.currentText()))
+            else:
+                self.config_dict.set('TIMESERIES', 'out_pressure', '')
+            if self.af_gb_ext_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'out_sensor', str(self.af_gb_ext_cb_1.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'out_sensor', '')
+            if self.af_gb_int_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'in_sensor', str(self.af_gb_int_cb_1.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'in_sensor', '')
             if self.ap_gb_rb_1.isChecked():
                 self.config_dict.set('API', 'api_used', 'meteofrance')
                 self.config_dict.set('API', 'api_key', '')
@@ -180,7 +261,6 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.config_dict.set('API', 'user_place', 'True')
             else:
                 self.config_dict.set('API', 'user_place', 'False')
-
             self.cancel = False
             self.close_window()
 
@@ -189,18 +269,21 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         mqtt_manager.exec_()
         if not mqtt_manager.cancel:
             self.sensor_dict['MQTT'] = mqtt_manager.mqtt_dict
+            self.update_cb_with_sensor_list()
 
     def show_1w_manager(self):
         manager_window = W1SensorManager(copy.deepcopy(self.sensor_dict['DS18B20']), self.mainparent)
         manager_window.exec_()
         if not manager_window.cancel:
             self.sensor_dict['DS18B20'] = manager_window.sensor_dict
+            self.update_cb_with_sensor_list()
 
     def show_bme280_manager(self):
         manager_window = BME280SensorManager(copy.deepcopy(self.sensor_dict['BME280']), self.mainparent)
         manager_window.exec_()
         if not manager_window.cancel:
             self.sensor_dict['BME280'] = manager_window.sensor_dict
+            self.update_cb_with_sensor_list()
 
     def get_folder_path(self):
         logging.debug('gui - option_window.py - MyOptions - get_folder_path')
