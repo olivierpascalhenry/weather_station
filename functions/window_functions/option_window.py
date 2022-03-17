@@ -110,9 +110,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.lo_gb_ln_1.setCursorPosition(0)
         self.af_gb_int_ln_1.setText(self.config_dict.get('DISPLAY', 'in_display_rate'))
         self.af_gb_ext_ln_1.setText(self.config_dict.get('DISPLAY', 'out_display_rate'))
+        self.af_gb_int_ck_1.setChecked(self.config_dict.getboolean('DISPLAY', 'in_msl_pressure'))
+        self.af_gb_ext_ck_1.setChecked(self.config_dict.getboolean('DISPLAY', 'out_msl_pressure'))
         self.ca_ln_1.setText(self.config_dict.get('SENSOR', 'sensors_rate'))
         self.ap_gb_5_ln_1.setText(self.config_dict.get('API', 'request_rate'))
         self.sy_gb_ln_1.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
+        self.ts_gb_ext_ck_1.setChecked(self.config_dict.getboolean('TIMESERIES', 'msl_pressure'))
 
         if self.config_dict.get('API', 'api_used') == 'meteofrance':
             api = 'meteofrance'
@@ -154,11 +157,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             info_window = MyInfo(text)
             info_window.exec_()
         else:
-
             self.config_dict.set('LOG', 'level', str(self.lo_gb_cb_1.currentText()))
             self.config_dict.set('LOG', 'path', str(self.lo_gb_ln_1.text()))
             self.config_dict.set('DISPLAY', 'in_display_rate', self.af_gb_int_ln_1.text())
             self.config_dict.set('DISPLAY', 'out_display_rate', self.af_gb_ext_ln_1.text())
+            self.config_dict.set('DISPLAY', 'in_msl_pressure', str(self.af_gb_int_ck_1.isChecked()))
+            self.config_dict.set('DISPLAY', 'out_msl_pressure', str(self.af_gb_ext_ck_1.isChecked()))
+            self.config_dict.set('TIMESERIES', 'msl_pressure', str(self.ts_gb_ext_ck_1.isChecked()))
             self.config_dict.set('SENSOR', 'sensors_rate', self.ca_ln_1.text())
             self.config_dict.set('API', 'request_rate', self.ap_gb_5_ln_1.text())
             self.config_dict.set('SYSTEM', 'place_altitude', self.sy_gb_ln_1.text())
