@@ -423,30 +423,34 @@ class DBInDataThread(QtCore.QThread):
                             table = device
                             break
         if table is not None:
-            req_dict = {'temp': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
-                        'hum': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'pres': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'bat': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'sig': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1'}
-            log_error = True
+            req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                 'column': 'temperature'},
+                        'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
+                                        'column': 'temperature'},
+                        'hum': {'query': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'humidity'},
+                        'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                 'column': 'pressure'},
+                        'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'battery'},
+                        'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'signal'}}
+            self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
+            column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
                 for var, req in req_dict.items():
                     try:
-                        self.cursor.execute(req)
-                        data = self.cursor.fetchone()
-                        if var == 'temp_minmax':
-                            var_dict[var] = data
-                        else:
-                            var_dict[var] = data[0]
+                        if req['column'] in column_list:
+                            self.cursor.execute(req['query'])
+                            data = self.cursor.fetchone()
+                            if var == 'temp_minmax':
+                                var_dict[var] = data
+                            else:
+                                var_dict[var] = data[0]
                     except Exception:
-                        if log_error:
-                            logging.error(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} from {table}')
-                        else:
-                            pass
-                log_error = False
+                        logging.error(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
+                                      f'occurred when requesting {var} from {table}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
         else:
@@ -499,30 +503,34 @@ class DBOutDataThread(QtCore.QThread):
                             table = device
                             break
         if table is not None:
-            req_dict = {'temp': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
-                        'hum': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'pres': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'bat': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                        'sig': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1'}
-            log_error = True
+            req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                 'column': 'temperature'},
+                        'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
+                                        'column': 'temperature'},
+                        'hum': {'query': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'humidity'},
+                        'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                 'column': 'pressure'},
+                        'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'battery'},
+                        'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                'column': 'signal'}}
+            self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
+            column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
                 for var, req in req_dict.items():
                     try:
-                        self.cursor.execute(req)
-                        data = self.cursor.fetchone()
-                        if var == 'temp_minmax':
-                            var_dict[var] = data
-                        else:
-                            var_dict[var] = data[0]
+                        if req['column'] in column_list:
+                            self.cursor.execute(req['query'])
+                            data = self.cursor.fetchone()
+                            if var == 'temp_minmax':
+                                var_dict[var] = data
+                            else:
+                                var_dict[var] = data[0]
                     except Exception:
-                        if log_error:
-                            logging.error(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} from {table}')
-                        else:
-                            pass
-                    log_error = False
+                        logging.error(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
+                                      f'occurred when requesting {var} from {table}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
         else:

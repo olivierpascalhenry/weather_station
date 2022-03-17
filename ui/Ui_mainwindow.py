@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.vertical_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.vertical_line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.vertical_line.setObjectName("vertical_line")
-        self.gridLayout_21.addWidget(self.vertical_line, 3, 1, 2, 1)
+        self.gridLayout_21.addWidget(self.vertical_line, 3, 1, 2, 2)
         self.menu_scroll_area = QtWidgets.QScrollArea(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -504,7 +504,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.in_humidity_bt.sizePolicy().hasHeightForWidth())
         self.in_humidity_bt.setSizePolicy(sizePolicy)
         self.in_humidity_bt.setMinimumSize(QtCore.QSize(150, 45))
-        self.in_humidity_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.in_humidity_bt.setMaximumSize(QtCore.QSize(393, 45))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -535,6 +535,25 @@ class Ui_MainWindow(object):
         self.gridLayout_20 = QtWidgets.QGridLayout(self.in_lab_frame)
         self.gridLayout_20.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_20.setObjectName("gridLayout_20")
+        self.in_signal_bt = QtWidgets.QToolButton(self.in_lab_frame)
+        self.in_signal_bt.setEnabled(False)
+        self.in_signal_bt.setMinimumSize(QtCore.QSize(45, 45))
+        self.in_signal_bt.setMaximumSize(QtCore.QSize(45, 45))
+        self.in_signal_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.in_signal_bt.setText("")
+        self.in_signal_bt.setIconSize(QtCore.QSize(30, 30))
+        self.in_signal_bt.setObjectName("in_signal_bt")
+        self.gridLayout_20.addWidget(self.in_signal_bt, 0, 0, 1, 1)
         self.in_label_1 = QtWidgets.QLabel(self.in_lab_frame)
         self.in_label_1.setMinimumSize(QtCore.QSize(150, 25))
         self.in_label_1.setMaximumSize(QtCore.QSize(16777215, 50))
@@ -549,7 +568,26 @@ class Ui_MainWindow(object):
         self.in_label_1.setAlignment(QtCore.Qt.AlignCenter)
         self.in_label_1.setWordWrap(True)
         self.in_label_1.setObjectName("in_label_1")
-        self.gridLayout_20.addWidget(self.in_label_1, 0, 0, 1, 1)
+        self.gridLayout_20.addWidget(self.in_label_1, 0, 1, 1, 1)
+        self.in_battery_bt = QtWidgets.QToolButton(self.in_lab_frame)
+        self.in_battery_bt.setEnabled(False)
+        self.in_battery_bt.setMinimumSize(QtCore.QSize(45, 45))
+        self.in_battery_bt.setMaximumSize(QtCore.QSize(45, 45))
+        self.in_battery_bt.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.in_battery_bt.setText("")
+        self.in_battery_bt.setIconSize(QtCore.QSize(30, 30))
+        self.in_battery_bt.setObjectName("in_battery_bt")
+        self.gridLayout_20.addWidget(self.in_battery_bt, 0, 2, 1, 1)
         self.gridLayout_4.addWidget(self.in_lab_frame, 0, 0, 1, 1)
         self.in_label_3 = QtWidgets.QLabel(self.in_frame)
         self.in_label_3.setMinimumSize(QtCore.QSize(150, 50))
@@ -573,7 +611,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.in_temperature_label.sizePolicy().hasHeightForWidth())
         self.in_temperature_label.setSizePolicy(sizePolicy)
         self.in_temperature_label.setMinimumSize(QtCore.QSize(150, 50))
-        self.in_temperature_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.in_temperature_label.setMaximumSize(QtCore.QSize(393, 16777215))
         font = QtGui.QFont()
         font.setPointSize(68)
         font.setKerning(True)
@@ -608,7 +646,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.in_pressure_bt.sizePolicy().hasHeightForWidth())
         self.in_pressure_bt.setSizePolicy(sizePolicy)
         self.in_pressure_bt.setMinimumSize(QtCore.QSize(150, 45))
-        self.in_pressure_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.in_pressure_bt.setMaximumSize(QtCore.QSize(393, 45))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -689,7 +727,7 @@ class Ui_MainWindow(object):
         self.gridLayout_23.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_23.setObjectName("gridLayout_23")
         self.out_battery_bt = QtWidgets.QToolButton(self.out_lab_frame)
-        self.out_battery_bt.setEnabled(True)
+        self.out_battery_bt.setEnabled(False)
         self.out_battery_bt.setMinimumSize(QtCore.QSize(45, 45))
         self.out_battery_bt.setMaximumSize(QtCore.QSize(45, 45))
         self.out_battery_bt.setStyleSheet("QToolButton {\n"
@@ -704,10 +742,6 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.out_battery_bt.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon8.addPixmap(QtGui.QPixmap("icons/batterie_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.out_battery_bt.setIcon(icon8)
         self.out_battery_bt.setIconSize(QtCore.QSize(30, 30))
         self.out_battery_bt.setObjectName("out_battery_bt")
         self.gridLayout_23.addWidget(self.out_battery_bt, 0, 2, 1, 1)
@@ -727,7 +761,7 @@ class Ui_MainWindow(object):
         self.out_label_1.setObjectName("out_label_1")
         self.gridLayout_23.addWidget(self.out_label_1, 0, 1, 1, 1)
         self.out_signal_bt = QtWidgets.QToolButton(self.out_lab_frame)
-        self.out_signal_bt.setEnabled(True)
+        self.out_signal_bt.setEnabled(False)
         self.out_signal_bt.setMinimumSize(QtCore.QSize(45, 45))
         self.out_signal_bt.setMaximumSize(QtCore.QSize(45, 45))
         self.out_signal_bt.setStyleSheet("QToolButton {\n"
@@ -742,10 +776,6 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.out_signal_bt.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon9.addPixmap(QtGui.QPixmap("icons/signal_full_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.out_signal_bt.setIcon(icon9)
         self.out_signal_bt.setIconSize(QtCore.QSize(30, 30))
         self.out_signal_bt.setObjectName("out_signal_bt")
         self.gridLayout_23.addWidget(self.out_signal_bt, 0, 0, 1, 1)
@@ -757,7 +787,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.out_humidity_bt.sizePolicy().hasHeightForWidth())
         self.out_humidity_bt.setSizePolicy(sizePolicy)
         self.out_humidity_bt.setMinimumSize(QtCore.QSize(150, 45))
-        self.out_humidity_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.out_humidity_bt.setMaximumSize(QtCore.QSize(393, 45))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -782,7 +812,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.out_temperature_label.sizePolicy().hasHeightForWidth())
         self.out_temperature_label.setSizePolicy(sizePolicy)
         self.out_temperature_label.setMinimumSize(QtCore.QSize(150, 50))
-        self.out_temperature_label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.out_temperature_label.setMaximumSize(QtCore.QSize(393, 16777215))
         font = QtGui.QFont()
         font.setPointSize(68)
         font.setKerning(True)
@@ -802,7 +832,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.out_pressure_bt.sizePolicy().hasHeightForWidth())
         self.out_pressure_bt.setSizePolicy(sizePolicy)
         self.out_pressure_bt.setMinimumSize(QtCore.QSize(150, 45))
-        self.out_pressure_bt.setMaximumSize(QtCore.QSize(16777215, 45))
+        self.out_pressure_bt.setMaximumSize(QtCore.QSize(393, 45))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -950,9 +980,9 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.left_ts_button.setText("")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap("icons/left_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.left_ts_button.setIcon(icon10)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("icons/left_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.left_ts_button.setIcon(icon8)
         self.left_ts_button.setIconSize(QtCore.QSize(50, 50))
         self.left_ts_button.setArrowType(QtCore.Qt.NoArrow)
         self.left_ts_button.setObjectName("left_ts_button")
@@ -974,10 +1004,10 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.ts_page_marker_1.setText("")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon11.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        self.ts_page_marker_1.setIcon(icon11)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon9.addPixmap(QtGui.QPixmap("icons/filled_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        self.ts_page_marker_1.setIcon(icon9)
         self.ts_page_marker_1.setObjectName("ts_page_marker_1")
         self.horizontalLayout_2.addWidget(self.ts_page_marker_1)
         self.ts_page_marker_2 = QtWidgets.QToolButton(self.page_2)
@@ -995,11 +1025,11 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.ts_page_marker_2.setText("")
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon12.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
-        icon12.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
-        self.ts_page_marker_2.setIcon(icon12)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon10.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
+        icon10.addPixmap(QtGui.QPixmap("icons/empty_circle_icon.svg"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
+        self.ts_page_marker_2.setIcon(icon10)
         self.ts_page_marker_2.setObjectName("ts_page_marker_2")
         self.horizontalLayout_2.addWidget(self.ts_page_marker_2)
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -1018,9 +1048,9 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.right_ts_button.setText("")
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap("icons/right_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.right_ts_button.setIcon(icon13)
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap("icons/right_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.right_ts_button.setIcon(icon11)
         self.right_ts_button.setIconSize(QtCore.QSize(50, 50))
         self.right_ts_button.setArrowType(QtCore.Qt.NoArrow)
         self.right_ts_button.setObjectName("right_ts_button")
@@ -1157,7 +1187,7 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.left_fc_button.setText("")
-        self.left_fc_button.setIcon(icon10)
+        self.left_fc_button.setIcon(icon8)
         self.left_fc_button.setIconSize(QtCore.QSize(50, 50))
         self.left_fc_button.setArrowType(QtCore.Qt.NoArrow)
         self.left_fc_button.setObjectName("left_fc_button")
@@ -1179,7 +1209,7 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.fc_page_marker_1.setText("")
-        self.fc_page_marker_1.setIcon(icon11)
+        self.fc_page_marker_1.setIcon(icon9)
         self.fc_page_marker_1.setObjectName("fc_page_marker_1")
         self.horizontalLayout_3.addWidget(self.fc_page_marker_1)
         self.fc_page_marker_2 = QtWidgets.QToolButton(self.page_3)
@@ -1197,7 +1227,7 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.fc_page_marker_2.setText("")
-        self.fc_page_marker_2.setIcon(icon12)
+        self.fc_page_marker_2.setIcon(icon10)
         self.fc_page_marker_2.setObjectName("fc_page_marker_2")
         self.horizontalLayout_3.addWidget(self.fc_page_marker_2)
         spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -1216,7 +1246,7 @@ class Ui_MainWindow(object):
 "    border: none;\n"
 "}")
         self.right_fc_button.setText("")
-        self.right_fc_button.setIcon(icon13)
+        self.right_fc_button.setIcon(icon11)
         self.right_fc_button.setIconSize(QtCore.QSize(50, 50))
         self.right_fc_button.setArrowType(QtCore.Qt.NoArrow)
         self.right_fc_button.setObjectName("right_fc_button")
@@ -1299,6 +1329,6 @@ class Ui_MainWindow(object):
         self.out_label_1.setText(_translate("MainWindow", "Extérieur"))
         self.out_humidity_bt.setText(_translate("MainWindow", "Humidité : XXX %"))
         self.out_temperature_label.setText(_translate("MainWindow", "XX° C"))
-        self.out_pressure_bt.setText(_translate("MainWindow", "Pression MSL: XXXX hPa"))
+        self.out_pressure_bt.setText(_translate("MainWindow", "Pression : XXXX hPa"))
         self.in_label_4.setText(_translate("MainWindow", "Intérieur"))
         self.out_label_5.setText(_translate("MainWindow", "Extérieur"))
