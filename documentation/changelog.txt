@@ -16,6 +16,7 @@
     * ds18b20 and bme280 threads has been modified to handle current 1wire based sensors and bme280 sensors.
     * tables are now automatically handled by the weather station.
     * cleaning thread has been modified to handle new tables.
+    * option window can handle options to control MSL pressure.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
