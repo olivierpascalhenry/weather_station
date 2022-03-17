@@ -18,6 +18,7 @@
     * cleaning thread has been modified to handle new tables.
     * option window can handle options to control MSL pressure and sensors for display and time series.
     * thread to display data can handle different tables based on options.
+    * GUI is now handling different sensors for in and out.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

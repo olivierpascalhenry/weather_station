@@ -131,6 +131,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.out_battery_bt.clicked.connect(self.show_bat_link_details)
         self.out_signal_bt.clicked.connect(self.show_bat_link_details)
+        self.in_battery_bt.clicked.connect(self.show_bat_link_details)
+        self.in_signal_bt.clicked.connect(self.show_bat_link_details)
         self.in_pressure_bt.clicked.connect(self.show_pressure_details)
         self.out_pressure_bt.clicked.connect(self.show_pressure_details)
         self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
@@ -368,7 +370,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_pressure = data_dict['pres']
         self.in_battery = data_dict['bat']
         self.in_signal = data_dict['sig']
-        # self.in_pressure_msl = data_dict['presmsl']
+        if (self.config_dict.getboolean('DISPLAY', 'in_msl_pressure') and data_dict['temp'] is not None
+                and self.config_dict.get('SYSTEM', 'place_altitude') and data_dict['pres'] is not None):
+            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
+            self.in_pressure_msl = data_dict['pres'] + ((data_dict['pres'] * 9.80665 * alt) /
+                                                        (287.0531 * (273.15 + data_dict['temp'] + (alt / 400))))
+        else:
+            self.in_pressure_msl = None
         self.refresh_in_display()
 
     def refresh_out_data(self, data_dict):
@@ -377,9 +385,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
         self.out_pressure = data_dict['pres']
-        # self.out_pressure_msl = data_dict['presmsl']
         self.out_battery = data_dict['bat']
         self.out_signal = data_dict['sig']
+        if (self.config_dict.getboolean('DISPLAY', 'out_msl_pressure') and data_dict['temp'] is not None
+                and self.config_dict.get('SYSTEM', 'place_altitude') and data_dict['pres'] is not None):
+            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
+            self.out_pressure_msl = data_dict['pres'] + ((data_dict['pres'] * 9.80665 * alt) /
+                                                         (287.0531 * (273.15 + data_dict['temp'] + (alt / 400))))
+        else:
+            self.out_pressure_msl = None
         self.refresh_out_display()
 
     def refresh_in_display(self):
@@ -388,62 +402,97 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.in_temperature_label.setText(f'{self.in_temperature} °C')
         else:
             self.in_temperature_label.setText('No data')
-
         if self.in_temperature_min_max[0] is not None:
             self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
         else:
             self.in_label_3.setText('No data / No data')
-
         if self.in_humidity is not None:
+            self.in_humidity_bt.setEnabled(True)
             self.in_humidity_bt.setText(f'Humidité : {round(self.in_humidity)} %')
         else:
-            self.in_humidity_bt.setText('Humidité : No data')
-
+            self.in_humidity_bt.setEnabled(False)
+            self.in_humidity_bt.setText('')
         if self.in_pressure is not None:
-            self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
+            self.in_pressure_bt.setEnabled(True)
+            if self.in_pressure_msl is not None:
+                self.in_pressure_bt.setText(f'Pression SL : {round(self.in_pressure_msl)} hPa')
+            else:
+                self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
         else:
-            self.in_pressure_bt.setText('Pression : No data')
+            self.in_pressure_bt.setEnabled(False)
+            self.in_pressure_bt.setText('')
+
+        if self.in_battery is not None:
+            self.in_battery_bt.setEnabled(True)
+            icon = 'batterie_0-5_icon.svg'
+            bat_list = sorted(list(battery_value_icon_dict().keys()))
+            for i, val in enumerate(bat_list[: -1]):
+                if bat_list[i] <= self.in_battery < bat_list[i + 1]:
+                    icon = battery_value_icon_dict()[val]
+        else:
+            self.in_battery_bt.setEnabled(False)
+            icon = 'none_icon.png'
+        self.in_battery_bt.setIcon(icon_creation_function(icon))
+
+        if self.in_signal is not None:
+            self.in_signal_bt.setEnabled(True)
+            icon = 'signal_0-5_icon.svg'
+            link_list = sorted(list(link_value_icon_dict().keys()))
+            for i, val in enumerate(link_list[: -1]):
+                if link_list[i] <= self.in_signal < link_list[i + 1]:
+                    icon = link_value_icon_dict()[val]
+        else:
+            self.in_signal_bt.setEnabled(False)
+            icon = 'none_icon.png'
+        self.in_signal_bt.setIcon(icon_creation_function(icon))
 
     def refresh_out_display(self):
         logging.debug('gui - mainwindow.py - MainWindow - refresh_out_display')
-
         if self.out_temperature is not None:
             self.out_temperature_label.setText(f'{self.out_temperature} °C')
         else:
             self.out_temperature_label.setText('No data')
-
         if self.out_temperature_min_max[0] is not None:
             self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
         else:
             self.out_label_3.setText('No data / No data')
-
         if self.out_humidity is not None:
+            self.out_humidity_bt.setEnabled(True)
             self.out_humidity_bt.setText(f'Humidité : {round(self.out_humidity)} %')
         else:
-            self.out_humidity_bt.setText('Humidité : No data')
-
-        self.out_pressure_bt.setText('Pression : No data')
-        if self.out_pressure is not None and self.out_temperature is not None:
-            if self.config_dict.get('SYSTEM', 'place_altitude'):
-                place_altitude = int(self.config_dict.get('SYSTEM', 'place_altitude'))
-                pres_msl = self.out_pressure + ((self.out_pressure * 9.80665 * place_altitude) /
-                                                (287.0531 * (273.15 + self.out_temperature + (place_altitude / 400))))
-                self.out_pressure_bt.setText(f'Pression : {round(pres_msl)} hPa')
-
-        icon = 'batterie_0-5_icon.svg'
+            self.out_humidity_bt.setEnabled(False)
+            self.out_humidity_bt.setText('')
+        if self.out_pressure is not None:
+            self.out_pressure_bt.setEnabled(True)
+            if self.out_pressure_msl is not None:
+                self.out_pressure_bt.setText(f'Pression SL : {round(self.out_pressure_msl)} hPa')
+            else:
+                self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure)} hPa')
+        else:
+            self.out_pressure_bt.setEnabled(False)
+            self.out_pressure_bt.setText('')
         if self.out_battery is not None:
+            self.out_battery_bt.setEnabled(True)
+            icon = 'batterie_0-5_icon.svg'
             bat_list = sorted(list(battery_value_icon_dict().keys()))
             for i, val in enumerate(bat_list[: -1]):
                 if bat_list[i] <= self.out_battery < bat_list[i + 1]:
                     icon = battery_value_icon_dict()[val]
+        else:
+            self.out_battery_bt.setEnabled(False)
+            icon = 'none_icon.png'
         self.out_battery_bt.setIcon(icon_creation_function(icon))
 
-        icon = 'signal_0-5_icon.svg'
         if self.out_signal is not None:
+            self.out_signal_bt.setEnabled(True)
+            icon = 'signal_0-5_icon.svg'
             link_list = sorted(list(link_value_icon_dict().keys()))
             for i, val in enumerate(link_list[: -1]):
                 if link_list[i] <= self.out_signal < link_list[i + 1]:
                     icon = link_value_icon_dict()[val]
+        else:
+            self.out_signal_bt.setEnabled(False)
+            icon = 'none_icon.png'
         self.out_signal_bt.setIcon(icon_creation_function(icon))
 
     def plot_time_series_start(self):
@@ -612,7 +661,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def show_bat_link_details(self):
         logging.debug('gui - mainwindow.py - MainWindow - show_bat_link_details')
-        bat_link = MyBatLink(self.out_battery, self.out_signal, self)
+        if 'in' in self.sender().objectName():
+            bat, sig = self.in_battery, self.in_signal
+        else:
+            bat, sig = self.out_battery, self.out_signal
+        bat_link = MyBatLink(bat, sig, self)
         bat_link.exec_()
 
     def show_pressure_details(self):
