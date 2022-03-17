@@ -28,9 +28,8 @@ class Ui_optionWindow(object):
 "    background-color: rgb(230,230,230);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
-        self.gridLayout_24 = QtWidgets.QGridLayout(optionWindow)
-        self.gridLayout_24.setContentsMargins(-1, -1, 1, -1)
-        self.gridLayout_24.setObjectName("gridLayout_24")
+        self.gridLayout_28 = QtWidgets.QGridLayout(optionWindow)
+        self.gridLayout_28.setObjectName("gridLayout_28")
         self.splitter = QtWidgets.QSplitter(optionWindow)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
@@ -299,7 +298,7 @@ class Ui_optionWindow(object):
         self.scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_1.setObjectName("scroll_area_1")
         self.scrollAreaWidgetContents_1 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 628, 380))
+        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 600, 437))
         self.scrollAreaWidgetContents_1.setObjectName("scrollAreaWidgetContents_1")
         self.gridLayout_15 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_1)
         self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
@@ -499,6 +498,48 @@ class Ui_optionWindow(object):
         self.horizontalLayout_4.addItem(spacerItem)
         self.gridLayout.addLayout(self.horizontalLayout_4, 1, 1, 1, 1)
         self.gridLayout_11.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.af_gb_int_ck_1 = QtWidgets.QCheckBox(self.af_gb_int)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.af_gb_int_ck_1.setFont(font)
+        self.af_gb_int_ck_1.setStyleSheet("QCheckBox {\n"
+"    spacing: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}")
+        self.af_gb_int_ck_1.setObjectName("af_gb_int_ck_1")
+        self.gridLayout_11.addWidget(self.af_gb_int_ck_1, 1, 0, 1, 1)
         self.af_vl.addWidget(self.af_gb_int)
         self.af_gb_ext = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_1)
         font = QtGui.QFont()
@@ -691,6 +732,48 @@ class Ui_optionWindow(object):
         self.horizontalLayout_5.addItem(spacerItem1)
         self.gridLayout_14.addLayout(self.horizontalLayout_5, 1, 1, 1, 1)
         self.gridLayout_13.addLayout(self.gridLayout_14, 0, 0, 1, 1)
+        self.af_gb_ext_ck_1 = QtWidgets.QCheckBox(self.af_gb_ext)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.af_gb_ext_ck_1.setFont(font)
+        self.af_gb_ext_ck_1.setStyleSheet("QCheckBox {\n"
+"    spacing: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}")
+        self.af_gb_ext_ck_1.setObjectName("af_gb_ext_ck_1")
+        self.gridLayout_13.addWidget(self.af_gb_ext_ck_1, 1, 0, 1, 1)
         self.af_vl.addWidget(self.af_gb_ext)
         self.gridLayout_15.addLayout(self.af_vl, 0, 0, 1, 1)
         self.scroll_area_1.setWidget(self.scrollAreaWidgetContents_1)
@@ -874,7 +957,7 @@ class Ui_optionWindow(object):
         self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_2.setObjectName("scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 390, 291))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 621, 380))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -1106,384 +1189,10 @@ class Ui_optionWindow(object):
         self.stack_widget.addWidget(self.page_2)
         self.page_3 = QtWidgets.QWidget()
         self.page_3.setObjectName("page_3")
-        self.gridLayout_5 = QtWidgets.QGridLayout(self.page_3)
-        self.gridLayout_5.setContentsMargins(10, 0, 0, 0)
-        self.gridLayout_5.setObjectName("gridLayout_5")
-        self.scroll_area_3 = QtWidgets.QScrollArea(self.page_3)
-        self.scroll_area_3.setStyleSheet("QScrollArea { background: transparent; }\n"
-"\n"
-"QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border-left: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"  border-top-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"border-bottom-left-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
-        self.scroll_area_3.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scroll_area_3.setWidgetResizable(True)
-        self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.scroll_area_3.setObjectName("scroll_area_3")
-        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 354, 143))
-        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
-        self.gridLayout_6 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
-        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_6.setObjectName("gridLayout_6")
-        self.lo_vl = QtWidgets.QVBoxLayout()
-        self.lo_vl.setObjectName("lo_vl")
-        self.lo_gb_1 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_3)
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.lo_gb_1.setFont(font)
-        self.lo_gb_1.setStyleSheet("QGroupBox{\n"
-"    border: 1px solid grey;\n"
-"    margin-top: 1.0em;\n"
-"    margin-right: 8px;\n"
-"    padding-top: 8px;\n"
-"}\n"
-"\n"
-"QGroupBox::title {\n"
-"    top: -17px;\n"
-"    left: 10px;\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.lo_gb_1.setObjectName("lo_gb_1")
-        self.gridLayout_17 = QtWidgets.QGridLayout(self.lo_gb_1)
-        self.gridLayout_17.setObjectName("gridLayout_17")
-        self.gridLayout_3 = QtWidgets.QGridLayout()
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.lo_gb_lb_1 = QtWidgets.QLabel(self.lo_gb_1)
-        self.lo_gb_lb_1.setMinimumSize(QtCore.QSize(0, 39))
-        self.lo_gb_lb_1.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.lo_gb_lb_1.setFont(font)
-        self.lo_gb_lb_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.lo_gb_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lo_gb_lb_1.setObjectName("lo_gb_lb_1")
-        self.gridLayout_3.addWidget(self.lo_gb_lb_1, 0, 0, 1, 1)
-        self.lo_gb_lb_2 = QtWidgets.QLabel(self.lo_gb_1)
-        self.lo_gb_lb_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.lo_gb_lb_2.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.lo_gb_lb_2.setFont(font)
-        self.lo_gb_lb_2.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.lo_gb_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.lo_gb_lb_2.setObjectName("lo_gb_lb_2")
-        self.gridLayout_3.addWidget(self.lo_gb_lb_2, 1, 0, 1, 1)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.lo_gb_ln_1 = QtWidgets.QLineEdit(self.lo_gb_1)
-        self.lo_gb_ln_1.setMinimumSize(QtCore.QSize(0, 40))
-        self.lo_gb_ln_1.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.lo_gb_ln_1.setFont(font)
-        self.lo_gb_ln_1.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.lo_gb_ln_1.setObjectName("lo_gb_ln_1")
-        self.horizontalLayout.addWidget(self.lo_gb_ln_1)
-        self.lo_gb_bt_1 = QtWidgets.QToolButton(self.lo_gb_1)
-        self.lo_gb_bt_1.setMinimumSize(QtCore.QSize(40, 40))
-        self.lo_gb_bt_1.setMaximumSize(QtCore.QSize(40, 40))
-        self.lo_gb_bt_1.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.lo_gb_bt_1.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.lo_gb_bt_1.setIcon(icon1)
-        self.lo_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
-        self.lo_gb_bt_1.setAutoRaise(False)
-        self.lo_gb_bt_1.setObjectName("lo_gb_bt_1")
-        self.horizontalLayout.addWidget(self.lo_gb_bt_1)
-        self.gridLayout_3.addLayout(self.horizontalLayout, 1, 1, 1, 1)
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.lo_gb_cb_1 = QtWidgets.QComboBox(self.lo_gb_1)
-        self.lo_gb_cb_1.setMinimumSize(QtCore.QSize(150, 40))
-        self.lo_gb_cb_1.setMaximumSize(QtCore.QSize(150, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setBold(False)
-        font.setWeight(50)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.lo_gb_cb_1.setFont(font)
-        self.lo_gb_cb_1.setStyleSheet("QComboBox {\n"
-"    border: 1px solid #acacac;\n"
-"    border-radius: 1px;\n"
-"    padding-left: 5px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QComboBox:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"    color: rgb(145,145,145);\n"
-"}\n"
-"\n"
-"QComboBox:hover {\n"
-"    border: 1px solid #7eb4ea;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
-"}\n"
-"\n"
-"QComboBox::drop-down {\n"
-"    subcontrol-origin: padding;\n"
-"    subcontrol-position: top right;\n"
-"    width: 27px;\n"
-"    border-left-width: 1px;\n"
-"    border-left-color: darkgray;\n"
-"    border-left-style: solid;\n"
-"    border-top-right-radius: 3px;\n"
-"    border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QComboBox::down-arrow {\n"
-"    image: url(icons/down_arrow_icon.svg); \n"
-"    width: 16px;\n"
-"    height: 16px\n"
-"}\n"
-"\n"
-"QComboBox::down-arrow:disabled {\n"
-"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
-"    width: 16px;\n"
-"    height: 16px\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView {\n"
-"    background: #f0f0f0;\n"
-"    border: 0px solid #f0f0f0;\n"
-"    outline: 0px;\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView::item:hover {\n"
-"    background-color: rgb(200,200,200);\n"
-"    color: rgb(45,45,45);\n"
-"    margin: 0px 0px 0px 0px;\n"
-"}\n"
-"\n"
-"QComboBox QAbstractItemView::item:selected {\n"
-"    background-color: rgb(200,200,200);\n"
-"    color: rgb(45,45,45);\n"
-"    margin: 0px 0px 0px 0px;\n"
-"}\n"
-"\n"
-"\n"
-"QComboBox QAbstractItemView::item {\n"
-"    margin: 3px 5px 3px 5px;\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.lo_gb_cb_1.setObjectName("lo_gb_cb_1")
-        self.lo_gb_cb_1.addItem("")
-        self.lo_gb_cb_1.addItem("")
-        self.lo_gb_cb_1.addItem("")
-        self.lo_gb_cb_1.addItem("")
-        self.lo_gb_cb_1.addItem("")
-        self.horizontalLayout_7.addWidget(self.lo_gb_cb_1)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem6)
-        self.gridLayout_3.addLayout(self.horizontalLayout_7, 0, 1, 1, 1)
-        self.gridLayout_17.addLayout(self.gridLayout_3, 0, 0, 1, 1)
-        self.lo_vl.addWidget(self.lo_gb_1)
-        self.gridLayout_6.addLayout(self.lo_vl, 0, 0, 1, 1)
-        self.scroll_area_3.setWidget(self.scrollAreaWidgetContents_3)
-        self.gridLayout_5.addWidget(self.scroll_area_3, 0, 0, 1, 1)
-        self.stack_widget.addWidget(self.page_3)
-        self.page_4 = QtWidgets.QWidget()
-        self.page_4.setObjectName("page_4")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_4)
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_3)
         self.gridLayout_9.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_9.setObjectName("gridLayout_9")
-        self.scroll_area_4 = QtWidgets.QScrollArea(self.page_4)
+        self.scroll_area_4 = QtWidgets.QScrollArea(self.page_3)
         self.scroll_area_4.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -1652,7 +1361,7 @@ class Ui_optionWindow(object):
         self.scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_4.setObjectName("scroll_area_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 598, 441))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 600, 441))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -1727,8 +1436,8 @@ class Ui_optionWindow(object):
         self.buttonGroup.setObjectName("buttonGroup")
         self.buttonGroup.addButton(self.ap_gb_rb_1)
         self.horizontalLayout_19.addWidget(self.ap_gb_rb_1)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem7)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_19.addItem(spacerItem6)
         self.gridLayout_21.addLayout(self.horizontalLayout_19, 0, 0, 1, 1)
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
@@ -1807,8 +1516,8 @@ class Ui_optionWindow(object):
         self.ap_gb_lb_1.setText("")
         self.ap_gb_lb_1.setObjectName("ap_gb_lb_1")
         self.horizontalLayout_18.addWidget(self.ap_gb_lb_1)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacerItem8)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacerItem7)
         self.gridLayout_21.addLayout(self.horizontalLayout_18, 1, 0, 1, 1)
         self.ap_vl.addWidget(self.ap_gb_1)
         self.ap_gb_2 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_4)
@@ -2101,13 +1810,697 @@ class Ui_optionWindow(object):
         self.ap_gb_3_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_3_bt_1.setObjectName("ap_gb_3_bt_1")
         self.horizontalLayout_12.addWidget(self.ap_gb_3_bt_1)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_12.addItem(spacerItem9)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem8)
         self.gridLayout_20.addLayout(self.horizontalLayout_12, 0, 0, 1, 1)
         self.ap_vl.addWidget(self.ap_gb_5)
         self.gridLayout_8.addLayout(self.ap_vl, 0, 0, 1, 1)
         self.scroll_area_4.setWidget(self.scrollAreaWidgetContents_4)
         self.gridLayout_9.addWidget(self.scroll_area_4, 0, 0, 1, 1)
+        self.stack_widget.addWidget(self.page_3)
+        self.page_4 = QtWidgets.QWidget()
+        self.page_4.setObjectName("page_4")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.page_4)
+        self.gridLayout_6.setContentsMargins(10, 0, 0, 0)
+        self.gridLayout_6.setObjectName("gridLayout_6")
+        self.scroll_area_3 = QtWidgets.QScrollArea(self.page_4)
+        self.scroll_area_3.setStyleSheet("QScrollArea { background: transparent;}\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
+"\n"
+"QScrollBar:vertical {\n"
+"  border-left: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  margin: 21px 0px 21px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  margin: 0px 21px 0px 21px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-height: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::handle:horizontal {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-width: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"  border-top: 0px solid rgb(240,240,240);\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: bottom;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid rgb(240,240,240);\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: top;\n"
+"  subcontrol-origin: margin;\n"
+"  border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"  image: url(icons/up_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical {\n"
+"  image: url(icons/down_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid rgb(240,240,240);\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: right;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid rgb(240,240,240);\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: left;\n"
+"  subcontrol-origin: margin;\n"
+"border-bottom-left-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal {\n"
+"  image: url(icons/left_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal {\n"
+"  image: url(icons/right_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}")
+        self.scroll_area_3.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll_area_3.setWidgetResizable(True)
+        self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scroll_area_3.setObjectName("scroll_area_3")
+        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 601, 400))
+        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
+        self.gridLayout_24 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
+        self.gridLayout_24.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_24.setObjectName("gridLayout_24")
+        self.st_vl = QtWidgets.QVBoxLayout()
+        self.st_vl.setObjectName("st_vl")
+        self.ts_gb_int = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_3)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        self.ts_gb_int.setFont(font)
+        self.ts_gb_int.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_int.setObjectName("ts_gb_int")
+        self.gridLayout_25 = QtWidgets.QGridLayout(self.ts_gb_int)
+        self.gridLayout_25.setObjectName("gridLayout_25")
+        self.gridLayout_5 = QtWidgets.QGridLayout()
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.ts_gb_int_lb_1 = QtWidgets.QLabel(self.ts_gb_int)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.ts_gb_int_lb_1.sizePolicy().hasHeightForWidth())
+        self.ts_gb_int_lb_1.setSizePolicy(sizePolicy)
+        self.ts_gb_int_lb_1.setMinimumSize(QtCore.QSize(0, 60))
+        self.ts_gb_int_lb_1.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_int_lb_1.setFont(font)
+        self.ts_gb_int_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_int_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ts_gb_int_lb_1.setWordWrap(True)
+        self.ts_gb_int_lb_1.setObjectName("ts_gb_int_lb_1")
+        self.gridLayout_5.addWidget(self.ts_gb_int_lb_1, 0, 0, 1, 1)
+        self.ts_gb_int_lb_2 = QtWidgets.QLabel(self.ts_gb_int)
+        self.ts_gb_int_lb_2.setMinimumSize(QtCore.QSize(0, 60))
+        self.ts_gb_int_lb_2.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_int_lb_2.setFont(font)
+        self.ts_gb_int_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_int_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ts_gb_int_lb_2.setWordWrap(True)
+        self.ts_gb_int_lb_2.setObjectName("ts_gb_int_lb_2")
+        self.gridLayout_5.addWidget(self.ts_gb_int_lb_2, 1, 0, 1, 1)
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.ts_gb_int_cb_1 = QtWidgets.QComboBox(self.ts_gb_int)
+        self.ts_gb_int_cb_1.setMinimumSize(QtCore.QSize(250, 40))
+        self.ts_gb_int_cb_1.setMaximumSize(QtCore.QSize(250, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_int_cb_1.setFont(font)
+        self.ts_gb_int_cb_1.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_int_cb_1.setObjectName("ts_gb_int_cb_1")
+        self.ts_gb_int_cb_1.addItem("")
+        self.horizontalLayout_9.addWidget(self.ts_gb_int_cb_1)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem9)
+        self.gridLayout_5.addLayout(self.horizontalLayout_9, 0, 1, 1, 1)
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.ts_gb_int_cb_2 = QtWidgets.QComboBox(self.ts_gb_int)
+        self.ts_gb_int_cb_2.setMinimumSize(QtCore.QSize(250, 40))
+        self.ts_gb_int_cb_2.setMaximumSize(QtCore.QSize(250, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_int_cb_2.setFont(font)
+        self.ts_gb_int_cb_2.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_int_cb_2.setObjectName("ts_gb_int_cb_2")
+        self.ts_gb_int_cb_2.addItem("")
+        self.horizontalLayout_14.addWidget(self.ts_gb_int_cb_2)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_14.addItem(spacerItem10)
+        self.gridLayout_5.addLayout(self.horizontalLayout_14, 1, 1, 1, 1)
+        self.gridLayout_25.addLayout(self.gridLayout_5, 0, 0, 1, 1)
+        self.st_vl.addWidget(self.ts_gb_int)
+        self.ts_gb_ext = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_3)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        self.ts_gb_ext.setFont(font)
+        self.ts_gb_ext.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_ext.setObjectName("ts_gb_ext")
+        self.gridLayout_26 = QtWidgets.QGridLayout(self.ts_gb_ext)
+        self.gridLayout_26.setObjectName("gridLayout_26")
+        self.gridLayout_27 = QtWidgets.QGridLayout()
+        self.gridLayout_27.setObjectName("gridLayout_27")
+        self.horizontalLayout_16 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_16.setObjectName("horizontalLayout_16")
+        self.ts_gb_ext_cb_2 = QtWidgets.QComboBox(self.ts_gb_ext)
+        self.ts_gb_ext_cb_2.setMinimumSize(QtCore.QSize(250, 40))
+        self.ts_gb_ext_cb_2.setMaximumSize(QtCore.QSize(250, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_ext_cb_2.setFont(font)
+        self.ts_gb_ext_cb_2.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_ext_cb_2.setObjectName("ts_gb_ext_cb_2")
+        self.ts_gb_ext_cb_2.addItem("")
+        self.horizontalLayout_16.addWidget(self.ts_gb_ext_cb_2)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_16.addItem(spacerItem11)
+        self.gridLayout_27.addLayout(self.horizontalLayout_16, 1, 1, 1, 1)
+        self.ts_gb_ext_lb_2 = QtWidgets.QLabel(self.ts_gb_ext)
+        self.ts_gb_ext_lb_2.setMinimumSize(QtCore.QSize(0, 60))
+        self.ts_gb_ext_lb_2.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_ext_lb_2.setFont(font)
+        self.ts_gb_ext_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_ext_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ts_gb_ext_lb_2.setWordWrap(True)
+        self.ts_gb_ext_lb_2.setObjectName("ts_gb_ext_lb_2")
+        self.gridLayout_27.addWidget(self.ts_gb_ext_lb_2, 1, 0, 1, 1)
+        self.ts_gb_ext_lb_1 = QtWidgets.QLabel(self.ts_gb_ext)
+        self.ts_gb_ext_lb_1.setMinimumSize(QtCore.QSize(0, 60))
+        self.ts_gb_ext_lb_1.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_ext_lb_1.setFont(font)
+        self.ts_gb_ext_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_ext_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ts_gb_ext_lb_1.setWordWrap(True)
+        self.ts_gb_ext_lb_1.setObjectName("ts_gb_ext_lb_1")
+        self.gridLayout_27.addWidget(self.ts_gb_ext_lb_1, 0, 0, 1, 1)
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        self.ts_gb_ext_cb_1 = QtWidgets.QComboBox(self.ts_gb_ext)
+        self.ts_gb_ext_cb_1.setMinimumSize(QtCore.QSize(250, 40))
+        self.ts_gb_ext_cb_1.setMaximumSize(QtCore.QSize(250, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_ext_cb_1.setFont(font)
+        self.ts_gb_ext_cb_1.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ts_gb_ext_cb_1.setObjectName("ts_gb_ext_cb_1")
+        self.ts_gb_ext_cb_1.addItem("")
+        self.horizontalLayout_15.addWidget(self.ts_gb_ext_cb_1)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_15.addItem(spacerItem12)
+        self.gridLayout_27.addLayout(self.horizontalLayout_15, 0, 1, 1, 1)
+        self.ts_gb_ext_ck_1 = QtWidgets.QCheckBox(self.ts_gb_ext)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ts_gb_ext_ck_1.setFont(font)
+        self.ts_gb_ext_ck_1.setStyleSheet("QCheckBox {\n"
+"    spacing: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}")
+        self.ts_gb_ext_ck_1.setObjectName("ts_gb_ext_ck_1")
+        self.gridLayout_27.addWidget(self.ts_gb_ext_ck_1, 2, 1, 1, 1)
+        self.gridLayout_26.addLayout(self.gridLayout_27, 0, 0, 1, 1)
+        self.st_vl.addWidget(self.ts_gb_ext)
+        self.gridLayout_24.addLayout(self.st_vl, 0, 0, 1, 1)
+        self.scroll_area_3.setWidget(self.scrollAreaWidgetContents_3)
+        self.gridLayout_6.addWidget(self.scroll_area_3, 0, 0, 1, 1)
         self.stack_widget.addWidget(self.page_4)
         self.page_5 = QtWidgets.QWidget()
         self.page_5.setObjectName("page_5")
@@ -2287,7 +2680,7 @@ class Ui_optionWindow(object):
         self.scroll_area_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_5.setObjectName("scroll_area_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 369, 102))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 573, 385))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -2386,17 +2779,202 @@ class Ui_optionWindow(object):
         self.sy_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.sy_gb_bt_1.setObjectName("sy_gb_bt_1")
         self.horizontalLayout_22.addWidget(self.sy_gb_bt_1)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_22.addItem(spacerItem10)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_22.addItem(spacerItem13)
         self.gridLayout_19.addLayout(self.horizontalLayout_22, 0, 0, 1, 1)
         self.sy_vl.addWidget(self.sy_gb_1)
+        self.lo_gb_1 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_5)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.lo_gb_1.setFont(font)
+        self.lo_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.lo_gb_1.setObjectName("lo_gb_1")
+        self.gridLayout_17 = QtWidgets.QGridLayout(self.lo_gb_1)
+        self.gridLayout_17.setObjectName("gridLayout_17")
+        self.gridLayout_3 = QtWidgets.QGridLayout()
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.lo_gb_lb_1 = QtWidgets.QLabel(self.lo_gb_1)
+        self.lo_gb_lb_1.setMinimumSize(QtCore.QSize(0, 39))
+        self.lo_gb_lb_1.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.lo_gb_lb_1.setFont(font)
+        self.lo_gb_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.lo_gb_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lo_gb_lb_1.setObjectName("lo_gb_lb_1")
+        self.gridLayout_3.addWidget(self.lo_gb_lb_1, 0, 0, 1, 1)
+        self.lo_gb_lb_2 = QtWidgets.QLabel(self.lo_gb_1)
+        self.lo_gb_lb_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.lo_gb_lb_2.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.lo_gb_lb_2.setFont(font)
+        self.lo_gb_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.lo_gb_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.lo_gb_lb_2.setObjectName("lo_gb_lb_2")
+        self.gridLayout_3.addWidget(self.lo_gb_lb_2, 1, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lo_gb_ln_1 = QtWidgets.QLineEdit(self.lo_gb_1)
+        self.lo_gb_ln_1.setMinimumSize(QtCore.QSize(0, 40))
+        self.lo_gb_ln_1.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.lo_gb_ln_1.setFont(font)
+        self.lo_gb_ln_1.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.lo_gb_ln_1.setObjectName("lo_gb_ln_1")
+        self.horizontalLayout.addWidget(self.lo_gb_ln_1)
+        self.lo_gb_bt_1 = QtWidgets.QToolButton(self.lo_gb_1)
+        self.lo_gb_bt_1.setMinimumSize(QtCore.QSize(40, 40))
+        self.lo_gb_bt_1.setMaximumSize(QtCore.QSize(40, 40))
+        self.lo_gb_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.lo_gb_bt_1.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/open_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.lo_gb_bt_1.setIcon(icon1)
+        self.lo_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
+        self.lo_gb_bt_1.setAutoRaise(False)
+        self.lo_gb_bt_1.setObjectName("lo_gb_bt_1")
+        self.horizontalLayout.addWidget(self.lo_gb_bt_1)
+        self.gridLayout_3.addLayout(self.horizontalLayout, 1, 1, 1, 1)
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.lo_gb_cb_1 = QtWidgets.QComboBox(self.lo_gb_1)
+        self.lo_gb_cb_1.setMinimumSize(QtCore.QSize(150, 40))
+        self.lo_gb_cb_1.setMaximumSize(QtCore.QSize(150, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.lo_gb_cb_1.setFont(font)
+        self.lo_gb_cb_1.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.lo_gb_cb_1.setObjectName("lo_gb_cb_1")
+        self.lo_gb_cb_1.addItem("")
+        self.lo_gb_cb_1.addItem("")
+        self.lo_gb_cb_1.addItem("")
+        self.lo_gb_cb_1.addItem("")
+        self.lo_gb_cb_1.addItem("")
+        self.horizontalLayout_7.addWidget(self.lo_gb_cb_1)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem14)
+        self.gridLayout_3.addLayout(self.horizontalLayout_7, 0, 1, 1, 1)
+        self.gridLayout_17.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+        self.sy_vl.addWidget(self.lo_gb_1)
         self.gridLayout_10.addLayout(self.sy_vl, 0, 0, 1, 1)
         self.scroll_area_5.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_12.addWidget(self.scroll_area_5, 0, 0, 1, 1)
         self.stack_widget.addWidget(self.page_5)
-        self.gridLayout_24.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem11 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_24.addItem(spacerItem11, 1, 0, 1, 1)
+        self.gridLayout_28.addWidget(self.splitter, 0, 0, 1, 1)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_28.addItem(spacerItem15, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ok_button = QtWidgets.QToolButton(optionWindow)
@@ -2432,8 +3010,8 @@ class Ui_optionWindow(object):
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem12 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem12)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem16)
         self.cancel_button = QtWidgets.QToolButton(optionWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -2467,9 +3045,9 @@ class Ui_optionWindow(object):
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem13 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem13)
-        self.gridLayout_24.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
+        spacerItem17 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem17)
+        self.gridLayout_28.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(optionWindow)
         self.stack_widget.setCurrentIndex(0)
@@ -2484,9 +3062,9 @@ class Ui_optionWindow(object):
         item = self.section_list.item(1)
         item.setText(_translate("optionWindow", "Capteurs"))
         item = self.section_list.item(2)
-        item.setText(_translate("optionWindow", "Log"))
-        item = self.section_list.item(3)
         item.setText(_translate("optionWindow", "API Météo"))
+        item = self.section_list.item(3)
+        item.setText(_translate("optionWindow", "Series temporelles"))
         item = self.section_list.item(4)
         item.setText(_translate("optionWindow", "Système"))
         self.section_list.setSortingEnabled(__sortingEnabled)
@@ -2495,25 +3073,19 @@ class Ui_optionWindow(object):
         self.af_gb_int_cb_1.setItemText(0, _translate("optionWindow", "Pas de capteur"))
         self.af_gb_int_lb_2.setText(_translate("optionWindow", "Rafraichissement :"))
         self.af_gb_int_lb_3.setText(_translate("optionWindow", "secondes"))
+        self.af_gb_int_ck_1.setText(_translate("optionWindow", "Pression au niveau de la mer ?"))
         self.af_gb_ext.setTitle(_translate("optionWindow", "Extérieur"))
         self.af_gb_ext_lb_1.setText(_translate("optionWindow", "Capteur :"))
         self.af_gb_ext_cb_1.setItemText(0, _translate("optionWindow", "Pas de capteur"))
         self.af_gb_ext_lb_2.setText(_translate("optionWindow", "Rafraichissement :"))
         self.af_gb_ext_lb_3.setText(_translate("optionWindow", "secondes"))
+        self.af_gb_ext_ck_1.setText(_translate("optionWindow", "Pression au niveau de la mer ?"))
         self.ca_lb_1.setText(_translate("optionWindow", "Rafraichissement :"))
         self.ca_lb_2.setText(_translate("optionWindow", "secondes"))
         self.ca_gb_1.setTitle(_translate("optionWindow", "Gestion des capteurs"))
         self.ca_gc_lb_1.setText(_translate("optionWindow", "Gestion DS18B20 :"))
         self.ca_gc_lb_2.setText(_translate("optionWindow", "Gestion BME280 :"))
         self.ca_gc_lb_3.setText(_translate("optionWindow", "Gestion MQTT :"))
-        self.lo_gb_1.setTitle(_translate("optionWindow", "Options de log"))
-        self.lo_gb_lb_1.setText(_translate("optionWindow", "Niveau de log :"))
-        self.lo_gb_lb_2.setText(_translate("optionWindow", "Chemin du log :"))
-        self.lo_gb_cb_1.setItemText(0, _translate("optionWindow", "DEBUG"))
-        self.lo_gb_cb_1.setItemText(1, _translate("optionWindow", "INFO"))
-        self.lo_gb_cb_1.setItemText(2, _translate("optionWindow", "WARNING"))
-        self.lo_gb_cb_1.setItemText(3, _translate("optionWindow", "CRITICAL"))
-        self.lo_gb_cb_1.setItemText(4, _translate("optionWindow", "ERROR"))
         self.ap_gb_1.setTitle(_translate("optionWindow", "API Météo"))
         self.ap_gb_rb_1.setText(_translate("optionWindow", "Météo France"))
         self.ap_gb_rb_2.setText(_translate("optionWindow", "OpenWeather"))
@@ -2525,6 +3097,25 @@ class Ui_optionWindow(object):
         self.ap_gb_5.setTitle(_translate("optionWindow", "Requête des prévisions météo"))
         self.ow_label_16.setText(_translate("optionWindow", "Intervalle :"))
         self.ow_label_17.setText(_translate("optionWindow", "minutes"))
+        self.ts_gb_int.setTitle(_translate("optionWindow", "Intérieur"))
+        self.ts_gb_int_lb_1.setText(_translate("optionWindow", "Température :"))
+        self.ts_gb_int_lb_2.setText(_translate("optionWindow", "Humidité :"))
+        self.ts_gb_int_cb_1.setItemText(0, _translate("optionWindow", "Pas de capteur"))
+        self.ts_gb_int_cb_2.setItemText(0, _translate("optionWindow", "Pas de capteur"))
+        self.ts_gb_ext.setTitle(_translate("optionWindow", "Extérieur"))
+        self.ts_gb_ext_cb_2.setItemText(0, _translate("optionWindow", "Pas de capteur"))
+        self.ts_gb_ext_lb_2.setText(_translate("optionWindow", "Pression :"))
+        self.ts_gb_ext_lb_1.setText(_translate("optionWindow", "Température :"))
+        self.ts_gb_ext_cb_1.setItemText(0, _translate("optionWindow", "Pas de capteur"))
+        self.ts_gb_ext_ck_1.setText(_translate("optionWindow", "Pression au niveau de la mer ?"))
         self.sy_gb_1.setTitle(_translate("optionWindow", "Calcul pression au niveau de la mer"))
         self.sy_gb_lb_1.setText(_translate("optionWindow", "Altitude :"))
         self.sy_gb_lb_2.setText(_translate("optionWindow", "mètres"))
+        self.lo_gb_1.setTitle(_translate("optionWindow", "Options de log"))
+        self.lo_gb_lb_1.setText(_translate("optionWindow", "Niveau de log :"))
+        self.lo_gb_lb_2.setText(_translate("optionWindow", "Chemin du log :"))
+        self.lo_gb_cb_1.setItemText(0, _translate("optionWindow", "DEBUG"))
+        self.lo_gb_cb_1.setItemText(1, _translate("optionWindow", "INFO"))
+        self.lo_gb_cb_1.setItemText(2, _translate("optionWindow", "WARNING"))
+        self.lo_gb_cb_1.setItemText(3, _translate("optionWindow", "CRITICAL"))
+        self.lo_gb_cb_1.setItemText(4, _translate("optionWindow", "ERROR"))

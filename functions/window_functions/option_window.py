@@ -56,19 +56,23 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         scroll.setScrollerProperties(properties)
         self.config_dict = config_dict
         self.sensor_dict = sensor_dict
-        self.splitter.setSizes([180, 732])
+        self.splitter.setSizes([230, 682])
         self.user_path = user_path
         self.cancel = True
         self.place_object = None
         self.api_key = None
         self.af_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ca_vl.setAlignment(QtCore.Qt.AlignTop)
-        self.lo_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
         self.sy_vl.setAlignment(QtCore.Qt.AlignTop)
+        self.st_vl.setAlignment(QtCore.Qt.AlignTop)
         self.lo_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.ts_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.ts_gb_int_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.ts_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.ts_gb_ext_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.section_list.currentRowChanged.connect(self.display_options)
         self.ok_button.clicked.connect(self.save_config_dict)
         self.cancel_button.clicked.connect(self.close_window)
@@ -79,11 +83,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_3_bt_1.clicked.connect(self.display_numpad)
         self.sy_gb_bt_1.clicked.connect(self.display_numpad)
         self.ap_gb_2_bt_1.clicked.connect(self.display_keyboard)
-
         self.ca_gc_bt_3.clicked.connect(self.show_mqtt_manager)
         self.ca_gc_bt_1.clicked.connect(self.show_1w_manager)
         self.ca_gc_bt_2.clicked.connect(self.show_bme280_manager)
-
         self.ap_gb_2_ln_1.textChanged.connect(self.activate_search_button)
         self.ap_gb_rb_1.clicked.connect(self.activate_place_search)
         self.ap_gb_rb_2.clicked.connect(self.activate_place_search)
