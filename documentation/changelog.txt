@@ -20,6 +20,7 @@
     * thread to display data can handle different tables based on options.
     * GUI is now handling different sensors for in and out.
     * time series section can now handle different sensors for in and out temperature, pressure and humidity.
+    * menu icons have been improved.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
