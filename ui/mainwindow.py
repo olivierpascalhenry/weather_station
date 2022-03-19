@@ -206,10 +206,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def set_stack_widget_page(self, idx):
         logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
-        self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+        self.main_stacked_widget.setCurrentIndex(idx)
         if idx == 1:
             self.compute_ephemerides()
         elif idx == 2:
@@ -377,14 +377,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict, self.sensor_dict)
-        self.display_in_data_thread.db_data.connect(self.refresh_in_data)
-        self.display_in_data_thread.error.connect(self.log_thread_error)
-        self.display_in_data_thread.start()
-        self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
-        self.display_out_data_thread.db_data.connect(self.refresh_out_data)
-        self.display_out_data_thread.error.connect(self.log_thread_error)
-        self.display_out_data_thread.start()
+        if self.config_dict.get('DISPLAY', 'in_sensor'):
+            self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict, self.sensor_dict)
+            self.display_in_data_thread.db_data.connect(self.refresh_in_data)
+            self.display_in_data_thread.error.connect(self.log_thread_error)
+            self.display_in_data_thread.start()
+        else:
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum':None, 'pres':None, 'bat':None, 'sig':None,}
+            self.refresh_in_data(data_dict)
+        if self.config_dict.get('DISPLAY', 'out_sensor'):
+            self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
+            self.display_out_data_thread.db_data.connect(self.refresh_out_data)
+            self.display_out_data_thread.error.connect(self.log_thread_error)
+            self.display_out_data_thread.start()
+        else:
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum':None, 'pres':None, 'bat':None, 'sig':None,}
+            self.refresh_out_data(data_dict)
 
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
@@ -464,7 +472,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.in_temperature_label.setText(f'{self.in_temperature} °C')
         else:
             self.in_temperature_label.setText('No data')
-        if self.in_temperature_min_max[0] is not None:
+        if self.in_temperature_min_max is not None and self.in_temperature_min_max[0] is not None:
             self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
         else:
             self.in_label_3.setText('No data / No data')
@@ -514,7 +522,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_temperature_label.setText(f'{self.out_temperature} °C')
         else:
             self.out_temperature_label.setText('No data')
-        if self.out_temperature_min_max[0] is not None:
+        if self.out_temperature_min_max is not None and self.out_temperature_min_max[0] is not None:
             self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
         else:
             self.out_label_3.setText('No data / No data')

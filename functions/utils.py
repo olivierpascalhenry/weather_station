@@ -22,6 +22,7 @@ def create_option_file(user_path):
     config_dict.add_section('API')
     config_dict.add_section('DISPLAY')
     config_dict.add_section('SENSOR')
+    config_dict.add_section('TIMESERIES')
     config_dict.set('LOG', 'level', 'DEBUG')
     config_dict.set('LOG', 'path', str(user_path))
     config_dict.set('SENSOR', 'sensors_rate', '30')
