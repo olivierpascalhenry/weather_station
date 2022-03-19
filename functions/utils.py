@@ -1,3 +1,4 @@
+import collections
 import json
 import shutil
 import logging
@@ -386,3 +387,52 @@ def link_value_icon_dict():
                  120: 'signal_3-5_icon.svg', 160: 'signal_4-5_icon.svg', 200: 'signal_full_icon.svg',
                  256: 'signal_full_icon.svg'}
     return data_dict
+
+
+def angle_moon_phase():
+    angle_dict = collections.OrderedDict()
+    angle_dict[0.] = 'wi-moon-alt-new.svg'
+    angle_dict[6.428571] = 'wi-moon-alt-waning-crescent-6.svg'
+    angle_dict[19.285713] = 'wi-moon-alt-waning-crescent-5.svg'
+    angle_dict[32.142855] = 'wi-moon-alt-waning-crescent-4.svg'
+    angle_dict[44.999997] = 'wi-moon-alt-waning-crescent-3.svg'
+    angle_dict[57.857138] = 'wi-moon-alt-waning-crescent-2.svg'
+    angle_dict[70.714281] = 'wi-moon-alt-waning-crescent-1.svg'
+    angle_dict[83.571423] = 'wi-moon-alt-third-quarter.svg'
+    angle_dict[96.428565] = 'wi-moon-alt-waning-gibbous-6.svg'
+    angle_dict[109.285707] = 'wi-moon-alt-waning-gibbous-5.svg'
+    angle_dict[122.142849] = 'wi-moon-alt-waning-gibbous-4.svg'
+    angle_dict[134.999991] = 'wi-moon-alt-waning-gibbous-3.svg'
+    angle_dict[147.857133] = 'wi-moon-alt-waning-gibbous-2.svg'
+    angle_dict[160.714275] = 'wi-moon-alt-waning-gibbous-1.svg'
+    angle_dict[173.571417] = 'wi-moon-alt-full.svg'
+    angle_dict[186.428559] = 'wi-moon-alt-waxing-gibbous-6.svg'
+    angle_dict[199.285701] = 'wi-moon-alt-waxing-gibbous-5.svg'
+    angle_dict[212.142843] = 'wi-moon-alt-waxing-gibbous-4.svg'
+    angle_dict[224.999985] = 'wi-moon-alt-waxing-gibbous-3.svg'
+    angle_dict[237.857127] = 'wi-moon-alt-waxing-gibbous-2.svg'
+    angle_dict[250.714269] = 'wi-moon-alt-waxing-gibbous-1.svg'
+    angle_dict[263.571411] = 'wi-moon-alt-first-quarter.svg'
+    angle_dict[276.428553] = 'wi-moon-alt-waxing-crescent-6.svg'
+    angle_dict[289.285695] = 'wi-moon-alt-waxing-crescent-5.svg'
+    angle_dict[302.142837] = 'wi-moon-alt-waxing-crescent-4.svg'
+    angle_dict[314.999979] = 'wi-moon-alt-waxing-crescent-3.svg'
+    angle_dict[327.857121] = 'wi-moon-alt-waxing-crescent-2.svg'
+    angle_dict[340.714263] = 'wi-moon-alt-waxing-crescent-1.svg'
+    angle_dict[353.571405] = 'wi-moon-alt-new.svg'
+    angle_dict[360.] = None
+    return angle_dict
+
+
+def get_season(dt):
+    if isinstance(dt, datetime.datetime):
+        dt = dt.date()
+    y = dt.year
+    seasons = [('Hiver', (datetime.date(y, 1, 1), datetime.date(y, 3, 20))),
+               ('Printemps', (datetime.date(y, 3, 21), datetime.date(y, 6, 20))),
+               ('Eté', (datetime.date(y, 6, 21), datetime.date(y, 9, 22))),
+               ('Automne', (datetime.date(y, 9, 23), datetime.date(y, 12, 20))),
+               ('Hiver', (datetime.date(y, 12, 21), datetime.date(y, 12, 31)))]
+    return next(season for season, (start, end) in seasons if start <= dt <= end)
+
+
