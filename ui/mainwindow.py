@@ -4,6 +4,7 @@ import copy
 import json
 import math
 import time
+import ephem
 import pickle
 import platform
 import logging
@@ -21,7 +22,7 @@ from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict)
+                             link_value_icon_dict, angle_moon_phase, get_season)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
@@ -68,10 +69,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2 = None
         self.spinner = None
         self.h_spin_lay = None
-
         self.ds18b20_data_threads = []
         self.bme280_data_threads = []
-
         self.collect_ds18b20_data_thread = None
         self.collect_bme180_data_thread = None
         self.collect_mqtt_data_thread = None
@@ -122,9 +121,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.option_button.clicked.connect(self.open_options)
         self.warning_button.clicked.connect(self.warning_update_dispatch)
         self.in_out_bt.clicked.connect(lambda: self.set_stack_widget_page(0))
-        self.time_series_bt.clicked.connect(lambda: self.set_stack_widget_page(1))
-        self.h1_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(2))
-        self.h6_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(3))
+        self.ephemeride_bt.clicked.connect(lambda: self.set_stack_widget_page(1))
+        self.time_series_bt.clicked.connect(lambda: self.set_stack_widget_page(2))
+        self.h1_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(3))
+        self.h6_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(4))
         self.left_ts_button.clicked.connect(self.set_ts_stack_left)
         self.right_ts_button.clicked.connect(self.set_ts_stack_right)
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
@@ -137,7 +137,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_bt.clicked.connect(self.show_pressure_details)
         self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
-        self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
+        self.button_list = [self.in_out_bt, self.ephemeride_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -150,6 +150,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
         self.load_place_data()
+
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -210,10 +211,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         if idx == 1:
-            self.plot_time_series_start()
+            self.compute_ephemerides()
         elif idx == 2:
-            self.display_fc_1h()
+            self.plot_time_series_start()
         elif idx == 3:
+            self.display_fc_1h()
+        elif idx == 4:
             self.display_fc_6h()
 
     def set_ts_stack_left(self):
@@ -280,6 +283,65 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             month = days_months_dictionary()['month'][self.current_date.month()]
             year = str(self.current_date.year())
             self.date_label.setText(f'{week_day} {day}\n{month} {year}')
+
+    def compute_ephemerides(self):
+        if self.place_object and self.place_object is not None:
+            if self.config_dict.get('API', 'api_used') == 'meteofrance':
+                lon = str(self.place_object.longitude)
+                lat = str(self.place_object.latitude)
+            else:
+                lon = str(self.place_object.lon)
+                lat = str(self.place_object.lat)
+            date = self.current_date.toPyDate()
+            observer = ephem.Observer()
+            observer.lat, observer.lon, observer.date = lat, lon, date
+            moon, sun = ephem.Moon(), ephem.Sun()
+            sun.compute(observer)
+            moon.compute(observer)
+            sunlon = ephem.Ecliptic(sun).lon / math.pi * 180.0
+            moonlon = ephem.Ecliptic(moon).lon / math.pi * 180.0
+            if sunlon >= moonlon:
+                angle = sunlon - moonlon
+            else:
+                angle = 360 - sunlon - moonlon
+            angle_dict = angle_moon_phase()
+            angle_list = [a for a in angle_dict]
+            svg = None
+            for i in range(len(angle_list) - 1):
+                if angle_list[i] <= angle < angle_list[i + 1]:
+                    svg = angle_dict[angle_list[i]]
+                    break
+            sunrise = ephem.localtime(observer.next_rising(sun, start=date.strftime('%Y/%m/%d')))
+            sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
+            sunlive = sunset - sunrise
+            moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
+            moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
+            yday = date.timetuple().tm_yday
+            nweek = date.isocalendar()[1]
+            season = get_season(date)
+            week_day = days_months_dictionary()['day'][self.current_date.dayOfWeek()]
+            day = str(self.current_date.day())
+            month = days_months_dictionary()['month'][self.current_date.month()]
+            year = str(self.current_date.year())
+            self.day_box.setTitle(f'{week_day} {day} {month} {year}')
+            if yday == 1:
+                self.day_lb_1.setText(f'{yday}er jour de l’année')
+            else:
+                self.day_lb_1.setText(f'{yday}ème jour de l’année')
+            self.day_lb_2.setText(f'Semaine {nweek}')
+            self.day_lb_3.setText(season)
+            self.sun_lb_1.setText(f'Le Soleil se lève à {sunrise.strftime("%Hh%M")} et se couche à '
+                                  f'{sunset.strftime("%Hh%M")}')
+            h = str(sunlive.seconds//3600)
+            if len(h) == 1:
+                h = '0' + h
+            m = str((sunlive.seconds//60)%60)
+            if len(m) == 1:
+                m = '0' + m
+            self.sun_lb_2.setText(f'Durée d’ensoleillement: {h}h{m}')
+            self.moon_lb_1.setText(f'La Lune se lève à {moonrise.strftime("%Hh%M")} et se couche à '
+                                   f'{moonset.strftime("%Hh%M")}')
+            self.moon_lb_3.setPixmap(QtGui.QPixmap(f'graphic_materials/pictogrammes/moon_phases/{svg}'))
 
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')

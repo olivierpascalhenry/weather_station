@@ -10,6 +10,7 @@
     * a window and a dictionary to manage bme280 based sensors have been added.
     * specific threads have been added for testing purpose.
     * options to control data feed for time series and the computation of MSL pressure have been introduced.
+    * ephemeride section has been introduced.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
