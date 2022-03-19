@@ -24,17 +24,12 @@ class MFForecastRequest(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - forecast_resquest.py - MFForecastRequest - run')
-        # {'dt': 1629644400, 'T': {'value': 26.3, 'windchill': 29.9}, 'humidity': 50, 'sea_level': 1022.3,
-        # 'wind': {'speed': 4, 'gust': 0, 'direction': 315, 'icon': 'NO'}, 'rain': {'1h': 0}, 'snow': {'1h': 0},
-        # 'iso0': 4350, 'rain snow limit': 'Non pertinent', 'clouds': 70, 'weather': {'icon': 'p2j',
-        # 'desc': 'Eclaircies'}}
         while True:
             try:
                 mf_client = meteofrance_api.MeteoFranceClient()
                 place_forecast = mf_client.get_forecast_for_place(self.user_place)
                 place_warning = mf_client.get_warning_current_phenomenoms(self.user_place.admin2)
                 fc_1h = collections.OrderedDict()
-
                 now = datetime.datetime.now().replace(minute=0, second=0)
                 limite = now + datetime.timedelta(hours=24)
                 for i, forecast in enumerate(place_forecast.forecast):

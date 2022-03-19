@@ -149,9 +149,6 @@ class BME280DataCollectingThread(QtCore.QThread):
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
             pres = round(data.pressure, 1)
-            # pres = round(pres, 1)
-            # temp = round(temp, 1)
-            # hum = round(hum)
             if temp > 50:
                 temp = None
         except Exception:

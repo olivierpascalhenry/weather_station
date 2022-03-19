@@ -150,7 +150,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
         self.load_place_data()
-
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -285,6 +284,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.date_label.setText(f'{week_day} {day}\n{month} {year}')
 
     def compute_ephemerides(self):
+        logging.debug('gui - mainwindow.py - MainWindow - compute_ephemerides')
         if self.place_object and self.place_object is not None:
             if self.config_dict.get('API', 'api_used') == 'meteofrance':
                 lon = str(self.place_object.longitude)
@@ -403,6 +403,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.check_internet_connection()
 
     def launch_weather_request(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')
         if self.config_dict.get('API', 'api_used') and self.place_object is not None:
             if self.config_dict.get('API', 'api_used') == 'meteofrance':
                 self.launch_mf_request_thread()
@@ -420,6 +421,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.query_mf_forecast_thread.start()
 
     def launch_ow_request_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_ow_request_thread')
         self.query_ow_forecast_thread = OWForecastRequest(self.place_object, self.config_dict)
         self.query_ow_forecast_thread.fc_data.connect(self.parse_forecast_data)
         self.query_ow_forecast_thread.error.connect(self.log_thread_error)
