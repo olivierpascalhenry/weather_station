@@ -99,6 +99,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
         self.exit_button.clicked.connect(self.exit_station)
         self.reboot_button.clicked.connect(self.reboot_system)
         self.shutdown_button.clicked.connect(self.shutdown_system)
+        self.cancel_button.clicked.connect(self.close_window)
         logging.info('gui - other_windows.py - MyExit - ready')
 
     def exit_station(self):
