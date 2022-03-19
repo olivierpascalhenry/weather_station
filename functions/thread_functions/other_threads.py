@@ -38,8 +38,9 @@ class CleaningThread(QtCore.QThread):
         while True:
             try:
                 time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
-                for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
-                    self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
+                if platform.system() == 'Windows':
+                    for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
+                        self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
 
                 for device, ddict in self.sensor_dict['DS18B20'].items():
                     table = ddict['table']

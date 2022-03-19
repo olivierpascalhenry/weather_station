@@ -1,5 +1,4 @@
 import platform
-
 import copy
 import pickle
 import logging
