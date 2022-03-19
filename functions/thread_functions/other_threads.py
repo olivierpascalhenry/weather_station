@@ -199,7 +199,6 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - run')
-
         installed, database, tables = False, False, False
         if platform.system() == 'Linux':
             res = subprocess.run(['which', 'psql'])
@@ -229,7 +228,6 @@ class CheckPostgresqlConnexion(QtCore.QThread):
             cursor = connector.cursor()
             cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
             db_table_list = [table[0] for table in cursor.fetchall()]
-
             fl_table_list = []
             for device, _ in mqtt_dict.items():
                 fl_table_list.append(device)
@@ -269,7 +267,6 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
             cursor.close()
             connector.close()
-
         self.results.emit([installed, database])
 
     def stop(self):
@@ -391,6 +388,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.error.emit()
 
     def get_device_table(self):
+        logging.debug('gui - other_threads.py - RequestPlotDataThread - get_device_table')
         in_temp, in_hum, out_temp, out_pres = None, None, None, None
         if self.config_dict.get('TIMESERIES', 'in_temperature'):
             in_temp = self.get_table(self.config_dict.get('TIMESERIES', 'in_temperature'))
@@ -403,6 +401,7 @@ class RequestPlotDataThread(QtCore.QThread):
         return in_temp, in_hum, out_temp, out_pres
 
     def get_table(self, device_name):
+        logging.debug(f'gui - other_threads.py - RequestPlotDataThread - get_table - device_name: {device_name}')
         table = None
         if platform.system() == 'Windows':
             table = device_name
@@ -424,6 +423,8 @@ class RequestPlotDataThread(QtCore.QThread):
         return table
 
     def query_table_for_data(self, column, table, time_limit):
+        logging.debug(f'gui - other_threads.py - RequestPlotDataThread - query_table_for_data - column: {column} ; '
+                      f'table: {table} ; time_limit: {time_limit} ;')
         data_x, data_y = None, None
         self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
         column_list = [column[0] for column in self.cursor.fetchall()]

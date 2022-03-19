@@ -1,7 +1,6 @@
 import logging
 import platform
 import pathlib
-
 from PyQt5 import QtCore, QtWidgets, QtGui
 from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from ui.Ui_1wiremanagerwindow import Ui_sensormanagerWindow
@@ -169,12 +168,14 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.parse_sensor_dict()
 
     def parse_sensor_dict(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - parse_sensor_dict')
         for sensor, _ in self.sensor_dict.items():
             widget = QtWidgets.QListWidgetItem()
             widget.setText(sensor)
             self.section_list.addItem(widget)
 
     def display_available_sensors(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_available_sensors')
         if platform.system() == 'Linux':
             path = pathlib.Path('/sys/bus/w1/devices')
         else:
@@ -192,11 +193,13 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                                                           'id': sensor_window.sensor}
 
     def delete_sensor(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
         item = self.section_list.selectedItems()[0]
         self.section_list.takeItem(self.section_list.row(item))
         self.display_information()
 
     def display_information(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_information')
         items = self.section_list.selectedItems()
         if items:
             sensor = items[0].text()
@@ -241,12 +244,14 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             self.id_ln.clear()
 
     def set_sensor_dict_info(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - set_sensor_dict_info')
         if self.section_list.selectedItems():
             sensor = self.section_list.selectedItems()[0].text()
             item = self.sender().objectName()[: -3]
             self.sensor_dict[sensor][item] = str(self.sender().text())
 
     def display_keyboard(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_keyboard')
         keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
@@ -256,6 +261,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 self.table_ln.setText(keyboard_window.num_line.text())
 
     def display_numpad(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_numpad')
         numpad_window = MyNumpad(self.mainparent)
         numpad_window.exec_()
         if not numpad_window.cancel:
@@ -265,12 +271,14 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 self.store_ln.setText(numpad_window.num_line.text())
 
     def activate_delete_button(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - activate_delete_button')
         if self.section_list.selectedItems():
             self.del_sensor.setEnabled(True)
         else:
             self.del_sensor.setEnabled(False)
 
     def save_sensor_dict(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - save_sensor_dict')
         self.cancel = False
         self.close_window()
 
@@ -311,12 +319,14 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.parse_sensor_dict()
 
     def parse_sensor_dict(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - parse_sensor_dict')
         for sensor, _ in self.sensor_dict.items():
             widget = QtWidgets.QListWidgetItem()
             widget.setText(sensor)
             self.section_list.addItem(widget)
 
     def display_available_sensors(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_available_sensors')
         sensor_list = []
         if platform.system() == 'Linux':
             pi = pigpio.pi()
@@ -346,11 +356,13 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                                                           'id': sensor_window.sensor, 'bus': 1}
 
     def delete_sensor(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
         item = self.section_list.selectedItems()[0]
         self.section_list.takeItem(self.section_list.row(item))
         self.display_information()
 
     def display_information(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_information')
         items = self.section_list.selectedItems()
         if items:
             sensor = items[0].text()
@@ -395,12 +407,14 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             self.id_ln.clear()
 
     def set_sensor_dict_info(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - set_sensor_dict_info')
         if self.section_list.selectedItems():
             sensor = self.section_list.selectedItems()[0].text()
             item = self.sender().objectName()[: -3]
             self.sensor_dict[sensor][item] = str(self.sender().text())
 
     def display_keyboard(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_keyboard')
         keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
@@ -410,6 +424,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 self.table_ln.setText(keyboard_window.num_line.text())
 
     def display_numpad(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - display_numpad')
         numpad_window = MyNumpad(self.mainparent)
         numpad_window.exec_()
         if not numpad_window.cancel:
@@ -419,19 +434,20 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 self.store_ln.setText(numpad_window.num_line.text())
 
     def activate_delete_button(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - activate_delete_button')
         if self.section_list.selectedItems():
             self.del_sensor.setEnabled(True)
         else:
             self.del_sensor.setEnabled(False)
 
     def save_sensor_dict(self):
+        logging.debug('gui - sensor_window.py - W1SensorManager - save_sensor_dict')
         self.cancel = False
         self.close_window()
 
     def close_window(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - close_window')
         self.close()
-
 
 
 class AvailableSensorsWindow(QtWidgets.QDialog, Ui_townsearchWindow):

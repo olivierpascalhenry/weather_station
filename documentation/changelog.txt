@@ -11,6 +11,7 @@
     * specific threads have been added for testing purpose.
     * options to control data feed for time series and the computation of MSL pressure have been introduced.
     * ephemeride section has been introduced.
+    * few new logging messages have been added.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.

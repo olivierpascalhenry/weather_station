@@ -108,6 +108,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.stack_widget.setCurrentIndex(idx)
 
     def create_sensor_list(self):
+        logging.debug('gui - option_window.py - MyOptions - create_sensor_list')
         self.sensor_list.clear()
         if platform.system() == 'Windows':
             self.sensor_list.append('DS18B20_TEST')
@@ -121,6 +122,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.sensor_list.append(device)
 
     def parse_sensor_list_in_cb(self):
+        logging.debug('gui - option_window.py - MyOptions - parse_sensor_list_in_cb')
         cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
                    self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
         if self.sensor_list:
@@ -134,6 +136,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 cb.addItem('Pas de capteur')
 
     def update_cb_with_sensor_list(self):
+        logging.debug('gui - option_window.py - MyOptions - update_cb_with_sensor_list')
         self.create_sensor_list()
         cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
                    self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
@@ -271,6 +274,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.close_window()
 
     def show_mqtt_manager(self):
+        logging.debug('gui - option_window.py - MyOptions - show_mqtt_manager')
         mqtt_manager = MqttManager(copy.deepcopy(self.sensor_dict['MQTT']), self.mainparent)
         mqtt_manager.exec_()
         if not mqtt_manager.cancel:
@@ -278,6 +282,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.update_cb_with_sensor_list()
 
     def show_1w_manager(self):
+        logging.debug('gui - option_window.py - MyOptions - show_1w_manager')
         manager_window = W1SensorManager(copy.deepcopy(self.sensor_dict['DS18B20']), self.mainparent)
         manager_window.exec_()
         if not manager_window.cancel:
@@ -285,6 +290,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.update_cb_with_sensor_list()
 
     def show_bme280_manager(self):
+        logging.debug('gui - option_window.py - MyOptions - show_bme280_manager')
         manager_window = BME280SensorManager(copy.deepcopy(self.sensor_dict['BME280']), self.mainparent)
         manager_window.exec_()
         if not manager_window.cancel:
@@ -372,7 +378,6 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             owm = OWM(self.api_key, config_dict)
             reg = owm.city_id_registry()
             list_places = reg.locations_for(self.ap_gb_2_ln_1.text())
-
         if len(list_places) > 1:
             place_search = MyTown(list_places, api, self)
             place_search.exec_()
@@ -415,6 +420,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ap_gb_2_lb_5.setText(f'Lon : {lon} ; Lat : {lat}')
 
     def set_openweather_key(self):
+        logging.debug('gui - option_window.py - MyOptions - set_openweather_key')
         api_window = MyAPI(self.api_key, self.mainparent)
         api_window.exec_()
         if not api_window.cancel:

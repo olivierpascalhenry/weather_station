@@ -222,7 +222,6 @@ def openweather_to_mf_desc(item):
         weather = conversion[item]
     except KeyError:
         weather = 'none'
-
     return weather
 
 
@@ -391,6 +390,7 @@ def link_value_icon_dict():
 
 
 def angle_moon_phase():
+    logging.debug('gui - utils.py - angle_moon_phase')
     angle_dict = collections.OrderedDict()
     angle_dict[0.] = 'wi-moon-alt-new.svg'
     angle_dict[6.428571] = 'wi-moon-alt-waning-crescent-6.svg'
@@ -426,6 +426,7 @@ def angle_moon_phase():
 
 
 def get_season(dt):
+    logging.debug(f'gui - utils.py - get_season - dt: {dt}')
     if isinstance(dt, datetime.datetime):
         dt = dt.date()
     y = dt.year
@@ -435,5 +436,3 @@ def get_season(dt):
                ('Automne', (datetime.date(y, 9, 23), datetime.date(y, 12, 20))),
                ('Hiver', (datetime.date(y, 12, 21), datetime.date(y, 12, 31)))]
     return next(season for season, (start, end) in seasons if start <= dt <= end)
-
-
