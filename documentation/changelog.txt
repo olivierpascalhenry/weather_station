@@ -24,6 +24,7 @@
     * time series section can now handle different sensors for in and out temperature, pressure and humidity.
     * menu icons have been improved.
     * cleaning thread only cleans test tables if platform is Windows.
+    * a new close window has been designed.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
