@@ -335,7 +335,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             h = str(sunlive.seconds//3600)
             if len(h) == 1:
                 h = '0' + h
-            m = str((sunlive.seconds//60)%60)
+            m = str((sunlive.seconds//60) % 60)
             if len(m) == 1:
                 m = '0' + m
             self.sun_lb_2.setText(f'Durée d’ensoleillement: {h}h{m}')
@@ -354,10 +354,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if platform.system() == 'Linux':
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
-
             for _, ddict in self.sensor_dict['BME280'].items():
                 self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict))
-
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
@@ -383,7 +381,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_in_data_thread.error.connect(self.log_thread_error)
             self.display_in_data_thread.start()
         else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum':None, 'pres':None, 'bat':None, 'sig':None,}
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
             self.refresh_in_data(data_dict)
         if self.config_dict.get('DISPLAY', 'out_sensor'):
             self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
@@ -391,7 +389,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_out_data_thread.error.connect(self.log_thread_error)
             self.display_out_data_thread.start()
         else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum':None, 'pres':None, 'bat':None, 'sig':None,}
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
             self.refresh_out_data(data_dict)
 
     def no_internet_message(self):

@@ -19,38 +19,41 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
     def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
-        logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - __init__')
-        self.sensors_rate = int(sensor_dict['refresh'])
-        self.sensor_file = pathlib.Path(f'/sys/bus/w1/devices/{sensor_dict["id"]}/w1_slave')
+        logging.info(f'gui - sensors_reading.py - DS18B20DataCollectingThread - __init__ - sensor_dict: {sensor_dict}')
+        self.name = sensor_dict['id']
+        self.sensor_dict = sensor_dict
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
 
     def run(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - run')
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - run')
         if self.check_sensor():
             while True:
                 dtime = datetime.datetime.now().replace(microsecond=0)
                 temp = self.collect_data()
                 self.add_data_to_db(dtime, temp)
-                time.sleep(self.sensors_rate)
+                time.sleep(int(self.sensor_dict['refresh']))
         else:
-            logging.info('gui - sensors_reading.py - DS18B20DataCollectingThread - run - no sensor detected')
+            logging.info(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - run - '
+                         f'no sensor detected')
 
     def add_data_to_db(self, dt, tp):
-        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread - add_data_to_db _ dt: {dt} ; tp: {tp}')
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - add_data_to_db _ dt: '
+                      f'{dt} ; tp: {tp}')
         try:
-            self.cursor.execute('insert into "DS18B20" (date_time, temperature) values (%s, %s)', (dt, tp))
+            self.cursor.execute(f'insert into "{self.sensor_dict["table"]}" (date_time, temperature) values (%s, %s)',
+                                (dt, tp))
             self.connector.commit()
         except Exception:
-            logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
-                              'occurred when adding data to db')
+            logging.exception(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - collect_data - '
+                              f'an issue occurred when adding data to db')
 
     def collect_data(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data')
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - collect_data')
         temp = None
         try:
-            f = open(self.sensor_file, 'r')
+            f = open(pathlib.Path(f'/sys/bus/w1/devices/{self.sensor_dict["id"]}/w1_slave'), 'r')
             lines = f.readlines()
             f.close()
             if lines[0].strip()[-3:] == 'YES':
@@ -60,20 +63,20 @@ class DS18B20DataCollectingThread(QtCore.QThread):
                     if temp > 50:
                         temp = None
         except Exception:
-            logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
-                              'occurred when collecting data')
+            logging.exception(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - collect_data - '
+                              f'an issue occurred when collecting data')
             temp = None
         return temp
 
     def check_sensor(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - check_sensor')
-        if self.sensor_file.exists():
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - check_sensor')
+        if pathlib.Path(f'/sys/bus/w1/devices/{self.sensor_dict["id"]}/w1_slave').exists():
             return True
         else:
             return False
 
     def stop(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingThread - stop')
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop')
         self.connector.close()
         self.terminate()
 
@@ -122,75 +125,70 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
 class BME280DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict):
+    def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
-        logging.info('gui - sensors_reading.py - BME280DataCollectingThread - __init__')
+        logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread - __init__ - sensor_dict: {sensor_dict}')
+        self.name = sensor_dict['id']
+        self.sensor_dict = sensor_dict
+        self.address = int(sensor_dict['id'][sensor_dict['id'].find('0x'):], 16)
+        self.bus = sensor_dict['bus']
+        self.cal_params = None
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
-        self.sensors_rate = int(config_dict.get('SENSOR', 'sensors_rate'))
-        self.cal_params = None
-        self.bus = None
-        self.address = None
 
     def run(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - run')
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - run')
         if self.set_bme280_parameters():
             while True:
                 date_time = datetime.datetime.now().replace(microsecond=0)
                 temp, hum, pres = self.collect_data()
                 self.add_data_to_db(date_time, temp, hum, pres)
-                time.sleep(self.sensors_rate)
+                time.sleep(int(self.sensor_dict['refresh']))
 
     def collect_data(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_data')
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - collect_data')
         try:
-            data = bme280.sample(self.bus, self.address, self.cal_params)
+            data = bme280.sample(smbus2.SMBus(self.bus), self.address, self.cal_params)
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
             pres = round(data.pressure, 1)
             if temp > 50:
                 temp = None
         except Exception:
-            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
-                              'exception occurred when collecting bme280 data')
+            logging.exception(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - '
+                              f'collect_data - an exception occurred when collecting bme280 data')
             temp, hum, pres = None, None, None
         return temp, hum, pres
 
     def add_data_to_db(self, dt, tp, hm, ps):
-        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread - add_data_to_db - dt: {dt} ; tp: {tp} ; '
-                      f'hm: {hm} ; ps: {ps}')
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - add_data_to_db - '
+                      f'dt: {dt} ; tp: {tp} ; hm: {hm} ; ps: {ps}')
         try:
-            self.cursor.execute('insert into "BME280" (date_time, temperature, humidity, pressure) '
-                                'values (%s, %s, %s, %s)', (dt, tp, hm, ps))
+            self.cursor.execute(f'insert into "{self.sensor_dict["table"]}" (date_time, temperature, humidity, '
+                                f'pressure) values (%s, %s, %s, %s)', (dt, tp, hm, ps))
             self.connector.commit()
         except Exception:
-            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
-                              'exception occurred when adding data to db')
+            logging.exception(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} -'
+                              f' add_data_to_db - an exception occurred when adding data to db')
 
     def set_bme280_parameters(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters')
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - set_bme280_parameters - '
+                      f'bus: {self.bus} ; address: {self.address}')
         try:
-            self.bus = smbus2.SMBus(1)
-            self.address = 0x77
-            self.cal_params = bme280.load_calibration_params(self.bus, self.address)
+            self.cal_params = bme280.load_calibration_params(smbus2.SMBus(self.bus), self.address)
             return True
         except OSError:
-            logging.info('gui - sensors_reading.py - BME280DataCollectingThread - run - no sensor detected')
+            logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - run - '
+                         f'no sensor detected')
             return False
         except Exception:
-            logging.exception('gui - sensors_reading.py - BME280DataCollectingThread - set_bme280_parameters - an '
-                              'exception occurred when setting bme280 parameters')
+            logging.exception(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - '
+                              f'set_bme280_parameters - an exception occurred when setting bme280 parameters')
             return False
 
-    @staticmethod
-    def collect_test_data(num, limit):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - collect_test_data')
-        random.seed()
-        return round(num + random.uniform(0, limit), 1)
-
     def stop(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingThread - stop')
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - stop')
         self.connector.close()
         self.terminate()
 
@@ -446,8 +444,9 @@ class DBInDataThread(QtCore.QThread):
                             else:
                                 var_dict[var] = data[0]
                     except Exception:
-                        logging.error(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
-                                      f'occurred when requesting {var} from {table}')
+                        logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
+                                          f'occurred when requesting {var} from {table}')
+                logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - var_dict: {var_dict}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
         else:
@@ -526,8 +525,9 @@ class DBOutDataThread(QtCore.QThread):
                             else:
                                 var_dict[var] = data[0]
                     except Exception:
-                        logging.error(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
-                                      f'occurred when requesting {var} from {table}')
+                        logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
+                                          f'occurred when requesting {var} from {table}')
+                logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - var_dict: {var_dict}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
         else:

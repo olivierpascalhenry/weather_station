@@ -339,7 +339,6 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 except:
                     pass
                 pi.i2c_close(h)
-
             pi.stop
         else:
             sensor_list.append('id-1-0x77')
@@ -358,6 +357,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
     def delete_sensor(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
         item = self.section_list.selectedItems()[0]
+        del self.sensor_dict[item.text()]
         self.section_list.takeItem(self.section_list.row(item))
         self.display_information()
 
