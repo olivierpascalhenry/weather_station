@@ -1,6 +1,5 @@
 ### To do list: ###
 
-* ajouter onglet ephemerides, avec phase de la lune, heure lever coucher soleil / lune, durée ensoleillement, durée nuit
 * ajouter un champ "durée de stockage" pour chaque capteur MQTT
 
 ### To fix list: ###
