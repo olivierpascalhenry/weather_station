@@ -10,7 +10,7 @@
     * a window and a dictionary to manage bme280 based sensors have been added.
     * specific threads have been added for testing purpose.
     * options to control data feed for time series and the computation of MSL pressure have been introduced.
-    * ephemeride section has been introduced.
+    * ephemeris section has been introduced.
     * few new logging messages have been added.
 
   * MODIFIED:
@@ -26,7 +26,7 @@
     * cleaning thread only cleans test tables if platform is Windows.
     * a new close window has been designed.
     * a name has been given to all threads collecting data for logging purpose.
-
+    * MSL pressure is now computed in collecting threads.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

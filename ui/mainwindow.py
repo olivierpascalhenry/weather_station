@@ -351,15 +351,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
+        if self.config_dict.get('SYSTEM', 'place_altitude'):
+            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
+        else:
+            alt = None
         if platform.system() == 'Linux':
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
             for _, ddict in self.sensor_dict['BME280'].items():
-                self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict))
+                self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict, alt))
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
-                self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'])
+                self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'], alt)
                 self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
                 self.collect_mqtt_data_thread.start()
         else:
@@ -438,15 +442,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
         self.in_pressure = data_dict['pres']
+        self.in_pressure_msl = data_dict['pres_msl']
         self.in_battery = data_dict['bat']
         self.in_signal = data_dict['sig']
-        if (self.config_dict.getboolean('DISPLAY', 'in_msl_pressure') and data_dict['temp'] is not None
-                and self.config_dict.get('SYSTEM', 'place_altitude') and data_dict['pres'] is not None):
-            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-            self.in_pressure_msl = data_dict['pres'] + ((data_dict['pres'] * 9.80665 * alt) /
-                                                        (287.0531 * (273.15 + data_dict['temp'] + (alt / 400))))
-        else:
-            self.in_pressure_msl = None
         self.refresh_in_display()
 
     def refresh_out_data(self, data_dict):
@@ -455,15 +453,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
         self.out_pressure = data_dict['pres']
+        self.out_pressure_msl = data_dict['pres_msl']
         self.out_battery = data_dict['bat']
         self.out_signal = data_dict['sig']
-        if (self.config_dict.getboolean('DISPLAY', 'out_msl_pressure') and data_dict['temp'] is not None
-                and self.config_dict.get('SYSTEM', 'place_altitude') and data_dict['pres'] is not None):
-            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-            self.out_pressure_msl = data_dict['pres'] + ((data_dict['pres'] * 9.80665 * alt) /
-                                                         (287.0531 * (273.15 + data_dict['temp'] + (alt / 400))))
-        else:
-            self.out_pressure_msl = None
         self.refresh_out_display()
 
     def refresh_in_display(self):
@@ -484,7 +476,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.in_humidity_bt.setText('')
         if self.in_pressure is not None:
             self.in_pressure_bt.setEnabled(True)
-            if self.in_pressure_msl is not None:
+            if self.in_pressure_msl is not None and self.config_dict.getboolean('DISPLAY', 'in_msl_pressure'):
                 self.in_pressure_bt.setText(f'Pression SL : {round(self.in_pressure_msl)} hPa')
             else:
                 self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
@@ -534,7 +526,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_humidity_bt.setText('')
         if self.out_pressure is not None:
             self.out_pressure_bt.setEnabled(True)
-            if self.out_pressure_msl is not None:
+            if self.out_pressure_msl is not None and self.config_dict.getboolean('DISPLAY', 'out_msl_pressure'):
                 self.out_pressure_bt.setText(f'Pression SL : {round(self.out_pressure_msl)} hPa')
             else:
                 self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure)} hPa')

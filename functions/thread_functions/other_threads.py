@@ -234,8 +234,8 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                 fl_table_list.append(device)
                 if device not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{device}" (date_time timestamp without time zone NOT '
-                             f'NULL, temperature real, humidity real, pressure real, battery real, signal real, '
-                             f'CONSTRAINT "{device}_pkey" PRIMARY KEY (date_time)) TABLESPACE pg_default;'
+                             f'NULL, temperature real, humidity real, pressure real, pressure_msl real, battery real, '
+                             f'signal real, CONSTRAINT "{device}_pkey" PRIMARY KEY (date_time)) TABLESPACE pg_default;'
                              f'ALTER TABLE public."{device}" OWNER to weather_station;')
                     cursor.execute(query)
                     connector.commit()
@@ -244,9 +244,10 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                 fl_table_list.append(ddict['table'])
                 if ddict['table'] not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
-                             f'time zone NOT NULL, temperature real, humidity real, pressure real, battery real, '
-                             f'signal real, CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KEY (date_time)) TABLESPACE '
-                             f'pg_default; ALTER TABLE public."{ddict["table"]}" OWNER to weather_station;')
+                             f'time zone NOT NULL, temperature real, humidity real, pressure real, pressure_msl real,'
+                             f' battery real, signal real, CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KE'
+                             f'Y (date_time)) TABLESPACE pg_default; ALTER TABLE public."{ddict["table"]}" OWNER to '
+                             f'weather_station;')
                     cursor.execute(query)
                     connector.commit()
 
@@ -254,7 +255,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                 fl_table_list.append(ddict['table'])
                 if ddict['table'] not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
-                             f'time zone NOT NULL, temperature real, humidity real, pressure real, '
+                             f'time zone NOT NULL, temperature real, humidity real, pressure real, pressure_msl real,'
                              f'CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KEY (date_time)) TABLESPACE '
                              f'pg_default; ALTER TABLE public."{ddict["table"]}" OWNER to weather_station;')
                     cursor.execute(query)
@@ -312,12 +313,12 @@ class RequestPlotDataThread(QtCore.QThread):
             temp_in_x, temp_in_y = self.query_table_for_data('temperature', in_temp_table, limit)
             temp_out_x, temp_out_y = self.query_table_for_data('temperature', out_temp_table, limit)
             hum_in_x, hum_in_y = self.query_table_for_data('humidity', in_hum_table, limit)
-            pres_out_x, pres_out_y = self.query_table_for_data('pressure', out_pres_table, limit)
-            if (self.config_dict.getboolean('TIMESERIES', 'msl_pressure') and temp_out_y is not None
-                    and self.config_dict.get('SYSTEM', 'place_altitude') and pres_out_y is not None):
-                alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-                pres_out_y = pres_out_y + ((pres_out_y * 9.80665 * alt) / (287.0531 * (273.15 + temp_out_y + (alt /
-                                                                                                              400))))
+            if self.config_dict.getboolean('TIMESERIES', 'msl_pressure'):
+                ylabel = 'Pression SL (hPa)'
+                pres_out_x, pres_out_y = self.query_table_for_data('pressure_msl', out_pres_table, limit)
+            else:
+                ylabel = 'Pression (hPa)'
+                pres_out_x, pres_out_y = self.query_table_for_data('pressure', out_pres_table, limit)
             self.plot_in_1.clear()
             self.plot_in_2.clear()
             self.plot_out_1.clear()
@@ -329,7 +330,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_in_2.set_ylim(0, 100)
             self.plot_out_1.set_ylabel('Température (°C)', color=color_1)
             self.plot_out_1.tick_params(axis='y', labelcolor=color_1)
-            self.plot_out_2.set_ylabel('Pression (hPa)', color=color_3)
+            self.plot_out_2.set_ylabel(ylabel, color=color_3)
             self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
             if temp_in_y is not None:
                 self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
