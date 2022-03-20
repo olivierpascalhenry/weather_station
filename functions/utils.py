@@ -79,7 +79,7 @@ def create_logging_handlers(config_dict, filename, default_path):
 def sync_graphic_folders(gui_path):
     logging.debug('gui - utils.py - sync_graphic_folders')
     if platform.system() == 'Linux':
-        path = pathlib.Path('/home/pi')
+        path = pathlib.Path().home()
         gui_path = pathlib.Path(gui_path)
         if path.joinpath('icons').exists():
             logging.debug('gui - utils.py - sync_graphic_folders - synchronizing graphic folders')
