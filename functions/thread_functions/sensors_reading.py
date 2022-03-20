@@ -125,14 +125,16 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
 class BME280DataCollectingThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, sensor_dict):
+    def __init__(self, db_dict, sensor_dict, altitude):
         QtCore.QThread.__init__(self)
-        logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread - __init__ - sensor_dict: {sensor_dict}')
+        logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread - __init__ - sensor_dict: {sensor_dict} '
+                     f'; altitude: {altitude}')
         self.name = sensor_dict['id']
         self.sensor_dict = sensor_dict
         self.address = int(sensor_dict['id'][sensor_dict['id'].find('0x'):], 16)
         self.bus = sensor_dict['bus']
         self.cal_params = None
+        self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -142,8 +144,8 @@ class BME280DataCollectingThread(QtCore.QThread):
         if self.set_bme280_parameters():
             while True:
                 date_time = datetime.datetime.now().replace(microsecond=0)
-                temp, hum, pres = self.collect_data()
-                self.add_data_to_db(date_time, temp, hum, pres)
+                temp, hum, pres, pres_msl = self.collect_data()
+                self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
                 time.sleep(int(self.sensor_dict['refresh']))
 
     def collect_data(self):
@@ -153,20 +155,27 @@ class BME280DataCollectingThread(QtCore.QThread):
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
             pres = round(data.pressure, 1)
+
+            if self.alt is not None:
+                pres_msl = pres + ((pres * 9.80665 * self.alt) / (287.0531 * (273.15 + temp + (self.alt / 400))))
+                pres_msl = round(pres_msl, 1)
+            else:
+                pres_msl = pres
+
             if temp > 50:
                 temp = None
         except Exception:
             logging.exception(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - '
                               f'collect_data - an exception occurred when collecting bme280 data')
-            temp, hum, pres = None, None, None
-        return temp, hum, pres
+            temp, hum, pres, pres_msl = None, None, None, None
+        return temp, hum, pres, pres_msl
 
-    def add_data_to_db(self, dt, tp, hm, ps):
+    def add_data_to_db(self, dt, tp, hm, ps, ps_sl):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - add_data_to_db - '
-                      f'dt: {dt} ; tp: {tp} ; hm: {hm} ; ps: {ps}')
+                      f'dt: {dt} ; tp: {tp} ; hm: {hm} ; ps: {ps} ; ps_sl: {ps_sl}')
         try:
             self.cursor.execute(f'insert into "{self.sensor_dict["table"]}" (date_time, temperature, humidity, '
-                                f'pressure) values (%s, %s, %s, %s)', (dt, tp, hm, ps))
+                                f'pressure, pressure_msl) values (%s, %s, %s, %s, %s)', (dt, tp, hm, ps, ps_sl))
             self.connector.commit()
         except Exception:
             logging.exception(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} -'
@@ -208,8 +217,8 @@ class BME280DataCollectingTestThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - run')
         while True:
             date_time = datetime.datetime.now().replace(microsecond=0)
-            temp, hum, pres = self.collect_data_test()
-            self.add_data_to_db(date_time, temp, hum, pres)
+            temp, hum, pres, pres_msl = self.collect_data_test()
+            self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
             time.sleep(self.sensors_rate)
 
     def collect_data_test(self):
@@ -217,14 +226,15 @@ class BME280DataCollectingTestThread(QtCore.QThread):
         temp = self.collect_test_data(20., 5)
         hum = self.collect_test_data(65., 20)
         pres = self.collect_test_data(1013., 15)
-        return temp, hum, pres
+        pres_msl = self.collect_test_data(1013., 15)
+        return temp, hum, pres, pres_msl
 
-    def add_data_to_db(self, dt, tp, hm, ps):
+    def add_data_to_db(self, dt, tp, hm, ps, ps_sl):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingTestThread - add_data_to_db - dt: {dt} ; tp:'
-                      f' {tp} ; hm: {hm} ; ps: {ps}')
+                      f' {tp} ; hm: {hm} ; ps: {ps} ; ps_sl: {ps_sl}')
         try:
-            self.cursor.execute('insert into "BME280_TEST" (date_time, temperature, humidity, pressure) '
-                                'values (%s, %s, %s, %s)', (dt, tp, hm, ps))
+            self.cursor.execute('insert into "BME280_TEST" (date_time, temperature, humidity, pressure, pressure_msl) '
+                                'values (%s, %s, %s, %s, %s)', (dt, tp, hm, ps, ps_sl))
             self.connector.commit()
         except Exception:
             logging.exception('gui - sensors_reading.py - BME280DataCollectingTestThread - set_bme280_parameters - an '
@@ -245,9 +255,11 @@ class BME280DataCollectingTestThread(QtCore.QThread):
 class MqttToDbThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, mqtt_dict):
+    def __init__(self, db_dict, mqtt_dict, altitude):
         QtCore.QThread.__init__(self)
-        logging.info('gui - sensors_reading.py - MqttToDbThread - __init__')
+        logging.info(f'gui - sensors_reading.py - MqttToDbThread - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
+                     f'{altidude}')
+        self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
         self.cursor = self.connector.cursor()
@@ -293,6 +305,14 @@ class MqttToDbThread(QtCore.QThread):
             pressure = round(data['pressure'], 1)
         except KeyError:
             pressure = None
+
+        if self.alt is not None and temperature is not None:
+            pressure_msl = pressure + ((pressure * 9.80665 * self.alt) /
+                                       (287.0531 * (273.15 + temperature + (self.alt / 400))))
+            pressure_msl = round(pressure_msl, 1)
+        else:
+            pressure_msl = prespressure
+
         try:
             battery = data['battery']
         except KeyError:
@@ -301,25 +321,19 @@ class MqttToDbThread(QtCore.QThread):
             signal = data['linkquality']
         except KeyError:
             signal = None
-        self.add_data_to_db(date_time, temperature, humidity, pressure, battery, signal, database)
+        self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
 
-    def add_data_to_db(self, dt, tp, hm, ps, bt, lk, db):
+    def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
-                      f'| {bt} | {lk} | {db}')
+                      f'| {ps_sl} | {bt} | {lk} | {db}')
         try:
-            self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, battery, '
-                                f'signal) values (%s, %s, %s, %s, %s, %s)',
-                                (dt, tp, hm, ps, bt, lk))
+            self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, pressure_msl, '
+                                f'battery, signal) values (%s, %s, %s, %s, %s, %s, %s)',
+                                (dt, tp, hm, ps, ps_sl, bt, lk))
             self.connector.commit()
         except Exception:
             logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
                               'when adding data to db')
-
-    @staticmethod
-    def collect_test_data(num, limit):
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - collect_test_data')
-        random.seed()
-        return round(num + random.uniform(0, limit), 1)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
@@ -347,18 +361,19 @@ class MqttToDbTestThread(QtCore.QThread):
             temperature = self.collect_test_data(20., 5)
             humidity = self.collect_test_data(65., 20)
             pressure = self.collect_test_data(1013., 15)
-            batterie = 75.
+            pressure_msl = self.collect_test_data(1013., 15)
+            battery = 75.
             signal = 97.
-            self.add_data_to_db(date_time, temperature, humidity, pressure, batterie, signal, database)
+            self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
             time.sleep(60)
 
-    def add_data_to_db(self, dt, tp, hm, ps, bt, lk, db):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
-                      f'| {bt} | {lk} | {db}')
+    def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - add_data_to_db - data : {dt} | {tp} | {hm} '
+                      f'| {ps} | {ps_sl} | {bt} | {lk} | {db}')
         try:
-            self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, battery, '
-                                f'signal) values (%s, %s, %s, %s, %s, %s)',
-                                (dt, tp, hm, ps, bt, lk))
+            self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, pressure_msl, '
+                                f'battery, signal) values (%s, %s, %s, %s, %s, %s, %s)',
+                                (dt, tp, hm, ps, ps_sl, bt, lk))
             self.connector.commit()
         except Exception:
             logging.exception('gui - sensors_reading.py - MqttToDbTestThread - set_mqtt_client - an exception occurred '
@@ -426,6 +441,8 @@ class DBInDataThread(QtCore.QThread):
                                 'column': 'humidity'},
                         'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'pressure'},
+                        'pres_msl': {'query': f'SELECT pressure_msl FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                     'column': 'pressure_msl'},
                         'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                 'column': 'battery'},
                         'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
@@ -433,7 +450,8 @@ class DBInDataThread(QtCore.QThread):
             self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
             column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
-                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
+                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
+                            'bat': None, 'sig': None}
                 for var, req in req_dict.items():
                     try:
                         if req['column'] in column_list:
@@ -507,6 +525,8 @@ class DBOutDataThread(QtCore.QThread):
                                 'column': 'humidity'},
                         'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'pressure'},
+                        'pres_msl': {'query': f'SELECT pressure_msl FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+                                     'column': 'pressure_msl'},
                         'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                 'column': 'battery'},
                         'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
@@ -514,7 +534,8 @@ class DBOutDataThread(QtCore.QThread):
             self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
             column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
-                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
+                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
+                            'bat': None, 'sig': None}
                 for var, req in req_dict.items():
                     try:
                         if req['column'] in column_list:
