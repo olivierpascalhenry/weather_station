@@ -36,6 +36,7 @@
     * the syncing function now works with all users.
     * sensor dict is now used properly in all threads collecting data.
     * fixed an issue preventing the deletion of a sensor in BME280 window
+    * msl pressure was missing from the variable dict when no sensor is connected.
 
 ### March 5 2021, Release version 0.10.1 ###
 
