@@ -385,7 +385,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_in_data_thread.error.connect(self.log_thread_error)
             self.display_in_data_thread.start()
         else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
+                         'sig': None}
             self.refresh_in_data(data_dict)
         if self.config_dict.get('DISPLAY', 'out_sensor'):
             self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
@@ -393,7 +394,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_out_data_thread.error.connect(self.log_thread_error)
             self.display_out_data_thread.start()
         else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'bat': None, 'sig': None}
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
+                         'sig': None}
             self.refresh_out_data(data_dict)
 
     def no_internet_message(self):

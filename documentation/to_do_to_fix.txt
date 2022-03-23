@@ -1,6 +1,7 @@
 ### To do list: ###
 
 * ajouter un champ "durée de stockage" pour chaque capteur MQTT
+* ajouter des coefs de calibration pour les capteurs (offset, courbe, etc)
 
 ### To fix list: ###
 
