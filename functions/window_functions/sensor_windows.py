@@ -39,7 +39,8 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         self.battery_ln.textChanged.connect(self.add_text_to_dict)
         self.signal_ln.textChanged.connect(self.add_text_to_dict)
         for button in self.findChildren(QtWidgets.QToolButton):
-            if button.objectName()[: 3] not in ['del', 'add', 'ok_', 'can']:
+            if button.objectName()[: -3] in ['username', 'password', 'address', 'main_topic', 'temperature',
+                                             'humidity', 'pressure', 'battery', 'signal']:
                 button.clicked.connect(self.display_keyboard)
         self.parse_mqtt_dict()
 
