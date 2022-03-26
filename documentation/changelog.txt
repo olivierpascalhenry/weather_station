@@ -38,6 +38,7 @@
     * fixed an issue preventing the deletion of a sensor in BME280 window
     * msl pressure was missing from the variable dict when no sensor is connected.
     * the address button of the mqtt managers was not connected to a function.
+    * fixed few issues with MQTT thread.
 
 ### March 5 2021, Release version 0.10.1 ###
 
