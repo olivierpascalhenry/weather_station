@@ -431,6 +431,7 @@ class DBInDataThread(QtCore.QThread):
                         if self.device_name == device:
                             table = device
                             break
+        logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - table: {table}')
         if table is not None:
             req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'temperature'},
@@ -456,10 +457,11 @@ class DBInDataThread(QtCore.QThread):
                         if req['column'] in column_list:
                             self.cursor.execute(req['query'])
                             data = self.cursor.fetchone()
-                            if var == 'temp_minmax':
-                                var_dict[var] = data
-                            else:
-                                var_dict[var] = data[0]
+                            if data is not None:
+                                if var == 'temp_minmax':
+                                    var_dict[var] = data
+                                else:
+                                    var_dict[var] = data[0]
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
                                           f'occurred when requesting {var} from {table}')
@@ -515,6 +517,7 @@ class DBOutDataThread(QtCore.QThread):
                         if self.device_name == device:
                             table = device
                             break
+        logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - table: {table}')
         if table is not None:
             req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'temperature'},
@@ -540,10 +543,11 @@ class DBOutDataThread(QtCore.QThread):
                         if req['column'] in column_list:
                             self.cursor.execute(req['query'])
                             data = self.cursor.fetchone()
-                            if var == 'temp_minmax':
-                                var_dict[var] = data
-                            else:
-                                var_dict[var] = data[0]
+                            if data is not None:
+                                if var == 'temp_minmax':
+                                    var_dict[var] = data
+                                else:
+                                    var_dict[var] = data[0]
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
                                           f'occurred when requesting {var} from {table}')

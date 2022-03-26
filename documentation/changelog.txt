@@ -27,6 +27,7 @@
     * a new close window has been designed.
     * a name has been given to all threads collecting data for logging purpose.
     * MSL pressure is now computed in collecting threads.
+    * threads to display data have been improved.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
