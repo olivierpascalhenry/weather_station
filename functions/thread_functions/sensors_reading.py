@@ -258,7 +258,7 @@ class MqttToDbThread(QtCore.QThread):
     def __init__(self, db_dict, mqtt_dict, altitude):
         QtCore.QThread.__init__(self)
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
-                     f'{altidude}')
+                     f'{altitude}')
         self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'])
@@ -287,11 +287,10 @@ class MqttToDbThread(QtCore.QThread):
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code: {rc}')
 
     def parse_data(self, client, userdata, message):
-        message = str(message.payload.decode('utf-8'))
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : {message} ; '
-                      f'from {message.topic}')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : '
+                      f'{str(message.payload.decode("utf-8"))} ; from {message.topic}')
         date_time = datetime.datetime.now()
-        data = json.loads(message)
+        data = json.loads(str(message.payload.decode('utf-8')))
         database = os.path.basename(message.topic)
         try:
             temperature = round(data['temperature'], 1)
