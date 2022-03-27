@@ -280,11 +280,12 @@ class MqttToDbThread(QtCore.QThread):
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):
-        logging.info(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
 
     @staticmethod
     def on_disconnect(client, userdata, rc):
-        logging.info(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code: {rc}')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code:'
+                      f' {rc}')
 
     def parse_data(self, client, userdata, message):
         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : '
@@ -337,6 +338,7 @@ class MqttToDbThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
         if platform.system() == 'Linux':
+            self.mqtt_client.loop_stop()
             self.mqtt_client.disconnect()
         self.connector.close()
         self.terminate()
