@@ -12,6 +12,8 @@
     * options to control data feed for time series and the computation of MSL pressure have been introduced.
     * ephemeris section has been introduced.
     * few new logging messages have been added.
+    * a storage value has been added for all MQTT sensors.
+    * a checkbox to activate/deactivate a sensor has been added.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.

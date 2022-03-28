@@ -436,3 +436,14 @@ def get_season(dt):
                ('Automne', (datetime.date(y, 9, 23), datetime.date(y, 12, 20))),
                ('Hiver', (datetime.date(y, 12, 21), datetime.date(y, 12, 31)))]
     return next(season for season, (start, end) in seasons if start <= dt <= end)
+
+
+def str2bool(string):
+    logging.debug(f'gui - utils.py - str2bool - string: {string}')
+    if string == 'True':
+        return True
+    elif string == 'False':
+        return False
+    else:
+        raise ValueError
+
