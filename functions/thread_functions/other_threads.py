@@ -242,7 +242,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
             for device, ddict in ds18_dict.items():
                 fl_table_list.append(ddict['table'])
-                if ddict['table'] not in table_list:
+                if ddict['table'] and ddict['table'] not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
                              f'time zone NOT NULL, temperature real, humidity real, pressure real, pressure_msl real,'
                              f' battery real, signal real, CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KE'
@@ -253,7 +253,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
             for device, ddict in bme280_dict.items():
                 fl_table_list.append(ddict['table'])
-                if ddict['table'] not in table_list:
+                if ddict['table'] and ddict['table'] not in table_list:
                     query = (f'CREATE TABLE IF NOT EXISTS public."{ddict["table"]}" (date_time timestamp without '
                              f'time zone NOT NULL, temperature real, humidity real, pressure real, pressure_msl real,'
                              f'CONSTRAINT "{ddict["table"]}_pkey" PRIMARY KEY (date_time)) TABLESPACE '
