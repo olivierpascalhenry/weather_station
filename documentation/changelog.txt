@@ -42,6 +42,7 @@
     * msl pressure was missing from the variable dict when no sensor is connected.
     * the address button of the mqtt managers was not connected to a function.
     * fixed few issues with MQTT thread.
+    * if a table is empty for a sensor, its thread is now launched.
 
 ### March 5 2021, Release version 0.10.1 ###
 
