@@ -6,7 +6,8 @@ from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from ui.Ui_1wiremanagerwindow import Ui_sensormanagerWindow
 from ui.Ui_townsearchwindow import Ui_townsearchWindow
 from functions.window_functions.other_windows import MyKeyboard, MyNumpad
-from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
+from functions.utils import (code_to_departement, stylesheet_creation_function, font_creation_function,
+                             icon_creation_function, clear_layout, str2bool)
 if platform.system() == 'Linux':
     import pigpio
 
@@ -22,26 +23,43 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
+        self.splitter.setSizes([300, 526])
         self.cancel = True
         self.mqtt_dict = mqtt_dict
+        self.topic_hor_layout = []
+        self.topic_del_button = []
+        self.topic_label = []
+        self.topic_edit_line = []
+        self.topic_edit_button = []
+        self.topic_nbr = 0
+        self.equivalence_topic_dict = {'Température': 'temperature', 'Humidité': 'humidity', 'Pression': 'pressure',
+                                       'Batterie': 'battery', 'Signal': 'signal'}
+        self.rev_equivalence_topic_dict = {value: key for key, value in self.equivalence_topic_dict.items()}
+        self.verticalLayout_2.setAlignment(QtCore.Qt.AlignTop)
+        self.addtopic_cb.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        scroll = QtWidgets.QScroller.scroller(self.info_scroll_area.viewport())
+        scroll.grabGesture(self.info_scroll_area.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
+        properties = scroll.scrollerProperties()
+        properties.setScrollMetric(QtWidgets.QScrollerProperties.VerticalOvershootPolicy,
+                                   QtWidgets.QScrollerProperties.OvershootAlwaysOff)
+        scroll.setScrollerProperties(properties)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.clicked.connect(self.confirm_device_dict)
         self.sensor_list.itemClicked.connect(self.show_device_information)
         self.add_sensor.clicked.connect(self.add_device)
         self.del_sensor.clicked.connect(self.del_device)
+        self.addtopic_bt.clicked.connect(self.add_topic)
+        self.active_ck.clicked.connect(self.set_device_active)
         self.username_ln.textChanged.connect(self.add_text_to_dict)
         self.password_ln.textChanged.connect(self.add_text_to_dict)
         self.address_ln.textChanged.connect(self.add_text_to_dict)
         self.main_topic_ln.textChanged.connect(self.add_text_to_dict)
-        self.temperature_ln.textChanged.connect(self.add_text_to_dict)
-        self.humidity_ln.textChanged.connect(self.add_text_to_dict)
-        self.pressure_ln.textChanged.connect(self.add_text_to_dict)
-        self.battery_ln.textChanged.connect(self.add_text_to_dict)
-        self.signal_ln.textChanged.connect(self.add_text_to_dict)
-        for button in self.findChildren(QtWidgets.QToolButton):
-            if button.objectName()[: -3] in ['username', 'password', 'address', 'main_topic', 'temperature',
-                                             'humidity', 'pressure', 'battery', 'signal']:
-                button.clicked.connect(self.display_keyboard)
+        self.store_ln.textChanged.connect(self.add_text_to_dict)
+        self.store_bt.clicked.connect(self.display_keyboard)
+        self.username_bt.clicked.connect(self.display_keyboard)
+        self.password_bt.clicked.connect(self.display_keyboard)
+        self.address_bt.clicked.connect(self.display_keyboard)
+        self.main_topic_bt.clicked.connect(self.display_keyboard)
         self.parse_mqtt_dict()
 
     def parse_mqtt_dict(self):
@@ -56,21 +74,26 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
     def show_device_information(self, item):
         logging.debug('gui - other_windows.py - MqttManager - show_device_information')
         self.del_sensor.setEnabled(True)
-        self.temperature_ln.setEnabled(True)
-        self.pressure_ln.setEnabled(True)
-        self.humidity_ln.setEnabled(True)
-        self.battery_ln.setEnabled(True)
-        self.signal_ln.setEnabled(True)
-        self.temperature_ln.setText(self.mqtt_dict['devices'][item.text()]['temperature'])
-        self.pressure_ln.setText(self.mqtt_dict['devices'][item.text()]['pressure'])
-        self.humidity_ln.setText(self.mqtt_dict['devices'][item.text()]['humidity'])
-        self.battery_ln.setText(self.mqtt_dict['devices'][item.text()]['battery'])
-        self.signal_ln.setText(self.mqtt_dict['devices'][item.text()]['signal'])
-        self.temperature_bt.setEnabled(True)
-        self.pressure_bt.setEnabled(True)
-        self.humidity_bt.setEnabled(True)
-        self.battery_bt.setEnabled(True)
-        self.signal_bt.setEnabled(True)
+        self.active_ck.setEnabled(True)
+        self.store_lb.setEnabled(True)
+        self.store_lb_2.setEnabled(True)
+        self.store_ln.setEnabled(True)
+        self.store_bt.setEnabled(True)
+        self.addtopic_cb.setEnabled(True)
+        self.addtopic_bt.setEnabled(True)
+        self.store_ln.setText(self.mqtt_dict['devices'][item.text()]['store'])
+        self.active_ck.setChecked(str2bool(self.mqtt_dict['devices'][item.text()]['active']))
+        topic_list = [topic for topic in self.mqtt_dict['devices'][item.text()] if topic not in ['store', 'active']]
+        clear_layout(self.topic_layout)
+        self.topic_hor_layout.clear()
+        self.topic_del_button.clear()
+        self.topic_label.clear()
+        self.topic_edit_line.clear()
+        self.topic_edit_button.clear()
+        self.topic_nbr = 0
+        for topic in topic_list:
+            value = self.mqtt_dict['devices'][item.text()][topic]
+            self.add_topic(topic=self.rev_equivalence_topic_dict[topic], value=value)
 
     def add_device(self):
         logging.debug('gui - other_windows.py - MqttManager - add_device')
@@ -80,8 +103,7 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
             name = str(keyboard_window.num_line.text())
             if not self.sensor_list.findItems(name, QtCore.Qt.MatchFixedString):
                 self.sensor_list.addItem(name)
-                tmp_dict = {'temperature': '', 'humidity': '', 'pressure': '', 'battery': '', 'signal': '',
-                            'store': '48'}
+                tmp_dict = {'store': '24', 'active': 'True'}
                 self.mqtt_dict['devices'][name] = tmp_dict
 
     def del_device(self):
@@ -90,38 +112,123 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         del self.mqtt_dict['devices'][item.text()]
         if not self.sensor_list.selectedItems():
             self.del_sensor.setEnabled(False)
-            self.temperature_ln.setEnabled(False)
-            self.pressure_ln.setEnabled(False)
-            self.humidity_ln.setEnabled(False)
-            self.battery_ln.setEnabled(False)
-            self.signal_ln.setEnabled(False)
-            self.temperature_bt.setEnabled(False)
-            self.pressure_bt.setEnabled(False)
-            self.humidity_bt.setEnabled(False)
-            self.battery_bt.setEnabled(False)
-            self.signal_bt.setEnabled(False)
-            self.temperature_ln.setText('')
-            self.pressure_ln.setText('')
-            self.humidity_ln.setText('')
-            self.battery_ln.setText('')
-            self.signal_ln.setText('')
+            self.del_sensor.setEnabled(False)
+            self.active_ck.setEnabled(False)
+            self.store_lb.setEnabled(False)
+            self.store_lb_2.setEnabled(False)
+            self.store_ln.setEnabled(False)
+            self.store_bt.setEnabled(False)
+            self.addtopic_cb.setEnabled(False)
+            self.addtopic_bt.setEnabled(False)
+            self.store_ln.clear()
+            self.active_ck.setChecked(False)
         else:
             self.show_device_information(self.sensor_list.currentItem())
+
+    def add_topic(self, topic=None, value=None):
+        logging.debug('gui - other_windows.py - MqttManager - add_topic')
+        if topic is None or value is None:
+            topic_list = [item.text()[: -2] for item in self.topic_label]
+            topic = self.addtopic_cb.currentText()
+            value = ''
+            if topic == 'Ajouter un topic' or topic in topic_list:
+                return
+        self.topic_hor_layout.append(QtWidgets.QHBoxLayout())
+        self.topic_hor_layout[self.topic_nbr].setObjectName(f'topic_hor_layout_{self.topic_nbr}')
+        self.topic_del_button.append(QtWidgets.QToolButton())
+        self.topic_del_button[self.topic_nbr].setMinimumSize(QtCore.QSize(40, 40))
+        self.topic_del_button[self.topic_nbr].setMaximumSize(QtCore.QSize(40, 40))
+        self.topic_del_button[self.topic_nbr].setStyleSheet(stylesheet_creation_function('qtoolbutton'))
+        self.topic_del_button[self.topic_nbr].setText('')
+        self.topic_del_button[self.topic_nbr].setIcon(icon_creation_function('del_icon.svg'))
+        self.topic_del_button[self.topic_nbr].setIconSize(QtCore.QSize(40, 40))
+        self.topic_del_button[self.topic_nbr].setObjectName(f'topic_del_button_{self.topic_nbr}')
+        self.topic_hor_layout[self.topic_nbr].addWidget(self.topic_del_button[self.topic_nbr])
+        self.topic_label.append(QtWidgets.QLabel())
+        self.topic_label[self.topic_nbr].setMinimumSize(QtCore.QSize(0, 40))
+        self.topic_label[self.topic_nbr].setMaximumSize(QtCore.QSize(16777215, 40))
+        self.topic_label[self.topic_nbr].setFont(font_creation_function('medium_big'))
+        self.topic_label[self.topic_nbr].setStyleSheet(stylesheet_creation_function('qlabel'))
+        self.topic_label[self.topic_nbr].setText(topic + ' :')
+        self.topic_label[self.topic_nbr].setObjectName(f'topic_label_{self.topic_nbr}')
+        self.topic_hor_layout[self.topic_nbr].addWidget(self.topic_label[self.topic_nbr])
+        self.topic_edit_line.append(QtWidgets.QLineEdit())
+        self.topic_edit_line[self.topic_nbr].setMinimumSize(QtCore.QSize(150, 40))
+        self.topic_edit_line[self.topic_nbr].setMaximumSize(QtCore.QSize(16777215, 40))
+        self.topic_edit_line[self.topic_nbr].setFont(font_creation_function('medium_big'))
+        self.topic_edit_line[self.topic_nbr].setStyleSheet(stylesheet_creation_function('qlineedit'))
+        self.topic_edit_line[self.topic_nbr].setText(value)
+        self.topic_edit_line[self.topic_nbr].setObjectName(f'topic_edit_line_{self.topic_nbr}')
+        self.topic_hor_layout[self.topic_nbr].addWidget(self.topic_edit_line[self.topic_nbr])
+        self.topic_edit_button.append(QtWidgets.QToolButton())
+        self.topic_edit_button[self.topic_nbr].setMinimumSize(QtCore.QSize(40, 40))
+        self.topic_edit_button[self.topic_nbr].setMaximumSize(QtCore.QSize(40, 40))
+        self.topic_edit_button[self.topic_nbr].setStyleSheet(stylesheet_creation_function('qtoolbutton_mqtt'))
+        self.topic_edit_button[self.topic_nbr].setText('')
+        self.topic_edit_button[self.topic_nbr].setIcon(icon_creation_function('edit_icon.svg'))
+        self.topic_edit_button[self.topic_nbr].setIconSize(QtCore.QSize(40, 40))
+        self.topic_edit_button[self.topic_nbr].setObjectName(f'topic_edit_button_{self.topic_nbr}')
+        self.topic_hor_layout[self.topic_nbr].addWidget(self.topic_edit_button[self.topic_nbr])
+        self.topic_layout.addLayout(self.topic_hor_layout[self.topic_nbr])
+        self.topic_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.topic_edit_line[self.topic_nbr].textChanged.connect(self.add_text_to_dict)
+        self.topic_edit_button[self.topic_nbr].clicked.connect(self.display_keyboard)
+        self.topic_del_button[self.topic_nbr].clicked.connect(self.del_topic)
+        self.topic_nbr += 1
+
+    def del_topic(self):
+        logging.debug('gui - other_windows.py - MqttManager - del_topic')
+        device = str(self.sensor_list.currentItem().text())
+        idx = int(self.sender().objectName()[self.sender().objectName().rfind('_') + 1:])
+        topic = self.equivalence_topic_dict[self.topic_label[idx].text()[: -2]]
+        if topic in self.mqtt_dict['devices'][device]:
+            del self.mqtt_dict['devices'][device][topic]
+        self.topic_del_button[idx].deleteLater()
+        self.topic_del_button.pop(idx)
+        self.topic_label[idx].deleteLater()
+        self.topic_label.pop(idx)
+        self.topic_edit_line[idx].deleteLater()
+        self.topic_edit_line.pop(idx)
+        self.topic_edit_button[idx].deleteLater()
+        self.topic_edit_button.pop(idx)
+        self.topic_hor_layout[idx].deleteLater()
+        self.topic_hor_layout.pop(idx)
+        self.topic_nbr -= 1
+        if len(self.topic_hor_layout) > 0:
+            for i in range(0, len(self.topic_hor_layout)):
+                self.topic_hor_layout[i].setObjectName(f'topic_hor_layout_{i}')
+                self.topic_del_button[i].setObjectName(f'topic_del_button_{i}')
+                self.topic_label[i].setObjectName(f'topic_label_{i}')
+                self.topic_edit_line[i].setObjectName(f'topic_edit_line_{i}')
+                self.topic_edit_button[i].setObjectName(f'topic_edit_button_{i}')
 
     def add_text_to_dict(self):
         logging.debug('gui - other_windows.py - MqttManager - add_text_to_dict')
         try:
-            if self.sender().objectName()[: -3] in ['temperature', 'humidity', 'pressure', 'battery', 'signal']:
-                device = str(self.sensor_list.currentItem().text())
-                self.mqtt_dict['devices'][device][self.sender().objectName()[: -3]] = str(self.sender().text())
-            else:
+            if self.sender().objectName()[: -3] in ['username', 'address', 'password', 'main_topic']:
                 self.mqtt_dict[self.sender().objectName()[: -3]] = str(self.sender().text())
+            else:
+                device = str(self.sensor_list.currentItem().text())
+                if 'store' in self.sender().objectName():
+                    self.mqtt_dict['devices'][device]['store'] = str(self.sender().text())
+                else:
+                    nbr = int(self.sender().objectName()[self.sender().objectName().rfind('_') + 1:])
+                    topic = self.equivalence_topic_dict[self.topic_label[nbr].text()[: -2]]
+                    self.mqtt_dict['devices'][device][topic] = str(self.sender().text())
         except AttributeError:
             pass
 
+    def set_device_active(self):
+        device = str(self.sensor_list.currentItem().text())
+        self.mqtt_dict['devices'][device]['active'] = str(self.active_ck.isChecked())
+
     def display_keyboard(self):
         logging.debug('gui - other_windows.py - MqttManager - display_keyboard')
-        lineedit = self.findChild(QtWidgets.QLineEdit, self.sender().objectName()[: -2] + 'ln')
+        if self.sender().objectName().startswith('topic_'):
+            nbr = int(self.sender().objectName()[self.sender().objectName().rfind('_') + 1:])
+            lineedit = self.findChild(QtWidgets.QLineEdit, f'topic_edit_line_{nbr}')
+        else:
+            lineedit = self.findChild(QtWidgets.QLineEdit, self.sender().objectName()[: -2] + 'ln')
         keyboard_window = MyKeyboard(self)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
@@ -149,7 +256,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.setGraphicsEffect(shadow)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
-        self.splitter.setSizes([270, 508])  # 778
+        self.splitter.setSizes([270, 508])
         self.cancel = True
         self.sensor_dict = sensor_dict
         self.section_list.itemClicked.connect(self.display_information)
@@ -162,6 +269,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.store_bt.clicked.connect(self.display_numpad)
         self.add_sensor.clicked.connect(self.display_available_sensors)
         self.del_sensor.clicked.connect(self.delete_sensor)
+        self.active_ck.clicked.connect(self.set_device_active)
         self.name_ln.textChanged.connect(self.set_sensor_dict_info)
         self.refresh_ln.textChanged.connect(self.set_sensor_dict_info)
         self.table_ln.textChanged.connect(self.set_sensor_dict_info)
@@ -191,7 +299,7 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
                 self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
-                                                          'id': sensor_window.sensor}
+                                                          'id': sensor_window.sensor, 'active': 'True'}
 
     def delete_sensor(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
@@ -204,6 +312,14 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         items = self.section_list.selectedItems()
         if items:
             sensor = items[0].text()
+            self.active_ck.setEnabled(True)
+            self.name_lb.setEnabled(True)
+            self.id_lb.setEnabled(True)
+            self.refresh_lb_1.setEnabled(True)
+            self.refresh_lb_2.setEnabled(True)
+            self.table_lb.setEnabled(True)
+            self.store_lb_1.setEnabled(True)
+            self.store_lb_2.setEnabled(True)
             self.name_ln.setEnabled(True)
             self.refresh_ln.setEnabled(True)
             self.table_ln.setEnabled(True)
@@ -213,6 +329,10 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             self.table_bt.setEnabled(True)
             self.store_bt.setEnabled(True)
             self.id_ln.setText(self.sensor_dict[sensor]['id'])
+            try:
+                self.active_ck.setChecked(str2bool(self.sensor_dict[sensor]['active']))
+            except KeyError:
+                pass
             try:
                 self.name_ln.setText(self.sensor_dict[sensor]['name'])
             except KeyError:
@@ -230,6 +350,14 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
         else:
+            self.active_ck.setEnabled(False)
+            self.name_lb.setEnabled(False)
+            self.id_lb.setEnabled(False)
+            self.refresh_lb_1.setEnabled(False)
+            self.refresh_lb_2.setEnabled(False)
+            self.table_lb.setEnabled(False)
+            self.store_lb_1.setEnabled(False)
+            self.store_lb_2.setEnabled(False)
             self.name_ln.setEnabled(False)
             self.refresh_ln.setEnabled(False)
             self.table_ln.setEnabled(False)
@@ -246,10 +374,13 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
 
     def set_sensor_dict_info(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - set_sensor_dict_info')
-        if self.section_list.selectedItems():
-            sensor = self.section_list.selectedItems()[0].text()
-            item = self.sender().objectName()[: -3]
-            self.sensor_dict[sensor][item] = str(self.sender().text())
+        sensor = self.section_list.currentItem().text()
+        item = self.sender().objectName()[: -3]
+        self.sensor_dict[sensor][item] = str(self.sender().text())
+
+    def set_device_active(self):
+        sensor = str(self.section_list.currentItem().text())
+        self.sensor_dict[sensor]['active'] = str(self.active_ck.isChecked())
 
     def display_keyboard(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - display_keyboard')
@@ -313,6 +444,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         self.store_bt.clicked.connect(self.display_numpad)
         self.add_sensor.clicked.connect(self.display_available_sensors)
         self.del_sensor.clicked.connect(self.delete_sensor)
+        self.active_ck.clicked.connect(self.set_device_active)
         self.name_ln.textChanged.connect(self.set_sensor_dict_info)
         self.refresh_ln.textChanged.connect(self.set_sensor_dict_info)
         self.table_ln.textChanged.connect(self.set_sensor_dict_info)
@@ -353,7 +485,7 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
                 self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
-                                                          'id': sensor_window.sensor, 'bus': 1}
+                                                          'id': sensor_window.sensor, 'bus': 1, 'active': 'True'}
 
     def delete_sensor(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
@@ -367,6 +499,14 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
         items = self.section_list.selectedItems()
         if items:
             sensor = items[0].text()
+            self.active_ck.setEnabled(True)
+            self.name_lb.setEnabled(True)
+            self.id_lb.setEnabled(True)
+            self.refresh_lb_1.setEnabled(True)
+            self.refresh_lb_2.setEnabled(True)
+            self.table_lb.setEnabled(True)
+            self.store_lb_1.setEnabled(True)
+            self.store_lb_2.setEnabled(True)
             self.name_ln.setEnabled(True)
             self.refresh_ln.setEnabled(True)
             self.table_ln.setEnabled(True)
@@ -376,6 +516,10 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             self.table_bt.setEnabled(True)
             self.store_bt.setEnabled(True)
             self.id_ln.setText(self.sensor_dict[sensor]['id'])
+            try:
+                self.active_ck.setChecked(str2bool(self.sensor_dict[sensor]['active']))
+            except KeyError:
+                pass
             try:
                 self.name_ln.setText(self.sensor_dict[sensor]['name'])
             except KeyError:
@@ -393,6 +537,14 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
             except KeyError:
                 pass
         else:
+            self.active_ck.setEnabled(False)
+            self.name_lb.setEnabled(False)
+            self.id_lb.setEnabled(False)
+            self.refresh_lb_1.setEnabled(False)
+            self.refresh_lb_2.setEnabled(False)
+            self.table_lb.setEnabled(False)
+            self.store_lb_1.setEnabled(False)
+            self.store_lb_2.setEnabled(False)
             self.name_ln.setEnabled(False)
             self.refresh_ln.setEnabled(False)
             self.table_ln.setEnabled(False)
@@ -409,10 +561,13 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
 
     def set_sensor_dict_info(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - set_sensor_dict_info')
-        if self.section_list.selectedItems():
-            sensor = self.section_list.selectedItems()[0].text()
-            item = self.sender().objectName()[: -3]
-            self.sensor_dict[sensor][item] = str(self.sender().text())
+        sensor = self.section_list.currentItem().text()
+        item = self.sender().objectName()[: -3]
+        self.sensor_dict[sensor][item] = str(self.sender().text())
+
+    def set_device_active(self):
+        sensor = str(self.section_list.currentItem().text())
+        self.sensor_dict[sensor]['active'] = str(self.active_ck.isChecked())
 
     def display_keyboard(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - display_keyboard')

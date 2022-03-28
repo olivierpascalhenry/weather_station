@@ -29,9 +29,14 @@ class Ui_mqttmanagerWindow(object):
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout_5 = QtWidgets.QGridLayout(mqttmanagerWindow)
-        self.gridLayout_5.setContentsMargins(-1, 4, 4, -1)
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.conn_gb = QtWidgets.QGroupBox(mqttmanagerWindow)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.conn_gb.sizePolicy().hasHeightForWidth())
+        self.conn_gb.setSizePolicy(sizePolicy)
+        self.conn_gb.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
@@ -50,10 +55,10 @@ class Ui_mqttmanagerWindow(object):
 "}")
         self.conn_gb.setObjectName("conn_gb")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.conn_gb)
-        self.gridLayout_3.setContentsMargins(10, 8, 0, 5)
+        self.gridLayout_3.setContentsMargins(10, 11, 10, 11)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setVerticalSpacing(0)
+        self.gridLayout_2.setVerticalSpacing(7)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.username_lb = QtWidgets.QLabel(self.conn_gb)
         self.username_lb.setMinimumSize(QtCore.QSize(0, 40))
@@ -97,8 +102,8 @@ class Ui_mqttmanagerWindow(object):
         self.gridLayout_2.addWidget(self.username_ln, 0, 1, 1, 1)
         self.username_bt = QtWidgets.QToolButton(self.conn_gb)
         self.username_bt.setEnabled(True)
-        self.username_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.username_bt.setMaximumSize(QtCore.QSize(50, 50))
+        self.username_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.username_bt.setMaximumSize(QtCore.QSize(40, 40))
         self.username_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -113,7 +118,7 @@ class Ui_mqttmanagerWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons/edit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.username_bt.setIcon(icon)
-        self.username_bt.setIconSize(QtCore.QSize(36, 36))
+        self.username_bt.setIconSize(QtCore.QSize(40, 40))
         self.username_bt.setObjectName("username_bt")
         self.gridLayout_2.addWidget(self.username_bt, 0, 2, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -160,8 +165,8 @@ class Ui_mqttmanagerWindow(object):
         self.gridLayout_2.addWidget(self.password_ln, 0, 5, 1, 1)
         self.password_bt = QtWidgets.QToolButton(self.conn_gb)
         self.password_bt.setEnabled(True)
-        self.password_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.password_bt.setMaximumSize(QtCore.QSize(50, 50))
+        self.password_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.password_bt.setMaximumSize(QtCore.QSize(40, 40))
         self.password_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -174,7 +179,7 @@ class Ui_mqttmanagerWindow(object):
 "}")
         self.password_bt.setText("")
         self.password_bt.setIcon(icon)
-        self.password_bt.setIconSize(QtCore.QSize(36, 36))
+        self.password_bt.setIconSize(QtCore.QSize(40, 40))
         self.password_bt.setObjectName("password_bt")
         self.gridLayout_2.addWidget(self.password_bt, 0, 6, 1, 1)
         self.address_lb = QtWidgets.QLabel(self.conn_gb)
@@ -219,8 +224,8 @@ class Ui_mqttmanagerWindow(object):
         self.gridLayout_2.addWidget(self.address_ln, 1, 1, 1, 1)
         self.address_bt = QtWidgets.QToolButton(self.conn_gb)
         self.address_bt.setEnabled(True)
-        self.address_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.address_bt.setMaximumSize(QtCore.QSize(50, 50))
+        self.address_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.address_bt.setMaximumSize(QtCore.QSize(40, 40))
         self.address_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -233,7 +238,7 @@ class Ui_mqttmanagerWindow(object):
 "}")
         self.address_bt.setText("")
         self.address_bt.setIcon(icon)
-        self.address_bt.setIconSize(QtCore.QSize(36, 36))
+        self.address_bt.setIconSize(QtCore.QSize(40, 40))
         self.address_bt.setObjectName("address_bt")
         self.gridLayout_2.addWidget(self.address_bt, 1, 2, 1, 1)
         spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
@@ -280,8 +285,8 @@ class Ui_mqttmanagerWindow(object):
         self.gridLayout_2.addWidget(self.main_topic_ln, 1, 5, 1, 1)
         self.main_topic_bt = QtWidgets.QToolButton(self.conn_gb)
         self.main_topic_bt.setEnabled(True)
-        self.main_topic_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.main_topic_bt.setMaximumSize(QtCore.QSize(50, 50))
+        self.main_topic_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.main_topic_bt.setMaximumSize(QtCore.QSize(40, 40))
         self.main_topic_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -294,85 +299,18 @@ class Ui_mqttmanagerWindow(object):
 "}")
         self.main_topic_bt.setText("")
         self.main_topic_bt.setIcon(icon)
-        self.main_topic_bt.setIconSize(QtCore.QSize(36, 36))
+        self.main_topic_bt.setIconSize(QtCore.QSize(40, 40))
         self.main_topic_bt.setObjectName("main_topic_bt")
         self.gridLayout_2.addWidget(self.main_topic_bt, 1, 6, 1, 1)
         self.gridLayout_3.addLayout(self.gridLayout_2, 0, 0, 1, 1)
         self.gridLayout_5.addWidget(self.conn_gb, 0, 0, 1, 1)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.ok_button = QtWidgets.QToolButton(mqttmanagerWindow)
-        self.ok_button.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
-        self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
-        self.ok_button.setMaximumSize(QtCore.QSize(50, 50))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ok_button.setFont(font)
-        self.ok_button.setStyleSheet("QToolButton {\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"    border-radius: 3px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ok_button.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ok_button.setIcon(icon1)
-        self.ok_button.setIconSize(QtCore.QSize(45, 45))
-        self.ok_button.setObjectName("ok_button")
-        self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
-        self.cancel_button = QtWidgets.QToolButton(mqttmanagerWindow)
-        self.cancel_button.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cancel_button.sizePolicy().hasHeightForWidth())
-        self.cancel_button.setSizePolicy(sizePolicy)
-        self.cancel_button.setMinimumSize(QtCore.QSize(50, 50))
-        self.cancel_button.setMaximumSize(QtCore.QSize(50, 50))
-        font = QtGui.QFont()
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.cancel_button.setFont(font)
-        self.cancel_button.setStyleSheet("QToolButton {\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"    border-radius: 3px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.cancel_button.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.cancel_button.setIcon(icon2)
-        self.cancel_button.setIconSize(QtCore.QSize(45, 45))
-        self.cancel_button.setObjectName("cancel_button")
-        self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem3 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem3)
-        self.gridLayout_5.addLayout(self.horizontalLayout_2, 3, 0, 1, 1)
         self.man_gb = QtWidgets.QGroupBox(mqttmanagerWindow)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.man_gb.sizePolicy().hasHeightForWidth())
+        self.man_gb.setSizePolicy(sizePolicy)
+        self.man_gb.setMinimumSize(QtCore.QSize(0, 300))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(14)
@@ -391,7 +329,7 @@ class Ui_mqttmanagerWindow(object):
 "}")
         self.man_gb.setObjectName("man_gb")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.man_gb)
-        self.gridLayout_4.setContentsMargins(10, 8, 0, 7)
+        self.gridLayout_4.setContentsMargins(10, 11, 0, 11)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.splitter = QtWidgets.QSplitter(self.man_gb)
         self.splitter.setStyleSheet("QSplitter::handle {\n"
@@ -425,8 +363,8 @@ class Ui_mqttmanagerWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.add_sensor.sizePolicy().hasHeightForWidth())
         self.add_sensor.setSizePolicy(sizePolicy)
-        self.add_sensor.setMinimumSize(QtCore.QSize(50, 50))
-        self.add_sensor.setMaximumSize(QtCore.QSize(50, 50))
+        self.add_sensor.setMinimumSize(QtCore.QSize(40, 40))
+        self.add_sensor.setMaximumSize(QtCore.QSize(40, 40))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -445,10 +383,10 @@ class Ui_mqttmanagerWindow(object):
 "    border: none;\n"
 "}")
         self.add_sensor.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/plus_2_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.add_sensor.setIcon(icon3)
-        self.add_sensor.setIconSize(QtCore.QSize(45, 45))
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/plus_2_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.add_sensor.setIcon(icon1)
+        self.add_sensor.setIconSize(QtCore.QSize(40, 40))
         self.add_sensor.setObjectName("add_sensor")
         self.verticalLayout.addWidget(self.add_sensor)
         self.del_sensor = QtWidgets.QToolButton(self.layoutWidget)
@@ -458,8 +396,8 @@ class Ui_mqttmanagerWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.del_sensor.sizePolicy().hasHeightForWidth())
         self.del_sensor.setSizePolicy(sizePolicy)
-        self.del_sensor.setMinimumSize(QtCore.QSize(50, 50))
-        self.del_sensor.setMaximumSize(QtCore.QSize(50, 50))
+        self.del_sensor.setMinimumSize(QtCore.QSize(40, 40))
+        self.del_sensor.setMaximumSize(QtCore.QSize(40, 40))
         font = QtGui.QFont()
         font.setPointSize(22)
         font.setKerning(True)
@@ -478,12 +416,14 @@ class Ui_mqttmanagerWindow(object):
 "    border: none;\n"
 "}")
         self.del_sensor.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.del_sensor.setIcon(icon2)
-        self.del_sensor.setIconSize(QtCore.QSize(45, 45))
+        self.del_sensor.setIconSize(QtCore.QSize(40, 40))
         self.del_sensor.setObjectName("del_sensor")
         self.verticalLayout.addWidget(self.del_sensor)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem4)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
         self.horizontalLayout_6.addLayout(self.verticalLayout)
         self.sensor_list = QtWidgets.QListWidget(self.layoutWidget)
         self.sensor_list.setEnabled(True)
@@ -538,40 +478,295 @@ class Ui_mqttmanagerWindow(object):
         self.sensor_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.sensor_list.setObjectName("sensor_list")
         self.horizontalLayout_6.addWidget(self.sensor_list)
-        self.layoutWidget1 = QtWidgets.QWidget(self.splitter)
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget1)
+        self.info_scroll_area = QtWidgets.QScrollArea(self.splitter)
+        self.info_scroll_area.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
+"\n"
+"QScrollBar:vertical {\n"
+"  border-left: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  margin: 21px 0px 21px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  margin: 0px 21px 0px 21px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-height: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::handle:horizontal {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-width: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"  border-top: 0px solid rgb(240,240,240);\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: bottom;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid rgb(240,240,240);\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: top;\n"
+"  subcontrol-origin: margin;\n"
+"  border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"  image: url(icons/up_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical {\n"
+"  image: url(icons/down_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid rgb(240,240,240);\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: right;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid rgb(240,240,240);\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: left;\n"
+"  subcontrol-origin: margin;\n"
+"border-bottom-left-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal {\n"
+"  image: url(icons/left_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal {\n"
+"  image: url(icons/right_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}")
+        self.info_scroll_area.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.info_scroll_area.setWidgetResizable(True)
+        self.info_scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.info_scroll_area.setObjectName("info_scroll_area")
+        self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 474, 280))
+        self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
+        self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout.setContentsMargins(10, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
-        self.temperature_lb = QtWidgets.QLabel(self.layoutWidget1)
-        self.temperature_lb.setEnabled(False)
-        self.temperature_lb.setMinimumSize(QtCore.QSize(0, 40))
-        self.temperature_lb.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.active_ck = QtWidgets.QCheckBox(self.scrollAreaWidgetContents_5)
+        self.active_ck.setEnabled(False)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.temperature_lb.setFont(font)
-        self.temperature_lb.setStyleSheet("QLabel {\n"
+        self.active_ck.setFont(font)
+        self.active_ck.setStyleSheet("QCheckBox {\n"
+"    spacing: 10px;\n"
 "    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QCheckBox:disabled {\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:disabled {\n"
+"    image: url(icons/checkbox_icon_unchecked_disabled.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover:disabled {\n"
+"    image: url(icons/checkbox_icon_unchecked_disabled.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed:disabled {\n"
+"    image: url(icons/checkbox_icon_unchecked_disabled.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:disabled {\n"
+"    image: url(icons/checkbox_icon_checked_disabled.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover:disabled {\n"
+"    image: url(icons/checkbox_icon_checked_disabled.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed:disabled {\n"
+"    image: url(icons/checkbox_icon_checked_disabled.svg);\n"
 "}")
-        self.temperature_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.temperature_lb.setObjectName("temperature_lb")
-        self.gridLayout.addWidget(self.temperature_lb, 0, 0, 1, 1)
+        self.active_ck.setObjectName("active_ck")
+        self.horizontalLayout_3.addWidget(self.active_ck)
+        spacerItem3 = QtWidgets.QSpacerItem(208, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem3)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.temperature_ln = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.temperature_ln.setEnabled(False)
-        self.temperature_ln.setMinimumSize(QtCore.QSize(0, 40))
-        self.temperature_ln.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.store_lb = QtWidgets.QLabel(self.scrollAreaWidgetContents_5)
+        self.store_lb.setEnabled(False)
+        self.store_lb.setMinimumSize(QtCore.QSize(0, 40))
+        self.store_lb.setMaximumSize(QtCore.QSize(16777215, 40))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.temperature_ln.setFont(font)
-        self.temperature_ln.setStyleSheet("QLineEdit {\n"
+        self.store_lb.setFont(font)
+        self.store_lb.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLabel:disabled {\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.store_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.store_lb.setObjectName("store_lb")
+        self.horizontalLayout.addWidget(self.store_lb)
+        self.store_ln = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_5)
+        self.store_ln.setEnabled(False)
+        self.store_ln.setMinimumSize(QtCore.QSize(50, 40))
+        self.store_ln.setMaximumSize(QtCore.QSize(50, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.store_ln.setFont(font)
+        self.store_ln.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    padding: 1px 4px 1px 4px;\n"
 "    background-color:  rgb(240, 240, 240);\n"
@@ -582,15 +777,36 @@ class Ui_mqttmanagerWindow(object):
 "    background-color:  rgb(200,200,200);\n"
 "    color: rgb(145,145,145);\n"
 "}")
-        self.temperature_ln.setText("")
-        self.temperature_ln.setReadOnly(False)
-        self.temperature_ln.setObjectName("temperature_ln")
-        self.horizontalLayout.addWidget(self.temperature_ln)
-        self.temperature_bt = QtWidgets.QToolButton(self.layoutWidget1)
-        self.temperature_bt.setEnabled(False)
-        self.temperature_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.temperature_bt.setMaximumSize(QtCore.QSize(50, 50))
-        self.temperature_bt.setStyleSheet("QToolButton {\n"
+        self.store_ln.setText("")
+        self.store_ln.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.store_ln.setReadOnly(False)
+        self.store_ln.setObjectName("store_ln")
+        self.horizontalLayout.addWidget(self.store_ln)
+        self.store_lb_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_5)
+        self.store_lb_2.setEnabled(False)
+        self.store_lb_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.store_lb_2.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.store_lb_2.setFont(font)
+        self.store_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLabel:disabled {\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.store_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.store_lb_2.setObjectName("store_lb_2")
+        self.horizontalLayout.addWidget(self.store_lb_2)
+        self.store_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents_5)
+        self.store_bt.setEnabled(False)
+        self.store_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.store_bt.setMaximumSize(QtCore.QSize(40, 40))
+        self.store_bt.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
 "    width: 27px;\n"
@@ -600,270 +816,218 @@ class Ui_mqttmanagerWindow(object):
 "QToolButton:flat {\n"
 "    border: none;\n"
 "}")
-        self.temperature_bt.setText("")
-        self.temperature_bt.setIcon(icon)
-        self.temperature_bt.setIconSize(QtCore.QSize(36, 36))
-        self.temperature_bt.setObjectName("temperature_bt")
-        self.horizontalLayout.addWidget(self.temperature_bt)
-        self.gridLayout.addLayout(self.horizontalLayout, 0, 1, 1, 1)
-        self.humidity_lb = QtWidgets.QLabel(self.layoutWidget1)
-        self.humidity_lb.setEnabled(False)
-        self.humidity_lb.setMinimumSize(QtCore.QSize(0, 40))
-        self.humidity_lb.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.humidity_lb.setFont(font)
-        self.humidity_lb.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.humidity_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.humidity_lb.setObjectName("humidity_lb")
-        self.gridLayout.addWidget(self.humidity_lb, 1, 0, 1, 1)
-        self.pressure_lb = QtWidgets.QLabel(self.layoutWidget1)
-        self.pressure_lb.setEnabled(False)
-        self.pressure_lb.setMinimumSize(QtCore.QSize(0, 40))
-        self.pressure_lb.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.pressure_lb.setFont(font)
-        self.pressure_lb.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.pressure_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.pressure_lb.setObjectName("pressure_lb")
-        self.gridLayout.addWidget(self.pressure_lb, 2, 0, 1, 1)
-        self.battery_lb = QtWidgets.QLabel(self.layoutWidget1)
-        self.battery_lb.setEnabled(False)
-        self.battery_lb.setMinimumSize(QtCore.QSize(0, 40))
-        self.battery_lb.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.battery_lb.setFont(font)
-        self.battery_lb.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.battery_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.battery_lb.setObjectName("battery_lb")
-        self.gridLayout.addWidget(self.battery_lb, 3, 0, 1, 1)
+        self.store_bt.setText("")
+        self.store_bt.setIcon(icon)
+        self.store_bt.setIconSize(QtCore.QSize(40, 40))
+        self.store_bt.setObjectName("store_bt")
+        self.horizontalLayout.addWidget(self.store_bt)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem4)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.battery_ln = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.battery_ln.setEnabled(False)
-        self.battery_ln.setMinimumSize(QtCore.QSize(0, 40))
-        self.battery_ln.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.addtopic_cb = QtWidgets.QComboBox(self.scrollAreaWidgetContents_5)
+        self.addtopic_cb.setEnabled(False)
+        self.addtopic_cb.setMinimumSize(QtCore.QSize(220, 40))
+        self.addtopic_cb.setMaximumSize(QtCore.QSize(220, 40))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.battery_ln.setFont(font)
-        self.battery_ln.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+        self.addtopic_cb.setFont(font)
+        self.addtopic_cb.setStyleSheet("QComboBox {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f0f0f0, stop: 1 #e5e5e5);\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
-"QLineEdit:disabled {\n"
+"QComboBox:disabled {\n"
 "    background-color:  rgb(200,200,200);\n"
 "    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ecf4fc, stop: 1 #dcecfc);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: #f0f0f0;\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
-        self.battery_ln.setText("")
-        self.battery_ln.setReadOnly(False)
-        self.battery_ln.setObjectName("battery_ln")
-        self.horizontalLayout_4.addWidget(self.battery_ln)
-        self.battery_bt = QtWidgets.QToolButton(self.layoutWidget1)
-        self.battery_bt.setEnabled(False)
-        self.battery_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.battery_bt.setMaximumSize(QtCore.QSize(50, 50))
-        self.battery_bt.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
+        self.addtopic_cb.setObjectName("addtopic_cb")
+        self.addtopic_cb.addItem("")
+        self.addtopic_cb.addItem("")
+        self.addtopic_cb.addItem("")
+        self.addtopic_cb.addItem("")
+        self.addtopic_cb.addItem("")
+        self.addtopic_cb.addItem("")
+        self.horizontalLayout_4.addWidget(self.addtopic_cb)
+        self.addtopic_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents_5)
+        self.addtopic_bt.setEnabled(False)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.addtopic_bt.sizePolicy().hasHeightForWidth())
+        self.addtopic_bt.setSizePolicy(sizePolicy)
+        self.addtopic_bt.setMinimumSize(QtCore.QSize(40, 40))
+        self.addtopic_bt.setMaximumSize(QtCore.QSize(40, 40))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.addtopic_bt.setFont(font)
+        self.addtopic_bt.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
 "    background-color: transparent;\n"
 "    width: 27px;\n"
 "    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
 "QToolButton:flat {\n"
 "    border: none;\n"
 "}")
-        self.battery_bt.setText("")
-        self.battery_bt.setIcon(icon)
-        self.battery_bt.setIconSize(QtCore.QSize(36, 36))
-        self.battery_bt.setObjectName("battery_bt")
-        self.horizontalLayout_4.addWidget(self.battery_bt)
-        self.gridLayout.addLayout(self.horizontalLayout_4, 3, 1, 1, 1)
-        self.signal_lb = QtWidgets.QLabel(self.layoutWidget1)
-        self.signal_lb.setEnabled(False)
-        self.signal_lb.setMinimumSize(QtCore.QSize(0, 40))
-        self.signal_lb.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.signal_lb.setFont(font)
-        self.signal_lb.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.signal_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.signal_lb.setObjectName("signal_lb")
-        self.gridLayout.addWidget(self.signal_lb, 4, 0, 1, 1)
-        self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-        self.humidity_ln = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.humidity_ln.setEnabled(False)
-        self.humidity_ln.setMinimumSize(QtCore.QSize(0, 40))
-        self.humidity_ln.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.humidity_ln.setFont(font)
-        self.humidity_ln.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"    color: rgb(145,145,145);\n"
-"}")
-        self.humidity_ln.setText("")
-        self.humidity_ln.setReadOnly(False)
-        self.humidity_ln.setObjectName("humidity_ln")
-        self.horizontalLayout_7.addWidget(self.humidity_ln)
-        self.humidity_bt = QtWidgets.QToolButton(self.layoutWidget1)
-        self.humidity_bt.setEnabled(False)
-        self.humidity_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.humidity_bt.setMaximumSize(QtCore.QSize(50, 50))
-        self.humidity_bt.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.humidity_bt.setText("")
-        self.humidity_bt.setIcon(icon)
-        self.humidity_bt.setIconSize(QtCore.QSize(36, 36))
-        self.humidity_bt.setObjectName("humidity_bt")
-        self.horizontalLayout_7.addWidget(self.humidity_bt)
-        self.gridLayout.addLayout(self.horizontalLayout_7, 1, 1, 1, 1)
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.pressure_ln = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.pressure_ln.setEnabled(False)
-        self.pressure_ln.setMinimumSize(QtCore.QSize(0, 40))
-        self.pressure_ln.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.pressure_ln.setFont(font)
-        self.pressure_ln.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"    color: rgb(145,145,145);\n"
-"}")
-        self.pressure_ln.setText("")
-        self.pressure_ln.setReadOnly(False)
-        self.pressure_ln.setObjectName("pressure_ln")
-        self.horizontalLayout_8.addWidget(self.pressure_ln)
-        self.pressure_bt = QtWidgets.QToolButton(self.layoutWidget1)
-        self.pressure_bt.setEnabled(False)
-        self.pressure_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.pressure_bt.setMaximumSize(QtCore.QSize(50, 50))
-        self.pressure_bt.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.pressure_bt.setText("")
-        self.pressure_bt.setIcon(icon)
-        self.pressure_bt.setIconSize(QtCore.QSize(36, 36))
-        self.pressure_bt.setObjectName("pressure_bt")
-        self.horizontalLayout_8.addWidget(self.pressure_bt)
-        self.gridLayout.addLayout(self.horizontalLayout_8, 2, 1, 1, 1)
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.signal_ln = QtWidgets.QLineEdit(self.layoutWidget1)
-        self.signal_ln.setEnabled(False)
-        self.signal_ln.setMinimumSize(QtCore.QSize(0, 40))
-        self.signal_ln.setMaximumSize(QtCore.QSize(16777215, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.signal_ln.setFont(font)
-        self.signal_ln.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QLineEdit:disabled {\n"
-"    background-color:  rgb(200,200,200);\n"
-"    color: rgb(145,145,145);\n"
-"}")
-        self.signal_ln.setText("")
-        self.signal_ln.setReadOnly(False)
-        self.signal_ln.setObjectName("signal_ln")
-        self.horizontalLayout_9.addWidget(self.signal_ln)
-        self.signal_bt = QtWidgets.QToolButton(self.layoutWidget1)
-        self.signal_bt.setEnabled(False)
-        self.signal_bt.setMinimumSize(QtCore.QSize(50, 50))
-        self.signal_bt.setMaximumSize(QtCore.QSize(50, 50))
-        self.signal_bt.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.signal_bt.setText("")
-        self.signal_bt.setIcon(icon)
-        self.signal_bt.setIconSize(QtCore.QSize(36, 36))
-        self.signal_bt.setObjectName("signal_bt")
-        self.horizontalLayout_9.addWidget(self.signal_bt)
-        self.gridLayout.addLayout(self.horizontalLayout_9, 4, 1, 1, 1)
+        self.addtopic_bt.setText("")
+        self.addtopic_bt.setIcon(icon1)
+        self.addtopic_bt.setIconSize(QtCore.QSize(40, 40))
+        self.addtopic_bt.setObjectName("addtopic_bt")
+        self.horizontalLayout_4.addWidget(self.addtopic_bt)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem5)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+        self.topic_layout = QtWidgets.QVBoxLayout()
+        self.topic_layout.setContentsMargins(-1, -1, 10, -1)
+        self.topic_layout.setObjectName("topic_layout")
+        self.verticalLayout_2.addLayout(self.topic_layout)
+        self.gridLayout.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
+        self.info_scroll_area.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_4.addWidget(self.splitter, 0, 0, 1, 1)
         self.gridLayout_5.addWidget(self.man_gb, 1, 0, 1, 1)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_5.addItem(spacerItem5, 2, 0, 1, 1)
-        self.man_gb.raise_()
+        spacerItem6 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_5.addItem(spacerItem6, 2, 0, 1, 1)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.ok_button = QtWidgets.QToolButton(mqttmanagerWindow)
+        self.ok_button.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
+        self.ok_button.setSizePolicy(sizePolicy)
+        self.ok_button.setMinimumSize(QtCore.QSize(40, 40))
+        self.ok_button.setMaximumSize(QtCore.QSize(40, 40))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ok_button.setFont(font)
+        self.ok_button.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ok_button.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ok_button.setIcon(icon3)
+        self.ok_button.setIconSize(QtCore.QSize(40, 40))
+        self.ok_button.setObjectName("ok_button")
+        self.horizontalLayout_2.addWidget(self.ok_button)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem7)
+        self.cancel_button = QtWidgets.QToolButton(mqttmanagerWindow)
+        self.cancel_button.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cancel_button.sizePolicy().hasHeightForWidth())
+        self.cancel_button.setSizePolicy(sizePolicy)
+        self.cancel_button.setMinimumSize(QtCore.QSize(40, 40))
+        self.cancel_button.setMaximumSize(QtCore.QSize(40, 40))
+        font = QtGui.QFont()
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.cancel_button.setFont(font)
+        self.cancel_button.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.cancel_button.setText("")
+        self.cancel_button.setIcon(icon2)
+        self.cancel_button.setIconSize(QtCore.QSize(40, 40))
+        self.cancel_button.setObjectName("cancel_button")
+        self.horizontalLayout_2.addWidget(self.cancel_button)
+        spacerItem8 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem8)
+        self.gridLayout_5.addLayout(self.horizontalLayout_2, 3, 0, 1, 1)
         self.conn_gb.raise_()
+        self.man_gb.raise_()
 
         self.retranslateUi(mqttmanagerWindow)
         QtCore.QMetaObject.connectSlotsByName(mqttmanagerWindow)
@@ -876,8 +1040,12 @@ class Ui_mqttmanagerWindow(object):
         self.address_lb.setText(_translate("mqttmanagerWindow", "Adresse :"))
         self.main_topic_lb.setText(_translate("mqttmanagerWindow", "Topic principal :"))
         self.man_gb.setTitle(_translate("mqttmanagerWindow", "Manager"))
-        self.temperature_lb.setText(_translate("mqttmanagerWindow", "Température :"))
-        self.humidity_lb.setText(_translate("mqttmanagerWindow", "Humidité :"))
-        self.pressure_lb.setText(_translate("mqttmanagerWindow", "Pression :"))
-        self.battery_lb.setText(_translate("mqttmanagerWindow", "Batterie :"))
-        self.signal_lb.setText(_translate("mqttmanagerWindow", "Signal :"))
+        self.active_ck.setText(_translate("mqttmanagerWindow", "Capteur activé ?"))
+        self.store_lb.setText(_translate("mqttmanagerWindow", "Rétention :"))
+        self.store_lb_2.setText(_translate("mqttmanagerWindow", "heures"))
+        self.addtopic_cb.setItemText(0, _translate("mqttmanagerWindow", "Ajouter un topic"))
+        self.addtopic_cb.setItemText(1, _translate("mqttmanagerWindow", "Batterie"))
+        self.addtopic_cb.setItemText(2, _translate("mqttmanagerWindow", "Humidité"))
+        self.addtopic_cb.setItemText(3, _translate("mqttmanagerWindow", "Pression"))
+        self.addtopic_cb.setItemText(4, _translate("mqttmanagerWindow", "Signal"))
+        self.addtopic_cb.setItemText(5, _translate("mqttmanagerWindow", "Température"))
