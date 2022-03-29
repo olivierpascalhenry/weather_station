@@ -5,7 +5,6 @@ import logging
 import pathlib
 import datetime
 import platform
-import psycopg2
 import subprocess
 import configparser
 from dirsync import sync
@@ -23,6 +22,7 @@ def create_option_file(user_path):
     config_dict.add_section('DISPLAY')
     config_dict.add_section('SENSOR')
     config_dict.add_section('TIMESERIES')
+    config_dict.add_section('DATABASE')
     config_dict.set('LOG', 'level', 'DEBUG')
     config_dict.set('LOG', 'path', str(user_path))
     config_dict.set('SENSOR', 'sensors_rate', '30')
@@ -38,10 +38,16 @@ def create_option_file(user_path):
     config_dict.set('TIMESERIES', 'out_pressure', '')
     config_dict.set('TIMESERIES', 'msl_pressure', 'False')
     config_dict.set('SYSTEM', 'place_altitude', '')
+    config_dict.set('SYSTEM', 'check_update', 'False')
     config_dict.set('API', 'api_used', 'meteofrance')
     config_dict.set('API', 'api_key', '')
     config_dict.set('API', 'user_place', 'False')
     config_dict.set('API', 'request_rate', '30')
+    config_dict.set('DATABASE', 'port', '5432')
+    config_dict.set('DATABASE', 'username', '')
+    config_dict.set('DATABASE', 'password', '')
+    config_dict.set('DATABASE', 'database', '')
+    config_dict.set('DATABASE', 'host', '127.0.0.1')
     config_dict.write(ini_file)
     ini_file.close()
 

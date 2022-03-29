@@ -28,8 +28,8 @@ class Ui_optionWindow(object):
 "    background-color: rgb(230,230,230);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
-        self.gridLayout_28 = QtWidgets.QGridLayout(optionWindow)
-        self.gridLayout_28.setObjectName("gridLayout_28")
+        self.gridLayout_32 = QtWidgets.QGridLayout(optionWindow)
+        self.gridLayout_32.setObjectName("gridLayout_32")
         self.splitter = QtWidgets.QSplitter(optionWindow)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
@@ -108,6 +108,8 @@ class Ui_optionWindow(object):
         self.section_list.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.section_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.section_list.setObjectName("section_list")
+        item = QtWidgets.QListWidgetItem()
+        self.section_list.addItem(item)
         item = QtWidgets.QListWidgetItem()
         self.section_list.addItem(item)
         item = QtWidgets.QListWidgetItem()
@@ -298,7 +300,7 @@ class Ui_optionWindow(object):
         self.scroll_area_1.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_1.setObjectName("scroll_area_1")
         self.scrollAreaWidgetContents_1 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 600, 437))
+        self.scrollAreaWidgetContents_1.setGeometry(QtCore.QRect(0, 0, 597, 437))
         self.scrollAreaWidgetContents_1.setObjectName("scrollAreaWidgetContents_1")
         self.gridLayout_15 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_1)
         self.gridLayout_15.setContentsMargins(0, 0, 0, 0)
@@ -781,418 +783,10 @@ class Ui_optionWindow(object):
         self.stack_widget.addWidget(self.page_1)
         self.page_2 = QtWidgets.QWidget()
         self.page_2.setObjectName("page_2")
-        self.gridLayout_18 = QtWidgets.QGridLayout(self.page_2)
-        self.gridLayout_18.setContentsMargins(10, 0, 0, 0)
-        self.gridLayout_18.setObjectName("gridLayout_18")
-        self.scroll_area_2 = QtWidgets.QScrollArea(self.page_2)
-        self.scroll_area_2.setStyleSheet("QScrollArea { background: transparent; }\n"
-"\n"
-"QScrollArea > QWidget > QWidget { background: transparent; }\n"
-"\n"
-"QScrollBar:vertical {\n"
-"  border-left: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  margin: 21px 0px 21px 0px;\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  margin: 0px 21px 0px 21px;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-height: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::handle:horizontal {\n"
-"  background-color: rgb(205, 205, 205);\n"
-"  min-width: 25px;\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(166, 166, 166);\n"
-"}\n"
-"\n"
-"QScrollBar:handle:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: bottom;\n"
-"  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
-"  subcontrol-position: top;\n"
-"  subcontrol-origin: margin;\n"
-"  border-top-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons/up_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::up-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons/down_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::down-arrow:vertical:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: right;\n"
-"  subcontrol-origin: margin;\n"
-"  border-bottom-right-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::add-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
-"  subcontrol-position: left;\n"
-"  subcontrol-origin: margin;\n"
-"border-bottom-left-radius: 3px;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(218, 218, 218);\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal:pressed {\n"
-"  background-color: rgb(96, 96, 96);\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons/left_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::left-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons/right_arrow_icon.svg); \n"
-"  width: 16px;\n"
-"  height: 16px;\n"
-"}\n"
-"\n"
-"QScrollBar::right-arrow:horizontal:pressed {\n"
-"  right: -1px;\n"
-"  bottom: -1px;\n"
-"}")
-        self.scroll_area_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scroll_area_2.setWidgetResizable(True)
-        self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
-        self.scroll_area_2.setObjectName("scroll_area_2")
-        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 621, 380))
-        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
-        self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
-        self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_16.setObjectName("gridLayout_16")
-        self.ca_vl = QtWidgets.QVBoxLayout()
-        self.ca_vl.setObjectName("ca_vl")
-        self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
-        self.ca_lb_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.ca_lb_1.setMinimumSize(QtCore.QSize(0, 60))
-        self.ca_lb_1.setMaximumSize(QtCore.QSize(16777215, 60))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_lb_1.setFont(font)
-        self.ca_lb_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ca_lb_1.setWordWrap(True)
-        self.ca_lb_1.setObjectName("ca_lb_1")
-        self.horizontalLayout_13.addWidget(self.ca_lb_1)
-        self.ca_ln_1 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.ca_ln_1.setMinimumSize(QtCore.QSize(50, 40))
-        self.ca_ln_1.setMaximumSize(QtCore.QSize(50, 40))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_ln_1.setFont(font)
-        self.ca_ln_1.setStyleSheet("QLineEdit {\n"
-"    border-radius: 3px;\n"
-"    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_ln_1.setText("")
-        self.ca_ln_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ca_ln_1.setObjectName("ca_ln_1")
-        self.horizontalLayout_13.addWidget(self.ca_ln_1)
-        self.ca_lb_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.ca_lb_2.setMinimumSize(QtCore.QSize(0, 50))
-        self.ca_lb_2.setMaximumSize(QtCore.QSize(16777215, 50))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_lb_2.setFont(font)
-        self.ca_lb_2.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_lb_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.ca_lb_2.setObjectName("ca_lb_2")
-        self.horizontalLayout_13.addWidget(self.ca_lb_2)
-        self.ca_bt_1 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_2)
-        self.ca_bt_1.setMinimumSize(QtCore.QSize(50, 50))
-        self.ca_bt_1.setMaximumSize(QtCore.QSize(50, 50))
-        self.ca_bt_1.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ca_bt_1.setText("")
-        self.ca_bt_1.setIcon(icon)
-        self.ca_bt_1.setIconSize(QtCore.QSize(36, 36))
-        self.ca_bt_1.setObjectName("ca_bt_1")
-        self.horizontalLayout_13.addWidget(self.ca_bt_1)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_13.addItem(spacerItem2)
-        self.ca_vl.addLayout(self.horizontalLayout_13)
-        self.ca_gb_1 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_2)
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_gb_1.setFont(font)
-        self.ca_gb_1.setStyleSheet("QGroupBox{\n"
-"    border: 1px solid grey;\n"
-"    margin-top: 1.0em;\n"
-"    margin-right: 8px;\n"
-"    padding-top: 8px;\n"
-"}\n"
-"\n"
-"QGroupBox::title {\n"
-"    top: -17px;\n"
-"    left: 10px;\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_gb_1.setObjectName("ca_gb_1")
-        self.gridLayout_7 = QtWidgets.QGridLayout(self.ca_gb_1)
-        self.gridLayout_7.setObjectName("gridLayout_7")
-        self.gridLayout_23 = QtWidgets.QGridLayout()
-        self.gridLayout_23.setObjectName("gridLayout_23")
-        self.ca_gc_lb_1 = QtWidgets.QLabel(self.ca_gb_1)
-        self.ca_gc_lb_1.setMinimumSize(QtCore.QSize(0, 0))
-        self.ca_gc_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_gc_lb_1.setFont(font)
-        self.ca_gc_lb_1.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_gc_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ca_gc_lb_1.setWordWrap(True)
-        self.ca_gc_lb_1.setObjectName("ca_gc_lb_1")
-        self.gridLayout_23.addWidget(self.ca_gc_lb_1, 0, 0, 1, 1)
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.ca_gc_bt_1 = QtWidgets.QToolButton(self.ca_gb_1)
-        self.ca_gc_bt_1.setEnabled(True)
-        self.ca_gc_bt_1.setMinimumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_1.setMaximumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_1.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ca_gc_bt_1.setText("")
-        self.ca_gc_bt_1.setIcon(icon)
-        self.ca_gc_bt_1.setIconSize(QtCore.QSize(36, 36))
-        self.ca_gc_bt_1.setObjectName("ca_gc_bt_1")
-        self.horizontalLayout_8.addWidget(self.ca_gc_bt_1)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem3)
-        self.gridLayout_23.addLayout(self.horizontalLayout_8, 0, 1, 1, 1)
-        self.ca_gc_lb_2 = QtWidgets.QLabel(self.ca_gb_1)
-        self.ca_gc_lb_2.setMinimumSize(QtCore.QSize(0, 0))
-        self.ca_gc_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_gc_lb_2.setFont(font)
-        self.ca_gc_lb_2.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_gc_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ca_gc_lb_2.setWordWrap(True)
-        self.ca_gc_lb_2.setObjectName("ca_gc_lb_2")
-        self.gridLayout_23.addWidget(self.ca_gc_lb_2, 1, 0, 1, 1)
-        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        self.ca_gc_bt_2 = QtWidgets.QToolButton(self.ca_gb_1)
-        self.ca_gc_bt_2.setEnabled(True)
-        self.ca_gc_bt_2.setMinimumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_2.setMaximumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_2.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ca_gc_bt_2.setText("")
-        self.ca_gc_bt_2.setIcon(icon)
-        self.ca_gc_bt_2.setIconSize(QtCore.QSize(36, 36))
-        self.ca_gc_bt_2.setObjectName("ca_gc_bt_2")
-        self.horizontalLayout_6.addWidget(self.ca_gc_bt_2)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_6.addItem(spacerItem4)
-        self.gridLayout_23.addLayout(self.horizontalLayout_6, 1, 1, 1, 1)
-        self.ca_gc_lb_3 = QtWidgets.QLabel(self.ca_gb_1)
-        self.ca_gc_lb_3.setMinimumSize(QtCore.QSize(0, 0))
-        self.ca_gc_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ca_gc_lb_3.setFont(font)
-        self.ca_gc_lb_3.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.ca_gc_lb_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.ca_gc_lb_3.setWordWrap(True)
-        self.ca_gc_lb_3.setObjectName("ca_gc_lb_3")
-        self.gridLayout_23.addWidget(self.ca_gc_lb_3, 2, 0, 1, 1)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.ca_gc_bt_3 = QtWidgets.QToolButton(self.ca_gb_1)
-        self.ca_gc_bt_3.setEnabled(True)
-        self.ca_gc_bt_3.setMinimumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_3.setMaximumSize(QtCore.QSize(50, 50))
-        self.ca_gc_bt_3.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ca_gc_bt_3.setText("")
-        self.ca_gc_bt_3.setIcon(icon)
-        self.ca_gc_bt_3.setIconSize(QtCore.QSize(36, 36))
-        self.ca_gc_bt_3.setObjectName("ca_gc_bt_3")
-        self.horizontalLayout_3.addWidget(self.ca_gc_bt_3)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem5)
-        self.gridLayout_23.addLayout(self.horizontalLayout_3, 2, 1, 1, 1)
-        self.gridLayout_7.addLayout(self.gridLayout_23, 0, 0, 1, 1)
-        self.ca_vl.addWidget(self.ca_gb_1)
-        self.gridLayout_16.addLayout(self.ca_vl, 0, 0, 1, 1)
-        self.scroll_area_2.setWidget(self.scrollAreaWidgetContents_2)
-        self.gridLayout_18.addWidget(self.scroll_area_2, 0, 0, 1, 1)
-        self.stack_widget.addWidget(self.page_2)
-        self.page_3 = QtWidgets.QWidget()
-        self.page_3.setObjectName("page_3")
-        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_3)
+        self.gridLayout_9 = QtWidgets.QGridLayout(self.page_2)
         self.gridLayout_9.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_9.setObjectName("gridLayout_9")
-        self.scroll_area_4 = QtWidgets.QScrollArea(self.page_3)
+        self.scroll_area_4 = QtWidgets.QScrollArea(self.page_2)
         self.scroll_area_4.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -1361,7 +955,7 @@ class Ui_optionWindow(object):
         self.scroll_area_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_4.setObjectName("scroll_area_4")
         self.scrollAreaWidgetContents_4 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 600, 441))
+        self.scrollAreaWidgetContents_4.setGeometry(QtCore.QRect(0, 0, 598, 441))
         self.scrollAreaWidgetContents_4.setObjectName("scrollAreaWidgetContents_4")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_4)
         self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
@@ -1436,8 +1030,8 @@ class Ui_optionWindow(object):
         self.buttonGroup.setObjectName("buttonGroup")
         self.buttonGroup.addButton(self.ap_gb_rb_1)
         self.horizontalLayout_19.addWidget(self.ap_gb_rb_1)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_19.addItem(spacerItem6)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_19.addItem(spacerItem2)
         self.gridLayout_21.addLayout(self.horizontalLayout_19, 0, 0, 1, 1)
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
@@ -1516,8 +1110,8 @@ class Ui_optionWindow(object):
         self.ap_gb_lb_1.setText("")
         self.ap_gb_lb_1.setObjectName("ap_gb_lb_1")
         self.horizontalLayout_18.addWidget(self.ap_gb_lb_1)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacerItem7)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacerItem3)
         self.gridLayout_21.addLayout(self.horizontalLayout_18, 1, 0, 1, 1)
         self.ap_vl.addWidget(self.ap_gb_1)
         self.ap_gb_2 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_4)
@@ -1810,20 +1404,967 @@ class Ui_optionWindow(object):
         self.ap_gb_3_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.ap_gb_3_bt_1.setObjectName("ap_gb_3_bt_1")
         self.horizontalLayout_12.addWidget(self.ap_gb_3_bt_1)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_12.addItem(spacerItem8)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_12.addItem(spacerItem4)
         self.gridLayout_20.addLayout(self.horizontalLayout_12, 0, 0, 1, 1)
         self.ap_vl.addWidget(self.ap_gb_5)
         self.gridLayout_8.addLayout(self.ap_vl, 0, 0, 1, 1)
         self.scroll_area_4.setWidget(self.scrollAreaWidgetContents_4)
         self.gridLayout_9.addWidget(self.scroll_area_4, 0, 0, 1, 1)
+        self.stack_widget.addWidget(self.page_2)
+        self.page_3 = QtWidgets.QWidget()
+        self.page_3.setObjectName("page_3")
+        self.gridLayout_29 = QtWidgets.QGridLayout(self.page_3)
+        self.gridLayout_29.setContentsMargins(10, 0, 0, 0)
+        self.gridLayout_29.setObjectName("gridLayout_29")
+        self.scroll_area_6 = QtWidgets.QScrollArea(self.page_3)
+        self.scroll_area_6.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
+"\n"
+"QScrollBar:vertical {\n"
+"  border-left: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  margin: 21px 0px 21px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  margin: 0px 21px 0px 21px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-height: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::handle:horizontal {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-width: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"  border-top: 0px solid rgb(240,240,240);\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: bottom;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid rgb(240,240,240);\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: top;\n"
+"  subcontrol-origin: margin;\n"
+"  border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"  image: url(icons/up_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical {\n"
+"  image: url(icons/down_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid rgb(240,240,240);\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: right;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid rgb(240,240,240);\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: left;\n"
+"  subcontrol-origin: margin;\n"
+"border-bottom-left-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal {\n"
+"  image: url(icons/left_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal {\n"
+"  image: url(icons/right_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}")
+        self.scroll_area_6.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll_area_6.setWidgetResizable(True)
+        self.scroll_area_6.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scroll_area_6.setObjectName("scroll_area_6")
+        self.scrollAreaWidgetContents_6 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_6.setGeometry(QtCore.QRect(0, 0, 618, 380))
+        self.scrollAreaWidgetContents_6.setObjectName("scrollAreaWidgetContents_6")
+        self.gridLayout_28 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_6)
+        self.gridLayout_28.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_28.setObjectName("gridLayout_28")
+        self.db_vl = QtWidgets.QVBoxLayout()
+        self.db_vl.setObjectName("db_vl")
+        self.db_gb = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_6)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.db_gb.sizePolicy().hasHeightForWidth())
+        self.db_gb.setSizePolicy(sizePolicy)
+        self.db_gb.setMinimumSize(QtCore.QSize(0, 0))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        self.db_gb.setFont(font)
+        self.db_gb.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb.setObjectName("db_gb")
+        self.gridLayout_31 = QtWidgets.QGridLayout(self.db_gb)
+        self.gridLayout_31.setObjectName("gridLayout_31")
+        self.gridLayout_30 = QtWidgets.QGridLayout()
+        self.gridLayout_30.setObjectName("gridLayout_30")
+        self.db_gb_lb_1 = QtWidgets.QLabel(self.db_gb)
+        self.db_gb_lb_1.setMinimumSize(QtCore.QSize(0, 40))
+        self.db_gb_lb_1.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_lb_1.setFont(font)
+        self.db_gb_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.db_gb_lb_1.setObjectName("db_gb_lb_1")
+        self.gridLayout_30.addWidget(self.db_gb_lb_1, 0, 0, 1, 1)
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.db_gb_ln_1 = QtWidgets.QLineEdit(self.db_gb)
+        self.db_gb_ln_1.setEnabled(True)
+        self.db_gb_ln_1.setMinimumSize(QtCore.QSize(300, 40))
+        self.db_gb_ln_1.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_ln_1.setFont(font)
+        self.db_gb_ln_1.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.db_gb_ln_1.setText("")
+        self.db_gb_ln_1.setReadOnly(False)
+        self.db_gb_ln_1.setObjectName("db_gb_ln_1")
+        self.horizontalLayout_11.addWidget(self.db_gb_ln_1)
+        self.db_gb_bt_1 = QtWidgets.QToolButton(self.db_gb)
+        self.db_gb_bt_1.setEnabled(True)
+        self.db_gb_bt_1.setMinimumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_1.setMaximumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.db_gb_bt_1.setText("")
+        self.db_gb_bt_1.setIcon(icon)
+        self.db_gb_bt_1.setIconSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_1.setObjectName("db_gb_bt_1")
+        self.horizontalLayout_11.addWidget(self.db_gb_bt_1)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_11.addItem(spacerItem5)
+        self.gridLayout_30.addLayout(self.horizontalLayout_11, 0, 1, 1, 1)
+        self.db_gb_lb_4 = QtWidgets.QLabel(self.db_gb)
+        self.db_gb_lb_4.setMinimumSize(QtCore.QSize(0, 40))
+        self.db_gb_lb_4.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_lb_4.setFont(font)
+        self.db_gb_lb_4.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb_lb_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.db_gb_lb_4.setObjectName("db_gb_lb_4")
+        self.gridLayout_30.addWidget(self.db_gb_lb_4, 3, 0, 1, 1)
+        self.horizontalLayout_17 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_17.setObjectName("horizontalLayout_17")
+        self.db_gb_ln_2 = QtWidgets.QLineEdit(self.db_gb)
+        self.db_gb_ln_2.setEnabled(True)
+        self.db_gb_ln_2.setMinimumSize(QtCore.QSize(300, 40))
+        self.db_gb_ln_2.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_ln_2.setFont(font)
+        self.db_gb_ln_2.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.db_gb_ln_2.setText("")
+        self.db_gb_ln_2.setReadOnly(False)
+        self.db_gb_ln_2.setObjectName("db_gb_ln_2")
+        self.horizontalLayout_17.addWidget(self.db_gb_ln_2)
+        self.db_gb_bt_2 = QtWidgets.QToolButton(self.db_gb)
+        self.db_gb_bt_2.setEnabled(True)
+        self.db_gb_bt_2.setMinimumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_2.setMaximumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_2.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.db_gb_bt_2.setText("")
+        self.db_gb_bt_2.setIcon(icon)
+        self.db_gb_bt_2.setIconSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_2.setObjectName("db_gb_bt_2")
+        self.horizontalLayout_17.addWidget(self.db_gb_bt_2)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_17.addItem(spacerItem6)
+        self.gridLayout_30.addLayout(self.horizontalLayout_17, 1, 1, 1, 1)
+        self.db_gb_lb_2 = QtWidgets.QLabel(self.db_gb)
+        self.db_gb_lb_2.setMinimumSize(QtCore.QSize(0, 40))
+        self.db_gb_lb_2.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_lb_2.setFont(font)
+        self.db_gb_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.db_gb_lb_2.setObjectName("db_gb_lb_2")
+        self.gridLayout_30.addWidget(self.db_gb_lb_2, 1, 0, 1, 1)
+        self.horizontalLayout_21 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_21.setObjectName("horizontalLayout_21")
+        self.db_gb_ln_4 = QtWidgets.QLineEdit(self.db_gb)
+        self.db_gb_ln_4.setEnabled(True)
+        self.db_gb_ln_4.setMinimumSize(QtCore.QSize(300, 40))
+        self.db_gb_ln_4.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_ln_4.setFont(font)
+        self.db_gb_ln_4.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.db_gb_ln_4.setText("")
+        self.db_gb_ln_4.setReadOnly(False)
+        self.db_gb_ln_4.setObjectName("db_gb_ln_4")
+        self.horizontalLayout_21.addWidget(self.db_gb_ln_4)
+        self.db_gb_bt_4 = QtWidgets.QToolButton(self.db_gb)
+        self.db_gb_bt_4.setEnabled(True)
+        self.db_gb_bt_4.setMinimumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_4.setMaximumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_4.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.db_gb_bt_4.setText("")
+        self.db_gb_bt_4.setIcon(icon)
+        self.db_gb_bt_4.setIconSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_4.setObjectName("db_gb_bt_4")
+        self.horizontalLayout_21.addWidget(self.db_gb_bt_4)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_21.addItem(spacerItem7)
+        self.gridLayout_30.addLayout(self.horizontalLayout_21, 3, 1, 1, 1)
+        self.db_gb_lb_3 = QtWidgets.QLabel(self.db_gb)
+        self.db_gb_lb_3.setMinimumSize(QtCore.QSize(0, 40))
+        self.db_gb_lb_3.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_lb_3.setFont(font)
+        self.db_gb_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb_lb_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.db_gb_lb_3.setObjectName("db_gb_lb_3")
+        self.gridLayout_30.addWidget(self.db_gb_lb_3, 2, 0, 1, 1)
+        self.horizontalLayout_20 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_20.setObjectName("horizontalLayout_20")
+        self.db_gb_ln_3 = QtWidgets.QLineEdit(self.db_gb)
+        self.db_gb_ln_3.setEnabled(True)
+        self.db_gb_ln_3.setMinimumSize(QtCore.QSize(300, 40))
+        self.db_gb_ln_3.setMaximumSize(QtCore.QSize(300, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_ln_3.setFont(font)
+        self.db_gb_ln_3.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.db_gb_ln_3.setText("")
+        self.db_gb_ln_3.setReadOnly(False)
+        self.db_gb_ln_3.setObjectName("db_gb_ln_3")
+        self.horizontalLayout_20.addWidget(self.db_gb_ln_3)
+        self.db_gb_bt_3 = QtWidgets.QToolButton(self.db_gb)
+        self.db_gb_bt_3.setEnabled(True)
+        self.db_gb_bt_3.setMinimumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_3.setMaximumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_3.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.db_gb_bt_3.setText("")
+        self.db_gb_bt_3.setIcon(icon)
+        self.db_gb_bt_3.setIconSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_3.setObjectName("db_gb_bt_3")
+        self.horizontalLayout_20.addWidget(self.db_gb_bt_3)
+        spacerItem8 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_20.addItem(spacerItem8)
+        self.gridLayout_30.addLayout(self.horizontalLayout_20, 2, 1, 1, 1)
+        self.db_gb_lb_5 = QtWidgets.QLabel(self.db_gb)
+        self.db_gb_lb_5.setMinimumSize(QtCore.QSize(0, 40))
+        self.db_gb_lb_5.setMaximumSize(QtCore.QSize(16777215, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_lb_5.setFont(font)
+        self.db_gb_lb_5.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.db_gb_lb_5.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.db_gb_lb_5.setObjectName("db_gb_lb_5")
+        self.gridLayout_30.addWidget(self.db_gb_lb_5, 4, 0, 1, 1)
+        self.horizontalLayout_23 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_23.setObjectName("horizontalLayout_23")
+        self.db_gb_ln_5 = QtWidgets.QLineEdit(self.db_gb)
+        self.db_gb_ln_5.setEnabled(True)
+        self.db_gb_ln_5.setMinimumSize(QtCore.QSize(100, 40))
+        self.db_gb_ln_5.setMaximumSize(QtCore.QSize(100, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.db_gb_ln_5.setFont(font)
+        self.db_gb_ln_5.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QLineEdit:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}")
+        self.db_gb_ln_5.setText("")
+        self.db_gb_ln_5.setReadOnly(False)
+        self.db_gb_ln_5.setObjectName("db_gb_ln_5")
+        self.horizontalLayout_23.addWidget(self.db_gb_ln_5)
+        self.db_gb_bt_5 = QtWidgets.QToolButton(self.db_gb)
+        self.db_gb_bt_5.setEnabled(True)
+        self.db_gb_bt_5.setMinimumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_5.setMaximumSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_5.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.db_gb_bt_5.setText("")
+        self.db_gb_bt_5.setIcon(icon)
+        self.db_gb_bt_5.setIconSize(QtCore.QSize(40, 40))
+        self.db_gb_bt_5.setObjectName("db_gb_bt_5")
+        self.horizontalLayout_23.addWidget(self.db_gb_bt_5)
+        spacerItem9 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_23.addItem(spacerItem9)
+        self.gridLayout_30.addLayout(self.horizontalLayout_23, 4, 1, 1, 1)
+        self.gridLayout_31.addLayout(self.gridLayout_30, 0, 0, 1, 1)
+        self.db_vl.addWidget(self.db_gb)
+        self.gridLayout_28.addLayout(self.db_vl, 0, 0, 1, 1)
+        self.scroll_area_6.setWidget(self.scrollAreaWidgetContents_6)
+        self.gridLayout_29.addWidget(self.scroll_area_6, 0, 0, 1, 1)
         self.stack_widget.addWidget(self.page_3)
         self.page_4 = QtWidgets.QWidget()
         self.page_4.setObjectName("page_4")
-        self.gridLayout_6 = QtWidgets.QGridLayout(self.page_4)
+        self.gridLayout_18 = QtWidgets.QGridLayout(self.page_4)
+        self.gridLayout_18.setContentsMargins(10, 0, 0, 0)
+        self.gridLayout_18.setObjectName("gridLayout_18")
+        self.scroll_area_2 = QtWidgets.QScrollArea(self.page_4)
+        self.scroll_area_2.setStyleSheet("QScrollArea { background: transparent; }\n"
+"\n"
+"QScrollArea > QWidget > QWidget { background: transparent; }\n"
+"\n"
+"QScrollBar:vertical {\n"
+"  border-left: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  margin: 21px 0px 21px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"  border: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  margin: 0px 21px 0px 21px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-height: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::handle:horizontal {\n"
+"  background-color: rgb(205, 205, 205);\n"
+"  min-width: 25px;\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:hover {\n"
+"  background-color: rgb(166, 166, 166);\n"
+"}\n"
+"\n"
+"QScrollBar:handle:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical {\n"
+"  border-top: 0px solid rgb(240,240,240);\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: bottom;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid rgb(240,240,240);\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  height: 20px;\n"
+"  subcontrol-position: top;\n"
+"  subcontrol-origin: margin;\n"
+"  border-top-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical {\n"
+"  image: url(icons/up_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::up-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical {\n"
+"  image: url(icons/down_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::down-arrow:vertical:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid rgb(240,240,240);\n"
+"  border-right: 0px solid white;\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: right;\n"
+"  subcontrol-origin: margin;\n"
+"  border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::add-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"  border-top: 0px solid white;\n"
+"  border-left: 0px solid white;\n"
+"  border-right: 0px solid rgb(240,240,240);\n"
+"  border-bottom: 0px solid white;\n"
+"  background-color: rgb(240, 240, 240);\n"
+"  width: 20px;\n"
+"  subcontrol-position: left;\n"
+"  subcontrol-origin: margin;\n"
+"border-bottom-left-radius: 3px;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:hover {\n"
+"  background-color: rgb(218, 218, 218);\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal:pressed {\n"
+"  background-color: rgb(96, 96, 96);\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal {\n"
+"  image: url(icons/left_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::left-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal {\n"
+"  image: url(icons/right_arrow_icon.svg); \n"
+"  width: 16px;\n"
+"  height: 16px;\n"
+"}\n"
+"\n"
+"QScrollBar::right-arrow:horizontal:pressed {\n"
+"  right: -1px;\n"
+"  bottom: -1px;\n"
+"}")
+        self.scroll_area_2.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scroll_area_2.setWidgetResizable(True)
+        self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.scroll_area_2.setObjectName("scroll_area_2")
+        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 618, 380))
+        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
+        self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
+        self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_16.setObjectName("gridLayout_16")
+        self.ca_vl = QtWidgets.QVBoxLayout()
+        self.ca_vl.setObjectName("ca_vl")
+        self.horizontalLayout_13 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_13.setObjectName("horizontalLayout_13")
+        self.ca_lb_1 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.ca_lb_1.setMinimumSize(QtCore.QSize(0, 60))
+        self.ca_lb_1.setMaximumSize(QtCore.QSize(16777215, 60))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_lb_1.setFont(font)
+        self.ca_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ca_lb_1.setWordWrap(True)
+        self.ca_lb_1.setObjectName("ca_lb_1")
+        self.horizontalLayout_13.addWidget(self.ca_lb_1)
+        self.ca_ln_1 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
+        self.ca_ln_1.setMinimumSize(QtCore.QSize(50, 40))
+        self.ca_ln_1.setMaximumSize(QtCore.QSize(50, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_ln_1.setFont(font)
+        self.ca_ln_1.setStyleSheet("QLineEdit {\n"
+"    border-radius: 3px;\n"
+"    padding: 1px 4px 1px 4px;\n"
+"    background-color:  rgb(240, 240, 240);\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_ln_1.setText("")
+        self.ca_ln_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ca_ln_1.setObjectName("ca_ln_1")
+        self.horizontalLayout_13.addWidget(self.ca_ln_1)
+        self.ca_lb_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
+        self.ca_lb_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.ca_lb_2.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_lb_2.setFont(font)
+        self.ca_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_lb_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.ca_lb_2.setObjectName("ca_lb_2")
+        self.horizontalLayout_13.addWidget(self.ca_lb_2)
+        self.ca_bt_1 = QtWidgets.QToolButton(self.scrollAreaWidgetContents_2)
+        self.ca_bt_1.setMinimumSize(QtCore.QSize(50, 50))
+        self.ca_bt_1.setMaximumSize(QtCore.QSize(50, 50))
+        self.ca_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ca_bt_1.setText("")
+        self.ca_bt_1.setIcon(icon)
+        self.ca_bt_1.setIconSize(QtCore.QSize(36, 36))
+        self.ca_bt_1.setObjectName("ca_bt_1")
+        self.horizontalLayout_13.addWidget(self.ca_bt_1)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_13.addItem(spacerItem10)
+        self.ca_vl.addLayout(self.horizontalLayout_13)
+        self.ca_gb_1 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_2)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_gb_1.setFont(font)
+        self.ca_gb_1.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_gb_1.setObjectName("ca_gb_1")
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.ca_gb_1)
+        self.gridLayout_7.setObjectName("gridLayout_7")
+        self.gridLayout_23 = QtWidgets.QGridLayout()
+        self.gridLayout_23.setObjectName("gridLayout_23")
+        self.ca_gc_lb_1 = QtWidgets.QLabel(self.ca_gb_1)
+        self.ca_gc_lb_1.setMinimumSize(QtCore.QSize(0, 0))
+        self.ca_gc_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_gc_lb_1.setFont(font)
+        self.ca_gc_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_gc_lb_1.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ca_gc_lb_1.setWordWrap(True)
+        self.ca_gc_lb_1.setObjectName("ca_gc_lb_1")
+        self.gridLayout_23.addWidget(self.ca_gc_lb_1, 0, 0, 1, 1)
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.ca_gc_bt_1 = QtWidgets.QToolButton(self.ca_gb_1)
+        self.ca_gc_bt_1.setEnabled(True)
+        self.ca_gc_bt_1.setMinimumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_1.setMaximumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ca_gc_bt_1.setText("")
+        self.ca_gc_bt_1.setIcon(icon)
+        self.ca_gc_bt_1.setIconSize(QtCore.QSize(36, 36))
+        self.ca_gc_bt_1.setObjectName("ca_gc_bt_1")
+        self.horizontalLayout_8.addWidget(self.ca_gc_bt_1)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem11)
+        self.gridLayout_23.addLayout(self.horizontalLayout_8, 0, 1, 1, 1)
+        self.ca_gc_lb_2 = QtWidgets.QLabel(self.ca_gb_1)
+        self.ca_gc_lb_2.setMinimumSize(QtCore.QSize(0, 0))
+        self.ca_gc_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_gc_lb_2.setFont(font)
+        self.ca_gc_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_gc_lb_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ca_gc_lb_2.setWordWrap(True)
+        self.ca_gc_lb_2.setObjectName("ca_gc_lb_2")
+        self.gridLayout_23.addWidget(self.ca_gc_lb_2, 1, 0, 1, 1)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.ca_gc_bt_2 = QtWidgets.QToolButton(self.ca_gb_1)
+        self.ca_gc_bt_2.setEnabled(True)
+        self.ca_gc_bt_2.setMinimumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_2.setMaximumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_2.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ca_gc_bt_2.setText("")
+        self.ca_gc_bt_2.setIcon(icon)
+        self.ca_gc_bt_2.setIconSize(QtCore.QSize(36, 36))
+        self.ca_gc_bt_2.setObjectName("ca_gc_bt_2")
+        self.horizontalLayout_6.addWidget(self.ca_gc_bt_2)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_6.addItem(spacerItem12)
+        self.gridLayout_23.addLayout(self.horizontalLayout_6, 1, 1, 1, 1)
+        self.ca_gc_lb_3 = QtWidgets.QLabel(self.ca_gb_1)
+        self.ca_gc_lb_3.setMinimumSize(QtCore.QSize(0, 0))
+        self.ca_gc_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ca_gc_lb_3.setFont(font)
+        self.ca_gc_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.ca_gc_lb_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ca_gc_lb_3.setWordWrap(True)
+        self.ca_gc_lb_3.setObjectName("ca_gc_lb_3")
+        self.gridLayout_23.addWidget(self.ca_gc_lb_3, 2, 0, 1, 1)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.ca_gc_bt_3 = QtWidgets.QToolButton(self.ca_gb_1)
+        self.ca_gc_bt_3.setEnabled(True)
+        self.ca_gc_bt_3.setMinimumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_3.setMaximumSize(QtCore.QSize(50, 50))
+        self.ca_gc_bt_3.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ca_gc_bt_3.setText("")
+        self.ca_gc_bt_3.setIcon(icon)
+        self.ca_gc_bt_3.setIconSize(QtCore.QSize(36, 36))
+        self.ca_gc_bt_3.setObjectName("ca_gc_bt_3")
+        self.horizontalLayout_3.addWidget(self.ca_gc_bt_3)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem13)
+        self.gridLayout_23.addLayout(self.horizontalLayout_3, 2, 1, 1, 1)
+        self.gridLayout_7.addLayout(self.gridLayout_23, 0, 0, 1, 1)
+        self.ca_vl.addWidget(self.ca_gb_1)
+        self.gridLayout_16.addLayout(self.ca_vl, 0, 0, 1, 1)
+        self.scroll_area_2.setWidget(self.scrollAreaWidgetContents_2)
+        self.gridLayout_18.addWidget(self.scroll_area_2, 0, 0, 1, 1)
+        self.stack_widget.addWidget(self.page_4)
+        self.page_5 = QtWidgets.QWidget()
+        self.page_5.setObjectName("page_5")
+        self.gridLayout_6 = QtWidgets.QGridLayout(self.page_5)
         self.gridLayout_6.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_6.setObjectName("gridLayout_6")
-        self.scroll_area_3 = QtWidgets.QScrollArea(self.page_4)
+        self.scroll_area_3 = QtWidgets.QScrollArea(self.page_5)
         self.scroll_area_3.setStyleSheet("QScrollArea { background: transparent;}\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -1996,7 +2537,7 @@ class Ui_optionWindow(object):
         self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_3.setObjectName("scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 601, 400))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 597, 400))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_24 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_24.setContentsMargins(0, 0, 0, 0)
@@ -2143,8 +2684,8 @@ class Ui_optionWindow(object):
         self.ts_gb_int_cb_1.setObjectName("ts_gb_int_cb_1")
         self.ts_gb_int_cb_1.addItem("")
         self.horizontalLayout_9.addWidget(self.ts_gb_int_cb_1)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem9)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_9.addItem(spacerItem14)
         self.gridLayout_5.addLayout(self.horizontalLayout_9, 0, 1, 1, 1)
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
@@ -2227,8 +2768,8 @@ class Ui_optionWindow(object):
         self.ts_gb_int_cb_2.setObjectName("ts_gb_int_cb_2")
         self.ts_gb_int_cb_2.addItem("")
         self.horizontalLayout_14.addWidget(self.ts_gb_int_cb_2)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_14.addItem(spacerItem10)
+        spacerItem15 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_14.addItem(spacerItem15)
         self.gridLayout_5.addLayout(self.horizontalLayout_14, 1, 1, 1, 1)
         self.gridLayout_25.addLayout(self.gridLayout_5, 0, 0, 1, 1)
         self.st_vl.addWidget(self.ts_gb_int)
@@ -2335,8 +2876,8 @@ class Ui_optionWindow(object):
         self.ts_gb_ext_cb_2.setObjectName("ts_gb_ext_cb_2")
         self.ts_gb_ext_cb_2.addItem("")
         self.horizontalLayout_16.addWidget(self.ts_gb_ext_cb_2)
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_16.addItem(spacerItem11)
+        spacerItem16 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_16.addItem(spacerItem16)
         self.gridLayout_27.addLayout(self.horizontalLayout_16, 1, 1, 1, 1)
         self.ts_gb_ext_lb_2 = QtWidgets.QLabel(self.ts_gb_ext)
         self.ts_gb_ext_lb_2.setMinimumSize(QtCore.QSize(0, 60))
@@ -2451,8 +2992,8 @@ class Ui_optionWindow(object):
         self.ts_gb_ext_cb_1.setObjectName("ts_gb_ext_cb_1")
         self.ts_gb_ext_cb_1.addItem("")
         self.horizontalLayout_15.addWidget(self.ts_gb_ext_cb_1)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_15.addItem(spacerItem12)
+        spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_15.addItem(spacerItem17)
         self.gridLayout_27.addLayout(self.horizontalLayout_15, 0, 1, 1, 1)
         self.ts_gb_ext_ck_1 = QtWidgets.QCheckBox(self.ts_gb_ext)
         font = QtGui.QFont()
@@ -2501,13 +3042,13 @@ class Ui_optionWindow(object):
         self.gridLayout_24.addLayout(self.st_vl, 0, 0, 1, 1)
         self.scroll_area_3.setWidget(self.scrollAreaWidgetContents_3)
         self.gridLayout_6.addWidget(self.scroll_area_3, 0, 0, 1, 1)
-        self.stack_widget.addWidget(self.page_4)
-        self.page_5 = QtWidgets.QWidget()
-        self.page_5.setObjectName("page_5")
-        self.gridLayout_12 = QtWidgets.QGridLayout(self.page_5)
+        self.stack_widget.addWidget(self.page_5)
+        self.page_6 = QtWidgets.QWidget()
+        self.page_6.setObjectName("page_6")
+        self.gridLayout_12 = QtWidgets.QGridLayout(self.page_6)
         self.gridLayout_12.setContentsMargins(10, 0, 0, 0)
         self.gridLayout_12.setObjectName("gridLayout_12")
-        self.scroll_area_5 = QtWidgets.QScrollArea(self.page_5)
+        self.scroll_area_5 = QtWidgets.QScrollArea(self.page_6)
         self.scroll_area_5.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
@@ -2680,7 +3221,7 @@ class Ui_optionWindow(object):
         self.scroll_area_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_5.setObjectName("scroll_area_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 573, 385))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 618, 380))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -2779,8 +3320,8 @@ class Ui_optionWindow(object):
         self.sy_gb_bt_1.setIconSize(QtCore.QSize(36, 36))
         self.sy_gb_bt_1.setObjectName("sy_gb_bt_1")
         self.horizontalLayout_22.addWidget(self.sy_gb_bt_1)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_22.addItem(spacerItem13)
+        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_22.addItem(spacerItem18)
         self.gridLayout_19.addLayout(self.horizontalLayout_22, 0, 0, 1, 1)
         self.sy_vl.addWidget(self.sy_gb_1)
         self.lo_gb_1 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_5)
@@ -2963,18 +3504,18 @@ class Ui_optionWindow(object):
         self.lo_gb_cb_1.addItem("")
         self.lo_gb_cb_1.addItem("")
         self.horizontalLayout_7.addWidget(self.lo_gb_cb_1)
-        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem14)
+        spacerItem19 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem19)
         self.gridLayout_3.addLayout(self.horizontalLayout_7, 0, 1, 1, 1)
         self.gridLayout_17.addLayout(self.gridLayout_3, 0, 0, 1, 1)
         self.sy_vl.addWidget(self.lo_gb_1)
         self.gridLayout_10.addLayout(self.sy_vl, 0, 0, 1, 1)
         self.scroll_area_5.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_12.addWidget(self.scroll_area_5, 0, 0, 1, 1)
-        self.stack_widget.addWidget(self.page_5)
-        self.gridLayout_28.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_28.addItem(spacerItem15, 1, 0, 1, 1)
+        self.stack_widget.addWidget(self.page_6)
+        self.gridLayout_32.addWidget(self.splitter, 0, 0, 1, 1)
+        spacerItem20 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_32.addItem(spacerItem20, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ok_button = QtWidgets.QToolButton(optionWindow)
@@ -3010,8 +3551,8 @@ class Ui_optionWindow(object):
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem16)
+        spacerItem21 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem21)
         self.cancel_button = QtWidgets.QToolButton(optionWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -3045,12 +3586,12 @@ class Ui_optionWindow(object):
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem17 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem17)
-        self.gridLayout_28.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
+        spacerItem22 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem22)
+        self.gridLayout_32.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(optionWindow)
-        self.stack_widget.setCurrentIndex(0)
+        self.stack_widget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(optionWindow)
 
     def retranslateUi(self, optionWindow):
@@ -3060,12 +3601,14 @@ class Ui_optionWindow(object):
         item = self.section_list.item(0)
         item.setText(_translate("optionWindow", "Affichage"))
         item = self.section_list.item(1)
-        item.setText(_translate("optionWindow", "Capteurs"))
-        item = self.section_list.item(2)
         item.setText(_translate("optionWindow", "API Météo"))
+        item = self.section_list.item(2)
+        item.setText(_translate("optionWindow", "Base de données"))
         item = self.section_list.item(3)
-        item.setText(_translate("optionWindow", "Series temporelles"))
+        item.setText(_translate("optionWindow", "Capteurs"))
         item = self.section_list.item(4)
+        item.setText(_translate("optionWindow", "Series temporelles"))
+        item = self.section_list.item(5)
         item.setText(_translate("optionWindow", "Système"))
         self.section_list.setSortingEnabled(__sortingEnabled)
         self.af_gb_int.setTitle(_translate("optionWindow", "Intérieur"))
@@ -3080,12 +3623,6 @@ class Ui_optionWindow(object):
         self.af_gb_ext_lb_2.setText(_translate("optionWindow", "Rafraichissement :"))
         self.af_gb_ext_lb_3.setText(_translate("optionWindow", "secondes"))
         self.af_gb_ext_ck_1.setText(_translate("optionWindow", "Pression au niveau de la mer ?"))
-        self.ca_lb_1.setText(_translate("optionWindow", "Rafraichissement :"))
-        self.ca_lb_2.setText(_translate("optionWindow", "secondes"))
-        self.ca_gb_1.setTitle(_translate("optionWindow", "Gestion des capteurs"))
-        self.ca_gc_lb_1.setText(_translate("optionWindow", "Gestion DS18B20 :"))
-        self.ca_gc_lb_2.setText(_translate("optionWindow", "Gestion BME280 :"))
-        self.ca_gc_lb_3.setText(_translate("optionWindow", "Gestion MQTT :"))
         self.ap_gb_1.setTitle(_translate("optionWindow", "API Météo"))
         self.ap_gb_rb_1.setText(_translate("optionWindow", "Météo France"))
         self.ap_gb_rb_2.setText(_translate("optionWindow", "OpenWeather"))
@@ -3097,6 +3634,18 @@ class Ui_optionWindow(object):
         self.ap_gb_5.setTitle(_translate("optionWindow", "Requête des prévisions météo"))
         self.ow_label_16.setText(_translate("optionWindow", "Intervalle :"))
         self.ow_label_17.setText(_translate("optionWindow", "minutes"))
+        self.db_gb.setTitle(_translate("optionWindow", "PostgreSQL"))
+        self.db_gb_lb_1.setText(_translate("optionWindow", "Utilisateur :"))
+        self.db_gb_lb_4.setText(_translate("optionWindow", "Hôte :"))
+        self.db_gb_lb_2.setText(_translate("optionWindow", "Mot de passe :"))
+        self.db_gb_lb_3.setText(_translate("optionWindow", "Base de données :"))
+        self.db_gb_lb_5.setText(_translate("optionWindow", "Port :"))
+        self.ca_lb_1.setText(_translate("optionWindow", "Rafraichissement :"))
+        self.ca_lb_2.setText(_translate("optionWindow", "secondes"))
+        self.ca_gb_1.setTitle(_translate("optionWindow", "Gestion des capteurs"))
+        self.ca_gc_lb_1.setText(_translate("optionWindow", "Gestion DS18B20 :"))
+        self.ca_gc_lb_2.setText(_translate("optionWindow", "Gestion BME280 :"))
+        self.ca_gc_lb_3.setText(_translate("optionWindow", "Gestion MQTT :"))
         self.ts_gb_int.setTitle(_translate("optionWindow", "Intérieur"))
         self.ts_gb_int_lb_1.setText(_translate("optionWindow", "Température :"))
         self.ts_gb_int_lb_2.setText(_translate("optionWindow", "Humidité :"))

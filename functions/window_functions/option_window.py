@@ -68,6 +68,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
         self.sy_vl.setAlignment(QtCore.Qt.AlignTop)
         self.st_vl.setAlignment(QtCore.Qt.AlignTop)
+        self.db_vl.setAlignment(QtCore.Qt.AlignTop)
         self.lo_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -79,6 +80,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ok_button.clicked.connect(self.save_config_dict)
         self.cancel_button.clicked.connect(self.close_window)
         self.lo_gb_bt_1.clicked.connect(self.get_folder_path)
+
+        self.db_gb_bt_1.clicked.connect(self.display_keyboard)
+        self.db_gb_bt_2.clicked.connect(self.display_keyboard)
+        self.db_gb_bt_3.clicked.connect(self.display_keyboard)
+        self.db_gb_bt_4.clicked.connect(self.display_keyboard)
+        self.db_gb_bt_5.clicked.connect(self.display_numpad)
+
         self.af_gb_int_bt_1.clicked.connect(self.display_numpad)
         self.af_gb_ext_bt_1.clicked.connect(self.display_numpad)
         self.ca_bt_1.clicked.connect(self.display_numpad)
@@ -155,6 +163,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def read_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - read_config_dict')
         api = None
+        self.db_gb_ln_1.setText(self.config_dict.get('DATABASE', 'username'))
+        self.db_gb_ln_2.setText(self.config_dict.get('DATABASE', 'password'))
+        self.db_gb_ln_3.setText(self.config_dict.get('DATABASE', 'database'))
+        self.db_gb_ln_4.setText(self.config_dict.get('DATABASE', 'host'))
+        self.db_gb_ln_5.setText(self.config_dict.get('DATABASE', 'port'))
         self.lo_gb_cb_1.setCurrentIndex(self.lo_gb_cb_1.findText(self.config_dict.get('LOG', 'level')))
         self.lo_gb_ln_1.setText(self.config_dict.get('LOG', 'path'))
         self.lo_gb_ln_1.setCursorPosition(0)
@@ -222,6 +235,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             info_window = MyInfo(text)
             info_window.exec_()
         else:
+            self.config_dict.set('DATABASE', 'username', str(self.db_gb_ln_1.text()))
+            self.config_dict.set('DATABASE', 'password', str(self.db_gb_ln_2.text()))
+            self.config_dict.set('DATABASE', 'database', str(self.db_gb_ln_3.text()))
+            self.config_dict.set('DATABASE', 'host', str(self.db_gb_ln_4.text()))
+            self.config_dict.set('DATABASE', 'port', str(self.db_gb_ln_5.text()))
             self.config_dict.set('LOG', 'level', str(self.lo_gb_cb_1.currentText()))
             self.config_dict.set('LOG', 'path', str(self.lo_gb_ln_1.text()))
             self.config_dict.set('DISPLAY', 'in_display_rate', self.af_gb_int_ln_1.text())
@@ -441,13 +459,24 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.ap_gb_3_ln_1.setText(numpad_window.num_line.text())
             elif self.sender().objectName() == 'sy_gb_bt_1':
                 self.sy_gb_ln_1.setText(numpad_window.num_line.text())
+            elif self.sender().objectName() == 'db_gb_bt_5':
+                self.db_gb_ln_5.setText(numpad_window.num_line.text())
 
     def display_keyboard(self):
         logging.debug('gui - option_window.py - MyOptions - display_keyboard')
         keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
-            self.ap_gb_2_ln_1.setText(keyboard_window.num_line.text())
+            if self.sender().objectName() == 'ap_gb_2_ln_1':
+                self.ap_gb_2_ln_1.setText(keyboard_window.num_line.text())
+            elif self.sender().objectName() == 'db_gb_bt_1':
+                self.db_gb_ln_1.setText(keyboard_window.num_line.text())
+            elif self.sender().objectName() == 'db_gb_bt_2':
+                self.db_gb_ln_2.setText(keyboard_window.num_line.text())
+            elif self.sender().objectName() == 'db_gb_bt_3':
+                self.db_gb_ln_3.setText(keyboard_window.num_line.text())
+            elif self.sender().objectName() == 'db_gb_bt_4':
+                self.db_gb_ln_4.setText(keyboard_window.num_line.text())
 
     def close_window(self):
         logging.debug('gui - option_window.py - MyOptions - close_window')

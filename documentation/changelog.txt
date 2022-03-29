@@ -14,6 +14,7 @@
     * few new logging messages have been added.
     * a storage value has been added for all MQTT sensors.
     * a checkbox to activate/deactivate a sensor has been added.
+    * database options have been added.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
