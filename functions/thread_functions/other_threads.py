@@ -26,7 +26,7 @@ class CleaningThread(QtCore.QThread):
         logging.info('gui - other_threads.py - CleaningThread - __init__')
         self.sensor_dict = sensor_dict
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -193,9 +193,10 @@ class CheckInternetConnexion(QtCore.QThread):
 class CheckPostgresqlConnexion(QtCore.QThread):
     results = QtCore.pyqtSignal(list)
 
-    def __init__(self, sensor_dict):
+    def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CheckPostgresqlConnexion - __init__')
+        self.db_dict = db_dict
         self.sensor_dict = sensor_dict
 
     def run(self):
@@ -212,8 +213,9 @@ class CheckPostgresqlConnexion(QtCore.QThread):
             installed = True
         if installed:
             try:
-                connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                             database='weather_station_db', connect_timeout=1)
+                connector = psycopg2.connect(user=self.db_dict['user'], password=self.db_dict['password'],
+                                             host=self.db_dict['host'], database=self.db_dict['database'],
+                                             port=self.db_dict['port'])
                 database = True
                 connector.close()
             except psycopg2.OperationalError:
@@ -280,8 +282,7 @@ class RequestPlotDataThread(QtCore.QThread):
     success = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal()
 
-    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, db_dict,  config_dict,
-                 sensor_dict):
+    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
         self.canvas_in = canvas_in
@@ -292,8 +293,11 @@ class RequestPlotDataThread(QtCore.QThread):
         self.plot_out_2 = plot_out_2
         self.config_dict = config_dict
         self.sensor_dict = sensor_dict
-        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+        self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
+                                          password=self.config_dict.get('DATABASE', 'password'),
+                                          host=self.config_dict.get('DATABASE', 'host'),
+                                          database=self.config_dict.get('DATABASE', 'database'),
+                                          port=self.config_dict.get('DATABASE', 'port'))
         self.cursor = self.connector.cursor()
 
     def run(self):

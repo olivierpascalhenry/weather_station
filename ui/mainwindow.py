@@ -87,8 +87,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_posgresql = None
         self.update_url = None
         self.timer = None
-        self.db_dict = {'user': 'weather_station', 'password': '31weather64', 'host': '127.0.0.1',
-                        'database': 'weather_station_db'}
         self.in_temperature = None
         self.in_temperature_min_max = None
         self.in_humidity = None
@@ -155,7 +153,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
-        self.check_posgresql = CheckPostgresqlConnexion(self.sensor_dict)
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
+        self.check_posgresql = CheckPostgresqlConnexion(db_dict, self.sensor_dict)
         self.check_posgresql.results.connect(self.parse_posgresql_check)
         self.check_posgresql.start()
 
@@ -345,12 +348,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        self.db_cleaning_thread = CleaningThread(self.db_dict, self.sensor_dict)
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
+        self.db_cleaning_thread = CleaningThread(db_dict, self.sensor_dict)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
         if self.config_dict.get('SYSTEM', 'place_altitude'):
             alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
         else:
@@ -358,20 +371,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if platform.system() == 'Linux':
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 if ddict['table']:
-                    self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
+                    self.ds18b20_data_threads.append(DS18B20DataCollectingThread(db_dict, ddict))
             for _, ddict in self.sensor_dict['BME280'].items():
                 if ddict['table']:
-                    self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict, alt))
+                    self.bme280_data_threads.append(BME280DataCollectingThread(db_dict, ddict, alt))
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
-                self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'], alt)
+                self.collect_mqtt_data_thread = MqttToDbThread(db_dict, self.sensor_dict['MQTT'], alt)
                 self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
                 self.collect_mqtt_data_thread.start()
         else:
-            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
-            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
-            self.collect_mqtt_data_thread = MqttToDbTestThread(self.db_dict)
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(db_dict))
+            self.collect_mqtt_data_thread = MqttToDbTestThread(db_dict)
             self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
             self.collect_mqtt_data_thread.start()
 
@@ -382,7 +395,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
         if self.config_dict.get('DISPLAY', 'in_sensor'):
-            self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict, self.sensor_dict)
+            self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
             self.display_in_data_thread.db_data.connect(self.refresh_in_data)
             self.display_in_data_thread.error.connect(self.log_thread_error)
             self.display_in_data_thread.start()
@@ -391,7 +404,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                          'sig': None}
             self.refresh_in_data(data_dict)
         if self.config_dict.get('DISPLAY', 'out_sensor'):
-            self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict, self.sensor_dict)
+            self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
             self.display_out_data_thread.db_data.connect(self.refresh_out_data)
             self.display_out_data_thread.error.connect(self.log_thread_error)
             self.display_out_data_thread.start()
@@ -585,7 +598,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.database_ok:
             self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in,
                                                              self.plot_in_2, self.plot_out, self.plot_out_2,
-                                                             self.db_dict, self.config_dict, self.sensor_dict)
+                                                             self.config_dict, self.sensor_dict)
             self.request_plot_thread.success.connect(self.plot_time_series_end)
             self.request_plot_thread.error.connect(self.plot_time_series_error)
             self.request_plot_thread.start()
