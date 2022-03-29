@@ -30,6 +30,7 @@
     * a name has been given to all threads collecting data for logging purpose.
     * MSL pressure is now computed in collecting threads.
     * threads to display data have been improved.
+    * replaced loop_forever in MQTT thread by loop_start and loop_stop.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

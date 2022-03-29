@@ -276,7 +276,8 @@ class MqttToDbThread(QtCore.QThread):
         self.mqtt_client.connect(self.mqtt_dict['address'])
         topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
         self.mqtt_client.subscribe(topics_list)
-        self.mqtt_client.loop_forever()
+        # self.mqtt_client.loop_forever()
+        self.mqtt_client.loop_start()
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):
@@ -338,8 +339,11 @@ class MqttToDbThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
         if platform.system() == 'Linux':
-            self.mqtt_client.loop_stop()
+            # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - asking for DISCONNECT')
             self.mqtt_client.disconnect()
+            self.mqtt_client.loop_stop()
+
+            # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - DISCONNECT EFFECTIVE')
         self.connector.close()
         self.terminate()
 
