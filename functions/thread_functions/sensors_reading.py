@@ -23,7 +23,7 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         self.name = sensor_dict['id']
         self.sensor_dict = sensor_dict
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -89,7 +89,7 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingTestThread - __init__')
         self.sensors_rate = 30
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -136,7 +136,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         self.cal_params = None
         self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -209,7 +209,7 @@ class BME280DataCollectingTestThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - BME280DataCollectingTestThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
         self.sensors_rate = 30
 
@@ -261,7 +261,7 @@ class MqttToDbThread(QtCore.QThread):
                      f'{altitude}')
         self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
         self.mqtt_dict = mqtt_dict
         self.mqtt_client = None
@@ -339,11 +339,8 @@ class MqttToDbThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
         if platform.system() == 'Linux':
-            # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - asking for DISCONNECT')
             self.mqtt_client.disconnect()
             self.mqtt_client.loop_stop()
-
-            # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - DISCONNECT EFFECTIVE')
         self.connector.close()
         self.terminate()
 
@@ -355,7 +352,7 @@ class MqttToDbTestThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - MqttToDbTestThread - __init__')
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+                                          database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -402,14 +399,17 @@ class DBInDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict, sensor_dict):
+    def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBInDataThread - __init__')
         self.sensor_dict = sensor_dict
         self.device_name = config_dict.get('DISPLAY', 'in_sensor')
         self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
-        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+        self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
+                                          password=config_dict.get('DATABASE', 'password'),
+                                          host=config_dict.get('DATABASE', 'host'),
+                                          database=config_dict.get('DATABASE', 'database'),
+                                          port=config_dict.get('DATABASE', 'port'))
         self.cursor = self.connector.cursor()
 
     def run(self):
@@ -488,14 +488,17 @@ class DBOutDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
     error = QtCore.pyqtSignal(list)
 
-    def __init__(self, db_dict, config_dict, sensor_dict):
+    def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBOutDataThread - __init__')
         self.sensor_dict = sensor_dict
         self.device_name = config_dict.get('DISPLAY', 'out_sensor')
         self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
-        self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
-                                          database=db_dict['database'])
+        self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
+                                          password=config_dict.get('DATABASE', 'password'),
+                                          host=config_dict.get('DATABASE', 'host'),
+                                          database=config_dict.get('DATABASE', 'database'),
+                                          port=config_dict.get('DATABASE', 'port'))
         self.cursor = self.connector.cursor()
 
     def run(self):
