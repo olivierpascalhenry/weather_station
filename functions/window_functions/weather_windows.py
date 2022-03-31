@@ -76,9 +76,8 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
 
     def parse_forecast(self):
         logging.debug('gui - weather_windows.py - My6hFCDetails - parse_forecast')
-        step = datetime.timedelta()
+        dt = None
         for i, fc in enumerate(self.forecast):
-
             wspeed = round(fc[1]['w_spd'] * 3600 / 1000)
             wdir = fc[1]['w_dir']
             if wspeed > 5:
@@ -90,12 +89,12 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                 icon = wind_dir_to_pictogramme(idx)
             else:
                 icon = wind_dir_to_pictogramme(0)
+
             if i == 0:
                 dt = fc[0]
                 date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
                         + days_months_dictionary()['month'][dt.month])
                 self.date_label.setText(date)
-
             else:
                 dt += datetime.timedelta(hours=6)
 

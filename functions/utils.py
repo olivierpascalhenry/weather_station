@@ -481,4 +481,3 @@ def str2bool(string):
         return False
     else:
         raise ValueError
-
