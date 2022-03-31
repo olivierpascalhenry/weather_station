@@ -101,6 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
+        self.sunrise = None
+        self.sunset = None
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -148,6 +150,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
         self.load_place_data()
+        self.compute_ephemerides()
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -314,9 +317,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if angle_list[i] <= angle < angle_list[i + 1]:
                     svg = angle_dict[angle_list[i]]
                     break
-            sunrise = ephem.localtime(observer.next_rising(sun, start=date.strftime('%Y/%m/%d')))
-            sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
-            sunlive = sunset - sunrise
+            self.sunrise = ephem.localtime(observer.next_rising(sun, start=date.strftime('%Y/%m/%d')))
+            self.sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
+            sunlive = self.sunset - self.sunrise
             moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
             moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
             yday = date.timetuple().tm_yday
@@ -333,8 +336,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.day_lb_1.setText(f'{yday}ème jour de l’année')
             self.day_lb_2.setText(f'Semaine {nweek}')
             self.day_lb_3.setText(season)
-            self.sun_lb_1.setText(f'Le Soleil se lève à {sunrise.strftime("%Hh%M")} et se couche à '
-                                  f'{sunset.strftime("%Hh%M")}')
+            self.sun_lb_1.setText(f'Le Soleil se lève à {self.sunrise.strftime("%Hh%M")} et se couche à '
+                                  f'{self.sunset.strftime("%Hh%M")}')
             h = str(sunlive.seconds//3600)
             if len(h) == 1:
                 h = '0' + h

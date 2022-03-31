@@ -172,24 +172,52 @@ def days_months_dictionary():
     return date_dict
 
 
-def weather_to_pictogrammes(weather):
-    logging.debug('gui - utils.py - weather_to_pictogrammes')
-    available_weather = {'Eclaircies': 'eclaircies.svg', 'Très nuageux': 'tres_nuageux.svg',
-                         'Ensoleillé': 'ensoleille.svg', 'Risque d\'orages': 'risque_orages.svg',
-                         'Nuit claire': 'nuit_claire.svg', 'Couvert': 'couvert.svg',
-                         'Rares averses': 'rares_averses.svg', 'Pluies éparses': 'pluies_eparses.svg',
-                         'Risque de grèle': 'risque_grele.svg', 'Averses orageuses': 'averses_orageuses.svg',
-                         'Brume': 'brume.svg', 'Averses': 'averses.svg', 'Pluie': 'pluie.svg',
-                         'Pluies orageuses': 'pluies_orageuses.svg', 'Orages': 'orages.svg',
-                         'Ciel voilé': 'ciel_voile.svg', 'Bancs de Brouillard': 'bancs_brouillard.svg',
-                         'Brouillard': 'brouillard.svg', 'Brouillard givrant': 'brouillard_givrant.svg'}
+def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
+    logging.debug(f'gui - utils.py - weather_to_pictogrammes - weather: {weather} ; sunrise: {sunrise} ; sunset: '
+                  f'{sunset}')
+    available_weather = {'Eclaircies': 'eclaircies.svg',
+                         'Très nuageux': 'couvert.svg',
+                         'Ensoleillé': 'ensoleille.svg',
+                         'Risque d\'orages': 'risque_orages.svg',
+                         'Nuit claire': 'nuit_claire.svg',
+                         'Couvert': 'couvert.svg',
+                         'Rares averses': 'rares_averses.svg',
+                         'Pluies éparses': 'pluies_eparses.svg',
+                         'Risque de grèle': 'risque_grele.svg',
+                         'Averses orageuses': 'averses_orageuses.svg',
+                         'Brume': 'brume.svg',
+                         'Averses': 'pluie.svg',
+                         'Pluie': 'pluie.svg',
+                         'Pluies orageuses': 'averses_orageuses.svg',
+                         'Orages': 'orages.svg',
+                         'Ciel voilé': 'ciel_voile.svg',
+                         'Bancs de Brouillard': 'brume.svg',
+                         'Brouillard': 'brouillard.svg',
+                         'Brouillard givrant': 'brouillard_givrant.svg',
+                         'Neige': 'neige.svg',
+                         'Averses de neige': 'neige.svg',
+                         'Pluie et neige': 'pluie_et_neige.svg',
+                         'Quelques flocons': 'quelques_flocons.svg'}
     try:
         pictogramme = available_weather[weather]
     except KeyError:
         logging.warning('gui - utils.py - weather_to_pictogrammes - pictogramme is missing : ' + weather)
         pictogramme = ''
+
+
+    print(sunrise, sunset, dt)
+
+    if sunrise is None or sunset is None or dt is None:
+        period = 'jour'
+    else:
+        if sunrise <= dt <= sunset:
+            period = 'jour'
+        else:
+            period = 'nuit'
+
     if pictogramme:
-        link = f'graphic_materials/pictogrammes/{pictogramme}'
+        # link = f'graphic_materials/pictogrammes/{pictogramme}'
+        link = f'graphic_materials/pictogrammes/{period}/{pictogramme}'
     else:
         link = 'icons/none_icon.png'
     icon = QtGui.QIcon()
@@ -222,7 +250,12 @@ def openweather_to_mf_desc(item):
                   '302d': 'Averses', '302n': 'Averses', '310d': 'Averses', '310n': 'Averses',
                   '311d': 'Averses', '311n': 'Averses', '312d': 'Averses', '312n': 'Averses',
                   '313d': 'Averses', '313n': 'Averses', '314d': 'Averses', '314n': 'Averses',
-                  '321d': 'Averses', '321n': 'Averses'}
+                  '321d': 'Averses', '321n': 'Averses', '600d': 'Neige', '601d': 'Neige', '602d': 'Neige',
+                  '611d': 'Pluie et neige', '612d': 'Pluie et neige', '613d': 'Pluie et neige',
+                  '615d': 'Pluie et neige', '616d': 'Pluie et neige', '621d': 'Neige', '622d': 'Neige',
+                  '623d': 'Neige', '600n': 'Neige', '601n': 'Neige', '602n': 'Neige', '611n': 'Pluie et neige',
+                  '612n': 'Pluie et neige',  '613n': 'Pluie et neige', '615n': 'Pluie et neige',
+                  '616n': 'Pluie et neige', '621n': 'Neige', '622n': 'Neige', '623n': 'Neige'}
 
     try:
         weather = conversion[item]
