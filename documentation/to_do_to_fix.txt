@@ -1,7 +1,6 @@
 ### To do list: ###
 
 * ajouter des coefs de calibration pour les capteurs (offset, courbe, etc)
-* se baser sur les éphémérides calculées pour afficher la lune ou le soleil
 
 ### To fix list: ###
 

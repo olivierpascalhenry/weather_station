@@ -204,9 +204,6 @@ def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
         logging.warning('gui - utils.py - weather_to_pictogrammes - pictogramme is missing : ' + weather)
         pictogramme = ''
 
-
-    print(sunrise, sunset, dt)
-
     if sunrise is None or sunset is None or dt is None:
         period = 'jour'
     else:
@@ -216,7 +213,6 @@ def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
             period = 'nuit'
 
     if pictogramme:
-        # link = f'graphic_materials/pictogrammes/{pictogramme}'
         link = f'graphic_materials/pictogrammes/{period}/{pictogramme}'
     else:
         link = 'icons/none_icon.png'
