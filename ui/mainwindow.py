@@ -323,14 +323,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
 
             next_date = date
-
             for i in range(0, 5):
                 next_date += datetime.timedelta(days=1)
                 sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
                 sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
                 self.sunrise_5days.append(sunrise)
                 self.sunset_5days.append(sunset)
-
 
             sunlive = self.sunset - self.sunrise
             moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
