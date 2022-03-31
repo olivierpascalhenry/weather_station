@@ -15,6 +15,7 @@
     * a storage value has been added for all MQTT sensors.
     * a checkbox to activate/deactivate a sensor has been added.
     * database options have been added.
+    * new weather icons have been designed.
 
   * MODIFIED:
     * mqtt thread has been modified to handle new mqtt based sensors.
