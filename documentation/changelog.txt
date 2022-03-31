@@ -35,6 +35,7 @@
     * replaced loop_forever in MQTT thread by loop_start and loop_stop.
     * database options are now handled by the weather stations.
     * all icons have been resized.
+    * night and day weather icons are now displayed depending on sunrise and sunset.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

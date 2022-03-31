@@ -103,6 +103,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_signal = None
         self.sunrise = None
         self.sunset = None
+        self.sunrise_5days = []
+        self.sunset_5days = []
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -319,6 +321,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     break
             self.sunrise = ephem.localtime(observer.next_rising(sun, start=date.strftime('%Y/%m/%d')))
             self.sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
+
+            next_date = date
+
+            for i in range(0, 5):
+                next_date += datetime.timedelta(days=1)
+                sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
+                sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
+                self.sunrise_5days.append(sunrise)
+                self.sunset_5days.append(sunset)
+
+
             sunlive = self.sunset - self.sunrise
             moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
             moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
@@ -694,6 +707,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
                           f'{len(self.forecast_data["quaterly"])}')
             if self.forecast_data['api'] == 'meteofrance':
+                j = 0
                 for i in [0, 4, 8, 12, 16]:
                     dt_list = list(self.forecast_data['quaterly'].keys())[i: i + 4]
                     dt = dt_list[2]
@@ -705,7 +719,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         horizontal_layout = self.prev6h_layout_1
                     else:
                         horizontal_layout = self.prev6h_layout_2
-                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout)
+                    sunrise, sunset = self.sunrise_5days[j], self.sunset_5days[j]
+                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise, sunset)
+                    j += 1
             else:
                 i = 0
                 for dt, fc in self.forecast_data['quaterly'].items():
@@ -725,7 +741,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self)
+        details_window = My1hFCDetails(forecast, self.sunrise, self.sunset, self)
         details_window.exec_()
 
     def display_1d_forecast_details(self, data):
@@ -733,12 +749,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         details_window = My1dFCDetails(data, self)
         details_window.exec_()
 
-    def display_6h_forecast_details(self, dt_list):
+    def display_6h_forecast_details(self, dt_list, sunrise, sunset):
         logging.debug('gui - mainwindow.py - MainWindow - display_6h_forecast_details')
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self)
+        details_window = My6hFCDetails(forecast, sunrise, sunset, self)
         details_window.exec_()
 
     def show_bat_link_details(self):
