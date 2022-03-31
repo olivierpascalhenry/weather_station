@@ -13,27 +13,27 @@
 ]>
 <svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="0 0 103.574 98.536" enable-background="new 0 0 103.574 98.536" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
 <metadata>
 	<sfw  xmlns="&ns_sfw;">
 		<slices></slices>
-		<sliceSourceBounds  bottomLeftOrigin="true" height="98.536" width="103.574" x="245.713" y="-470.268"></sliceSourceBounds>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="98.536" width="103.574" x="243.851" y="-470.213"></sliceSourceBounds>
 	</sfw>
 </metadata>
 <g>
-	<circle fill="#F5FBFE" cx="78.448" cy="25.126" r="25.126"/>
-	<circle fill="#E9E9EA" cx="95.597" cy="21.764" r="2.17"/>
-	<circle fill="#E9E9EA" cx="72.491" cy="36.923" r="4.691"/>
-	<circle fill="#E9E9EA" cx="87.352" cy="8.84" r="2.648"/>
-	<circle fill="#E9E9EA" cx="61.044" cy="13.551" r="2.648"/>
-	<circle fill="#E9E9EA" cx="76.278" cy="19.594" r="2.17"/>
-	<circle fill="#E9E9EA" cx="89.522" cy="35.083" r="2.17"/>
+	<circle fill="#F5FBFE" cx="89.674" cy="40.87" r="25.126"/>
+	<circle fill="#E9E9EA" cx="106.823" cy="37.508" r="2.17"/>
+	<circle fill="#E9E9EA" cx="83.716" cy="52.668" r="4.691"/>
+	<circle fill="#E9E9EA" cx="98.578" cy="24.584" r="2.648"/>
+	<circle fill="#E9E9EA" cx="72.27" cy="29.296" r="2.648"/>
+	<circle fill="#E9E9EA" cx="87.504" cy="35.338" r="2.17"/>
+	<circle fill="#E9E9EA" cx="100.748" cy="50.827" r="2.17"/>
 </g>
-<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M75.867,71.102
-	c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694C69.749,18.714,59.192,9.06,46.379,9.06
-	c-12.862,0-23.452,9.729-24.811,22.229C11.671,32.479,4,40.905,4,51.123c0,11.034,8.945,19.979,19.979,19.979"/>
-<polygon fill="#FEEF62" points="70.417,50.785 57.543,50.785 48.78,73.991 57.915,73.991 48.472,98.536 49.619,98.536 
-	70.502,67.721 61.165,67.721 "/>
-<polygon fill="#FEEF62" points="52.155,41.827 39.282,41.827 30.518,65.034 39.653,65.034 30.21,89.579 31.357,89.579 52.24,58.764 
-	42.903,58.764 "/>
+<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M87.093,86.847
+	c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694c-1.424-12.431-11.982-22.085-24.795-22.085
+	c-12.862,0-23.452,9.729-24.811,22.229c-9.897,1.19-17.568,9.617-17.568,19.835c0,11.034,8.945,19.979,19.979,19.979"/>
+<polygon fill="#FEEF62" points="81.643,66.529 68.769,66.529 60.006,89.736 69.141,89.736 59.697,114.281 60.844,114.281 
+	81.728,83.466 72.39,83.466 "/>
+<polygon fill="#FEEF62" points="63.381,57.572 50.507,57.572 41.744,80.778 50.879,80.778 41.435,105.323 42.582,105.323 
+	63.466,74.508 54.128,74.508 "/>
 </svg>

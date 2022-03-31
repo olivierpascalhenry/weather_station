@@ -34,6 +34,7 @@
     * threads to display data have been improved.
     * replaced loop_forever in MQTT thread by loop_start and loop_stop.
     * database options are now handled by the weather stations.
+    * all icons have been resized.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.

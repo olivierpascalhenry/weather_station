@@ -13,20 +13,20 @@
 ]>
 <svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="0 0 50.251 50.251" enable-background="new 0 0 50.251 50.251" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
 <metadata>
 	<sfw  xmlns="&ns_sfw;">
 		<slices></slices>
-		<sliceSourceBounds  bottomLeftOrigin="true" height="50.251" width="50.251" x="272.374" y="-446.126"></sliceSourceBounds>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="50.251" width="50.251" x="272.512" y="-446.07"></sliceSourceBounds>
 	</sfw>
 </metadata>
 <g>
-	<circle fill="#F5FBFE" cx="25.126" cy="25.126" r="25.126"/>
-	<circle fill="#E9E9EA" cx="42.274" cy="21.764" r="2.17"/>
-	<circle fill="#E9E9EA" cx="19.168" cy="36.923" r="4.691"/>
-	<circle fill="#E9E9EA" cx="34.029" cy="8.84" r="2.648"/>
-	<circle fill="#E9E9EA" cx="7.721" cy="13.551" r="2.648"/>
-	<circle fill="#E9E9EA" cx="22.955" cy="19.594" r="2.17"/>
-	<circle fill="#E9E9EA" cx="36.2" cy="35.083" r="2.17"/>
+	<circle fill="#F5FBFE" cx="65.013" cy="65.013" r="25.126"/>
+	<circle fill="#E9E9EA" cx="82.162" cy="61.651" r="2.17"/>
+	<circle fill="#E9E9EA" cx="59.055" cy="76.81" r="4.691"/>
+	<circle fill="#E9E9EA" cx="73.916" cy="48.727" r="2.648"/>
+	<circle fill="#E9E9EA" cx="47.608" cy="53.438" r="2.648"/>
+	<circle fill="#E9E9EA" cx="62.842" cy="59.481" r="2.17"/>
+	<circle fill="#E9E9EA" cx="76.087" cy="74.97" r="2.17"/>
 </g>
 </svg>

@@ -1,3 +1,0 @@
-The icon designs are originally by Lukas Bischoff. Icon art for v1.1 forward, HTML, Less, and CSS are by Erik Flowers.
-Weather Icons licensed under SIL OFL 1.1
-https://erikflowers.github.io/weather-icons/
