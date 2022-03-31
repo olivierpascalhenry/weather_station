@@ -13,27 +13,27 @@
 ]>
 <svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="0 0 123.51 101.547" enable-background="new 0 0 123.51 101.547" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
 <metadata>
 	<sfw  xmlns="&ns_sfw;">
 		<slices></slices>
-		<sliceSourceBounds  bottomLeftOrigin="true" height="101.547" width="123.51" x="235.745" y="-471.774"></sliceSourceBounds>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="101.547" width="123.51" x="235.883" y="-470.719"></sliceSourceBounds>
 	</sfw>
 </metadata>
-<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M99.334,47.612h6.133
-	c7.756,0,14.044-6.288,14.044-14.044s-6.288-14.044-14.044-14.044h-3.299C101.166,10.786,93.745,4,84.739,4
+<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M102.591,60.85h6.133
+	c7.756,0,14.044-6.288,14.044-14.044s-6.288-14.044-14.044-14.044h-3.299c-1.001-8.738-8.423-15.524-17.429-15.524
 	c-9.041,0-16.485,6.839-17.441,15.625c-6.957,0.837-12.349,6.76-12.349,13.942c0,7.756,6.288,14.044,14.044,14.044"/>
-<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M75.867,88.023
-	c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694c-1.424-12.431-11.982-22.085-24.795-22.085
-	c-12.862,0-23.452,9.729-24.811,22.229C11.671,49.4,4,57.827,4,68.045c0,11.034,8.945,19.979,19.979,19.979"/>
+<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M79.125,101.262
+	c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694C73.007,48.874,62.449,39.22,49.637,39.22
+	c-12.862,0-23.452,9.729-24.811,22.229c-9.897,1.19-17.568,9.617-17.568,19.835c0,11.034,8.945,19.979,19.979,19.979"/>
 <g>
 	
-		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="49.923" y1="76.499" x2="49.923" y2="99.547"/>
+		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="53.18" y1="89.738" x2="53.18" y2="112.786"/>
 	
-		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="58.072" y1="79.875" x2="41.774" y2="96.172"/>
+		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="61.329" y1="93.113" x2="45.032" y2="109.411"/>
 	
-		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="58.072" y1="96.172" x2="41.774" y2="79.875"/>
+		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="61.329" y1="109.411" x2="45.032" y2="93.113"/>
 	
-		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="61.447" y1="88.023" x2="38.399" y2="88.023"/>
+		<line fill="none" stroke="#8FCFF1" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="64.705" y1="101.262" x2="41.656" y2="101.262"/>
 </g>
 </svg>

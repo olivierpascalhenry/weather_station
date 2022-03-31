@@ -13,35 +13,33 @@
 ]>
 <svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="0 0 129.907 122.731" enable-background="new 0 0 129.907 122.731" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
 <metadata>
 	<sfw  xmlns="&ns_sfw;">
 		<slices></slices>
-		<sliceSourceBounds  bottomLeftOrigin="true" height="122.731" width="129.907" x="232.546" y="-481.866"></sliceSourceBounds>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="122.731" width="129.907" x="232.684" y="-480.311"></sliceSourceBounds>
 	</sfw>
 </metadata>
 <g>
-	<g>
-		<circle fill="#F3B300" cx="78.448" cy="51.363" r="25.126"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="78.448" y1="4" x2="78.448" y2="14.14"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="125.907" y1="51.363" x2="115.768" y2="51.363"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="41.225" y1="51.363" x2="31.085" y2="51.363"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="48.197" y1="21.112" x2="44.805" y2="17.719"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="112.092" y1="85.006" x2="108.699" y2="81.614"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="108.699" y1="21.112" x2="112.092" y2="17.719"/>
-		
-			<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="44.805" y1="85.006" x2="48.197" y2="81.614"/>
-		<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M75.867,97.34
-			c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694c-1.424-12.431-11.982-22.085-24.795-22.085
-			c-12.862,0-23.452,9.729-24.811,22.229C11.671,58.716,4,67.143,4,77.361C4,88.395,12.945,97.34,23.979,97.34"/>
-	</g>
-	<polygon fill="#FEEF62" points="60.431,74.979 47.557,74.979 38.794,98.186 47.929,98.186 38.486,122.731 39.632,122.731 
-		60.516,91.916 51.179,91.916 	"/>
+	<circle fill="#F3B300" cx="78.507" cy="53.01" r="25.126"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="78.507" y1="5.647" x2="78.507" y2="15.787"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="125.966" y1="53.01" x2="115.827" y2="53.01"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="41.284" y1="53.01" x2="31.144" y2="53.01"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="48.256" y1="22.759" x2="44.864" y2="19.366"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="112.151" y1="86.653" x2="108.758" y2="83.261"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="108.758" y1="22.759" x2="112.151" y2="19.366"/>
+	
+		<line fill="none" stroke="#F3B300" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" x1="44.864" y1="86.653" x2="48.256" y2="83.261"/>
 </g>
+<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M75.926,98.987
+	c11.034,0,19.979-8.945,19.979-19.979S86.96,59.029,75.926,59.029h-4.694c-1.424-12.431-11.982-22.085-24.795-22.085
+	c-12.862,0-23.452,9.729-24.811,22.229C11.73,60.363,4.059,68.79,4.059,79.008c0,11.034,8.945,19.979,19.979,19.979"/>
+<polygon fill="#FEEF62" points="60.49,76.626 47.616,76.626 38.853,99.833 47.988,99.833 38.544,124.378 39.691,124.378 
+	60.575,93.563 51.237,93.563 "/>
 </svg>

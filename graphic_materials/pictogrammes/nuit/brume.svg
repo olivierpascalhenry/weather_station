@@ -13,29 +13,29 @@
 ]>
 <svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" viewBox="0 0 90.039 75.937" enable-background="new 0 0 90.039 75.937" xml:space="preserve">
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
 <metadata>
 	<sfw  xmlns="&ns_sfw;">
 		<slices></slices>
-		<sliceSourceBounds  bottomLeftOrigin="true" height="75.937" width="90.039" x="252.481" y="-458.969"></sliceSourceBounds>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="75.937" width="90.039" x="252.13" y="-459.664"></sliceSourceBounds>
 	</sfw>
 </metadata>
 <g>
-	<circle fill="#F5FBFE" cx="64.389" cy="25.126" r="25.126"/>
-	<circle fill="#E9E9EA" cx="81.538" cy="21.764" r="2.17"/>
-	<circle fill="#E9E9EA" cx="58.432" cy="36.923" r="4.691"/>
-	<circle fill="#E9E9EA" cx="73.293" cy="8.84" r="2.648"/>
-	<circle fill="#E9E9EA" cx="46.985" cy="13.551" r="2.648"/>
-	<circle fill="#E9E9EA" cx="62.219" cy="19.594" r="2.17"/>
-	<circle fill="#E9E9EA" cx="75.463" cy="35.083" r="2.17"/>
+	<circle fill="#F5FBFE" cx="83.894" cy="52.919" r="25.126"/>
+	<circle fill="#E9E9EA" cx="101.043" cy="49.558" r="2.17"/>
+	<circle fill="#E9E9EA" cx="77.937" cy="64.717" r="4.691"/>
+	<circle fill="#E9E9EA" cx="92.798" cy="36.634" r="2.648"/>
+	<circle fill="#E9E9EA" cx="66.49" cy="41.345" r="2.648"/>
+	<circle fill="#E9E9EA" cx="81.724" cy="47.388" r="2.17"/>
+	<circle fill="#E9E9EA" cx="94.968" cy="62.877" r="2.17"/>
 </g>
-<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M65.585,38.263H7.117
+<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M85.09,66.057H26.622
+	c-3.102,0-5.617-2.515-5.617-5.617v0c0-3.102,2.515-5.617,5.617-5.617H85.09c3.102,0,5.617,2.515,5.617,5.617v0
+	C90.707,63.542,88.192,66.057,85.09,66.057z"/>
+<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M102.427,84.144H43.959
 	c-3.102,0-5.617-2.515-5.617-5.617v0c0-3.102,2.515-5.617,5.617-5.617h58.468c3.102,0,5.617,2.515,5.617,5.617v0
-	C71.202,35.749,68.687,38.263,65.585,38.263z"/>
-<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M82.922,56.35H24.453
-	c-3.102,0-5.617-2.515-5.617-5.617v0c0-3.102,2.515-5.617,5.617-5.617h58.468c3.102,0,5.617,2.515,5.617,5.617v0
-	C88.539,53.836,86.024,56.35,82.922,56.35z"/>
-<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M65.585,74.437H7.117
-	c-3.102,0-5.617-2.515-5.617-5.617v0c0-3.102,2.515-5.617,5.617-5.617h58.468c3.102,0,5.617,2.515,5.617,5.617v0
-	C71.202,71.923,68.687,74.437,65.585,74.437z"/>
+	C108.044,81.629,105.529,84.144,102.427,84.144z"/>
+<path fill="#FFFFFF" stroke="#C6C4C3" stroke-width="3" stroke-miterlimit="10" d="M85.09,102.231H26.622
+	c-3.102,0-5.617-2.515-5.617-5.617v0c0-3.102,2.515-5.617,5.617-5.617H85.09c3.102,0,5.617,2.515,5.617,5.617v0
+	C90.707,99.716,88.192,102.231,85.09,102.231z"/>
 </svg>
