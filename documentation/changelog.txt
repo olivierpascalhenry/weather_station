@@ -1,4 +1,4 @@
-### April 1 202, Release version 0.11.0 ###
+### April 1 2022, Release version 0.11.0 ###
 
   * ADDED:
     * a new numpad has been introduced.
