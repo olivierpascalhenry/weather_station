@@ -5,7 +5,8 @@ from functions.utils import (stylesheet_creation_function, weather_to_pictogramm
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):
-    logging.debug('gui - gui_functions.py - add_1h_forecast_widget')
+    logging.debug(f'gui - gui_functions.py - add_1h_forecast_widget - hour: {hour} ; weather: {weather} ; temp: {temp} '
+                  f'; full_dt: {full_dt} ; horizontal_layout: {horizontal_layout}')
     self.fc_1h_fr_1.append(QtWidgets.QFrame())
     if self.fc_1h_nbr1 not in [0, 6, 12, 18]:
         self.fc_1h_fr_1[self.fc_1h_nbr1].setStyleSheet("QFrame {\n"
@@ -42,7 +43,8 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
     self.fc_1h_bt_1[self.fc_1h_nbr1].setMinimumSize(QtCore.QSize(80, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setMaximumSize(QtCore.QSize(16777215, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setStyleSheet(stylesheet_creation_function('qtoolbutton_1hfc'))
-    self.fc_1h_bt_1[self.fc_1h_nbr1].setIcon(weather_to_pictogrammes(weather))
+    self.fc_1h_bt_1[self.fc_1h_nbr1].setIcon(weather_to_pictogrammes(weather, full_dt, self.sunrise_6days[0],
+                                                                     self.sunset_6days[0]))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setIconSize(QtCore.QSize(80, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setObjectName('fc_1h_bt_1_' + str(self.fc_1h_nbr1))
     self.fc_1h_vert_lay_1[self.fc_1h_nbr1].addWidget(self.fc_1h_bt_1[self.fc_1h_nbr1])
@@ -60,8 +62,11 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
     self.fc_1h_nbr1 += 1
 
 
-def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, api='meteofrance'):
-    logging.debug('gui - gui_functions.py - add_6h_forecast_widget')
+def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise=None, sunset=None,
+                           api='meteofrance'):
+    logging.debug(f'gui - gui_functions.py - add_6h_forecast_widget -  date: {date} ; weather: {weather} '
+                  f'; temp: {temp} ; dt_list: {dt_list} ; horizontal_layout: {horizontal_layout} ; sunrise: {sunrise} ;'
+                  f' sunset: {sunset} : api: {api}')
     self.fc_6h_fr_1.append(QtWidgets.QFrame())
     if self.fc_6h_nbr1 not in [0, 3]:
         self.fc_6h_fr_1[self.fc_6h_nbr1].setStyleSheet("QFrame {\n"
@@ -118,7 +123,8 @@ def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout
     self.fc_6h_vert_lay_1[self.fc_6h_nbr1].addWidget(self.fc_6h_lb_2[self.fc_6h_nbr1])
     horizontal_layout.addLayout(self.fc_6h_vert_lay_1[self.fc_6h_nbr1])
     if api == 'meteofrance':
-        self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_6h_forecast_details(dt_list))
+        self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_6h_forecast_details(dt_list, sunrise,
+                                                                                                  sunset))
     else:
         self.fc_6h_bt_1[self.fc_6h_nbr1].clicked.connect(lambda: self.display_1d_forecast_details(dt_list))
     self.fc_6h_nbr1 += 1

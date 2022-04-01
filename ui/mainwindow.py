@@ -1,6 +1,10 @@
 import io
 import os
+import copy
+import json
 import math
+import time
+import ephem
 import pickle
 import platform
 import logging
@@ -8,7 +12,7 @@ import pathlib
 import configparser
 import tempfile
 import shutil
-import time
+import datetime
 from PyQt5 import QtWidgets, QtCore, QtGui
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -18,30 +22,32 @@ from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict)
+                             link_value_icon_dict, angle_moon_phase, get_season)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
-                                                        MqttToDbThread, DBInDataThread, DBOutDataThread)
+                                                        MqttToDbThread, DBInDataThread, DBOutDataThread,
+                                                        DS18B20DataCollectingTestThread, MqttToDbTestThread,
+                                                        BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
-from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
+from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, path, user_path, config_dict, parent=None):
+    def __init__(self, path, user_path, config_dict, sensor_dict, parent=None):
         logging.debug('gui - mainwindow.py - MainWindow - __init__')
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.gui_path = path
         self.user_path = user_path
         self.config_dict = config_dict
+        self.sensor_dict = sensor_dict
         self.place_object = None
-        # self.old_place_object = None
         self.database_ok = False
         self.connector = None
         self.cursor = None
@@ -63,6 +69,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2 = None
         self.spinner = None
         self.h_spin_lay = None
+        self.ds18b20_data_threads = []
+        self.bme280_data_threads = []
         self.collect_ds18b20_data_thread = None
         self.collect_bme180_data_thread = None
         self.collect_mqtt_data_thread = None
@@ -79,13 +87,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_posgresql = None
         self.update_url = None
         self.timer = None
-        self.db_dict = {'user': 'weather_station', 'password': '31weather64', 'host': '127.0.0.1',
-                        'database': 'weather_station_db'}
         self.in_temperature = None
         self.in_temperature_min_max = None
         self.in_humidity = None
         self.in_pressure = None
         self.in_pressure_msl = None
+        self.in_battery = None
+        self.in_signal = None
         self.out_temperature = None
         self.out_temperature_min_max = None
         self.out_humidity = None
@@ -93,6 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
+        self.sunrise_6days = []
+        self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -111,26 +121,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.option_button.clicked.connect(self.open_options)
         self.warning_button.clicked.connect(self.warning_update_dispatch)
         self.in_out_bt.clicked.connect(lambda: self.set_stack_widget_page(0))
-        self.time_series_bt.clicked.connect(lambda: self.set_stack_widget_page(1))
-        self.h1_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(2))
-        self.h6_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(3))
+        self.ephemeride_bt.clicked.connect(lambda: self.set_stack_widget_page(1))
+        self.time_series_bt.clicked.connect(lambda: self.set_stack_widget_page(2))
+        self.h1_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(3))
+        self.h6_prev_bt.clicked.connect(lambda: self.set_stack_widget_page(4))
         self.left_ts_button.clicked.connect(self.set_ts_stack_left)
         self.right_ts_button.clicked.connect(self.set_ts_stack_right)
         self.left_fc_button.clicked.connect(self.set_fc_stack_left)
         self.right_fc_button.clicked.connect(self.set_fc_stack_right)
         self.out_battery_bt.clicked.connect(self.show_bat_link_details)
         self.out_signal_bt.clicked.connect(self.show_bat_link_details)
+        self.in_battery_bt.clicked.connect(self.show_bat_link_details)
+        self.in_signal_bt.clicked.connect(self.show_bat_link_details)
         self.in_pressure_bt.clicked.connect(self.show_pressure_details)
         self.out_pressure_bt.clicked.connect(self.show_pressure_details)
         self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
-        self.button_list = [self.in_out_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
+        self.button_list = [self.in_out_bt, self.ephemeride_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
-        # if self.config_dict.getboolean('API', 'user_place'):
-        #     f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
-        #     self.place_object = pickle.load(f)
-        #     self.old_place_object = self.place_object
-        #     f.close()
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
         self.in_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
         self.out_temperature_label.setGraphicsEffect(shadow_creation_function(2, 5))
@@ -141,15 +149,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
         self.show_date()
         self.set_time_date()
-
         self.load_place_data()
-
+        self.compute_ephemerides()
         self.check_postgresql_connection()
         self.check_internet_connection()
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
-        self.check_posgresql = CheckPostgresqlConnexion()
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
+        self.check_posgresql = CheckPostgresqlConnexion(db_dict, self.sensor_dict)
         self.check_posgresql.results.connect(self.parse_posgresql_check)
         self.check_posgresql.start()
 
@@ -162,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def parse_posgresql_check(self, results):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
-        if results[0] and results[1] and results[2]:
+        if results[0] and results[1]:
             self.database_ok = True
             self.launch_clean_thread()
             self.collect_sensors_data()
@@ -172,19 +184,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 text = ('La station météo n\'a pas trouvé PostgreSQL. Veuillez l\'installer ou vérifier son '
                         'installation. PostgreSQL est obligatoire pour gérer la base de données des capteurs.')
             else:
-                if not results[1]:
-                    text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
-                            'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
-                            'connecter.')
-                else:
-                    text = ('La station météo n\'a pas trouvé les tables dédiées aux capteurs. Veuillez les créer '
-                            'avant d\'utiliser la station météo.')
+                text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
+                        'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
+                        'connecter.')
             info_window = MyInfo(text, self)
             info_window.exec_()
 
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
-        self.check_update()
+        # self.check_update()
         self.launch_weather_request()
 
     def load_place_data(self):
@@ -203,15 +211,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def set_stack_widget_page(self, idx):
         logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
-        self.main_stacked_widget.setCurrentIndex(idx)
         for button in self.button_list:
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+        self.main_stacked_widget.setCurrentIndex(idx)
         if idx == 1:
-            self.plot_time_series_start()
+            self.compute_ephemerides()
         elif idx == 2:
-            self.display_fc_1h()
+            self.plot_time_series_start()
         elif idx == 3:
+            self.display_fc_1h()
+        elif idx == 4:
             self.display_fc_6h()
 
     def set_ts_stack_left(self):
@@ -279,34 +289,139 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             year = str(self.current_date.year())
             self.date_label.setText(f'{week_day} {day}\n{month} {year}')
 
+    def compute_ephemerides(self):
+        logging.debug('gui - mainwindow.py - MainWindow - compute_ephemerides')
+        if self.place_object and self.place_object is not None:
+            if self.config_dict.get('API', 'api_used') == 'meteofrance':
+                lon = str(self.place_object.longitude)
+                lat = str(self.place_object.latitude)
+            else:
+                lon = str(self.place_object.lon)
+                lat = str(self.place_object.lat)
+            date = self.current_date.toPyDate()
+            observer = ephem.Observer()
+            observer.lat, observer.lon, observer.date = lat, lon, date
+            moon, sun = ephem.Moon(), ephem.Sun()
+            sun.compute(observer)
+            moon.compute(observer)
+            sunlon = ephem.Ecliptic(sun).lon / math.pi * 180.0
+            moonlon = ephem.Ecliptic(moon).lon / math.pi * 180.0
+            if sunlon >= moonlon:
+                angle = sunlon - moonlon
+            else:
+                angle = 360 - sunlon - moonlon
+            angle_dict = angle_moon_phase()
+            angle_list = [a for a in angle_dict]
+            svg = None
+            for i in range(len(angle_list) - 1):
+                if angle_list[i] <= angle < angle_list[i + 1]:
+                    svg = angle_dict[angle_list[i]]
+                    break
+
+            next_date = date
+            for i in range(0, 6):
+                sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
+                sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
+                self.sunrise_6days.append(sunrise)
+                self.sunset_6days.append(sunset)
+                next_date += datetime.timedelta(days=1)
+
+            sunlive = self.sunrise_6days[0] - self.sunset_6days[0]
+            moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
+            moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
+            yday = date.timetuple().tm_yday
+            nweek = date.isocalendar()[1]
+            season = get_season(date)
+            week_day = days_months_dictionary()['day'][self.current_date.dayOfWeek()]
+            day = str(self.current_date.day())
+            month = days_months_dictionary()['month'][self.current_date.month()]
+            year = str(self.current_date.year())
+            self.day_box.setTitle(f'{week_day} {day} {month} {year}')
+            if yday == 1:
+                self.day_lb_1.setText(f'{yday}er jour de l’année')
+            else:
+                self.day_lb_1.setText(f'{yday}ème jour de l’année')
+            self.day_lb_2.setText(f'Semaine {nweek}')
+            self.day_lb_3.setText(season)
+            self.sun_lb_1.setText(f'Le Soleil se lève à {self.sunrise_6days[0].strftime("%Hh%M")} et se couche à '
+                                  f'{self.sunset_6days[0].strftime("%Hh%M")}')
+            h = str(sunlive.seconds//3600)
+            if len(h) == 1:
+                h = '0' + h
+            m = str((sunlive.seconds//60) % 60)
+            if len(m) == 1:
+                m = '0' + m
+            self.sun_lb_2.setText(f'Durée d’ensoleillement: {h}h{m}')
+            self.moon_lb_1.setText(f'La Lune se lève à {moonrise.strftime("%Hh%M")} et se couche à '
+                                   f'{moonset.strftime("%Hh%M")}')
+            self.moon_lb_3.setPixmap(QtGui.QPixmap(f'graphic_materials/pictogrammes/moon_phases/{svg}'))
+
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        self.db_cleaning_thread = CleaningThread(self.db_dict)
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
+        self.db_cleaning_thread = CleaningThread(db_dict, self.sensor_dict)
         self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
-        self.collect_ds18b20_data_thread = DS18B20DataCollectingThread(self.db_dict, self.config_dict)
-        self.collect_ds18b20_data_thread.error.connect(self.log_thread_error)
-        self.collect_ds18b20_data_thread.start()
-        self.collect_bme180_data_thread = BME280DataCollectingThread(self.db_dict, self.config_dict)
-        self.collect_bme180_data_thread.error.connect(self.log_thread_error)
-        self.collect_bme180_data_thread.start()
-        self.collect_mqtt_data_thread = MqttToDbThread(self.db_dict, self.config_dict)
-        self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
-        self.collect_mqtt_data_thread.start()
+        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
+                   'password': self.config_dict.get('DATABASE', 'password'),
+                   'host': self.config_dict.get('DATABASE', 'host'),
+                   'database': self.config_dict.get('DATABASE', 'database'),
+                   'port': self.config_dict.get('DATABASE', 'port')}
+        if self.config_dict.get('SYSTEM', 'place_altitude'):
+            alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
+        else:
+            alt = None
+        if platform.system() == 'Linux':
+            for _, ddict in self.sensor_dict['DS18B20'].items():
+                if ddict['table']:
+                    self.ds18b20_data_threads.append(DS18B20DataCollectingThread(db_dict, ddict))
+            for _, ddict in self.sensor_dict['BME280'].items():
+                if ddict['table']:
+                    self.bme280_data_threads.append(BME280DataCollectingThread(db_dict, ddict, alt))
+            if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
+                    self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
+                    self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
+                self.collect_mqtt_data_thread = MqttToDbThread(db_dict, self.sensor_dict['MQTT'], alt)
+                self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
+                self.collect_mqtt_data_thread.start()
+        else:
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(db_dict))
+            self.collect_mqtt_data_thread = MqttToDbTestThread(db_dict)
+            self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
+            self.collect_mqtt_data_thread.start()
+
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
+            thread.error.connect(self.log_thread_error)
+            thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        self.display_in_data_thread = DBInDataThread(self.db_dict, self.config_dict)
-        self.display_in_data_thread.db_data.connect(self.refresh_in_data)
-        self.display_in_data_thread.error.connect(self.log_thread_error)
-        self.display_in_data_thread.start()
-        self.display_out_data_thread = DBOutDataThread(self.db_dict, self.config_dict)
-        self.display_out_data_thread.db_data.connect(self.refresh_out_data)
-        self.display_out_data_thread.error.connect(self.log_thread_error)
-        self.display_out_data_thread.start()
+        if self.config_dict.get('DISPLAY', 'in_sensor'):
+            self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
+            self.display_in_data_thread.db_data.connect(self.refresh_in_data)
+            self.display_in_data_thread.error.connect(self.log_thread_error)
+            self.display_in_data_thread.start()
+        else:
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
+                         'sig': None}
+            self.refresh_in_data(data_dict)
+        if self.config_dict.get('DISPLAY', 'out_sensor'):
+            self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
+            self.display_out_data_thread.db_data.connect(self.refresh_out_data)
+            self.display_out_data_thread.error.connect(self.log_thread_error)
+            self.display_out_data_thread.start()
+        else:
+            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
+                         'sig': None}
+            self.refresh_out_data(data_dict)
 
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
@@ -317,6 +432,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.check_internet_connection()
 
     def launch_weather_request(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')
         if self.config_dict.get('API', 'api_used') and self.place_object is not None:
             if self.config_dict.get('API', 'api_used') == 'meteofrance':
                 self.launch_mf_request_thread()
@@ -334,6 +450,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.query_mf_forecast_thread.start()
 
     def launch_ow_request_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_ow_request_thread')
         self.query_ow_forecast_thread = OWForecastRequest(self.place_object, self.config_dict)
         self.query_ow_forecast_thread.fc_data.connect(self.parse_forecast_data)
         self.query_ow_forecast_thread.error.connect(self.log_thread_error)
@@ -347,23 +464,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.start()
 
     def refresh_in_data(self, data_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_in_data - data_dict: {data_dict}')
         self.in_temperature = data_dict['temp']
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
         self.in_pressure = data_dict['pres']
-        self.in_pressure_msl = data_dict['presmsl']
+        self.in_pressure_msl = data_dict['pres_msl']
+        self.in_battery = data_dict['bat']
+        self.in_signal = data_dict['sig']
         self.refresh_in_display()
 
     def refresh_out_data(self, data_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_out_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_out_data- data_dict: {data_dict}')
         self.out_temperature = data_dict['temp']
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
         self.out_pressure = data_dict['pres']
-        self.out_pressure_msl = data_dict['presmsl']
+        self.out_pressure_msl = data_dict['pres_msl']
         self.out_battery = data_dict['bat']
-        self.out_signal = data_dict['link']
+        self.out_signal = data_dict['sig']
         self.refresh_out_display()
 
     def refresh_in_display(self):
@@ -372,59 +491,97 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.in_temperature_label.setText(f'{self.in_temperature} °C')
         else:
             self.in_temperature_label.setText('No data')
-
-        if self.in_temperature_min_max[0] is not None:
+        if self.in_temperature_min_max is not None and self.in_temperature_min_max[0] is not None:
             self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
         else:
             self.in_label_3.setText('No data / No data')
-
         if self.in_humidity is not None:
+            self.in_humidity_bt.setEnabled(True)
             self.in_humidity_bt.setText(f'Humidité : {round(self.in_humidity)} %')
         else:
-            self.in_humidity_bt.setText('Humidité : No data')
-
+            self.in_humidity_bt.setEnabled(False)
+            self.in_humidity_bt.setText('')
         if self.in_pressure is not None:
-            self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
+            self.in_pressure_bt.setEnabled(True)
+            if self.in_pressure_msl is not None and self.config_dict.getboolean('DISPLAY', 'in_msl_pressure'):
+                self.in_pressure_bt.setText(f'Pression SL : {round(self.in_pressure_msl)} hPa')
+            else:
+                self.in_pressure_bt.setText(f'Pression : {round(self.in_pressure)} hPa')
         else:
-            self.in_pressure_bt.setText('Pression : No data')
+            self.in_pressure_bt.setEnabled(False)
+            self.in_pressure_bt.setText('')
+
+        if self.in_battery is not None:
+            self.in_battery_bt.setEnabled(True)
+            icon = 'batterie_0-5_icon.svg'
+            bat_list = sorted(list(battery_value_icon_dict().keys()))
+            for i, val in enumerate(bat_list[: -1]):
+                if bat_list[i] <= self.in_battery < bat_list[i + 1]:
+                    icon = battery_value_icon_dict()[val]
+        else:
+            self.in_battery_bt.setEnabled(False)
+            icon = 'none_icon.png'
+        self.in_battery_bt.setIcon(icon_creation_function(icon))
+
+        if self.in_signal is not None:
+            self.in_signal_bt.setEnabled(True)
+            icon = 'signal_0-5_icon.svg'
+            link_list = sorted(list(link_value_icon_dict().keys()))
+            for i, val in enumerate(link_list[: -1]):
+                if link_list[i] <= self.in_signal < link_list[i + 1]:
+                    icon = link_value_icon_dict()[val]
+        else:
+            self.in_signal_bt.setEnabled(False)
+            icon = 'none_icon.png'
+        self.in_signal_bt.setIcon(icon_creation_function(icon))
 
     def refresh_out_display(self):
         logging.debug('gui - mainwindow.py - MainWindow - refresh_out_display')
-
         if self.out_temperature is not None:
             self.out_temperature_label.setText(f'{self.out_temperature} °C')
         else:
             self.out_temperature_label.setText('No data')
-
-        if self.out_temperature_min_max[0] is not None:
+        if self.out_temperature_min_max is not None and self.out_temperature_min_max[0] is not None:
             self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
         else:
             self.out_label_3.setText('No data / No data')
-
         if self.out_humidity is not None:
+            self.out_humidity_bt.setEnabled(True)
             self.out_humidity_bt.setText(f'Humidité : {round(self.out_humidity)} %')
         else:
-            self.out_humidity_bt.setText('Humidité : No data')
-
-        if self.out_pressure_msl is not None:
-            self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure_msl)} hPa')
+            self.out_humidity_bt.setEnabled(False)
+            self.out_humidity_bt.setText('')
+        if self.out_pressure is not None:
+            self.out_pressure_bt.setEnabled(True)
+            if self.out_pressure_msl is not None and self.config_dict.getboolean('DISPLAY', 'out_msl_pressure'):
+                self.out_pressure_bt.setText(f'Pression SL : {round(self.out_pressure_msl)} hPa')
+            else:
+                self.out_pressure_bt.setText(f'Pression : {round(self.out_pressure)} hPa')
         else:
-            self.out_pressure_bt.setText('Pression : No data')
-
-        icon = 'batterie_0-5_icon.svg'
+            self.out_pressure_bt.setEnabled(False)
+            self.out_pressure_bt.setText('')
         if self.out_battery is not None:
+            self.out_battery_bt.setEnabled(True)
+            icon = 'batterie_0-5_icon.svg'
             bat_list = sorted(list(battery_value_icon_dict().keys()))
             for i, val in enumerate(bat_list[: -1]):
                 if bat_list[i] <= self.out_battery < bat_list[i + 1]:
                     icon = battery_value_icon_dict()[val]
+        else:
+            self.out_battery_bt.setEnabled(False)
+            icon = 'none_icon.png'
         self.out_battery_bt.setIcon(icon_creation_function(icon))
 
-        icon = 'signal_0-5_icon.svg'
         if self.out_signal is not None:
+            self.out_signal_bt.setEnabled(True)
+            icon = 'signal_0-5_icon.svg'
             link_list = sorted(list(link_value_icon_dict().keys()))
             for i, val in enumerate(link_list[: -1]):
                 if link_list[i] <= self.out_signal < link_list[i + 1]:
                     icon = link_value_icon_dict()[val]
+        else:
+            self.out_signal_bt.setEnabled(False)
+            icon = 'none_icon.png'
         self.out_signal_bt.setIcon(icon_creation_function(icon))
 
     def plot_time_series_start(self):
@@ -451,7 +608,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.database_ok:
             self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in,
                                                              self.plot_in_2, self.plot_out, self.plot_out_2,
-                                                             self.db_dict)
+                                                             self.config_dict, self.sensor_dict)
             self.request_plot_thread.success.connect(self.plot_time_series_end)
             self.request_plot_thread.error.connect(self.plot_time_series_error)
             self.request_plot_thread.start()
@@ -507,7 +664,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.set_facecolor('None')
 
     def parse_forecast_data(self, fc_data):
-        logging.debug('gui - mainwindow.py - MainWindow - parse_forecast_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - parse_forecast_data - fc_data: {fc_data}')
         if fc_data:
             self.forecast_data = fc_data
             if fc_data['warning']:
@@ -544,6 +701,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
                           f'{len(self.forecast_data["quaterly"])}')
             if self.forecast_data['api'] == 'meteofrance':
+                j = 0
                 for i in [0, 4, 8, 12, 16]:
                     dt_list = list(self.forecast_data['quaterly'].keys())[i: i + 4]
                     dt = dt_list[2]
@@ -555,7 +713,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         horizontal_layout = self.prev6h_layout_1
                     else:
                         horizontal_layout = self.prev6h_layout_2
-                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout)
+                    sunrise, sunset = self.sunrise_6days[j + 1], self.sunset_6days[j + 1]
+                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise, sunset)
+                    j += 1
             else:
                 i = 0
                 for dt, fc in self.forecast_data['quaterly'].items():
@@ -573,27 +733,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     i += 1
 
     def display_1h_forecast_details(self, full_dt):
-        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - full_dt: {full_dt}')
         forecast = self.forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self)
+        details_window = My1hFCDetails(forecast, self.sunrise_6days[0], self.sunset_6days[0], self)
         details_window.exec_()
 
     def display_1d_forecast_details(self, data):
-        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - data: {data}')
         details_window = My1dFCDetails(data, self)
         details_window.exec_()
 
-    def display_6h_forecast_details(self, dt_list):
-        logging.debug('gui - mainwindow.py - MainWindow - display_6h_forecast_details')
+    def display_6h_forecast_details(self, dt_list, sunrise, sunset):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_6h_forecast_details - dt_list: {dt_list} ; '
+                      f'sunrise: {sunrise} ; sunset: {sunset}')
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, self)
+        details_window = My6hFCDetails(forecast, sunrise, sunset, self)
         details_window.exec_()
 
     def show_bat_link_details(self):
         logging.debug('gui - mainwindow.py - MainWindow - show_bat_link_details')
-        bat_link = MyBatLink(self.out_battery, self.out_signal, self)
+        if 'in' in self.sender().objectName():
+            bat, sig = self.in_battery, self.in_signal
+        else:
+            bat, sig = self.out_battery, self.out_signal
+        bat_link = MyBatLink(bat, sig, self)
         bat_link.exec_()
 
     def show_pressure_details(self):
@@ -650,7 +815,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     time.sleep(1.5)
                     self.close()
         elif self.warning_button.objectName() == 'warning_function':
-            warning_window = MyWarning(self.mf_forecast_data['warning'], self)
+            warning_window = MyWarning(self.forecast_data['warning'], self)
             warning_window.exec_()
 
     def open_options(self):
@@ -660,9 +825,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_string.seek(0)
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
-        option_window = MyOptions(config_dict_copy, self.user_path, self)
+        option_window = MyOptions(config_dict_copy, copy.deepcopy(self.sensor_dict), self.user_path, self)
         option_window.exec_()
         if not option_window.cancel:
+            self.sensor_dict = option_window.sensor_dict
+            self.sensor_dict['modification_date'] = datetime.datetime.now().strftime('%d/%m/%Y')
+            f = open(pathlib.Path(self.user_path).joinpath('sensor_file.json'), 'w')
+            json.dump(self.sensor_dict, f, indent=4)
+            f.close()
             self.config_dict = option_window.config_dict
             ini_file = open(pathlib.Path(self.user_path).joinpath('weather_station.ini'), 'w')
             self.config_dict.write(ini_file)
@@ -681,7 +851,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         about_window.exec_()
 
     def display_gui_update_button(self, url_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - display_gui_update_button')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_gui_update_button - url_dict: {url_dict}')
         if url_dict:
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':
@@ -710,10 +880,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-        if self.collect_ds18b20_data_thread is not None:
-            self.collect_ds18b20_data_thread.stop()
-        if self.collect_bme180_data_thread is not None:
-            self.collect_bme180_data_thread.stop()
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
+            thread.stop()
         if self.collect_mqtt_data_thread is not None:
             self.collect_mqtt_data_thread.stop()
         if self.db_cleaning_thread is not None:

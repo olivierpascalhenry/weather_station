@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" id="Calque_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+	 x="0px" y="0px" viewBox="0 0 130.025 130.025" enable-background="new 0 0 130.025 130.025" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  bottomLeftOrigin="true" height="92.023" width="123.51" x="235.883" y="-466.957"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g>
+	<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M102.591,66.612h6.133
+		c7.756,0,14.044-6.288,14.044-14.044s-6.288-14.044-14.044-14.044h-3.299c-1.001-8.738-8.423-15.524-17.429-15.524
+		c-9.041,0-16.485,6.839-17.441,15.625c-6.957,0.837-12.349,6.76-12.349,13.942c0,7.756,6.288,14.044,14.044,14.044"/>
+	<path fill="#FFFFFF" stroke="#534F4D" stroke-width="8" stroke-linecap="round" stroke-miterlimit="10" d="M79.125,107.024
+		c11.034,0,19.979-8.945,19.979-19.979s-8.945-19.979-19.979-19.979h-4.694c-1.424-12.431-11.982-22.085-24.795-22.085
+		c-12.862,0-23.452,9.729-24.811,22.229c-9.897,1.19-17.568,9.617-17.568,19.835c0,11.034,8.945,19.979,19.979,19.979H79.125z"/>
+</g>
+</svg>

@@ -1,5 +1,6 @@
 import bisect
 import logging
+import datetime
 from numpy import arange
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_forecast1hwindow import Ui_forecast1hWindow
@@ -9,7 +10,7 @@ from functions.utils import weather_to_pictogrammes, days_months_dictionary, win
 
 
 class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
-    def __init__(self, forecast, parent=None):
+    def __init__(self, forecast, sunrise, sunset, parent=None):
         logging.info('gui - weather_windows.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -20,6 +21,8 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.forecast = forecast
+        self.sunrise = sunrise
+        self.sunset = sunset
         self.ok_button.clicked.connect(self.close_window)
         self.parse_forecast()
 
@@ -47,7 +50,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.speed_ln.setText(str(wspeed) + ' km/h')
         self.cover_ln.setText(str(self.forecast['cover']) + ' %')
         self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
-        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather']))
+        self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], dt, self.sunrise, self.sunset))
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My1hFCDetails - close_window')
@@ -55,7 +58,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
 
 
 class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
-    def __init__(self, forecast, parent=None):
+    def __init__(self, forecast, sunrise, sunset, parent=None):
         logging.info('gui - weather_windows.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -66,11 +69,14 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
         self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
         self.forecast = forecast
+        self.sunrise = sunrise
+        self.sunset = sunset
         self.ok_button.clicked.connect(self.close)
         self.parse_forecast()
 
     def parse_forecast(self):
         logging.debug('gui - weather_windows.py - My6hFCDetails - parse_forecast')
+        dt = None
         for i, fc in enumerate(self.forecast):
             wspeed = round(fc[1]['w_spd'] * 3600 / 1000)
             wdir = fc[1]['w_dir']
@@ -83,18 +89,22 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                 icon = wind_dir_to_pictogramme(idx)
             else:
                 icon = wind_dir_to_pictogramme(0)
+
             if i == 0:
                 dt = fc[0]
                 date = (days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day) + ' '
                         + days_months_dictionary()['month'][dt.month])
                 self.date_label.setText(date)
+            else:
+                dt += datetime.timedelta(hours=6)
 
             self.findChild(QtWidgets.QLabel, 'temp_ln_' + str(i + 1)).setText(str(fc[1]['temp']) + '°C')
             self.findChild(QtWidgets.QLabel, 'pres_ln_' + str(i + 1)).setText(str(round(fc[1]['pres'])) + ' hPa')
             self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed) + ' km/h')
             self.findChild(QtWidgets.QToolButton, 'dir_ln_' + str(i + 1)).setIcon(icon)
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
-                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather']))
+                           + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], dt, self.sunrise,
+                                                                         self.sunset))
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My6hFCDetails - close_window')

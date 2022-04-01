@@ -2,6 +2,7 @@ import time
 import logging
 import markdown
 import pathlib
+import string
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_aboutlogwindow import Ui_aboutlogWindow
 from ui.Ui_infowindow import Ui_infoWindow
@@ -17,8 +18,9 @@ from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from ui.Ui_apiwindow import Ui_apiWindow
+from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
-from functions.thread_functions.other_threads import DownloadFile
+# from functions.thread_functions.other_threads import DownloadFile
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
@@ -97,6 +99,7 @@ class MyExit(QtWidgets.QDialog, Ui_closeWindow):
         self.exit_button.clicked.connect(self.exit_station)
         self.reboot_button.clicked.connect(self.reboot_system)
         self.shutdown_button.clicked.connect(self.shutdown_system)
+        self.cancel_button.clicked.connect(self.close_window)
         logging.info('gui - other_windows.py - MyExit - ready')
 
     def exit_station(self):
@@ -145,7 +148,7 @@ class MyNumpad(QtWidgets.QDialog, Ui_numpadWindow):
                 button.clicked.connect(self.add_number)
 
     def add_number(self):
-        self.num_line.setText(self.num_line.text() + self.sender().objectName()[-1:])
+        self.num_line.setText(self.num_line.text() + self.sender().text())
 
     def del_number(self):
         self.num_line.setText(self.num_line.text()[:-1])
@@ -173,6 +176,9 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
         self.setGraphicsEffect(shadow)
         self.move(int((parent.width() - self.width()) / 2), int((parent.height() - self.height()) / 2))
         self.cancel = True
+        self.up = False
+        self.keep_up = False
+        self.letters = ['abcdefghijklmnopqr']
         for button in self.findChildren(QtWidgets.QToolButton):
             if 'ok' in button.objectName():
                 button.clicked.connect(self.confirm_word)
@@ -180,21 +186,48 @@ class MyKeyboard(QtWidgets.QDialog, Ui_keyboardWindow):
                 button.clicked.connect(self.close_window)
             elif 'ret' in button.objectName():
                 button.clicked.connect(self.del_letter)
-            elif 'esc' in button.objectName():
-                button.clicked.connect(self.add_space)
-            elif 'min' in button.objectName():
-                button.clicked.connect(self.add_minus)
+            elif 'up' in button.objectName():
+                button.clicked.connect(self.set_up)
+                button.doubleClicked.connect(self.set_keep_up)
             else:
                 button.clicked.connect(self.add_letter)
 
+    def set_up(self):
+        if self.keep_up:
+            self.button_up.setStyleSheet(stylesheet_creation_function('qtoolbutton_keyboard'))
+            self.up = False
+            self.keep_up = False
+            self.set_buttons_dn()
+
+        else:
+            if not self.up:
+                self.button_up.setStyleSheet(stylesheet_creation_function('qtoolbutton_keyboard_activated'))
+                self.up = True
+                self.set_buttons_up()
+            else:
+                self.button_up.setStyleSheet(stylesheet_creation_function('qtoolbutton_keyboard'))
+                self.up = False
+                self.set_buttons_dn()
+
+    def set_keep_up(self):
+        self.keep_up = True
+
+    def set_buttons_up(self):
+        for char in string.ascii_lowercase:
+            bt = self.findChild(QtWidgets.QToolButton, f'button_{char}')
+            bt.setText(char.upper())
+
+    def set_buttons_dn(self):
+        for char in string.ascii_lowercase:
+            bt = self.findChild(QtWidgets.QToolButton, f'button_{char}')
+            bt.setText(char)
+
     def add_letter(self):
-        self.num_line.setText(self.num_line.text() + self.sender().objectName()[-1:])
-
-    def add_space(self):
-        self.num_line.setText(self.num_line.text() + ' ')
-
-    def add_minus(self):
-        self.num_line.setText(self.num_line.text() + '-')
+        self.num_line.setText(self.num_line.text() + self.sender().text())
+        if self.up and not self.keep_up:
+            self.button_up.setStyleSheet(stylesheet_creation_function('qtoolbutton_keyboard'))
+            self.up = False
+            self.set_buttons_dn()
 
     def del_letter(self):
         self.num_line.setText(self.num_line.text()[:-1])

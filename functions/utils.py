@@ -1,9 +1,10 @@
+import collections
+import json
 import shutil
 import logging
 import pathlib
 import datetime
 import platform
-import psycopg2
 import subprocess
 import configparser
 from dirsync import sync
@@ -20,23 +21,44 @@ def create_option_file(user_path):
     config_dict.add_section('API')
     config_dict.add_section('DISPLAY')
     config_dict.add_section('SENSOR')
+    config_dict.add_section('TIMESERIES')
+    config_dict.add_section('DATABASE')
     config_dict.set('LOG', 'level', 'DEBUG')
     config_dict.set('LOG', 'path', str(user_path))
     config_dict.set('SENSOR', 'sensors_rate', '30')
-    config_dict.set('SENSOR', 'bme280', 'False')
-    config_dict.set('SENSOR', 'ds18b20', 'False')
-    config_dict.set('SENSOR', 'mqtt', 'False')
     config_dict.set('DISPLAY', 'in_display_rate', '30')
     config_dict.set('DISPLAY', 'in_sensor', '')
+    config_dict.set('DISPLAY', 'in_msl_pressure', 'False')
     config_dict.set('DISPLAY', 'out_display_rate', '30')
     config_dict.set('DISPLAY', 'out_sensor', '')
+    config_dict.set('DISPLAY', 'out_msl_pressure', 'False')
+    config_dict.set('TIMESERIES', 'in_temperature', '')
+    config_dict.set('TIMESERIES', 'in_humidity', '')
+    config_dict.set('TIMESERIES', 'out_temperature', '')
+    config_dict.set('TIMESERIES', 'out_pressure', '')
+    config_dict.set('TIMESERIES', 'msl_pressure', 'False')
     config_dict.set('SYSTEM', 'place_altitude', '')
+    config_dict.set('SYSTEM', 'check_update', 'False')
     config_dict.set('API', 'api_used', 'meteofrance')
     config_dict.set('API', 'api_key', '')
     config_dict.set('API', 'user_place', 'False')
     config_dict.set('API', 'request_rate', '30')
+    config_dict.set('DATABASE', 'port', '5432')
+    config_dict.set('DATABASE', 'username', '')
+    config_dict.set('DATABASE', 'password', '')
+    config_dict.set('DATABASE', 'database', '')
+    config_dict.set('DATABASE', 'host', '127.0.0.1')
     config_dict.write(ini_file)
     ini_file.close()
+
+
+def create_sensor_file(user_path):
+    date = datetime.datetime.now().strftime('%d/%m/%Y')
+    json_dict = {'creation_date': date, 'modification_date': date, 'DS18B20': {}, 'BME280': {},
+                 'MQTT': {'username': '', 'password': '', 'address': '', 'main_topic': '', 'devices': {}}}
+    f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'w')
+    json.dump(json_dict, f, indent=4)
+    f.close()
 
 
 def create_logging_handlers(config_dict, filename, default_path):
@@ -60,38 +82,10 @@ def create_logging_handlers(config_dict, filename, default_path):
         logging.error('gui - logging system - path from ini file not found, using default path')
 
 
-def check_postgresql_server():
-    logging.debug('gui - utils.py - check_postgresql_server')
-    installed, database, tables = False, False, False
-    if platform.system() == 'Linux':
-        res = subprocess.run(['which', 'psql'])
-        if res.returncode == 0:
-            installed = True
-        else:
-            logging.error('gui - utils.py - check_postgresql_server - which -s psql returned 1, postgresql is not '
-                          'installed')
-    else:
-        installed = True
-    if installed:
-        try:
-            connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                         database='weather_station_db', connect_timeout=1)
-            database = True
-            cursor = connector.cursor()
-            cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
-            if cursor.fetchall():
-                tables = True
-            cursor.close()
-            connector.close()
-        except psycopg2.OperationalError:
-            pass
-    return installed, database, tables
-
-
 def sync_graphic_folders(gui_path):
-    logging.debug('gui - utils.py - sync_graphic_folders')
+    logging.debug(f'gui - utils.py - sync_graphic_folders - gui_path: {gui_path}')
     if platform.system() == 'Linux':
-        path = pathlib.Path('/home/pi')
+        path = pathlib.Path().home()
         gui_path = pathlib.Path(gui_path)
         if path.joinpath('icons').exists():
             logging.debug('gui - utils.py - sync_graphic_folders - synchronizing graphic folders')
@@ -115,7 +109,7 @@ def clear_layout(layout):
 
 
 def icon_creation_function(icon_filename):
-    logging.debug('gui - utils.py - icon_creation_function')
+    logging.debug(f'gui - utils.py - icon_creation_function - icon_filename: {icon_filename}')
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(f'icons/{icon_filename}'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     icon.addPixmap(QtGui.QPixmap(f'icons/{icon_filename}'), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
@@ -124,7 +118,7 @@ def icon_creation_function(icon_filename):
 
 
 def pictogramme_creation_function(icon_filename):
-    logging.debug('gui - utils.py - icon_creation_function')
+    logging.debug(f'gui - utils.py - icon_creation_function - icon_filename: {icon_filename}')
     path = f'graphic_materials/pictogrammes/{icon_filename}'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -132,7 +126,7 @@ def pictogramme_creation_function(icon_filename):
 
 
 def font_creation_function(font_style):
-    logging.debug('gui - utils.py - font_creation_function')
+    logging.debug(f'gui - utils.py - font_creation_function - font_style: {font_style}')
     font = QtGui.QFont()
     font.setKerning(True)
     font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -155,7 +149,7 @@ def font_creation_function(font_style):
 
 
 def stylesheet_creation_function(stylesheet):
-    logging.debug('gui - utils.py - stylesheet_creation_function')
+    logging.debug(f'gui - utils.py - stylesheet_creation_function - stylesheet: {stylesheet}')
     f = open(f'graphic_materials/style_sheets/{stylesheet}_stylesheet.dat', 'r')
     stylesheet_str = ''.join(f.readlines())
     f.close()
@@ -163,7 +157,7 @@ def stylesheet_creation_function(stylesheet):
 
 
 def shadow_creation_function(offset, blur):
-    logging.debug('gui - utils.py - shadow_creation_function')
+    logging.debug(f'gui - utils.py - shadow_creation_function - offset: {offset} ; blur: {blur}')
     shadow = QtWidgets.QGraphicsDropShadowEffect()
     shadow.setOffset(offset)
     shadow.setBlurRadius(blur)
@@ -178,24 +172,48 @@ def days_months_dictionary():
     return date_dict
 
 
-def weather_to_pictogrammes(weather):
-    logging.debug('gui - utils.py - weather_to_pictogrammes')
-    available_weather = {'Eclaircies': 'eclaircies.svg', 'Très nuageux': 'tres_nuageux.svg',
-                         'Ensoleillé': 'ensoleille.svg', 'Risque d\'orages': 'risque_orages.svg',
-                         'Nuit claire': 'nuit_claire.svg', 'Couvert': 'couvert.svg',
-                         'Rares averses': 'rares_averses.svg', 'Pluies éparses': 'pluies_eparses.svg',
-                         'Risque de grèle': 'risque_grele.svg', 'Averses orageuses': 'averses_orageuses.svg',
-                         'Brume': 'brume.svg', 'Averses': 'averses.svg', 'Pluie': 'pluie.svg',
-                         'Pluies orageuses': 'pluies_orageuses.svg', 'Orages': 'orages.svg',
-                         'Ciel voilé': 'ciel_voile.svg', 'Bancs de Brouillard': 'bancs_brouillard.svg',
-                         'Brouillard': 'brouillard.svg', 'Brouillard givrant': 'brouillard_givrant.svg'}
+def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
+    logging.debug(f'gui - utils.py - weather_to_pictogrammes - weather: {weather} ; sunrise: {sunrise} ; sunset: '
+                  f'{sunset}')
+    available_weather = {'Eclaircies': 'eclaircies.svg',
+                         'Très nuageux': 'couvert.svg',
+                         'Ensoleillé': 'ensoleille.svg',
+                         'Risque d\'orages': 'risque_orages.svg',
+                         'Nuit claire': 'nuit_claire.svg',
+                         'Couvert': 'couvert.svg',
+                         'Rares averses': 'rares_averses.svg',
+                         'Pluies éparses': 'pluies_eparses.svg',
+                         'Risque de grèle': 'risque_grele.svg',
+                         'Averses orageuses': 'averses_orageuses.svg',
+                         'Brume': 'brume.svg',
+                         'Averses': 'pluie.svg',
+                         'Pluie': 'pluie.svg',
+                         'Pluies orageuses': 'averses_orageuses.svg',
+                         'Orages': 'orages.svg',
+                         'Ciel voilé': 'ciel_voile.svg',
+                         'Bancs de Brouillard': 'brume.svg',
+                         'Brouillard': 'brouillard.svg',
+                         'Brouillard givrant': 'brouillard_givrant.svg',
+                         'Neige': 'neige.svg',
+                         'Averses de neige': 'neige.svg',
+                         'Pluie et neige': 'pluie_et_neige.svg',
+                         'Quelques flocons': 'quelques_flocons.svg'}
     try:
         pictogramme = available_weather[weather]
     except KeyError:
         logging.warning('gui - utils.py - weather_to_pictogrammes - pictogramme is missing : ' + weather)
         pictogramme = ''
+
+    if sunrise is None or sunset is None or dt is None:
+        period = 'jour'
+    else:
+        if sunrise <= dt <= sunset:
+            period = 'jour'
+        else:
+            period = 'nuit'
+
     if pictogramme:
-        link = f'graphic_materials/pictogrammes/{pictogramme}'
+        link = f'graphic_materials/pictogrammes/{period}/{pictogramme}'
     else:
         link = 'icons/none_icon.png'
     icon = QtGui.QIcon()
@@ -228,18 +246,22 @@ def openweather_to_mf_desc(item):
                   '302d': 'Averses', '302n': 'Averses', '310d': 'Averses', '310n': 'Averses',
                   '311d': 'Averses', '311n': 'Averses', '312d': 'Averses', '312n': 'Averses',
                   '313d': 'Averses', '313n': 'Averses', '314d': 'Averses', '314n': 'Averses',
-                  '321d': 'Averses', '321n': 'Averses'}
+                  '321d': 'Averses', '321n': 'Averses', '600d': 'Neige', '601d': 'Neige', '602d': 'Neige',
+                  '611d': 'Pluie et neige', '612d': 'Pluie et neige', '613d': 'Pluie et neige',
+                  '615d': 'Pluie et neige', '616d': 'Pluie et neige', '621d': 'Neige', '622d': 'Neige',
+                  '623d': 'Neige', '600n': 'Neige', '601n': 'Neige', '602n': 'Neige', '611n': 'Pluie et neige',
+                  '612n': 'Pluie et neige',  '613n': 'Pluie et neige', '615n': 'Pluie et neige',
+                  '616n': 'Pluie et neige', '621n': 'Neige', '622n': 'Neige', '623n': 'Neige'}
 
     try:
         weather = conversion[item]
     except KeyError:
         weather = 'none'
-
     return weather
 
 
 def wind_dir_to_pictogramme(dir_idx):
-    logging.debug('gui - utils.py - wind_dir_to_pictogramme')
+    logging.debug(f'gui - utils.py - wind_dir_to_pictogramme - dir_idx: {dir_idx}')
     path = f'graphic_materials/pictogrammes/wind_dir_images/wind_dir_arrow_{dir_idx}.svg'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -400,3 +422,62 @@ def link_value_icon_dict():
                  120: 'signal_3-5_icon.svg', 160: 'signal_4-5_icon.svg', 200: 'signal_full_icon.svg',
                  256: 'signal_full_icon.svg'}
     return data_dict
+
+
+def angle_moon_phase():
+    logging.debug('gui - utils.py - angle_moon_phase')
+    angle_dict = collections.OrderedDict()
+    angle_dict[0.] = 'wi-moon-alt-new.svg'
+    angle_dict[6.428571] = 'wi-moon-alt-waning-crescent-6.svg'
+    angle_dict[19.285713] = 'wi-moon-alt-waning-crescent-5.svg'
+    angle_dict[32.142855] = 'wi-moon-alt-waning-crescent-4.svg'
+    angle_dict[44.999997] = 'wi-moon-alt-waning-crescent-3.svg'
+    angle_dict[57.857138] = 'wi-moon-alt-waning-crescent-2.svg'
+    angle_dict[70.714281] = 'wi-moon-alt-waning-crescent-1.svg'
+    angle_dict[83.571423] = 'wi-moon-alt-third-quarter.svg'
+    angle_dict[96.428565] = 'wi-moon-alt-waning-gibbous-6.svg'
+    angle_dict[109.285707] = 'wi-moon-alt-waning-gibbous-5.svg'
+    angle_dict[122.142849] = 'wi-moon-alt-waning-gibbous-4.svg'
+    angle_dict[134.999991] = 'wi-moon-alt-waning-gibbous-3.svg'
+    angle_dict[147.857133] = 'wi-moon-alt-waning-gibbous-2.svg'
+    angle_dict[160.714275] = 'wi-moon-alt-waning-gibbous-1.svg'
+    angle_dict[173.571417] = 'wi-moon-alt-full.svg'
+    angle_dict[186.428559] = 'wi-moon-alt-waxing-gibbous-6.svg'
+    angle_dict[199.285701] = 'wi-moon-alt-waxing-gibbous-5.svg'
+    angle_dict[212.142843] = 'wi-moon-alt-waxing-gibbous-4.svg'
+    angle_dict[224.999985] = 'wi-moon-alt-waxing-gibbous-3.svg'
+    angle_dict[237.857127] = 'wi-moon-alt-waxing-gibbous-2.svg'
+    angle_dict[250.714269] = 'wi-moon-alt-waxing-gibbous-1.svg'
+    angle_dict[263.571411] = 'wi-moon-alt-first-quarter.svg'
+    angle_dict[276.428553] = 'wi-moon-alt-waxing-crescent-6.svg'
+    angle_dict[289.285695] = 'wi-moon-alt-waxing-crescent-5.svg'
+    angle_dict[302.142837] = 'wi-moon-alt-waxing-crescent-4.svg'
+    angle_dict[314.999979] = 'wi-moon-alt-waxing-crescent-3.svg'
+    angle_dict[327.857121] = 'wi-moon-alt-waxing-crescent-2.svg'
+    angle_dict[340.714263] = 'wi-moon-alt-waxing-crescent-1.svg'
+    angle_dict[353.571405] = 'wi-moon-alt-new.svg'
+    angle_dict[360.] = None
+    return angle_dict
+
+
+def get_season(dt):
+    logging.debug(f'gui - utils.py - get_season - dt: {dt}')
+    if isinstance(dt, datetime.datetime):
+        dt = dt.date()
+    y = dt.year
+    seasons = [('Hiver', (datetime.date(y, 1, 1), datetime.date(y, 3, 20))),
+               ('Printemps', (datetime.date(y, 3, 21), datetime.date(y, 6, 20))),
+               ('Eté', (datetime.date(y, 6, 21), datetime.date(y, 9, 22))),
+               ('Automne', (datetime.date(y, 9, 23), datetime.date(y, 12, 20))),
+               ('Hiver', (datetime.date(y, 12, 21), datetime.date(y, 12, 31)))]
+    return next(season for season, (start, end) in seasons if start <= dt <= end)
+
+
+def str2bool(string):
+    logging.debug(f'gui - utils.py - str2bool - string: {string}')
+    if string == 'True':
+        return True
+    elif string == 'False':
+        return False
+    else:
+        raise ValueError
