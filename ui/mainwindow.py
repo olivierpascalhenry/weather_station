@@ -32,7 +32,7 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
                                                         DS18B20DataCollectingTestThread, MqttToDbTestThread,
                                                         BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
-from functions.thread_functions.other_threads import (CleaningThread, CheckUpdate, CheckInternetConnexion,
+from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
