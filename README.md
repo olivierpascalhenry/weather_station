@@ -1,5 +1,5 @@
 Version:
--------
+--------
 
 Weather Station v0.11.0
 
@@ -44,7 +44,6 @@ The weather station system is a pure python script. Thus it can be used from a t
 At the present time, it is launched by *pi* user, but it can be used by any user as long as all rights have been set.
 
 For developments or to run it as a script, it needs few dependancies.
-
 
 Operating systems :
 
@@ -108,6 +107,19 @@ For Mosquitto and Zigbee2Mqtt :
 
 Sensors
 -------
+
+Currently, only BME280 and DS18B20 are officialy supported and tested. More will be supported once I can put my hand on them.
+Sensors relying on MQTT to send and store data are supported if each variable has its own topic. At this time, only temperature, humidity, pressure, battery and signal quality are used by the weather station.
+
+
+Limitations
+-----------
+
+The GUI has been developed on a raspberry pi 4 connected to a Waveshare 7" monitor (https://www.waveshare.com/product/raspberry-pi/displays/7inch-hdmi-lcd-c.htm?___SID=U) and is not responsive (lack of knowledge from the developer). Thus it can't adapt automatically to different screen size.
+
+As the GUI is intended to be used with a touch screen, the mouse cursor is hidden on a linux system for all windows.
+
+I found an issue between PyQt5, stylesheet and raspberry pi. Stylesheet and icons are not applied until those files are stored in the home directory of the user. That's why a sync function has been introduced to copy all icons and stylesheets in the home directory and keep those folders in sync. Once a proper solution is found, that limitation will be removed.
 
 
 Documentation:
