@@ -14,10 +14,6 @@ from PyQt5 import QtCore
 from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
 
 
-username = 'olivierpascalhenry'
-token = '***REMOVED***'
-
-
 class CleaningThread(QtCore.QThread):
     error = QtCore.pyqtSignal(list)
 
@@ -68,103 +64,103 @@ class CleaningThread(QtCore.QThread):
         self.terminate()
 
 
-class CheckUpdate(QtCore.QThread):
-    finished = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
+# class CheckUpdate(QtCore.QThread):
+#     finished = QtCore.pyqtSignal(dict)
+#     error = QtCore.pyqtSignal(list)
+#
+#     def __init__(self, gui_version):
+#         QtCore.QThread.__init__(self)
+#         logging.info('gui - other_threads.py - CheckUpdate - __init__')
+#         self.gui_version = gui_version
+#         self.url_dict = {}
+#
+#     def run(self):
+#         logging.debug('gui - other_threads.py - CheckUpdate - run')
+#         self.update_request()
+#
+#     def update_request(self):
+#         logging.debug('gui - other_threads.py - CheckUpdate - update_request')
+#         url = 'https://api.github.com/repos/olivierpascalhenry/weather_station/releases'
+#         try:
+#             gh_session = requests.Session()
+#             gh_session.auth = (username, token)
+#             json_object = gh_session.get(url=url, timeout=5).json()[0]
+#             if LooseVersion(self.gui_version) < LooseVersion(json_object['tag_name']):
+#                 self.url_dict['file'] = json_object['assets'][0]['name']
+#                 self.url_dict['url'] = json_object['assets'][0]['url']
+#             self.finished.emit(self.url_dict)
+#         except Exception:
+#             logging.exception('gui - other_threads.py - CheckUpdate - update_request - an exception occurred when '
+#                               'requesting update')
+#
+#     def stop(self):
+#         logging.debug('gui - other_threads.py - CheckUpdate - stop')
+#         self.terminate()
 
-    def __init__(self, gui_version):
-        QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - CheckUpdate - __init__')
-        self.gui_version = gui_version
-        self.url_dict = {}
 
-    def run(self):
-        logging.debug('gui - other_threads.py - CheckUpdate - run')
-        self.update_request()
-
-    def update_request(self):
-        logging.debug('gui - other_threads.py - CheckUpdate - update_request')
-        url = 'https://api.github.com/repos/olivierpascalhenry/weather_station/releases'
-        try:
-            gh_session = requests.Session()
-            gh_session.auth = (username, token)
-            json_object = gh_session.get(url=url, timeout=5).json()[0]
-            if LooseVersion(self.gui_version) < LooseVersion(json_object['tag_name']):
-                self.url_dict['file'] = json_object['assets'][0]['name']
-                self.url_dict['url'] = json_object['assets'][0]['url']
-            self.finished.emit(self.url_dict)
-        except Exception:
-            logging.exception('gui - other_threads.py - CheckUpdate - update_request - an exception occurred when '
-                              'requesting update')
-
-    def stop(self):
-        logging.debug('gui - other_threads.py - CheckUpdate - stop')
-        self.terminate()
-
-
-class DownloadFile(QtCore.QThread):
-    download_update = QtCore.pyqtSignal(list)
-    download_done = QtCore.pyqtSignal()
-    download_failed = QtCore.pyqtSignal(list)
-
-    def __init__(self, url, update_file):
-        QtCore.QThread.__init__(self)
-        logging.info(f'gui - other_threads.py - DownloadFile - __init__ - url: {url}')
-        self.url = url
-        self.update_file = update_file
-        self.filename = pathlib.Path(update_file).name
-        self.cancel = False
-
-    def run(self):
-        logging.debug('gui - other_threads.py - DownloadFile - run')
-        self.download_request()
-
-    def download_request(self):
-        logging.debug('gui - other_threads.py - DownloadFile - download_request')
-        download_text = 'Downloading %s at %s'
-        pre_download_text = 'Downloading %s'
-        self.download_update.emit([0, pre_download_text % self.filename])
-        opened_file = open(self.update_file, 'wb')
-        try:
-            headers = {"Authorization": 'token ' + token, "Accept": 'application/octet-stream'}
-            gh_session = requests.Session()
-            gh_session.auth = (username, token)
-            opened_url = gh_session.get(self.url, timeout=5, headers=headers, stream=True)
-            total_file_size = int(opened_url.headers['Content-length'])
-            buffer_size = 8192
-            file_size = 0
-            start = time.time()
-            for chunk in opened_url.iter_content(chunk_size=buffer_size):
-                if self.cancel:
-                    opened_file.close()
-                    break
-                opened_file.write(chunk)
-                file_size += len(chunk)
-                try:
-                    download_speed = set_size(file_size / (time.time() - start)) + '/s'
-                except ZeroDivisionError:
-                    download_speed = '0b/s'
-                self.download_update.emit([round(file_size * 100 / total_file_size),
-                                           download_text % (self.filename, download_speed)])
-            opened_file.close()
-            if not self.cancel:
-                logging.debug('gui - other_threads.py - DownloadFile - run - download finished')
-                self.download_done.emit()
-            else:
-                logging.debug('gui - other_threads.py - DownloadFile - run - download canceled')
-        except Exception as e:
-            logging.exception('gui - other_threads.py - DownloadFile - run - connexion issue ; self.url '
-                              + self.url)
-            opened_file.close()
-            self.download_failed.emit(['download thread', e])
-
-    def cancel_download(self):
-        logging.debug('gui - other_threads.py - DownloadFile - cancel_download')
-        self.cancel = True
-
-    def stop(self):
-        logging.debug('gui - other_threads.py - DownloadFile - stop')
-        self.terminate()
+# class DownloadFile(QtCore.QThread):
+#     download_update = QtCore.pyqtSignal(list)
+#     download_done = QtCore.pyqtSignal()
+#     download_failed = QtCore.pyqtSignal(list)
+#
+#     def __init__(self, url, update_file):
+#         QtCore.QThread.__init__(self)
+#         logging.info(f'gui - other_threads.py - DownloadFile - __init__ - url: {url}')
+#         self.url = url
+#         self.update_file = update_file
+#         self.filename = pathlib.Path(update_file).name
+#         self.cancel = False
+#
+#     def run(self):
+#         logging.debug('gui - other_threads.py - DownloadFile - run')
+#         self.download_request()
+#
+#     def download_request(self):
+#         logging.debug('gui - other_threads.py - DownloadFile - download_request')
+#         download_text = 'Downloading %s at %s'
+#         pre_download_text = 'Downloading %s'
+#         self.download_update.emit([0, pre_download_text % self.filename])
+#         opened_file = open(self.update_file, 'wb')
+#         try:
+#             headers = {"Authorization": 'token ' + token, "Accept": 'application/octet-stream'}
+#             gh_session = requests.Session()
+#             gh_session.auth = (username, token)
+#             opened_url = gh_session.get(self.url, timeout=5, headers=headers, stream=True)
+#             total_file_size = int(opened_url.headers['Content-length'])
+#             buffer_size = 8192
+#             file_size = 0
+#             start = time.time()
+#             for chunk in opened_url.iter_content(chunk_size=buffer_size):
+#                 if self.cancel:
+#                     opened_file.close()
+#                     break
+#                 opened_file.write(chunk)
+#                 file_size += len(chunk)
+#                 try:
+#                     download_speed = set_size(file_size / (time.time() - start)) + '/s'
+#                 except ZeroDivisionError:
+#                     download_speed = '0b/s'
+#                 self.download_update.emit([round(file_size * 100 / total_file_size),
+#                                            download_text % (self.filename, download_speed)])
+#             opened_file.close()
+#             if not self.cancel:
+#                 logging.debug('gui - other_threads.py - DownloadFile - run - download finished')
+#                 self.download_done.emit()
+#             else:
+#                 logging.debug('gui - other_threads.py - DownloadFile - run - download canceled')
+#         except Exception as e:
+#             logging.exception('gui - other_threads.py - DownloadFile - run - connexion issue ; self.url '
+#                               + self.url)
+#             opened_file.close()
+#             self.download_failed.emit(['download thread', e])
+#
+#     def cancel_download(self):
+#         logging.debug('gui - other_threads.py - DownloadFile - cancel_download')
+#         self.cancel = True
+#
+#     def stop(self):
+#         logging.debug('gui - other_threads.py - DownloadFile - stop')
+#         self.terminate()
 
 
 class CheckInternetConnexion(QtCore.QThread):

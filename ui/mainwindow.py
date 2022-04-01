@@ -192,7 +192,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
-        self.check_update()
+        # self.check_update()
         self.launch_weather_request()
 
     def load_place_data(self):
@@ -464,7 +464,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.start()
 
     def refresh_in_data(self, data_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_in_data - data_dict: {data_dict}')
         self.in_temperature = data_dict['temp']
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
@@ -475,7 +475,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.refresh_in_display()
 
     def refresh_out_data(self, data_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_out_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_out_data- data_dict: {data_dict}')
         self.out_temperature = data_dict['temp']
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
@@ -664,7 +664,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.set_facecolor('None')
 
     def parse_forecast_data(self, fc_data):
-        logging.debug('gui - mainwindow.py - MainWindow - parse_forecast_data')
+        logging.debug(f'gui - mainwindow.py - MainWindow - parse_forecast_data - fc_data: {fc_data}')
         if fc_data:
             self.forecast_data = fc_data
             if fc_data['warning']:
@@ -733,18 +733,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     i += 1
 
     def display_1h_forecast_details(self, full_dt):
-        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - full_dt: {full_dt}')
         forecast = self.forecast_data['hourly'][full_dt]
         details_window = My1hFCDetails(forecast, self.sunrise_6days[0], self.sunset_6days[0], self)
         details_window.exec_()
 
     def display_1d_forecast_details(self, data):
-        logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - data: {data}')
         details_window = My1dFCDetails(data, self)
         details_window.exec_()
 
     def display_6h_forecast_details(self, dt_list, sunrise, sunset):
-        logging.debug('gui - mainwindow.py - MainWindow - display_6h_forecast_details')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_6h_forecast_details - dt_list: {dt_list} ; '
+                      f'sunrise: {sunrise} ; sunset: {sunset}')
         forecast = []
         for dt in dt_list:
             forecast.append([dt, self.forecast_data['quaterly'][dt]])
@@ -850,7 +851,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         about_window.exec_()
 
     def display_gui_update_button(self, url_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - display_gui_update_button')
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_gui_update_button - url_dict: {url_dict}')
         if url_dict:
             self.update_url = url_dict
             if self.warning_button.objectName() == 'no_function':

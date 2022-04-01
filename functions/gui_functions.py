@@ -5,7 +5,8 @@ from functions.utils import (stylesheet_creation_function, weather_to_pictogramm
 
 
 def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout=None):
-    logging.debug('gui - gui_functions.py - add_1h_forecast_widget')
+    logging.debug(f'gui - gui_functions.py - add_1h_forecast_widget - hour: {hour} ; weather: {weather} ; temp: {temp} '
+                  f'; full_dt: {full_dt} ; horizontal_layout: {horizontal_layout}')
     self.fc_1h_fr_1.append(QtWidgets.QFrame())
     if self.fc_1h_nbr1 not in [0, 6, 12, 18]:
         self.fc_1h_fr_1[self.fc_1h_nbr1].setStyleSheet("QFrame {\n"
@@ -63,7 +64,9 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
 
 def add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise=None, sunset=None,
                            api='meteofrance'):
-    logging.debug('gui - gui_functions.py - add_6h_forecast_widget')
+    logging.debug(f'gui - gui_functions.py - add_6h_forecast_widget -  date: {date} ; weather: {weather} '
+                  f'; temp: {temp} ; dt_list: {dt_list} ; horizontal_layout: {horizontal_layout} ; sunrise: {sunrise} ;'
+                  f' sunset: {sunset} : api: {api}')
     self.fc_6h_fr_1.append(QtWidgets.QFrame())
     if self.fc_6h_nbr1 not in [0, 3]:
         self.fc_6h_fr_1[self.fc_6h_nbr1].setStyleSheet("QFrame {\n"

@@ -83,7 +83,7 @@ def create_logging_handlers(config_dict, filename, default_path):
 
 
 def sync_graphic_folders(gui_path):
-    logging.debug('gui - utils.py - sync_graphic_folders')
+    logging.debug(f'gui - utils.py - sync_graphic_folders - gui_path: {gui_path}')
     if platform.system() == 'Linux':
         path = pathlib.Path().home()
         gui_path = pathlib.Path(gui_path)
@@ -109,7 +109,7 @@ def clear_layout(layout):
 
 
 def icon_creation_function(icon_filename):
-    logging.debug('gui - utils.py - icon_creation_function')
+    logging.debug(f'gui - utils.py - icon_creation_function - icon_filename: {icon_filename}')
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(f'icons/{icon_filename}'), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     icon.addPixmap(QtGui.QPixmap(f'icons/{icon_filename}'), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
@@ -118,7 +118,7 @@ def icon_creation_function(icon_filename):
 
 
 def pictogramme_creation_function(icon_filename):
-    logging.debug('gui - utils.py - icon_creation_function')
+    logging.debug(f'gui - utils.py - icon_creation_function - icon_filename: {icon_filename}')
     path = f'graphic_materials/pictogrammes/{icon_filename}'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -126,7 +126,7 @@ def pictogramme_creation_function(icon_filename):
 
 
 def font_creation_function(font_style):
-    logging.debug('gui - utils.py - font_creation_function')
+    logging.debug(f'gui - utils.py - font_creation_function - font_style: {font_style}')
     font = QtGui.QFont()
     font.setKerning(True)
     font.setStyleStrategy(QtGui.QFont.PreferAntialias)
@@ -149,7 +149,7 @@ def font_creation_function(font_style):
 
 
 def stylesheet_creation_function(stylesheet):
-    logging.debug('gui - utils.py - stylesheet_creation_function')
+    logging.debug(f'gui - utils.py - stylesheet_creation_function - stylesheet: {stylesheet}')
     f = open(f'graphic_materials/style_sheets/{stylesheet}_stylesheet.dat', 'r')
     stylesheet_str = ''.join(f.readlines())
     f.close()
@@ -157,7 +157,7 @@ def stylesheet_creation_function(stylesheet):
 
 
 def shadow_creation_function(offset, blur):
-    logging.debug('gui - utils.py - shadow_creation_function')
+    logging.debug(f'gui - utils.py - shadow_creation_function - offset: {offset} ; blur: {blur}')
     shadow = QtWidgets.QGraphicsDropShadowEffect()
     shadow.setOffset(offset)
     shadow.setBlurRadius(blur)
@@ -261,7 +261,7 @@ def openweather_to_mf_desc(item):
 
 
 def wind_dir_to_pictogramme(dir_idx):
-    logging.debug('gui - utils.py - wind_dir_to_pictogramme')
+    logging.debug(f'gui - utils.py - wind_dir_to_pictogramme - dir_idx: {dir_idx}')
     path = f'graphic_materials/pictogrammes/wind_dir_images/wind_dir_arrow_{dir_idx}.svg'
     icon = QtGui.QIcon()
     icon.addPixmap(QtGui.QPixmap(path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
