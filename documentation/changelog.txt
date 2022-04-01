@@ -37,6 +37,7 @@
     * all icons have been resized.
     * night and day weather icons are now displayed depending on sunrise and sunset.
     * the computing of sunrise and sunset have simplified to compute for 6 days and use it later.
+    * readme has been updated.
 
   * FIXED:
     * few corrections to make the weather station works on raspberry pi.
