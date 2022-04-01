@@ -101,10 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
-        # self.sunrise = None
-        # self.sunset = None
-        self.sunrise_5days = []
-        self.sunset_5days = []
+        self.sunrise_6days = []
+        self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
         self.fc_1h_lb_1 = []
         self.fc_1h_lb_2 = []
@@ -319,18 +317,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 if angle_list[i] <= angle < angle_list[i + 1]:
                     svg = angle_dict[angle_list[i]]
                     break
-            # self.sunrise = ephem.localtime(observer.next_rising(sun, start=date.strftime('%Y/%m/%d')))
-            # self.sunset = ephem.localtime(observer.next_setting(sun, start=date.strftime('%Y/%m/%d')))
 
             next_date = date
             for i in range(0, 6):
                 sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
                 sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
-                self.sunrise_5days.append(sunrise)
-                self.sunset_5days.append(sunset)
+                self.sunrise_6days.append(sunrise)
+                self.sunset_6days.append(sunset)
                 next_date += datetime.timedelta(days=1)
 
-            sunlive = self.sunrise_5days[0] - self.sunset_5days[0]
+            sunlive = self.sunrise_6days[0] - self.sunset_6days[0]
             moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
             moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
             yday = date.timetuple().tm_yday
@@ -347,8 +343,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.day_lb_1.setText(f'{yday}ème jour de l’année')
             self.day_lb_2.setText(f'Semaine {nweek}')
             self.day_lb_3.setText(season)
-            self.sun_lb_1.setText(f'Le Soleil se lève à {self.sunrise_5days[0].strftime("%Hh%M")} et se couche à '
-                                  f'{self.sunset_5days[0].strftime("%Hh%M")}')
+            self.sun_lb_1.setText(f'Le Soleil se lève à {self.sunrise_6days[0].strftime("%Hh%M")} et se couche à '
+                                  f'{self.sunset_6days[0].strftime("%Hh%M")}')
             h = str(sunlive.seconds//3600)
             if len(h) == 1:
                 h = '0' + h
@@ -717,7 +713,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         horizontal_layout = self.prev6h_layout_1
                     else:
                         horizontal_layout = self.prev6h_layout_2
-                    sunrise, sunset = self.sunrise_5days[j + 1], self.sunset_5days[j + 1]
+                    sunrise, sunset = self.sunrise_6days[j + 1], self.sunset_6days[j + 1]
                     add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise, sunset)
                     j += 1
             else:
@@ -739,7 +735,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug('gui - mainwindow.py - MainWindow - display_1h_forecast_details')
         forecast = self.forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.sunrise_5days[0], self.sunset_5days[0], self)
+        details_window = My1hFCDetails(forecast, self.sunrise_6days[0], self.sunset_6days[0], self)
         details_window.exec_()
 
     def display_1d_forecast_details(self, data):
