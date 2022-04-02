@@ -326,7 +326,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.sunset_6days.append(sunset)
                 next_date += datetime.timedelta(days=1)
 
-            sunlive = self.sunrise_6days[0] - self.sunset_6days[0]
+            sunlive = self.sunset_6days[0] - self.sunrise_6days[0]
             moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
             moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
             yday = date.timetuple().tm_yday
