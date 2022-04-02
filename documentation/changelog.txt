@@ -3,6 +3,9 @@
   * FIXED:
     * the sunlive time was wrongly computed, it has been fixed.
 
+  * MODIFIED:
+    * set_size function has been improved.
+
 
 ### April 1 2022, Release version 0.11.0 ###
 

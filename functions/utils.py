@@ -401,11 +401,15 @@ def set_size(bytes_size):
     logging.debug('gui - utils.py - set_size')
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     i = 0
-    while bytes_size >= 1024 and i < len(suffixes)-1:
+    while bytes_size >= 1024 and i < len(suffixes) - 1:
         bytes_size /= 1024.
         i += 1
     f = ('%.2f' % bytes_size).rstrip('0').rstrip('.')
-    return '%s %s' % (f, suffixes[i])
+    if len(f[f.find('.'):]) == 2:
+        f += '0'
+    elif len(f[f.find('.'):]) == 1:
+        f += '00'
+    return f'{f} {suffixes[i]}'
 
 
 def battery_value_icon_dict():
