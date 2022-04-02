@@ -440,7 +440,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.launch_ow_request_thread()
         else:
             logging.warning('gui - mainwindow.py - MainWindow - launch_weather_request : no API registered in options'
-                            ' and/or  self.place_object is None')
+                            ' and/or self.place_object is None')
 
     def launch_mf_request_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')

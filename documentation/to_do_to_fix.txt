@@ -4,5 +4,5 @@
 
 ### To fix list: ###
 
-*
+* revoir le calcul de la durée d'ensoleillement
 
