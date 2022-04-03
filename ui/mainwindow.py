@@ -701,7 +701,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
         if self.forecast_data:
             clean_6h_forecast_widgets(self)
-
             logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
                           f'{len(self.forecast_data["quaterly"])}')
             if self.forecast_data['api'] == 'meteofrance':
@@ -739,7 +738,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_1h_forecast_details(self, full_dt):
         logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - full_dt: {full_dt}')
         forecast = self.forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.sunrise_6days[0], self.sunset_6days[0], self)
+        details_window = My1hFCDetails(forecast, self.sunrise_6days, self.sunset_6days, self)
         details_window.exec_()
 
     def display_1d_forecast_details(self, data):

@@ -207,11 +207,16 @@ def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
     if sunrise is None or sunset is None or dt is None:
         period = 'jour'
     else:
-        if sunrise <= dt <= sunset:
-            period = 'jour'
+        if isinstance(sunset, list):
+            if sunset[0] <= dt <= sunrise[1]:
+                period = 'nuit'
+            else:
+                period = 'jour'
         else:
-            period = 'nuit'
-
+            if sunrise <= dt <= sunset:
+                period = 'jour'
+            else:
+                period = 'nuit'
     if pictogramme:
         link = f'graphic_materials/pictogrammes/{period}/{pictogramme}'
     else:

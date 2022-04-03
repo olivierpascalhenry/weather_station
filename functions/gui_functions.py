@@ -43,8 +43,8 @@ def add_1h_forecast_widget(self, hour, weather, temp, full_dt, horizontal_layout
     self.fc_1h_bt_1[self.fc_1h_nbr1].setMinimumSize(QtCore.QSize(80, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setMaximumSize(QtCore.QSize(16777215, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setStyleSheet(stylesheet_creation_function('qtoolbutton_1hfc'))
-    self.fc_1h_bt_1[self.fc_1h_nbr1].setIcon(weather_to_pictogrammes(weather, full_dt, self.sunrise_6days[0],
-                                                                     self.sunset_6days[0]))
+    self.fc_1h_bt_1[self.fc_1h_nbr1].setIcon(weather_to_pictogrammes(weather, full_dt, self.sunrise_6days,
+                                                                     self.sunset_6days))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setIconSize(QtCore.QSize(80, 80))
     self.fc_1h_bt_1[self.fc_1h_nbr1].setObjectName('fc_1h_bt_1_' + str(self.fc_1h_nbr1))
     self.fc_1h_vert_lay_1[self.fc_1h_nbr1].addWidget(self.fc_1h_bt_1[self.fc_1h_nbr1])
