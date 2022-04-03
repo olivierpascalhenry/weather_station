@@ -4,5 +4,5 @@
 
 ### To fix list: ###
 
-* revoir le calcul de la durée d'ensoleillement
+* les icones nuits apparaissent à la place des icones jours pour les prévisions sur 1h (samedi à 20h)
 
