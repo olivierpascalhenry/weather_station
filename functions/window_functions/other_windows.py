@@ -1,8 +1,11 @@
+import os
 import time
 import logging
 import markdown
 import pathlib
 import string
+import platform
+import tempfile
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_aboutlogwindow import Ui_aboutlogWindow
 from ui.Ui_infowindow import Ui_infoWindow
@@ -19,8 +22,9 @@ from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from ui.Ui_apiwindow import Ui_apiWindow
 from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
+from ui.Ui_updateprocesswindow import Ui_updateprocessWindow
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
-# from functions.thread_functions.other_threads import DownloadFile
+from functions.thread_functions.other_threads import DownloadFile, UnzipFile, InstallFile, RebootingThread
 
 
 class MyAbout(QtWidgets.QDialog, Ui_aboutlogWindow):
@@ -587,4 +591,138 @@ class MyAPI(QtWidgets.QDialog, Ui_apiWindow):
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyAPI - close_window')
+        self.close()
+
+
+class MyUpdateProcess(QtWidgets.QDialog, Ui_updateprocessWindow):
+    def __init__(self, url_dict, install_path, parent=None):
+        logging.info('gui - other_windows.py - MyUpdateProcess - __init__')
+        QtWidgets.QWidget.__init__(self, parent)
+        self.setupUi(self)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setOffset(5)
+        shadow.setBlurRadius(25)
+        self.setGraphicsEffect(shadow)
+        self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        self.url = url_dict['url']
+        self.temp_folder = tempfile.mkdtemp(prefix='ws_')
+        self.install_path = install_path
+        self.update_file = pathlib.Path(tempfile.gettempdir()).joinpath(url_dict['file'])
+        self.cancel_button.clicked.connect(self.cancel_thread)
+        self.cancel = False
+        self.thread = None
+        self.success = False
+        self.download_update()
+
+    def download_update(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - download_update')
+        self.thread = DownloadFile(self.url, self.update_file)
+        self.thread.download_update.connect(self.update_progress_bar)
+        self.thread.download_done.connect(self.donwload_done)
+        self.thread.download_failed.connect(self.download_failed)
+        self.thread.start()
+
+    def unzip_update(self):
+        self.browser.append('')
+        self.thread = UnzipFile(self.update_file, self.temp_folder)
+        self.thread.unzip_update.connect(self.update_progress_bar)
+        self.thread.unzip_done.connect(self.unzip_done)
+        self.thread.unzip_failed.connect(self.unzip_failed)
+        self.thread.start()
+
+    def install_update(self):
+        self.browser.append('')
+        if platform.system() == 'Windows':
+            pathlib.Path('D:\\Temp\\test').mkdir(exist_ok=True)
+            self.install_path = pathlib.Path('D:\\Temp\\test')
+        self.cancel_button.setEnabled(False)
+        self.thread = InstallFile(pathlib.Path(self.temp_folder), self.install_path)
+        self.thread.install_update.connect(self.update_progress_bar)
+        self.thread.install_done.connect(self.install_done)
+        self.thread.install_failed.connect(self.install_failed)
+        self.thread.start()
+
+    def donwload_done(self, update_dict):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - donwload_done')
+        self.update_progress_bar(update_dict)
+        self.unzip_update()
+
+    def unzip_done(self, update_dict):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - unzip_done')
+        self.update_progress_bar(update_dict)
+        self.install_update()
+
+    def install_done(self, update_dict):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - unzip_done')
+        self.update_progress_bar(update_dict)
+        self.end_of_process()
+
+    def download_failed(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - download_failed')
+        update_dict = {'bar_value': 0, 'bar_text': 'Download failed',
+                       'browser_text': 'Le téléchargement a échoué, veuillez lire le log pour avoir plus de détail.'}
+        self.update_progress_bar(update_dict)
+        self.set_cancel_button()
+
+    def unzip_failed(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - unzip_failed')
+        update_dict = {'bar_value': 0, 'bar_text': 'Extraction failed',
+                       'browser_text': 'La décompression de l\'archive a échoué, veuillez lire le log pour avoir plus '
+                                       'de détail.'}
+        self.update_progress_bar(update_dict)
+        self.set_cancel_button()
+
+    def install_failed(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - install_failed')
+        update_dict = {'bar_value': 0, 'bar_text': 'Installation failed',
+                       'browser_text': 'L\'installation de la mise à jour a échoué, veuillez lire le log pour avoir '
+                                       'plus de détail.'}
+        self.update_progress_bar(update_dict)
+        self.set_cancel_button()
+
+    def cancel_thread(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - cancel_download')
+        if self.thread is not None:
+            self.thread.cancel_process()
+        self.cancel = True
+        time.sleep(0.25)
+        self.thread = None
+        self.close_window()
+
+    def update_progress_bar(self, prog_dict):
+        if prog_dict['bar_value'] is not None:
+            self.progress_bar.setValue(prog_dict['bar_value'])
+        if prog_dict['bar_text'] is not None:
+            self.progress_bar.setFormat(prog_dict['bar_text'])
+        if prog_dict['browser_text'] is not None:
+            self.browser.append(prog_dict['browser_text'])
+
+    def set_cancel_button(self):
+        self.cancel_button.setEnabled(True)
+        self.cancel_button.setText('Quit')
+        self.cancel_button.clicked.disconnect()
+        self.cancel_button.clicked.connect(self.close_window)
+
+    def end_of_process(self):
+        self.browser.append('')
+        if platform.system() == 'Linux':
+            self.thread = RebootingThread()
+            self.thread.reboot_update.connect(self.update_progress_bar)
+            self.thread.reboot_done.connect(self.reboot_raspberry)
+            self.thread.start()
+        else:
+            self.cancel_button.setEnabled(True)
+            self.cancel_button.setText('Quit')
+            self.cancel_button.clicked.disconnect()
+            self.cancel_button.clicked.connect(self.close_window)
+
+    def reboot_raspberry(self, update_dict):
+        self.update_progress_bar(update_dict)
+        logging.info('raspberry rebooting...')
+        self.success = True
+        self.close_window()
+
+    def close_window(self):
+        logging.debug('gui - other_windows.py - MyUpdateProcess - close_window')
         self.close()

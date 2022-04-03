@@ -11,6 +11,7 @@
     * a new unzip thread has been added (part of new update system).
     * a new thread to install files has been added (part of new update system).
     * a new thread to countdown and reboot has been added.
+    * a new window dedicated to the new update system has been added.
 
 
 ### April 1 2022, Release version 0.11.0 ###
