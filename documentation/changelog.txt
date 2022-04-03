@@ -1,10 +1,16 @@
-### April XX 2022, Release version 0.11.1 ###
+### April XX 2022, Release version 0.12.0 ###
 
   * FIXED:
     * the sunlive time was wrongly computed, it has been fixed.
 
   * MODIFIED:
     * set_size function has been improved.
+
+  * ADDED
+    * a new download thread has been added (part of new update system).
+    * a new unzip thread has been added (part of new update system).
+    * a new thread to install files has been added (part of new update system).
+    * a new thread to countdown and reboot has been added.
 
 
 ### April 1 2022, Release version 0.11.0 ###

@@ -405,10 +405,14 @@ def set_size(bytes_size):
         bytes_size /= 1024.
         i += 1
     f = ('%.2f' % bytes_size).rstrip('0').rstrip('.')
-    if len(f[f.find('.'):]) == 2:
-        f += '0'
-    elif len(f[f.find('.'):]) == 1:
-        f += '00'
+    idx = f.find('.')
+    if idx >= 0:
+        if len(f[idx:]) == 2:
+            f += '0'
+        elif len(f[idx:]) == 1:
+            f += '00'
+    else:
+        f += '.00'
     return f'{f} {suffixes[i]}'
 
 
