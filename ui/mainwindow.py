@@ -1,5 +1,6 @@
 import io
 import os
+import sys
 import copy
 import json
 import math
@@ -26,13 +27,14 @@ from functions.utils import (days_months_dictionary, stylesheet_creation_functio
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
-                                                      MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo)
+                                                      MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo,
+                                                      MyUpdateProcess)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
                                                         MqttToDbThread, DBInDataThread, DBOutDataThread,
                                                         DS18B20DataCollectingTestThread, MqttToDbTestThread,
                                                         BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
-from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion,
+from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
@@ -51,6 +53,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.database_ok = False
         self.connector = None
         self.cursor = None
+        self.reboot = False
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
@@ -192,7 +195,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
-        # self.check_update()
+        if getattr(sys, 'frozen', False) and self.config_dict.getboolean('SYSTEM', 'check_update'):
+            self.check_update()
         self.launch_weather_request()
 
     def load_place_data(self):
@@ -800,19 +804,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             update_window = MyWarningUpdate(self)
             update_window.exec_()
             if not update_window.cancel:
-                temp_folder = tempfile.gettempdir()
-                download_window = MyDownload(self.update_url, temp_folder, self)
-                download_window.exec_()
-                if download_window.success:
-                    install_path = pathlib.Path(self.gui_path)
-                    shutil.copy(str(install_path.joinpath('functions/unzip_update.py')), temp_folder)
-                    script_path = pathlib.Path(temp_folder).joinpath('unzip_update.py')
-                    update_path = pathlib.Path(temp_folder).joinpath(self.update_url['file'])
-                    logging.debug(f'gui - mainwindow.py - MainWindow - warning_update_dispatch - '
-                                  f'install_path:{install_path} ; script_path: {script_path} '
-                                  f'; update_path: {update_path}')
-                    os.system(f'lxterminal -e python3 {script_path} {update_path} {install_path}')
-                    time.sleep(1.5)
+                install_path = pathlib.Path(self.gui_path)
+                update_window = MyUpdateProcess(self.update_url, install_path, self)
+                update_window.exec_()
+                if update_window.success:
+                    self.reboot = True
                     self.close()
         elif self.warning_button.objectName() == 'warning_function':
             warning_window = MyWarning(self.forecast_data['warning'], self)
@@ -894,4 +890,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
+        if platform.system() == 'Linux' and self.reboot:
+            os.system('sudo shutdown -r now')
         event.accept()

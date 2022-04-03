@@ -1,4 +1,4 @@
-gui_version = '0.11.0'
+gui_version = '0.12.0'
 gui_branch = 'master'
 pycharm_version = '2021.3'
 python_version = '3.7.8'
