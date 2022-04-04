@@ -14,6 +14,7 @@
     * a new thread to countdown and reboot has been added.
     * a new window dedicated to the new update system has been added.
     * the new update system has been introduced in the main gui file.
+    * a button and a checkbox have been added to option window to handle the new update system.
 
 
 ### April 1 2022, Release version 0.11.0 ###

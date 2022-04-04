@@ -821,6 +821,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         config_dict_copy = configparser.ConfigParser()
         config_dict_copy.read_file(config_string)
         option_window = MyOptions(config_dict_copy, copy.deepcopy(self.sensor_dict), self.user_path, self)
+        option_window.available_update.connect(self.force_gui_update_button)
         option_window.exec_()
         if not option_window.cancel:
             self.sensor_dict = option_window.sensor_dict
@@ -844,6 +845,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 f'PyQt.</p>')
         about_window = MyAbout(text, self.gui_path, self)
         about_window.exec_()
+
+    def force_gui_update_button(self, url_dict):
+        logging.debug(f'gui - mainwindow.py - MainWindow - force_gui_update_button - url_dict: {url_dict}')
+        self.warning_button.setObjectName('no_function')
+        self.display_gui_update_button(url_dict)
 
     def display_gui_update_button(self, url_dict):
         logging.debug(f'gui - mainwindow.py - MainWindow - display_gui_update_button - url_dict: {url_dict}')

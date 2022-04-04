@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'optionwindow2.ui'
+# Form implementation generated from reading ui file 'optionwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -28,8 +28,8 @@ class Ui_optionWindow(object):
 "    background-color: rgb(230,230,230);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
-        self.gridLayout_32 = QtWidgets.QGridLayout(optionWindow)
-        self.gridLayout_32.setObjectName("gridLayout_32")
+        self.gridLayout_33 = QtWidgets.QGridLayout(optionWindow)
+        self.gridLayout_33.setObjectName("gridLayout_33")
         self.splitter = QtWidgets.QSplitter(optionWindow)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
@@ -2129,7 +2129,7 @@ class Ui_optionWindow(object):
         self.scroll_area_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_2.setObjectName("scroll_area_2")
         self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 618, 380))
+        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 390, 291))
         self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
         self.gridLayout_16 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_16.setContentsMargins(0, 0, 0, 0)
@@ -2537,7 +2537,7 @@ class Ui_optionWindow(object):
         self.scroll_area_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_3.setObjectName("scroll_area_3")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 597, 400))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 500, 400))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.gridLayout_24 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_24.setContentsMargins(0, 0, 0, 0)
@@ -3221,7 +3221,7 @@ class Ui_optionWindow(object):
         self.scroll_area_5.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area_5.setObjectName("scroll_area_5")
         self.scrollAreaWidgetContents_5 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 618, 380))
+        self.scrollAreaWidgetContents_5.setGeometry(QtCore.QRect(0, 0, 597, 386))
         self.scrollAreaWidgetContents_5.setObjectName("scrollAreaWidgetContents_5")
         self.gridLayout_10 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents_5)
         self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
@@ -3509,13 +3509,129 @@ class Ui_optionWindow(object):
         self.gridLayout_3.addLayout(self.horizontalLayout_7, 0, 1, 1, 1)
         self.gridLayout_17.addLayout(self.gridLayout_3, 0, 0, 1, 1)
         self.sy_vl.addWidget(self.lo_gb_1)
+        self.sy_gb_2 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents_5)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.sy_gb_2.setFont(font)
+        self.sy_gb_2.setStyleSheet("QGroupBox{\n"
+"    border: 1px solid grey;\n"
+"    margin-top: 1.0em;\n"
+"    margin-right: 8px;\n"
+"    padding-top: 8px;\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    top: -17px;\n"
+"    left: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.sy_gb_2.setObjectName("sy_gb_2")
+        self.gridLayout_32 = QtWidgets.QGridLayout(self.sy_gb_2)
+        self.gridLayout_32.setObjectName("gridLayout_32")
+        self.horizontalLayout_25 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_25.setObjectName("horizontalLayout_25")
+        self.sy_gb_2_ck_1 = QtWidgets.QCheckBox(self.sy_gb_2)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.sy_gb_2_ck_1.setFont(font)
+        self.sy_gb_2_ck_1.setStyleSheet("QCheckBox {\n"
+"    spacing: 10px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"    width: 30px;\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:hover {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:unchecked:pressed {\n"
+"    image: url(icons/checkbox_icon_unchecked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:hover {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}\n"
+"\n"
+"QCheckBox::indicator:checked:pressed {\n"
+"    image: url(icons/checkbox_icon_checked.svg);\n"
+"}")
+        self.sy_gb_2_ck_1.setObjectName("sy_gb_2_ck_1")
+        self.horizontalLayout_25.addWidget(self.sy_gb_2_ck_1)
+        spacerItem20 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_25.addItem(spacerItem20)
+        self.gridLayout_32.addLayout(self.horizontalLayout_25, 0, 0, 1, 1)
+        self.horizontalLayout_26 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_26.setObjectName("horizontalLayout_26")
+        spacerItem21 = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_26.addItem(spacerItem21)
+        self.sy_gb_2_bt_1 = QtWidgets.QToolButton(self.sy_gb_2)
+        self.sy_gb_2_bt_1.setMinimumSize(QtCore.QSize(250, 40))
+        self.sy_gb_2_bt_1.setMaximumSize(QtCore.QSize(250, 40))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(14)
+        font.setBold(False)
+        font.setWeight(50)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferDefault)
+        self.sy_gb_2_bt_1.setFont(font)
+        self.sy_gb_2_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid #acacac;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                    stop:0 #f0f0f0, stop:1 #e5e5e5);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:disabled {\n"
+"    background-color:  rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QToolButton:hover {\n"
+"    border: 1px solid #7eb4ea;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                    stop:0 #ecf4fc, stop:1 #dcecfc);\n"
+"}\n"
+"\n"
+"QToolButton:pressed {\n"
+"    border: 1px solid #579de5;\n"
+"    border-radius: 1px;\n"
+"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                    stop:0 #daecfc, stop:1 #c4e0fc);\n"
+"}")
+        self.sy_gb_2_bt_1.setObjectName("sy_gb_2_bt_1")
+        self.horizontalLayout_26.addWidget(self.sy_gb_2_bt_1)
+        spacerItem22 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_26.addItem(spacerItem22)
+        self.gridLayout_32.addLayout(self.horizontalLayout_26, 1, 0, 1, 1)
+        self.sy_vl.addWidget(self.sy_gb_2)
         self.gridLayout_10.addLayout(self.sy_vl, 0, 0, 1, 1)
         self.scroll_area_5.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_12.addWidget(self.scroll_area_5, 0, 0, 1, 1)
         self.stack_widget.addWidget(self.page_6)
-        self.gridLayout_32.addWidget(self.splitter, 0, 0, 1, 1)
-        spacerItem20 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_32.addItem(spacerItem20, 1, 0, 1, 1)
+        self.gridLayout_33.addWidget(self.splitter, 0, 0, 1, 1)
+        spacerItem23 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_33.addItem(spacerItem23, 1, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ok_button = QtWidgets.QToolButton(optionWindow)
@@ -3551,8 +3667,8 @@ class Ui_optionWindow(object):
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem21 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem21)
+        spacerItem24 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem24)
         self.cancel_button = QtWidgets.QToolButton(optionWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -3586,12 +3702,12 @@ class Ui_optionWindow(object):
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem22 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem22)
-        self.gridLayout_32.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
+        spacerItem25 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem25)
+        self.gridLayout_33.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(optionWindow)
-        self.stack_widget.setCurrentIndex(2)
+        self.stack_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(optionWindow)
 
     def retranslateUi(self, optionWindow):
@@ -3668,3 +3784,6 @@ class Ui_optionWindow(object):
         self.lo_gb_cb_1.setItemText(2, _translate("optionWindow", "WARNING"))
         self.lo_gb_cb_1.setItemText(3, _translate("optionWindow", "CRITICAL"))
         self.lo_gb_cb_1.setItemText(4, _translate("optionWindow", "ERROR"))
+        self.sy_gb_2.setTitle(_translate("optionWindow", "Mise à jour"))
+        self.sy_gb_2_ck_1.setText(_translate("optionWindow", "Vérifier les mises à jour au démarrage"))
+        self.sy_gb_2_bt_1.setText(_translate("optionWindow", "Vérifier maintenant"))

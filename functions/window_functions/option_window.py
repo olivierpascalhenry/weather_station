@@ -1,3 +1,4 @@
+import sys
 import platform
 import copy
 import pickle
@@ -9,11 +10,15 @@ from pyowm.utils.config import get_default_config
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_optionwindow import Ui_optionWindow
 from functions.utils import code_to_departement
+from ui.version import gui_version
 from functions.window_functions.other_windows import MyInfo, MyNumpad, MyKeyboard, MyTown, MyAPI
 from functions.window_functions.sensor_windows import MqttManager, W1SensorManager, BME280SensorManager
+from functions.thread_functions.other_threads import CheckUpdate
 
 
 class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
+    available_update = QtCore.pyqtSignal(dict)
+
     def __init__(self, config_dict, sensor_dict, user_path, parent=None):
         logging.info('gui - option_window.py - MyOptions - __init__ ')
         QtWidgets.QWidget.__init__(self, parent)
@@ -63,6 +68,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.place_object = None
         self.api_key = None
         self.sensor_list = []
+        self.check_update_thread = None
         self.af_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ca_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
@@ -80,13 +86,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ok_button.clicked.connect(self.save_config_dict)
         self.cancel_button.clicked.connect(self.close_window)
         self.lo_gb_bt_1.clicked.connect(self.get_folder_path)
-
         self.db_gb_bt_1.clicked.connect(self.display_keyboard)
         self.db_gb_bt_2.clicked.connect(self.display_keyboard)
         self.db_gb_bt_3.clicked.connect(self.display_keyboard)
         self.db_gb_bt_4.clicked.connect(self.display_keyboard)
         self.db_gb_bt_5.clicked.connect(self.display_numpad)
-
         self.af_gb_int_bt_1.clicked.connect(self.display_numpad)
         self.af_gb_ext_bt_1.clicked.connect(self.display_numpad)
         self.ca_bt_1.clicked.connect(self.display_numpad)
@@ -105,6 +109,11 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_rb_1.clicked.connect(self.change_place_info)
         self.ap_gb_rb_2.clicked.connect(self.change_place_info)
         self.ap_gb_bt_1.clicked.connect(self.set_openweather_key)
+        self.sy_gb_2_bt_1.clicked.connect(self.check_update)
+        if getattr(sys, 'frozen', False):
+            self.sy_gb_2_bt_1.setEnabled(True)
+        else:
+            self.sy_gb_2_bt_1.setEnabled(False)
         self.create_sensor_list()
         self.parse_sensor_list_in_cb()
         self.read_config_dict()
@@ -178,6 +187,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ca_ln_1.setText(self.config_dict.get('SENSOR', 'sensors_rate'))
         self.ap_gb_5_ln_1.setText(self.config_dict.get('API', 'request_rate'))
         self.sy_gb_ln_1.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
+        self.sy_gb_2_ck_1.setChecked(self.config_dict.getboolean('SYSTEM', 'check_update'))
         self.ts_gb_ext_ck_1.setChecked(self.config_dict.getboolean('TIMESERIES', 'msl_pressure'))
         if self.config_dict.get('DISPLAY', 'in_sensor') in self.sensor_list:
             self.af_gb_int_cb_1.setCurrentIndex(self.af_gb_int_cb_1.findText(self.config_dict.get('DISPLAY',
@@ -230,9 +240,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def save_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - save_config_dict')
         if not pathlib.Path(str(self.lo_gb_ln_1.text())).exists():
-            text = ('After checking, it appears that the path for the log file is not valid. Thus it is not possible '
-                    'to save the new configuration. Please correct it and try again.')
-            info_window = MyInfo(text)
+            text = ('Après vérification, il semblerait que le chemin du fichier de log ne soit pas correcte. Ainsi, il '
+                    'n\'est pas possible de sauvegarder les options. Veuillez corriger le problème et réessayer.')
+            info_window = MyInfo(text, self.mainparent)
             info_window.exec_()
         else:
             self.config_dict.set('DATABASE', 'username', str(self.db_gb_ln_1.text()))
@@ -250,6 +260,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.config_dict.set('SENSOR', 'sensors_rate', self.ca_ln_1.text())
             self.config_dict.set('API', 'request_rate', self.ap_gb_5_ln_1.text())
             self.config_dict.set('SYSTEM', 'place_altitude', self.sy_gb_ln_1.text())
+            self.config_dict.set('SYSTEM', 'check_update', str(self.sy_gb_2_ck_1.isChecked()))
             if self.ts_gb_int_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
                 self.config_dict.set('TIMESERIES', 'in_temperature', str(self.ts_gb_int_cb_1.currentText()))
             else:
@@ -477,6 +488,24 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.db_gb_ln_3.setText(keyboard_window.num_line.text())
             elif self.sender().objectName() == 'db_gb_bt_4':
                 self.db_gb_ln_4.setText(keyboard_window.num_line.text())
+
+    def check_update(self):
+        logging.debug('gui - mainwindow.py - MainWindow - check_update')
+        self.check_update_thread = CheckUpdate(gui_version)
+        self.check_update_thread.finished.connect(self.parse_update_check)
+        self.check_update_thread.start()
+
+    def parse_update_check(self, url_dict):
+        logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - url_dict: {url_dict}')
+        if url_dict:
+            logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - update available')
+            self.available_update.emit(url_dict)
+            text = ('Une nouvelle mise à jour est disponible. Pour l\'installer, veuillez quitter la fenêtre des '
+                    'options et cliquer sur l\'icône de mise à jour dans la fenêtre principale.')
+            info_window = MyInfo(text, self.mainparent)
+            info_window.exec_()
+        else:
+            logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - no update available')
 
     def close_window(self):
         logging.debug('gui - option_window.py - MyOptions - close_window')
