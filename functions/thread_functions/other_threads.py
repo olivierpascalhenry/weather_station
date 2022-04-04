@@ -1,7 +1,6 @@
 import os
 import stat
 import time
-import numpy
 import shutil
 import socket
 import logging
@@ -13,7 +12,7 @@ import platform
 import subprocess
 from zipfile import ZipFile
 from distutils.version import LooseVersion
-from numpy import min, max, linspace
+from numpy import linspace, asarray
 from PyQt5 import QtCore
 from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
 
@@ -586,7 +585,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, {column} from "{table}"  where '
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            data_x, data_y = numpy.asarray(data_x), numpy.asarray(data_y)
+            data_x, data_y = asarray(data_x), asarray(data_y)
         return data_x, data_y
 
     def stop(self):

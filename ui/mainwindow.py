@@ -49,11 +49,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.user_path = user_path
         self.config_dict = config_dict
         self.sensor_dict = sensor_dict
-        self.place_object = None
-        self.database_ok = False
-        self.connector = None
-        self.cursor = None
-        self.reboot = False
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
         QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
@@ -61,6 +56,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.showFullScreen()
             QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BlankCursor)
         self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.place_object = None
+        self.database_ok = False
+        self.connector = None
+        self.cursor = None
+        self.reboot = False
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
