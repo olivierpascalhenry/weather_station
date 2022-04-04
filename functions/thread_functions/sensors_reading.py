@@ -60,6 +60,11 @@ class DS18B20DataCollectingThread(QtCore.QThread):
                 t_idx = lines[1].find('t=')
                 if t_idx != -1:
                     temp = round(float(lines[1][t_idx + 2:]) / 1000.0, 1)
+
+                    # offset after calibration
+                    offset = 1.0
+                    temp += offset
+
                     if temp > 50:
                         temp = None
         except Exception:
@@ -155,6 +160,10 @@ class BME280DataCollectingThread(QtCore.QThread):
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
             pres = round(data.pressure, 1)
+
+            # offset after temp calibration
+            offset = 1.3
+            temp += offset
 
             if self.alt is not None:
                 pres_msl = pres + ((pres * 9.80665 * self.alt) / (287.0531 * (273.15 + temp + (self.alt / 400))))
