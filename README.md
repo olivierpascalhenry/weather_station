@@ -60,7 +60,6 @@ Python modules :
 * matplotlib (3.3.0+)
 * markdown (3.3.0+)
 * requests (2.25.0+)
-* numpy (1.19.5+)
 * psycopg2 (2.8.6+)
 * pyowm (3.2.0+)
 * meteofrance-api (1.0.2+)

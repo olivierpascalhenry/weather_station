@@ -1,7 +1,6 @@
 import bisect
 import logging
 import datetime
-from numpy import arange
 from PyQt5 import QtCore, QtWidgets
 from ui.Ui_forecast1hwindow import Ui_forecast1hWindow
 from ui.Ui_forecast6hwindow import Ui_forecast6hWindow
@@ -38,8 +37,7 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
                 wdir -= 180
             else:
                 wdir += 180
-            idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-            icon = wind_dir_to_pictogramme(idx)
+            icon = wind_dir_to_pictogramme(bisect.bisect_right([x * 7.5 for x in range(49)], wdir))
         else:
             icon = wind_dir_to_pictogramme(0)
         self.dir_ln.setIcon(icon)
@@ -85,8 +83,7 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                     wdir -= 180
                 else:
                     wdir += 180
-                idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-                icon = wind_dir_to_pictogramme(idx)
+                icon = wind_dir_to_pictogramme(bisect.bisect_right([x * 7.5 for x in range(49)], wdir))
             else:
                 icon = wind_dir_to_pictogramme(0)
 
@@ -137,8 +134,7 @@ class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
                 wdir -= 180
             else:
                 wdir += 180
-            idx = bisect.bisect_right(list(arange(0, 360, 7.5)) + [360], wdir)
-            icon = wind_dir_to_pictogramme(idx)
+            icon = wind_dir_to_pictogramme(bisect.bisect_right([x * 7.5 for x in range(49)], wdir))
         else:
             icon = wind_dir_to_pictogramme(0)
         self.dir_ln.setIcon(icon)

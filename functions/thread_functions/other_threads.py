@@ -12,7 +12,6 @@ import platform
 import subprocess
 from zipfile import ZipFile
 from distutils.version import LooseVersion
-from numpy import linspace, asarray
 from PyQt5 import QtCore
 from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
 
@@ -524,10 +523,17 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_1.set_xlim(limit, now)
             self.plot_out_1.set_xticks(hours_list)
             self.plot_out_1.set_xticklabels(ticks_labels)
-            self.plot_in_2.set_yticks(linspace(self.plot_in_2.get_yticks()[0], self.plot_in_2.get_yticks()[-1],
-                                               len(self.plot_in_1.get_yticks())))
-            self.plot_out_2.set_yticks(linspace(self.plot_out_2.get_yticks()[0], self.plot_out_2.get_yticks()[-1],
-                                                len(self.plot_out_1.get_yticks())))
+            length = len(self.plot_in_1.get_yticks())
+            upper = self.plot_in_2.get_yticks()[-1]
+            lower = self.plot_in_2.get_yticks()[0]
+            self.plot_in_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
+
+            length = len(self.plot_out_1.get_yticks())
+            upper = self.plot_out_2.get_yticks()[-1]
+            lower = self.plot_out_2.get_yticks()[0]
+
+            self.plot_out_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
+
             self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.canvas_in.draw()
@@ -585,7 +591,7 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, {column} from "{table}"  where '
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-            data_x, data_y = asarray(data_x), asarray(data_y)
+            # data_x, data_y = asarray(data_x), asarray(data_y)
         return data_x, data_y
 
     def stop(self):

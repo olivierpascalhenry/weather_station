@@ -7,6 +7,7 @@
   * MODIFIED:
     * set_size function has been improved.
     * improved few imports
+    * numpy is not used anymore in the weather station.
 
   * ADDED
     * a new download thread has been added (part of new update system).
