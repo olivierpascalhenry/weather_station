@@ -390,16 +390,13 @@ def mpl_hour_list():
     return list(reversed(hours_list))
 
 
-def db_data_to_mpl_vectors(data):
-    logging.debug('gui - utils.py - db_data_to_mpl_vectors')
-    t, x = [], []
-    for tx in data:
-        t.append(tx[0])
-        if tx[1] is None:
-            x.append(nan)
-        else:
-            x.append(tx[1])
-    return t, x
+# def db_data_to_mpl_vectors(data):
+#     logging.debug('gui - utils.py - db_data_to_mpl_vectors')
+#     t, x = [], []
+#     for tx in data:
+#         t.append(tx[0])
+#         x.append(tx[1])
+#     return t, x
 
 
 def set_size(bytes_size):

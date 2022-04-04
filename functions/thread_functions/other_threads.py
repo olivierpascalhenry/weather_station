@@ -13,7 +13,7 @@ import subprocess
 from zipfile import ZipFile
 from distutils.version import LooseVersion
 from PyQt5 import QtCore
-from functions.utils import set_size, mpl_hour_list, db_data_to_mpl_vectors
+from functions.utils import set_size, mpl_hour_list#, db_data_to_mpl_vectors
 
 
 class CleaningThread(QtCore.QThread):
@@ -484,38 +484,29 @@ class RequestPlotDataThread(QtCore.QThread):
             self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
             if temp_in_y is not None:
                 self.plot_in_1.plot(temp_in_x, temp_in_y, color=color_1, linewidth=1.)
-                if min(temp_in_y) < 10:
-                    y_min = min(temp_in_y) - 5
-                else:
-                    y_min = 10
-                if max(temp_in_y) > 30:
-                    y_max = max(temp_in_y) + 5
-                else:
-                    y_max = 30
+                y_min, y_max = 10, 30
+                while min(temp_in_y) < y_min:
+                    y_min -= 5
+                while max(temp_in_y) > y_max:
+                    y_max += 5
                 self.plot_in_1.set_ylim(y_min, y_max)
             if hum_in_y is not None:
                 self.plot_in_2.plot(hum_in_x, hum_in_y, color=color_2, linewidth=1.)
             if temp_out_y is not None:
                 self.plot_out_1.plot(temp_out_x, temp_out_y, color=color_1, linewidth=1.)
-                if min(temp_out_y) < 0:
-                    y_min = min(temp_out_y) - 5
-                else:
-                    y_min = 0
-                if max(temp_out_y) > 30:
-                    y_max = max(temp_out_y) + 5
-                else:
-                    y_max = 30
+                y_min, y_max = 10, 30
+                while min(temp_out_y) < y_min:
+                    y_min -= 5
+                while max(temp_out_y) > y_max:
+                    y_max += 5
                 self.plot_out_1.set_ylim(y_min, y_max)
             if pres_out_y is not None:
                 self.plot_out_2.plot(pres_out_x, pres_out_y, color=color_3, linewidth=1.)
-                if min(pres_out_y) < 990:
-                    y_min = min(pres_out_y) - 10
-                else:
-                    y_min = 990
-                if max(pres_out_y) > 1030:
-                    y_max = max(pres_out_y) + 10
-                else:
-                    y_max = 1030
+                y_min, y_max = 990, 1030
+                while min(pres_out_y) < y_min:
+                    y_min -= 5
+                while max(pres_out_y) > y_max:
+                    y_max += 5
                 self.plot_out_2.set_ylim(y_min, y_max)
             self.plot_in_1.set_xlim(limit, now)
             self.plot_in_1.set_xticks(hours_list)
@@ -527,13 +518,10 @@ class RequestPlotDataThread(QtCore.QThread):
             upper = self.plot_in_2.get_yticks()[-1]
             lower = self.plot_in_2.get_yticks()[0]
             self.plot_in_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
-
             length = len(self.plot_out_1.get_yticks())
             upper = self.plot_out_2.get_yticks()[-1]
             lower = self.plot_out_2.get_yticks()[0]
-
             self.plot_out_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
-
             self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
             self.canvas_in.draw()
@@ -590,7 +578,13 @@ class RequestPlotDataThread(QtCore.QThread):
         if column in column_list:
             self.cursor.execute(f'select date_time, {column} from "{table}"  where '
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
-            data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+            data = self.cursor.fetchall()
+
+            # data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
+
+            data_x = [x[0] for x in data]
+            data_y = [x[1] for x in data]
+
             # data_x, data_y = asarray(data_x), asarray(data_y)
         return data_x, data_y
 
