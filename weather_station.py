@@ -13,7 +13,6 @@ from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
 from psycopg2 import __version__ as pg_version
 from requests import __version__ as rq_version
-from numpy import __version__ as np_version
 from pyowm import __version__ as ow_version
 from ephem import __version__ as ep_version
 if platform.system() == 'Linux':
@@ -53,10 +52,7 @@ def launch_station(gui_path, user_path):
     logging.info(f'gui - markdown version: {mk_version}')
     logging.info(f'gui - psycopg2 version: {pg_version}')
     logging.info(f'gui - requests version: {rq_version}')
-
-    logging.info(f'gui - numpy version: {np_version}')
     logging.info(f'gui - pyephem version: {ep_version}')
-
     logging.info('gui - meteofrance_api version: 1.0.2')
     ow_maj, ow_moy, ow_min = ow_version.constants.PYOWM_VERSION
     logging.info(f'gui - pyowm version: {ow_maj}.{ow_moy}.{ow_min}')
