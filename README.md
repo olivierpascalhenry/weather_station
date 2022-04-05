@@ -10,12 +10,27 @@ Project Overview:
 This project comes from the idea to propose an "out-of-the-box" system, as complete as possible, in both the management of different sensors and the implementation of different weather APIs. In this way, an ensemble of meteorological and local variables are centralised in a Raspberry PI (preferably a 4b with 4GB or more RAM), as well as different forecasts produced by public (ex: Météo-France) or private (ex: OpenWeather) entities.
 
 
+Screenshots:
+------------
+
+![Sensor parameters](screenshots/screenshot_1.png?raw=true "Parameters from different sensors") 
+
+![Sensor time series](screenshots/screenshot_4.png?raw=true "Parameters can be displayed as time series")
+
+![1h forecast](screenshots/screenshot_2.png?raw=true "Forecast every 1h on a 24h period")
+
+![1d forecast](screenshots/screenshot_3.png?raw=true "Forecast every day on a 5d period")
+
+(displayed parameters are randomly generated for development purpose)
+
+
 More Information:
 -----------------
 
 The weather station is coded with Python 3.7 and relies on few technologies such as PostgreSQL, MQTT and Zigbee2MQTT. It has been tested on a Raspberry PI 4b with Buster and Bullseye Raspberry PI OS.
 Few APIs have been included : Météo-France and OpenWeatherMap. More will come in the future.
 Few sensors are handled by the weather station : DS18B20 (one or more) and BME280 (one or more), through 1-wire and I2C buses. More will come in the future, once I can get my hand on them.
+The main language of the software is French. English will be added once the full code is stable.
 
 
 Features:
