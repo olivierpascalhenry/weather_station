@@ -234,7 +234,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-        self.stacked_widget_actions[idx]()
+        if idx > 0:
+            self.stacked_widget_actions[idx]()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
