@@ -365,15 +365,16 @@ class CheckPostgresqlConnexion(QtCore.QThread):
                 database = True
                 connector.close()
             except psycopg2.OperationalError:
-                logging.error('gui - other_threads.py - CheckPostgresqlConnexion - database is not installed')
+                logging.exception('gui - other_threads.py - CheckPostgresqlConnexion - database is not installed')
 
         if installed and database:
             ds18_dict = self.sensor_dict['DS18B20']
             bme280_dict = self.sensor_dict['BME280']
             mqtt_dict = self.sensor_dict['MQTT']['devices']
             table_list = []
-            connector = psycopg2.connect(user='weather_station', password='31weather64', host='127.0.0.1',
-                                         database='weather_station_db', connect_timeout=1)
+            connector = psycopg2.connect(user=self.db_dict['user'], password=self.db_dict['password'],
+                                         host=self.db_dict['host'], database=self.db_dict['database'],
+                                         port=self.db_dict['port'], connect_timeout=1)
             cursor = connector.cursor()
             cursor.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema='public'""")
             db_table_list = [table[0] for table in cursor.fetchall()]

@@ -3,6 +3,7 @@
   * FIXED:
     * the sunlive time was wrongly computed, it has been fixed.
     * the day or night icon wasn't set properly based on sunrise and sunset.
+    * an issue in the thread to check postgresql and database has been fixed.
 
   * MODIFIED:
     * set_size function has been improved.

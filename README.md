@@ -64,11 +64,12 @@ Python modules :
 * pyowm (3.2.0+)
 * meteofrance-api (1.0.2+)
 * smbus2 (0.4.1+)
-* bme280 (0.2.4+)
+* RPi.bme280 (0.2.4+)
 * paho.mqtt (1.6.1+)
 * pigpio (1.78+) -> pigpiod service must me enabled
 * pyephem (4.1.3+)
 * pyqtspinner (0.1.1+)
+* dirsync (2.2.5 +)
 
 Other software :
 
