@@ -14,6 +14,7 @@
     * improved the computation of min and max tick values in time series section.
     * changed the way postgresql, database and tables are checked.
     * few corrections.
+    * the calibration methode and values have been transferred to the sensors' dictionary.
 
   * ADDED
     * a new download thread has been added (part of new update system).

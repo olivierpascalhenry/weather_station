@@ -103,7 +103,7 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
             name = str(keyboard_window.num_line.text())
             if not self.sensor_list.findItems(name, QtCore.Qt.MatchFixedString):
                 self.sensor_list.addItem(name)
-                tmp_dict = {'store': '24', 'active': 'True'}
+                tmp_dict = {'store': '24', 'active': 'True', 'cal_methode': '', 'cal_value': ''}
                 self.mqtt_dict['devices'][name] = tmp_dict
 
     def del_device(self):
@@ -299,7 +299,8 @@ class W1SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
                 self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
-                                                          'id': sensor_window.sensor, 'active': 'True'}
+                                                          'id': sensor_window.sensor, 'active': 'True',
+                                                          'cal_methode': '', 'cal_value': ''}
 
     def delete_sensor(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')
@@ -485,7 +486,8 @@ class BME280SensorManager(QtWidgets.QDialog, Ui_sensormanagerWindow):
                 widget.setText(sensor_window.sensor)
                 self.section_list.addItem(widget)
                 self.sensor_dict[sensor_window.sensor] = {'name': '', 'table': '', 'refresh': '30', 'store': '24',
-                                                          'id': sensor_window.sensor, 'bus': 1, 'active': 'True'}
+                                                          'id': sensor_window.sensor, 'bus': 1, 'active': 'True',
+                                                          'cal_methode': '', 'cal_value': ''}
 
     def delete_sensor(self):
         logging.debug('gui - sensor_window.py - W1SensorManager - delete_sensor')

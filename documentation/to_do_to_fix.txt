@@ -1,6 +1,6 @@
 ### To do list: ###
 
-* ajouter des coefs de calibration pour les capteurs (offset, courbe, etc)
+*
 
 ### To fix list: ###
 
