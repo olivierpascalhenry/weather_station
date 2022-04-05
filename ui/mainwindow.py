@@ -35,7 +35,7 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
                                                         BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
-                                                      RequestPlotDataThread, CheckPostgresqlConnexion)
+                                                      RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
@@ -88,6 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.forecast_data = None
         self.check_internet = None
         self.check_posgresql = None
+        self.table_manager = None
         self.update_url = None
         self.timer = None
         self.in_temperature = None
@@ -159,14 +160,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
-        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
-                   'password': self.config_dict.get('DATABASE', 'password'),
-                   'host': self.config_dict.get('DATABASE', 'host'),
-                   'database': self.config_dict.get('DATABASE', 'database'),
-                   'port': self.config_dict.get('DATABASE', 'port')}
-        self.check_posgresql = CheckPostgresqlConnexion(db_dict, self.sensor_dict)
-        self.check_posgresql.results.connect(self.parse_posgresql_check)
+        self.check_posgresql = CheckPostgresqlConnexion({'user': self.config_dict.get('DATABASE', 'username'),
+                                                         'password': self.config_dict.get('DATABASE', 'password'),
+                                                         'host': self.config_dict.get('DATABASE', 'host'),
+                                                         'database': self.config_dict.get('DATABASE', 'database'),
+                                                         'port': self.config_dict.get('DATABASE', 'port')})
+        self.check_posgresql.postgresql_ok.connect(self.launch_table_manager)
+        self.check_posgresql.postgresql_failed.connect(self.postgresql_failed)
         self.check_posgresql.start()
+
+    def launch_table_manager(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_table_manager')
+        self.table_manager = DBTableManager({'user': self.config_dict.get('DATABASE', 'username'),
+                                             'password': self.config_dict.get('DATABASE', 'password'),
+                                             'host': self.config_dict.get('DATABASE', 'host'),
+                                             'database': self.config_dict.get('DATABASE', 'database'),
+                                             'port': self.config_dict.get('DATABASE', 'port')}, self.sensor_dict)
+        self.table_manager.work_done.connect(self.start_database_services)
+        self.table_manager.work_failed.connect(self.postgresql_failed)
+        self.table_manager.start()
+
+    def postgresql_failed(self, string):
+        logging.debug('gui - mainwindow.py - MainWindow - postgresql_failed')
+        info_window = MyInfo(string, self)
+        info_window.exec_()
+
+    def start_database_services(self):
+        logging.debug('gui - mainwindow.py - MainWindow - start_database_services')
+        self.database_ok = True
+        self.launch_clean_thread()
+        self.collect_sensors_data()
+        self.display_sensors_data()
 
     def check_internet_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
@@ -175,29 +199,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()
 
-    def parse_posgresql_check(self, results):
-        logging.debug(f'gui - mainwindow.py - MainWindow - parse_posgresql_check - results: {results}')
-        if results[0] and results[1]:
-            self.database_ok = True
-            self.launch_clean_thread()
-            self.collect_sensors_data()
-            self.display_sensors_data()
-        else:
-            if not results[0]:
-                text = ('La station météo n\'a pas trouvé PostgreSQL. Veuillez l\'installer ou vérifier son '
-                        'installation. PostgreSQL est obligatoire pour gérer la base de données des capteurs.')
-            else:
-                text = ('La station météo n\'a pas pu se connecter à la base de données ou celle-ci n\'existe pas. '
-                        'Veuillez vérifier la présence de la base de données et d\'un utilisateur pouvant s\'y '
-                        'connecter.')
-            info_window = MyInfo(text, self)
-            info_window.exec_()
-
     def start_internet_services(self):
         logging.debug('gui - mainwindow.py - MainWindow - start_internet_services')
         if getattr(sys, 'frozen', False) and self.config_dict.getboolean('SYSTEM', 'check_update'):
             self.check_update()
         self.launch_weather_request()
+
+    def no_internet_message(self):
+        logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
+                        'outside world !')
+        connexion_window = MyConnexion(self)
+        connexion_window.exec_()
+        if connexion_window.retry:
+            self.check_internet_connection()
 
     def load_place_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - load_place_data')
@@ -210,8 +224,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 logging.exception('gui - mainwindow.py - MainWindow - load_place_data - place_object.dat has not been '
                                   'found')
         else:
-            logging.warning('gui - mainwindow.py - MainWindow - load_place_data - no user_place, self.place_object is '
-                            'None')
+            logging.warning('gui - mainwindow.py - MainWindow - load_place_data - no user_place')
 
     def set_stack_widget_page(self, idx):
         logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
@@ -426,14 +439,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
                          'sig': None}
             self.refresh_out_data(data_dict)
-
-    def no_internet_message(self):
-        logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
-                        'outside world !')
-        connexion_window = MyConnexion(self)
-        connexion_window.exec_()
-        if connexion_window.retry:
-            self.check_internet_connection()
 
     def launch_weather_request(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')

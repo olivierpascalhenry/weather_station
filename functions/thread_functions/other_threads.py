@@ -337,37 +337,66 @@ class CheckInternetConnexion(QtCore.QThread):
 
 
 class CheckPostgresqlConnexion(QtCore.QThread):
-    results = QtCore.pyqtSignal(list)
+    postgresql_ok = QtCore.pyqtSignal()
+    postgresql_failed = QtCore.pyqtSignal(str)
+
+    def __init__(self, db_dict):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - CheckPostgresqlConnexion - __init__')
+        self.db_dict = db_dict
+
+    def run(self):
+        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - run')
+        try:
+            connector = psycopg2.connect(user=self.db_dict['user'], password=self.db_dict['password'],
+                                         host=self.db_dict['host'], database=self.db_dict['database'],
+                                         port=self.db_dict['port'], connect_timeout=1)
+            connector.close()
+            logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - postgresql connexion is ok')
+            self.postgresql_ok.emit()
+        except psycopg2.OperationalError as e:
+            logging.exception('gui - other_threads.py - CheckPostgresqlConnexion - issue with postgresql')
+            if 'Connection refused' in str(e):
+                msg = ('La connection à PostgreSQL a été explicitement refusée. Veuillez vérifier  son installation et '
+                       'son fonctionnement, ainsi que les paramètres de connexion (adresse et port).')
+            elif f'database "{self.db_dict["database"]}"' in str(e):
+                msg = (f'La base de données {self.db_dict["database"]} n\'a pas été trouvée. Veuillez vérifier qu\'elle'
+                       ' existe et les paramètres de connexion (nom de la base de données)')
+            elif f'password authentication failed for user "{self.db_dict["user"]}"' in str(e):
+                msg = (f'La connexion a PostgreSQL a été refusée pour l\'utilisateur {self.db_dict["user"]}. Veuillez '
+                       f'vérifier qu\'il existe et les paramètres de connexion (nom d\'utilisateur et mot de passe)')
+            elif f'could not translate host name "{self.db_dict["host"]}" to address' in str(e):
+                msg = ('La connection à PostgreSQL a été explicitement refusée. Veuillez vérifier les paramètres de '
+                       'connexion (adresse et port).')
+            elif 'timeout expired' in str(e):
+                msg = ('La connexion à PostgreSQL a échoué. Veuillez vérifier les paramètres de connexion '
+                       '(adresse et port).')
+            else:
+                msg = 'La connexion à PostgreSQL a échoué. Veuillez lire le log pour obtenir des détails sur cet échec.'
+            self.postgresql_failed.emit(msg)
+        except:
+            logging.exception('gui - other_threads.py - CheckPostgresqlConnexion - issue with postgresql')
+            msg = 'La connexion à PostgreSQL a échoué. Veuillez lire le log pour obtenir des détails sur cet échec.'
+            self.postgresql_failed.emit(msg)
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
+        self.terminate()
+
+
+class DBTableManager(QtCore.QThread):
+    work_done = QtCore.pyqtSignal()
+    work_failed = QtCore.pyqtSignal(str)
 
     def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - CheckPostgresqlConnexion - __init__')
+        logging.info('gui - other_threads.py - DBTableManager - __init__')
         self.db_dict = db_dict
         self.sensor_dict = sensor_dict
 
     def run(self):
-        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - run')
-        installed, database, tables = False, False, False
-        if platform.system() == 'Linux':
-            res = subprocess.run(['which', 'psql'])
-            if res.returncode == 0:
-                installed = True
-            else:
-                logging.error('gui - other_threads.py - CheckPostgresqlConnexion - which -s psql returned 1, '
-                              'postgresql is not installed')
-        else:
-            installed = True
-        if installed:
-            try:
-                connector = psycopg2.connect(user=self.db_dict['user'], password=self.db_dict['password'],
-                                             host=self.db_dict['host'], database=self.db_dict['database'],
-                                             port=self.db_dict['port'])
-                database = True
-                connector.close()
-            except psycopg2.OperationalError:
-                logging.exception('gui - other_threads.py - CheckPostgresqlConnexion - database is not installed')
-
-        if installed and database:
+        logging.debug('gui - other_threads.py - DBTableManager - run')
+        try:
             ds18_dict = self.sensor_dict['DS18B20']
             bme280_dict = self.sensor_dict['BME280']
             mqtt_dict = self.sensor_dict['MQTT']['devices']
@@ -418,11 +447,12 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
             cursor.close()
             connector.close()
-        self.results.emit([installed, database])
-
-    def stop(self):
-        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
-        self.terminate()
+            self.work_done.emit()
+        except:
+            logging.exception('gui - other_threads.py - CheckPostgresqlConnexion - issue with postgresql')
+            msg = ('La gestion des tables des différents capteurs a échoué. Veuillez lire le log pour obtenir des '
+                   'détails sur cet échec.')
+            self.work_failed.emit(msg)
 
 
 class RequestPlotDataThread(QtCore.QThread):
