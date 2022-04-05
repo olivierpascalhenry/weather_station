@@ -13,7 +13,6 @@ from PyQt5 import QtCore
 
 class MFForecastRequest(QtCore.QThread):
     fc_data = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
@@ -98,8 +97,9 @@ class MFForecastRequest(QtCore.QThread):
                     self.forecast['warning'] = ''
 
                 self.fc_data.emit(self.forecast)
-            except Exception as e:
-                self.error.emit(['forecast request', e])
+            except Exception:
+                logging.exception('gui - forecast_resquest.py - MFForecastRequest - run - an issue occured during'
+                                  'the request of MF forecasts')
             time.sleep(self.request_rate)
 
     def stop(self):
@@ -109,7 +109,6 @@ class MFForecastRequest(QtCore.QThread):
 
 class OWForecastRequest(QtCore.QThread):
     fc_data = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
@@ -183,8 +182,9 @@ class OWForecastRequest(QtCore.QThread):
 
                 self.forecast['quaterly'] = fc_6h
                 self.fc_data.emit(self.forecast)
-            except Exception as e:
-                self.error.emit(['forecast request', e])
+            except Exception:
+                logging.exception('gui - forecast_resquest.py - OWForecastRequest - run - an issue occured during'
+                                  'the request of OWM forecasts')
             time.sleep(self.request_rate)
 
     def stop(self):

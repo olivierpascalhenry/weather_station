@@ -13,11 +13,10 @@ import subprocess
 from zipfile import ZipFile
 from distutils.version import LooseVersion
 from PyQt5 import QtCore
-from functions.utils import set_size, mpl_hour_list#, db_data_to_mpl_vectors
+from functions.utils import set_size, mpl_hour_list
 
 
 class CleaningThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
@@ -68,7 +67,6 @@ class CleaningThread(QtCore.QThread):
 
 class CheckUpdate(QtCore.QThread):
     finished = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, gui_version):
         QtCore.QThread.__init__(self)
@@ -91,7 +89,7 @@ class CheckUpdate(QtCore.QThread):
             self.finished.emit(self.url_dict)
         except Exception:
             logging.exception('gui - other_threads.py - CheckUpdate - update_request - an exception occurred when '
-                              'requesting update')
+                              'checking update')
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckUpdate - stop')
@@ -610,13 +608,8 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, {column} from "{table}"  where '
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             data = self.cursor.fetchall()
-
-            # data_x, data_y = db_data_to_mpl_vectors(self.cursor.fetchall())
-
             data_x = [x[0] for x in data]
             data_y = [x[1] for x in data]
-
-            # data_x, data_y = asarray(data_x), asarray(data_y)
         return data_x, data_y
 
     def stop(self):

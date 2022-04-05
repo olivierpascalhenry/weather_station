@@ -105,6 +105,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
+        self.stacked_widget_actions = {1: self.compute_ephemerides, 2: self.plot_time_series_start,
+                                       3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
         self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
@@ -232,14 +234,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-        if idx == 1:
-            self.compute_ephemerides()
-        elif idx == 2:
-            self.plot_time_series_start()
-        elif idx == 3:
-            self.display_fc_1h()
-        elif idx == 4:
-            self.display_fc_6h()
+        self.stacked_widget_actions[idx]()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
@@ -381,7 +376,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                    'database': self.config_dict.get('DATABASE', 'database'),
                    'port': self.config_dict.get('DATABASE', 'port')}
         self.db_cleaning_thread = CleaningThread(db_dict, self.sensor_dict)
-        self.db_cleaning_thread.error.connect(self.log_thread_error)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
@@ -405,18 +399,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
-                self.collect_mqtt_data_thread = MqttToDbThread(db_dict, self.sensor_dict['MQTT'], alt)
-                self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
-                self.collect_mqtt_data_thread.start()
+                self.collect_mqtt_data_thread = [MqttToDbThread(db_dict, self.sensor_dict['MQTT'], alt)]
         else:
             self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(db_dict))
             self.bme280_data_threads.append(BME280DataCollectingTestThread(db_dict))
-            self.collect_mqtt_data_thread = MqttToDbTestThread(db_dict)
-            self.collect_mqtt_data_thread.error.connect(self.log_thread_error)
-            self.collect_mqtt_data_thread.start()
-
-        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
-            thread.error.connect(self.log_thread_error)
+            self.collect_mqtt_data_thread = [MqttToDbTestThread(db_dict)]
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads + self.collect_mqtt_data_thread:
             thread.start()
 
     def display_sensors_data(self):
@@ -424,7 +412,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.config_dict.get('DISPLAY', 'in_sensor'):
             self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
             self.display_in_data_thread.db_data.connect(self.refresh_in_data)
-            self.display_in_data_thread.error.connect(self.log_thread_error)
             self.display_in_data_thread.start()
         else:
             data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
@@ -433,7 +420,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.config_dict.get('DISPLAY', 'out_sensor'):
             self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
             self.display_out_data_thread.db_data.connect(self.refresh_out_data)
-            self.display_out_data_thread.error.connect(self.log_thread_error)
             self.display_out_data_thread.start()
         else:
             data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
@@ -455,21 +441,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
         self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
         self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
-        self.query_mf_forecast_thread.error.connect(self.log_thread_error)
         self.query_mf_forecast_thread.start()
 
     def launch_ow_request_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_ow_request_thread')
         self.query_ow_forecast_thread = OWForecastRequest(self.place_object, self.config_dict)
         self.query_ow_forecast_thread.fc_data.connect(self.parse_forecast_data)
-        self.query_ow_forecast_thread.error.connect(self.log_thread_error)
         self.query_ow_forecast_thread.start()
 
     def check_update(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_update')
         self.check_update_thread = CheckUpdate(gui_version)
         self.check_update_thread.finished.connect(self.display_gui_update_button)
-        self.check_update_thread.error.connect(self.log_thread_error)
         self.check_update_thread.start()
 
     def refresh_in_data(self, data_dict):
@@ -863,11 +846,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.warning_button.objectName() == 'no_function':
                 self.warning_button.setObjectName('update_function')
                 self.warning_button.setIcon(icon_creation_function('weather_station_update.svg'))
-
-    @staticmethod
-    def log_thread_error(e_list):
-        logging.exception(f'gui - mainwindow.py - MainWindow - log_thread_error - '
-                          f'ERROR: {e_list[0]} | {str(e_list[1])}')
 
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')

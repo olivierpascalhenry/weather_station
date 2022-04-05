@@ -15,8 +15,6 @@ if platform.system() == 'Linux':
 
 
 class DS18B20DataCollectingThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
-
     def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info(f'gui - sensors_reading.py - DS18B20DataCollectingThread - __init__ - sensor_dict: {sensor_dict}')
@@ -87,7 +85,6 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
 
 class DS18B20DataCollectingTestThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
@@ -99,10 +96,9 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - run')
+        random.seed()
         while True:
-            dtime = datetime.datetime.now().replace(microsecond=0)
-            temp = self.collect_data_test()
-            self.add_data_to_db(dtime, temp)
+            self.add_data_to_db(datetime.datetime.now().replace(microsecond=0), round(25. + random.uniform(0, 5), 1))
             time.sleep(self.sensors_rate)
 
     def add_data_to_db(self, dt, tp):
@@ -115,12 +111,6 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
             logging.exception('gui - sensors_reading.py - DS18B20DataCollectingThread - collect_data - an issue '
                               'occurred when adding data to db')
 
-    @staticmethod
-    def collect_data_test():
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - collect_data_test')
-        random.seed()
-        return round(25. + random.uniform(0, 5), 1)
-
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop')
         self.connector.close()
@@ -128,8 +118,6 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
 
 
 class BME280DataCollectingThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
-
     def __init__(self, db_dict, sensor_dict, altitude):
         QtCore.QThread.__init__(self)
         logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread - __init__ - sensor_dict: {sensor_dict} '
@@ -212,8 +200,6 @@ class BME280DataCollectingThread(QtCore.QThread):
 
 
 class BME280DataCollectingTestThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
-
     def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - BME280DataCollectingTestThread - __init__')
@@ -224,19 +210,14 @@ class BME280DataCollectingTestThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - run')
+        random.seed()
         while True:
-            date_time = datetime.datetime.now().replace(microsecond=0)
-            temp, hum, pres, pres_msl = self.collect_data_test()
-            self.add_data_to_db(date_time, temp, hum, pres, pres_msl)
+            self.add_data_to_db(datetime.datetime.now().replace(microsecond=0),
+                                round(20 + random.uniform(0, 5), 1),
+                                round(65 + random.uniform(0, 20), 1),
+                                round(1013 + random.uniform(0, 15), 1),
+                                round(1013 + random.uniform(0, 15), 1))
             time.sleep(self.sensors_rate)
-
-    def collect_data_test(self):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - collect_data_test')
-        temp = self.collect_test_data(20., 5)
-        hum = self.collect_test_data(65., 20)
-        pres = self.collect_test_data(1013., 15)
-        pres_msl = self.collect_test_data(1013., 15)
-        return temp, hum, pres, pres_msl
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingTestThread - add_data_to_db - dt: {dt} ; tp:'
@@ -249,12 +230,6 @@ class BME280DataCollectingTestThread(QtCore.QThread):
             logging.exception('gui - sensors_reading.py - BME280DataCollectingTestThread - set_bme280_parameters - an '
                               'exception occurred when adding data to db')
 
-    @staticmethod
-    def collect_test_data(num, limit):
-        logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - collect_test_data')
-        random.seed()
-        return round(num + random.uniform(0, limit), 1)
-
     def stop(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - stop')
         self.connector.close()
@@ -262,8 +237,6 @@ class BME280DataCollectingTestThread(QtCore.QThread):
 
 
 class MqttToDbThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
-
     def __init__(self, db_dict, mqtt_dict, altitude):
         QtCore.QThread.__init__(self)
         logging.info(f'gui - sensors_reading.py - MqttToDbThread - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
@@ -285,7 +258,6 @@ class MqttToDbThread(QtCore.QThread):
         self.mqtt_client.connect(self.mqtt_dict['address'])
         topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
         self.mqtt_client.subscribe(topics_list)
-        # self.mqtt_client.loop_forever()
         self.mqtt_client.loop_start()
 
     @staticmethod
@@ -355,8 +327,6 @@ class MqttToDbThread(QtCore.QThread):
 
 
 class MqttToDbTestThread(QtCore.QThread):
-    error = QtCore.pyqtSignal(list)
-
     def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - MqttToDbTestThread - __init__')
@@ -366,16 +336,12 @@ class MqttToDbTestThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - sensors_reading.py - MqttToDbTestThread - run')
+        random.seed()
         while True:
-            database = 'AQARA_THP_TEST'
-            date_time = datetime.datetime.now().replace(microsecond=0)
-            temperature = self.collect_test_data(20., 5)
-            humidity = self.collect_test_data(65., 20)
-            pressure = self.collect_test_data(1013., 15)
-            pressure_msl = self.collect_test_data(1013., 15)
-            battery = 75.
-            signal = 97.
-            self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
+            self.add_data_to_db(datetime.datetime.now().replace(microsecond=0),
+                                round(20 + random.uniform(0, 5), 1), round(65 + random.uniform(0, 15), 1),
+                                round(1013 + random.uniform(0, 10), 1), round(1013 + random.uniform(0, 20), 1),
+                                75, 97, 'AQARA_THP_TEST')
             time.sleep(60)
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
@@ -390,12 +356,6 @@ class MqttToDbTestThread(QtCore.QThread):
             logging.exception('gui - sensors_reading.py - MqttToDbTestThread - set_mqtt_client - an exception occurred '
                               'when adding data to db')
 
-    @staticmethod
-    def collect_test_data(num, limit):
-        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - collect_test_data')
-        random.seed()
-        return round(num + random.uniform(0, limit), 1)
-
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop')
         if platform.system() == 'Linux':
@@ -406,7 +366,6 @@ class MqttToDbTestThread(QtCore.QThread):
 
 class DBInDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
@@ -495,7 +454,6 @@ class DBInDataThread(QtCore.QThread):
 
 class DBOutDataThread(QtCore.QThread):
     db_data = QtCore.pyqtSignal(dict)
-    error = QtCore.pyqtSignal(list)
 
     def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
