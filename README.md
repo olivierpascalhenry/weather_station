@@ -10,20 +10,6 @@ Project Overview:
 This project comes from the idea to propose an "out-of-the-box" system, as complete as possible, in both the management of different sensors and the implementation of different weather APIs. In this way, an ensemble of meteorological and local variables are centralised in a Raspberry PI (preferably a 4b with 4GB or more RAM), as well as different forecasts produced by public (ex: Météo-France) or private (ex: OpenWeather) entities.
 
 
-Screenshots:
-------------
-
-![Sensor parameters](screenshots/screenshot_1.png?raw=true "Parameters from different sensors") 
-
-![Sensor time series](screenshots/screenshot_4.png?raw=true "Parameters can be displayed as time series")
-
-![1h forecast](screenshots/screenshot_2.png?raw=true "Forecast every 1h on a 24h period")
-
-![1d forecast](screenshots/screenshot_3.png?raw=true "Forecast every day on a 5d period")
-
-(displayed parameters are randomly generated for development purpose)
-
-
 More Information:
 -----------------
 
@@ -142,3 +128,16 @@ Documentation:
 
 At this time, there is no documentation yet.
 
+
+Screenshots:
+------------
+
+![Sensor parameters](screenshots/screenshot_1.png?raw=true "Parameters from different sensors") 
+
+![Sensor time series](screenshots/screenshot_4.png?raw=true "Parameters can be displayed as time series")
+
+![1h forecast](screenshots/screenshot_2.png?raw=true "Forecast every 1h on a 24h period")
+
+![1d forecast](screenshots/screenshot_3.png?raw=true "Forecast every day on a 5d period")
+
+(displayed parameters are randomly generated for development purpose)
