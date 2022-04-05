@@ -864,10 +864,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
-        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
+        for thread in self.ds18b20_data_threads + self.bme280_data_threads + self.collect_mqtt_data_thread:
             thread.stop()
-        if self.collect_mqtt_data_thread is not None:
-            self.collect_mqtt_data_thread.stop()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
         if self.display_in_data_thread is not None:
