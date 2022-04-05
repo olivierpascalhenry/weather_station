@@ -58,6 +58,7 @@ Python modules :
 
 * Python (3.7+)
 * PyQt5 (5.15.0+)
+* numpy (1.19.5+)
 * matplotlib (3.3.0+)
 * markdown (3.3.0+)
 * requests (2.25.0+)

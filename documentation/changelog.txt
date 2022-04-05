@@ -9,7 +9,6 @@
   * MODIFIED:
     * set_size function has been improved.
     * improved few imports.
-    * numpy is not used anymore in the weather station.
     * improved use of comprehension list where it is possible.
     * improved the computation of min and max tick values in time series section.
     * changed the way postgresql, database and tables are checked.

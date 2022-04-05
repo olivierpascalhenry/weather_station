@@ -10,6 +10,7 @@ import psycopg2
 import requests
 import platform
 import subprocess
+import numpy as np
 from zipfile import ZipFile
 from distutils.version import LooseVersion
 from PyQt5 import QtCore
@@ -608,8 +609,8 @@ class RequestPlotDataThread(QtCore.QThread):
             self.cursor.execute(f'select date_time, {column} from "{table}"  where '
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             data = self.cursor.fetchall()
-            data_x = [x[0] for x in data]
-            data_y = [x[1] for x in data]
+            data_x = np.asarray([x[0] for x in data])
+            data_y = np.asarray([x[1] for x in data], dtype=np.float)
         return data_x, data_y
 
     def stop(self):
