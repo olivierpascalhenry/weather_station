@@ -78,8 +78,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_bme180_data_thread = None
         self.collect_mqtt_data_thread = None
         self.display_sensors_data_thread = None
-        self.query_mf_forecast_thread = None
-        self.query_ow_forecast_thread = None
+        # self.query_mf_forecast_thread = None
+        # self.query_ow_forecast_thread = None
+        self.query_forecast_thread = None
         self.display_in_data_thread = None
         self.display_out_data_thread = None
         self.db_cleaning_thread = None
@@ -105,6 +106,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
+
+        self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
+
         self.stacked_widget_actions = {1: self.compute_ephemerides, 2: self.plot_time_series_start,
                                        3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
@@ -430,25 +434,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def launch_weather_request(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')
         if self.config_dict.get('API', 'api_used') and self.place_object is not None:
-            if self.config_dict.get('API', 'api_used') == 'meteofrance':
-                self.launch_mf_request_thread()
-            elif self.config_dict.get('API', 'api_used') == 'openweather':
-                self.launch_ow_request_thread()
+            self.query_forecast_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]\
+                (self.place_object, self.config_dict)
+            self.query_forecast_thread.fc_data.connect(self.parse_forecast_data)
+            self.query_forecast_thread.start()
         else:
             logging.warning('gui - mainwindow.py - MainWindow - launch_weather_request : no API registered in options'
                             ' and/or self.place_object is None')
-
-    def launch_mf_request_thread(self):
-        logging.debug('gui - mainwindow.py - MainWindow - launch_fc_request_thread')
-        self.query_mf_forecast_thread = MFForecastRequest(self.place_object, self.config_dict)
-        self.query_mf_forecast_thread.fc_data.connect(self.parse_forecast_data)
-        self.query_mf_forecast_thread.start()
-
-    def launch_ow_request_thread(self):
-        logging.debug('gui - mainwindow.py - MainWindow - launch_ow_request_thread')
-        self.query_ow_forecast_thread = OWForecastRequest(self.place_object, self.config_dict)
-        self.query_ow_forecast_thread.fc_data.connect(self.parse_forecast_data)
-        self.query_ow_forecast_thread.start()
 
     def check_update(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_update')

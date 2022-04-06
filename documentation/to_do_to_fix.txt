@@ -1,6 +1,6 @@
 ### To do list: ###
 
-*
+* ajouter une section pour proposer d'exporter les données de la base.
 
 ### To fix list: ###
 
