@@ -171,7 +171,6 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def read_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - read_config_dict')
-        api = None
         self.db_gb_ln_1.setText(self.config_dict.get('DATABASE', 'username'))
         self.db_gb_ln_2.setText(self.config_dict.get('DATABASE', 'password'))
         self.db_gb_ln_3.setText(self.config_dict.get('DATABASE', 'database'))
@@ -208,34 +207,19 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.ts_gb_ext_cb_2.setCurrentIndex(self.ts_gb_ext_cb_2.findText(self.config_dict.get('TIMESERIES',
                                                                                                   'out_pressure')))
         if self.config_dict.get('API', 'api_used') == 'meteofrance':
-            api = 'meteofrance'
             self.ap_gb_rb_1.click()
         elif self.config_dict.get('API', 'api_used') == 'openweather':
-            api = 'openweather'
             self.ap_gb_rb_2.click()
             self.api_key = self.config_dict.get('API', 'api_key')
             self.ap_gb_lb_1.setText(self.config_dict.get('API', 'api_key'))
-        if self.config_dict.getboolean('API', 'user_place'):
-            f = open(self.user_path + '/place_object.dat', 'rb')
+        place_file = pathlib.Path(self.user_path).joinpath('place_object.dat')
+        if self.config_dict.getboolean('API', 'user_place') and place_file.exists():
+            f = open(place_file, 'rb')
             self.place_object = pickle.load(f)
             f.close()
-            self.ap_gb_2_ln_1.setText(self.place_object.name)
-            if api == 'meteofrance':
-                self.ap_gb_2_lb_4.setText(str(self.place_object.postal_code))
-                self.ap_gb_2_lb_5.setText(code_to_departement()[self.place_object.admin2])
-            elif api == 'openweather':
-                self.ap_gb_2_lb_4.setText(str(self.place_object.id))
-                lon = str(self.place_object.lon)
-                lat = str(self.place_object.lat)
-                if lon == '-':
-                    lon = lon + '°W'
-                else:
-                    lon += '°E'
-                if lat == '-':
-                    lat = lat + '°S'
-                else:
-                    lat += '°N'
-                self.ap_gb_2_lb_5.setText(f'Lon : {lon} ; Lat : {lat}')
+            self.ap_gb_2_ln_1.setText(self.place_object['ville'])
+            self.ap_gb_2_lb_4.setText(self.place_object['cp_id'])
+            self.ap_gb_2_lb_5.setText(self.place_object['dp_gps'])
 
     def save_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - save_config_dict')
@@ -353,36 +337,23 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def change_place_info(self):
         logging.debug('gui - option_window.py - MyOptions - change_place_info')
+        self.ap_gb_2_ln_1.setText('')
+        self.ap_gb_2_lb_4.setText('')
+        self.ap_gb_2_lb_5.setText('')
         if self.ap_gb_rb_2.isChecked():
             self.ap_gb_2_lb_2.setText('ID :')
             self.ap_gb_2_lb_3.setText('Coordonnées :')
-            self.ap_gb_2_ln_1.setText('')
-            self.ap_gb_2_lb_4.setText('')
-            self.ap_gb_2_lb_5.setText('')
-            if self.place_object is not None and self.place_object.api == 'openweather':
-                self.ap_gb_2_ln_1.setText(self.place_object.name)
-                self.ap_gb_2_lb_4.setText(str(self.place_object.id))
-                lon = str(self.place_object.lon)
-                lat = str(self.place_object.lat)
-                if lon == '-':
-                    lon = lon + '°W'
-                else:
-                    lon += '°E'
-                if lat == '-':
-                    lat = lat + '°S'
-                else:
-                    lat += '°N'
-                self.ap_gb_2_lb_5.setText(f'Lon : {lon} ; Lat : {lat}')
+            if self.place_object is not None and self.place_object['api'] == 'openweather':
+                self.ap_gb_2_ln_1.setText(self.place_object['ville'])
+                self.ap_gb_2_lb_4.setText(self.place_object['cp_id'])
+                self.ap_gb_2_lb_4.setText(self.place_object['dp_gps'])
         elif self.ap_gb_rb_1.isChecked():
             self.ap_gb_2_lb_2.setText('Code postal :')
             self.ap_gb_2_lb_3.setText('Département :')
-            self.ap_gb_2_ln_1.setText('')
-            self.ap_gb_2_lb_4.setText('')
-            self.ap_gb_2_lb_5.setText('')
-            if self.place_object is not None and self.place_object.api == 'meteofrance':
-                self.ap_gb_2_ln_1.setText(self.place_object.name)
-                self.ap_gb_2_lb_4.setText(str(self.place_object.postal_code))
-                self.ap_gb_2_lb_5.setText(code_to_departement()[self.place_object.admin2])
+            if self.place_object is not None and self.place_object['api'] == 'meteofrance':
+                self.ap_gb_2_ln_1.setText(self.place_object['ville'])
+                self.ap_gb_2_lb_4.setText(self.place_object['cp_id'])
+                self.ap_gb_2_lb_5.setText(self.place_object['dp_gps'])
 
     def activate_search_button(self):
         logging.debug('gui - option_window.py - MyOptions - activate_search_button')
@@ -393,59 +364,60 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def search_place(self):
         logging.debug('gui - option_window.py - MyOptions - search_place')
-        place, ville, cp_id, dp_gps = None, None, None, None
+        place_dict = {'object': None, 'ville': None, 'cp_id': None, 'altitude': None, 'longitude': None,
+                      'latitude': None, 'api': None, 'dp_gps': None}
         list_places = None
-        api = None
         if self.ap_gb_rb_1.isChecked():
             list_places = MeteoFranceClient().search_places(self.ap_gb_2_ln_1.text())
-            api = 'meteofrance'
+            place_dict['api'] = 'meteofrance'
         elif self.ap_gb_rb_2.isChecked():
-            api = 'openweather'
+            place_dict['api'] = 'openweather'
             config_dict = get_default_config()
             config_dict['language'] = 'fr'
             owm = OWM(self.api_key, config_dict)
             reg = owm.city_id_registry()
             list_places = reg.locations_for(self.ap_gb_2_ln_1.text())
         if len(list_places) > 1:
-            place_search = MyTown(list_places, api, self)
+            place_search = MyTown(list_places, place_dict['api'], self)
             place_search.exec_()
             if not place_search.cancel:
-                place = place_search.place
-                ville = place_search.ville
-                cp_id = place_search.cp_id
-                dp_gps = place_search.dp_gps
+                place_dict['object'] = place_search.place
+                place_dict['ville'] = place_search.ville
+                place_dict['cp_id'] = place_search.cp_id
+                place_dict['dp_gps'] = place_search.dp_gps
+                place_dict['longitude'] = place_search.lon
+                place_dict['latitude'] = place_search.lat
         else:
-            if api == 'meteofrance':
-                list_places[0].api = 'meteofrance'
-                place = list_places[0]
-                ville = list_places[0].name
-                cp_id = list_places[0].postal_code
-                dp_gps = code_to_departement()[list_places[0].admin2]
-            elif api == 'openweather':
-                list_places[0].api = 'openweather'
-                ville = list_places[0].name
-                cp_id = list_places[0].id
-                dp_gps = {'lon': list_places[0].lon, 'lat': list_places[0].lat}
-                place = list_places[0]
-
-        if place is not None:
-            self.place_object = place
-            self.ap_gb_2_ln_1.setText(ville)
-            self.ap_gb_2_lb_4.setText(str(cp_id))
-            if api == 'meteofrance':
-                self.ap_gb_2_lb_5.setText(dp_gps)
-            elif api == 'openweather':
-                lon = str(dp_gps['lon'])
-                lat = str(dp_gps['lat'])
-                if lon == '-':
-                    lon = lon + '°W'
+            if place_dict['api'] == 'meteofrance':
+                place_dict['object'] = list_places[0]
+                place_dict['ville'] = list_places[0].name
+                place_dict['cp_id'] = list_places[0].postal_code
+                place_dict['dp_gps'] = code_to_departement()[list_places[0].admin2]
+                place_dict['longitude'] = list_places[0].longitude
+                place_dict['latitude'] = list_places[0].latitude
+            elif place_dict['api'] == 'openweather':
+                lon = str(list_places[0].lon)
+                lat = str(list_places[0].lat)
+                if '-' in lon:
+                    lon = lon[1:] + '°W'
                 else:
                     lon += '°E'
-                if lat == '-':
-                    lat = lat + '°S'
+                if '-' in lat:
+                    lat = lat[1:] + '°S'
                 else:
                     lat += '°N'
-                self.ap_gb_2_lb_5.setText(f'Lon : {lon} ; Lat : {lat}')
+                place_dict['dp_gps'] = f'Lon : {lon} ; Lat : {lat}'
+                place_dict['object'] = list_places[0]
+                place_dict['ville'] = list_places[0].name
+                place_dict['cp_id'] = list_places[0].id
+                place_dict['longitude'] = list_places[0].lon
+                place_dict['latitude'] = list_places[0].lat
+
+        if place_dict['object'] is not None:
+            self.place_object = place_dict
+            self.ap_gb_2_ln_1.setText(place_dict['ville'])
+            self.ap_gb_2_lb_4.setText(place_dict['cp_id'])
+            self.ap_gb_2_lb_5.setText(place_dict['dp_gps'])
 
     def set_openweather_key(self):
         logging.debug('gui - option_window.py - MyOptions - set_openweather_key')

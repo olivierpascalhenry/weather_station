@@ -56,6 +56,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.showFullScreen()
             QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BlankCursor)
         self.menu_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.db_dict = {'user': config_dict.get('DATABASE', 'username'),
+                        'password': config_dict.get('DATABASE', 'password'),
+                        'host': config_dict.get('DATABASE', 'host'),
+                        'database': config_dict.get('DATABASE', 'database'),
+                        'port': config_dict.get('DATABASE', 'port')}
         self.place_object = None
         self.database_ok = False
         self.connector = None
@@ -78,8 +83,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.collect_bme180_data_thread = None
         self.collect_mqtt_data_thread = None
         self.display_sensors_data_thread = None
-        # self.query_mf_forecast_thread = None
-        # self.query_ow_forecast_thread = None
         self.query_forecast_thread = None
         self.display_in_data_thread = None
         self.display_out_data_thread = None
@@ -106,11 +109,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
-
         self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
-
-        self.stacked_widget_actions = {1: self.compute_ephemerides, 2: self.plot_time_series_start,
-                                       3: self.display_fc_1h, 4: self.display_fc_6h}
+        self.stacked_widget_dispatcher = {1: self.compute_ephemerides, 2: self.plot_time_series_start,
+                                          3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
         self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
@@ -166,22 +167,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
-        self.check_posgresql = CheckPostgresqlConnexion({'user': self.config_dict.get('DATABASE', 'username'),
-                                                         'password': self.config_dict.get('DATABASE', 'password'),
-                                                         'host': self.config_dict.get('DATABASE', 'host'),
-                                                         'database': self.config_dict.get('DATABASE', 'database'),
-                                                         'port': self.config_dict.get('DATABASE', 'port')})
+        self.check_posgresql = CheckPostgresqlConnexion(self.db_dict)
         self.check_posgresql.postgresql_ok.connect(self.launch_table_manager)
         self.check_posgresql.postgresql_failed.connect(self.postgresql_failed)
         self.check_posgresql.start()
 
     def launch_table_manager(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_table_manager')
-        self.table_manager = DBTableManager({'user': self.config_dict.get('DATABASE', 'username'),
-                                             'password': self.config_dict.get('DATABASE', 'password'),
-                                             'host': self.config_dict.get('DATABASE', 'host'),
-                                             'database': self.config_dict.get('DATABASE', 'database'),
-                                             'port': self.config_dict.get('DATABASE', 'port')}, self.sensor_dict)
+        self.table_manager = DBTableManager(self.db_dict, self.sensor_dict)
         self.table_manager.work_done.connect(self.start_database_services)
         self.table_manager.work_failed.connect(self.postgresql_failed)
         self.table_manager.start()
@@ -221,16 +214,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def load_place_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - load_place_data')
-        if self.config_dict.getboolean('API', 'user_place'):
-            try:
-                f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
-                self.place_object = pickle.load(f)
-                f.close()
-            except FileNotFoundError:
-                logging.exception('gui - mainwindow.py - MainWindow - load_place_data - place_object.dat has not been '
-                                  'found')
+        place_file = pathlib.Path(self.user_path).joinpath('place_object.dat')
+        if self.config_dict.getboolean('API', 'user_place') and place_file.exists():
+            f = open(pathlib.Path(self.user_path).joinpath('place_object.dat'), 'rb')
+            self.place_object = pickle.load(f)
+            f.close()
         else:
-            logging.warning('gui - mainwindow.py - MainWindow - load_place_data - no user_place')
+            logging.warning('gui - mainwindow.py - MainWindow - load_place_data - user_place is False or '
+                            'place_object.dat doesn\'t exist')
 
     def set_stack_widget_page(self, idx):
         logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
@@ -239,7 +230,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
         if idx > 0:
-            self.stacked_widget_actions[idx]()
+            self.stacked_widget_dispatcher[idx]()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
@@ -309,12 +300,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def compute_ephemerides(self):
         logging.debug('gui - mainwindow.py - MainWindow - compute_ephemerides')
         if self.place_object and self.place_object is not None:
-            if self.config_dict.get('API', 'api_used') == 'meteofrance':
-                lon = str(self.place_object.longitude)
-                lat = str(self.place_object.latitude)
-            else:
-                lon = str(self.place_object.lon)
-                lat = str(self.place_object.lat)
+            lon = str(self.place_object['longitude'])
+            lat = str(self.place_object['latitude'])
             date = self.current_date.toPyDate()
             observer = ephem.Observer()
             observer.lat, observer.lon, observer.date = lat, lon, date
@@ -375,40 +362,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
-        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
-                   'password': self.config_dict.get('DATABASE', 'password'),
-                   'host': self.config_dict.get('DATABASE', 'host'),
-                   'database': self.config_dict.get('DATABASE', 'database'),
-                   'port': self.config_dict.get('DATABASE', 'port')}
-        self.db_cleaning_thread = CleaningThread(db_dict, self.sensor_dict)
+        self.db_cleaning_thread = CleaningThread(self.db_dict, self.sensor_dict)
         self.db_cleaning_thread.start()
 
     def collect_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - collect_sensors_data')
-        db_dict = {'user': self.config_dict.get('DATABASE', 'username'),
-                   'password': self.config_dict.get('DATABASE', 'password'),
-                   'host': self.config_dict.get('DATABASE', 'host'),
-                   'database': self.config_dict.get('DATABASE', 'database'),
-                   'port': self.config_dict.get('DATABASE', 'port')}
+        alt = None
         if self.config_dict.get('SYSTEM', 'place_altitude'):
             alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-        else:
-            alt = None
         if platform.system() == 'Linux':
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 if ddict['table']:
-                    self.ds18b20_data_threads.append(DS18B20DataCollectingThread(db_dict, ddict))
+                    self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
             for _, ddict in self.sensor_dict['BME280'].items():
                 if ddict['table']:
-                    self.bme280_data_threads.append(BME280DataCollectingThread(db_dict, ddict, alt))
+                    self.bme280_data_threads.append(BME280DataCollectingThread(self.db_dict, ddict, alt))
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
-                self.collect_mqtt_data_thread = [MqttToDbThread(db_dict, self.sensor_dict['MQTT'], alt)]
+                self.collect_mqtt_data_thread = [MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'], alt)]
         else:
-            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(db_dict))
-            self.bme280_data_threads.append(BME280DataCollectingTestThread(db_dict))
-            self.collect_mqtt_data_thread = [MqttToDbTestThread(db_dict)]
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
+            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
         for thread in self.ds18b20_data_threads + self.bme280_data_threads + self.collect_mqtt_data_thread:
             thread.start()
 
@@ -416,26 +392,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
         if self.config_dict.get('DISPLAY', 'in_sensor'):
             self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
-            self.display_in_data_thread.db_data.connect(self.refresh_in_data)
+            self.display_in_data_thread.db_data.connect(self.refresh_in_display)
             self.display_in_data_thread.start()
-        else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
-                         'sig': None}
-            self.refresh_in_data(data_dict)
         if self.config_dict.get('DISPLAY', 'out_sensor'):
             self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
-            self.display_out_data_thread.db_data.connect(self.refresh_out_data)
+            self.display_out_data_thread.db_data.connect(self.refresh_out_display)
             self.display_out_data_thread.start()
-        else:
-            data_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None, 'bat': None,
-                         'sig': None}
-            self.refresh_out_data(data_dict)
 
     def launch_weather_request(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')
         if self.config_dict.get('API', 'api_used') and self.place_object is not None:
             self.query_forecast_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]\
-                (self.place_object, self.config_dict)
+            (self.place_object, self.config_dict)
             self.query_forecast_thread.fc_data.connect(self.parse_forecast_data)
             self.query_forecast_thread.start()
         else:
@@ -448,8 +416,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_update_thread.finished.connect(self.display_gui_update_button)
         self.check_update_thread.start()
 
-    def refresh_in_data(self, data_dict):
-        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_in_data - data_dict: {data_dict}')
+    def refresh_in_display(self, data_dict):
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_in_display - data_dict: {data_dict}')
         self.in_temperature = data_dict['temp']
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
@@ -457,21 +425,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_pressure_msl = data_dict['pres_msl']
         self.in_battery = data_dict['bat']
         self.in_signal = data_dict['sig']
-        self.refresh_in_display()
-
-    def refresh_out_data(self, data_dict):
-        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_out_data- data_dict: {data_dict}')
-        self.out_temperature = data_dict['temp']
-        self.out_temperature_min_max = data_dict['temp_minmax']
-        self.out_humidity = data_dict['hum']
-        self.out_pressure = data_dict['pres']
-        self.out_pressure_msl = data_dict['pres_msl']
-        self.out_battery = data_dict['bat']
-        self.out_signal = data_dict['sig']
-        self.refresh_out_display()
-
-    def refresh_in_display(self):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_in_display')
         if self.in_temperature is not None:
             self.in_temperature_label.setText(f'{self.in_temperature} °C')
         else:
@@ -503,6 +456,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for i, val in enumerate(bat_list[: -1]):
                 if bat_list[i] <= self.in_battery < bat_list[i + 1]:
                     icon = battery_value_icon_dict()[val]
+                    break
         else:
             self.in_battery_bt.setEnabled(False)
             icon = 'none_icon.png'
@@ -515,13 +469,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for i, val in enumerate(link_list[: -1]):
                 if link_list[i] <= self.in_signal < link_list[i + 1]:
                     icon = link_value_icon_dict()[val]
+                    break
         else:
             self.in_signal_bt.setEnabled(False)
             icon = 'none_icon.png'
         self.in_signal_bt.setIcon(icon_creation_function(icon))
 
-    def refresh_out_display(self):
-        logging.debug('gui - mainwindow.py - MainWindow - refresh_out_display')
+    def refresh_out_display(self, data_dict):
+        logging.debug(f'gui - mainwindow.py - MainWindow - refresh_out_display - data_dict: {data_dict}')
+        self.out_temperature = data_dict['temp']
+        self.out_temperature_min_max = data_dict['temp_minmax']
+        self.out_humidity = data_dict['hum']
+        self.out_pressure = data_dict['pres']
+        self.out_pressure_msl = data_dict['pres_msl']
+        self.out_battery = data_dict['bat']
+        self.out_signal = data_dict['sig']
         if self.out_temperature is not None:
             self.out_temperature_label.setText(f'{self.out_temperature} °C')
         else:

@@ -26,8 +26,8 @@ class MFForecastRequest(QtCore.QThread):
         while True:
             try:
                 mf_client = meteofrance_api.MeteoFranceClient()
-                place_forecast = mf_client.get_forecast_for_place(self.user_place)
-                place_warning = mf_client.get_warning_current_phenomenoms(self.user_place.admin2)
+                place_forecast = mf_client.get_forecast_for_place(self.user_place['object'])
+                place_warning = mf_client.get_warning_current_phenomenoms(self.user_place['object'].admin2)
                 fc_1h = collections.OrderedDict()
                 now = datetime.datetime.now().replace(minute=0, second=0)
                 limite = now + datetime.timedelta(hours=24)
@@ -126,8 +126,8 @@ class OWForecastRequest(QtCore.QThread):
                 config_dict['language'] = 'fr'
                 owm = OWM(self.api_key)
                 mgr = owm.weather_manager()
-                one_call = mgr.one_call(lon=self.user_place.lon, lat=self.user_place.lat, exclude='minutely',
-                                        units='metric')
+                one_call = mgr.one_call(lon=self.user_place['longitude'], lat=self.user_place['latitude'],
+                                        exclude='minutely', units='metric')
                 fc_1h = collections.OrderedDict()
                 now = datetime.datetime.now().replace(minute=0, second=0)
                 limite = now + datetime.timedelta(hours=24)

@@ -326,10 +326,24 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
             self.cp_id = self.place_list[idx].postal_code
             self.dp_gps = code_to_departement()[self.place_list[idx].admin2]
             self.place = self.place_list[idx]
+            self.lon = self.place_list[idx].longitude
+            self.lat = self.place_list[idx].latitude
         elif self.api == 'openweather':
             self.ville = self.place_list[idx].name
             self.cp_id = self.place_list[idx].id
-            self.dp_gps = {'lon': self.place_list[idx].lon, 'lat': self.place_list[idx].lat}
+            self.lon = self.place_list[idx].lon
+            self.lat = self.place_list[idx].lat
+            lon = self.place_list[idx].lon
+            lat = self.place_list[idx].lat
+            if '-' in lon:
+                lon = lon[1:] + '°W'
+            else:
+                lon += '°E'
+            if '-' in lat:
+                lat = lat[1:] + '°S'
+            else:
+                lat += '°N'
+            self.dp_gps = f'Lon : {lon} ; Lat : {lat}'
             self.place = self.place_list[idx]
 
     def activate_ok(self):

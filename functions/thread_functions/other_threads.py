@@ -617,3 +617,17 @@ class RequestPlotDataThread(QtCore.QThread):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
         self.connector.close()
         self.terminate()
+
+
+class ComputeEphemerisThread(QtCore.QThread):
+    work_done = QtCore.pyqtSignal(dict)
+    work_failed = QtCore.pyqtSignal(str)
+
+    def __init__(self, db_dict, sensor_dict):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - DBTableManager - __init__')
+        self.db_dict = db_dict
+        self.sensor_dict = sensor_dict
+
+    def run(self):
+        logging.debug('gui - other_threads.py - DBTableManager - run')
