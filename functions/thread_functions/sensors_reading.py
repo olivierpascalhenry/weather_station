@@ -277,11 +277,9 @@ class MqttToDbThread(QtCore.QThread):
         database = os.path.basename(message.topic)
         try:
             temperature = round(data['temperature'], 1)
-
-            if self.sensor_dict['cal_methode']:
-                if self.sensor_dict['cal_methode'] == 'offset':
-                    temperature += float(self.sensor_dict['cal_value'])
-
+            if self.mqtt_dict['cal_methode']:
+                if self.mqtt_dict['cal_methode'] == 'offset':
+                    temperature += float(self.mqtt_dict['cal_value'])
         except KeyError:
             temperature = None
         try:
@@ -308,6 +306,9 @@ class MqttToDbThread(QtCore.QThread):
             signal = data['linkquality']
         except KeyError:
             signal = None
+
+        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - sending data to db')
+
         self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):

@@ -5,6 +5,7 @@
     * the day or night icon wasn't set properly based on sunrise and sunset.
     * an issue in the thread to check postgresql and database has been fixed.
     * fixed a keyerror with a dispatching dictionary.
+    * fixed an issue with calibration in MQTT thread.
 
   * MODIFIED:
     * set_size function has been improved.
