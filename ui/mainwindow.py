@@ -35,7 +35,8 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
                                                         BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
-                                                      RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager)
+                                                      RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager,
+                                                      ComputeEphemerisThread)
 from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
                                      clean_6h_forecast_widgets)
 
@@ -89,6 +90,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.request_plot_thread = None
+        self.compute_ephemeris_thread = None
         self.forecast_data = None
         self.check_internet = None
         self.check_posgresql = None
@@ -110,8 +112,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_battery = None
         self.out_signal = None
         self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
-        self.stacked_widget_dispatcher = {1: self.compute_ephemerides, 2: self.plot_time_series_start,
-                                          3: self.display_fc_1h, 4: self.display_fc_6h}
+        self.stacked_widget_dispatcher = {2: self.plot_time_series_start, 3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
         self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
@@ -161,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
         self.load_place_data()
-        self.compute_ephemerides()
+        self.launch_ephemeris_thread()
         self.check_postgresql_connection()
         self.check_internet_connection()
 
@@ -223,142 +224,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             logging.warning('gui - mainwindow.py - MainWindow - load_place_data - user_place is False or '
                             'place_object.dat doesn\'t exist')
 
-    def set_stack_widget_page(self, idx):
-        logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
-        for button in self.button_list:
-            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
-        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
-        self.main_stacked_widget.setCurrentIndex(idx)
-        if idx > 0:
-            self.stacked_widget_dispatcher[idx]()
+    def launch_ephemeris_thread(self):
+        logging.debug('gui - mainwindow.py - MainWindow - launch_ephemeris_thread')
+        if self.place_object is not None:
+            self.compute_ephemeris_thread = ComputeEphemerisThread(self.place_object['longitude'],
+                                                                   self.place_object['latitude'])
+            self.compute_ephemeris_thread.work_done.connect(self.display_ephemeris)
+            self.compute_ephemeris_thread.start()
 
-    def set_ts_stack_left(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
-        idx = self.time_series_stack.currentIndex()
-        if idx != 0:
-            self.time_series_stack.setCurrentIndex(idx - 1)
-            self.set_ts_stack_icon()
-
-    def set_ts_stack_right(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_right')
-        idx = self.time_series_stack.currentIndex()
-        if idx != 1:
-            self.time_series_stack.setCurrentIndex(idx + 1)
-            self.set_ts_stack_icon()
-
-    def set_fc_stack_left(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_left')
-        idx = self.forecast_1h_stack.currentIndex()
-        if idx != 0:
-            self.forecast_1h_stack.setCurrentIndex(idx - 1)
-            self.set_fc_stack_icon()
-
-    def set_fc_stack_right(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_right')
-        idx = self.forecast_1h_stack.currentIndex()
-        if idx != 1:
-            self.forecast_1h_stack.setCurrentIndex(idx + 1)
-            self.set_fc_stack_icon()
-
-    def set_ts_stack_icon(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
-        idx = self.time_series_stack.currentIndex() + 1
-        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*')):
-            if idx == int(button.objectName()[-1:]):
-                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
-            else:
-                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
-
-    def set_fc_stack_icon(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_icon')
-        idx = self.forecast_1h_stack.currentIndex() + 1
-        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*')):
-            if idx == int(button.objectName()[-1:]):
-                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
-            else:
-                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
-
-    def set_time_date(self):
-        logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.show_time_date)
-        self.timer.start(1000)
-
-    def show_time_date(self):
-        self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
-        self.show_date()
-
-    def show_date(self):
-        if QtCore.QDate.currentDate() != self.current_date:
-            self.current_date = QtCore.QDate.currentDate()
-            week_day = days_months_dictionary()['day'][self.current_date.dayOfWeek()]
-            day = str(self.current_date.day())
-            month = days_months_dictionary()['month'][self.current_date.month()]
-            year = str(self.current_date.year())
-            self.date_label.setText(f'{week_day} {day}\n{month} {year}')
-
-    def compute_ephemerides(self):
-        logging.debug('gui - mainwindow.py - MainWindow - compute_ephemerides')
-        if self.place_object and self.place_object is not None:
-            lon = str(self.place_object['longitude'])
-            lat = str(self.place_object['latitude'])
-            date = self.current_date.toPyDate()
-            observer = ephem.Observer()
-            observer.lat, observer.lon, observer.date = lat, lon, date
-            moon, sun = ephem.Moon(), ephem.Sun()
-            sun.compute(observer)
-            moon.compute(observer)
-            sunlon = ephem.Ecliptic(sun).lon / math.pi * 180.0
-            moonlon = ephem.Ecliptic(moon).lon / math.pi * 180.0
-            if sunlon >= moonlon:
-                angle = sunlon - moonlon
-            else:
-                angle = 360 - sunlon - moonlon
-            angle_dict = angle_moon_phase()
-            angle_list = [a for a in angle_dict]
-            svg = None
-            for i in range(len(angle_list) - 1):
-                if angle_list[i] <= angle < angle_list[i + 1]:
-                    svg = angle_dict[angle_list[i]]
-                    break
-
-            next_date = date
-            for i in range(0, 6):
-                sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
-                sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
-                self.sunrise_6days.append(sunrise)
-                self.sunset_6days.append(sunset)
-                next_date += datetime.timedelta(days=1)
-
-            sunlive = self.sunset_6days[0] - self.sunrise_6days[0]
-            moonrise = ephem.localtime(observer.next_rising(moon, start=date.strftime('%Y/%m/%d')))
-            moonset = ephem.localtime(observer.next_setting(moon, start=date.strftime('%Y/%m/%d')))
-            yday = date.timetuple().tm_yday
-            nweek = date.isocalendar()[1]
-            season = get_season(date)
-            week_day = days_months_dictionary()['day'][self.current_date.dayOfWeek()]
-            day = str(self.current_date.day())
-            month = days_months_dictionary()['month'][self.current_date.month()]
-            year = str(self.current_date.year())
-            self.day_box.setTitle(f'{week_day} {day} {month} {year}')
-            if yday == 1:
-                self.day_lb_1.setText(f'{yday}er jour de l’année')
-            else:
-                self.day_lb_1.setText(f'{yday}ème jour de l’année')
-            self.day_lb_2.setText(f'Semaine {nweek}')
-            self.day_lb_3.setText(season)
-            self.sun_lb_1.setText(f'Le Soleil se lève à {self.sunrise_6days[0].strftime("%Hh%M")} et se couche à '
-                                  f'{self.sunset_6days[0].strftime("%Hh%M")}')
-            h = str(sunlive.seconds//3600)
-            if len(h) == 1:
-                h = '0' + h
-            m = str((sunlive.seconds//60) % 60)
-            if len(m) == 1:
-                m = '0' + m
-            self.sun_lb_2.setText(f'Durée d’ensoleillement: {h}h{m}')
-            self.moon_lb_1.setText(f'La Lune se lève à {moonrise.strftime("%Hh%M")} et se couche à '
-                                   f'{moonset.strftime("%Hh%M")}')
-            self.moon_lb_3.setPixmap(QtGui.QPixmap(f'graphic_materials/pictogrammes/moon_phases/{svg}'))
+    def display_ephemeris(self, data_dict):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_ephemeris - data_dict: {data_dict}')
+        self.sunrise_6days = data_dict['sunrise_6days']
+        self.sunset_6days = data_dict['sunset_6days']
+        self.day_box.setTitle(data_dict['day_box_title'])
+        self.day_lb_1.setText(data_dict['day_year'])
+        self.day_lb_2.setText(data_dict['week_nbr'])
+        self.day_lb_3.setText(data_dict['season'])
+        self.sun_lb_1.setText(data_dict['sun_text'])
+        self.sun_lb_2.setText(data_dict['sun_live'])
+        self.moon_lb_1.setText(data_dict['moon_text'])
+        self.moon_lb_3.setPixmap(data_dict['moon_phase'])
 
     def launch_clean_thread(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_clean_thread')
@@ -402,8 +287,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def launch_weather_request(self):
         logging.debug('gui - mainwindow.py - MainWindow - launch_weather_request')
         if self.config_dict.get('API', 'api_used') and self.place_object is not None:
-            self.query_forecast_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]\
-            (self.place_object, self.config_dict)
+            fc_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]
+            self.query_forecast_thread = fc_thread(self.place_object, self.config_dict)
             self.query_forecast_thread.fc_data.connect(self.parse_forecast_data)
             self.query_forecast_thread.start()
         else:
@@ -802,6 +687,80 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.warning_button.setObjectName('update_function')
                 self.warning_button.setIcon(icon_creation_function('weather_station_update.svg'))
 
+    def set_time_date(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_time_date')
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.show_time_date)
+        self.timer.start(1000)
+
+    def show_time_date(self):
+        self.time_label.setText(QtCore.QTime.currentTime().toString('hh:mm:ss'))
+        self.show_date()
+
+    def show_date(self):
+        if QtCore.QDate.currentDate() != self.current_date:
+            self.current_date = QtCore.QDate.currentDate()
+            week_day = days_months_dictionary()['day'][self.current_date.dayOfWeek()]
+            day = str(self.current_date.day())
+            month = days_months_dictionary()['month'][self.current_date.month()]
+            year = str(self.current_date.year())
+            self.date_label.setText(f'{week_day} {day}\n{month} {year}')
+
+    def set_stack_widget_page(self, idx):
+        logging.debug(f'gui - mainwindow.py - MainWindow - set_stack_widget_page - idx: {idx}')
+        for button in self.button_list:
+            button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
+        self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
+        self.main_stacked_widget.setCurrentIndex(idx)
+        if idx > 1:
+            self.stacked_widget_dispatcher[idx]()
+
+    def set_ts_stack_left(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
+        idx = self.time_series_stack.currentIndex()
+        if idx != 0:
+            self.time_series_stack.setCurrentIndex(idx - 1)
+            self.set_ts_stack_icon()
+
+    def set_ts_stack_right(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_right')
+        idx = self.time_series_stack.currentIndex()
+        if idx != 1:
+            self.time_series_stack.setCurrentIndex(idx + 1)
+            self.set_ts_stack_icon()
+
+    def set_fc_stack_left(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_left')
+        idx = self.forecast_1h_stack.currentIndex()
+        if idx != 0:
+            self.forecast_1h_stack.setCurrentIndex(idx - 1)
+            self.set_fc_stack_icon()
+
+    def set_fc_stack_right(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_right')
+        idx = self.forecast_1h_stack.currentIndex()
+        if idx != 1:
+            self.forecast_1h_stack.setCurrentIndex(idx + 1)
+            self.set_fc_stack_icon()
+
+    def set_ts_stack_icon(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
+        idx = self.time_series_stack.currentIndex() + 1
+        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('ts_page_marker*')):
+            if idx == int(button.objectName()[-1:]):
+                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
+            else:
+                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
+
+    def set_fc_stack_icon(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_fc_stack_icon')
+        idx = self.forecast_1h_stack.currentIndex() + 1
+        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('fc_page_marker*')):
+            if idx == int(button.objectName()[-1:]):
+                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
+            else:
+                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
+
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
         if platform.system() == 'Windows':
@@ -827,6 +786,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_in_data_thread.stop()
         if self.display_out_data_thread is not None:
             self.display_out_data_thread.stop()
+        if self.compute_ephemeris_thread is not None:
+            self.compute_ephemeris_thread.stop()
         self.timer.stop()
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')

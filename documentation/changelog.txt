@@ -17,6 +17,7 @@
     * the calibration methode and values have been transferred to the sensors' dictionary.
     * simplified weather forecast requests.
     * the place object is now a dictionary embedding the old place object.
+    * the computation of ephemeris has been moved to a qthread.
 
   * ADDED
     * a new download thread has been added (part of new update system).
