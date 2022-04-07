@@ -1,11 +1,9 @@
 ### To do list: ###
 
 * ajouter une section pour proposer d'exporter les données de la base.
-* repenser la partie forecast : afficher les widgets par défaut et les modifier lorsqu'on click sur le bouton
 
 ### To fix list: ###
 
-* vérifier tous les boutons pour le clavier dans la fenêtre des options, l'un de transmet pas le texte
 * lorsqu'on plot des séries, si la liste est vide, min ou max ne fonctionne pas.
 
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainwindow_2.ui'
+# Form implementation generated from reading ui file 'mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -1299,34 +1299,13 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.forecast_1h_stack = QtWidgets.QStackedWidget(self.page_4)
+        self.forecast_1h_stack.setStyleSheet("")
         self.forecast_1h_stack.setObjectName("forecast_1h_stack")
         self.fc_page_1 = QtWidgets.QWidget()
         self.fc_page_1.setObjectName("fc_page_1")
         self.gridLayout_11 = QtWidgets.QGridLayout(self.fc_page_1)
         self.gridLayout_11.setContentsMargins(0, 0, 0, 10)
         self.gridLayout_11.setObjectName("gridLayout_11")
-        self.prev1h_frame_1 = QtWidgets.QFrame(self.fc_page_1)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.prev1h_frame_1.sizePolicy().hasHeightForWidth())
-        self.prev1h_frame_1.setSizePolicy(sizePolicy)
-        self.prev1h_frame_1.setStyleSheet("QFrame {\n"
-"   background: #DEEBF7;\n"
-"   border: 0px solid black;\n"
-"   border-radius: 20px;\n"
-"}")
-        self.prev1h_frame_1.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.prev1h_frame_1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.prev1h_frame_1.setObjectName("prev1h_frame_1")
-        self.gridLayout_10 = QtWidgets.QGridLayout(self.prev1h_frame_1)
-        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout_10.setSpacing(0)
-        self.gridLayout_10.setObjectName("gridLayout_10")
-        self.prev1h_layout_1 = QtWidgets.QHBoxLayout()
-        self.prev1h_layout_1.setObjectName("prev1h_layout_1")
-        self.gridLayout_10.addLayout(self.prev1h_layout_1, 0, 0, 1, 1)
-        self.gridLayout_11.addWidget(self.prev1h_frame_1, 0, 0, 1, 1)
         spacerItem8 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.gridLayout_11.addItem(spacerItem8, 1, 0, 1, 1)
         self.prev1h_frame_2 = QtWidgets.QFrame(self.fc_page_1)
@@ -1349,8 +1328,894 @@ class Ui_MainWindow(object):
         self.gridLayout_9.setObjectName("gridLayout_9")
         self.prev1h_layout_2 = QtWidgets.QHBoxLayout()
         self.prev1h_layout_2.setObjectName("prev1h_layout_2")
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_7.setObjectName("verticalLayout_7")
+        self.fc_hour_lb_7 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_7.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_7.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_7.setFont(font)
+        self.fc_hour_lb_7.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_7.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_7.setWordWrap(True)
+        self.fc_hour_lb_7.setObjectName("fc_hour_lb_7")
+        self.verticalLayout_7.addWidget(self.fc_hour_lb_7)
+        self.fc_weat_bt_7 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_7.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_7.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_7.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_7.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_7.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_7.setFont(font)
+        self.fc_weat_bt_7.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_7.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_7.setObjectName("fc_weat_bt_7")
+        self.verticalLayout_7.addWidget(self.fc_weat_bt_7)
+        self.fc_temp_lb_7 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_7.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_7.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_7.setFont(font)
+        self.fc_temp_lb_7.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_7.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_7.setWordWrap(True)
+        self.fc_temp_lb_7.setObjectName("fc_temp_lb_7")
+        self.verticalLayout_7.addWidget(self.fc_temp_lb_7)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_7)
+        self.fc_line_6 = QtWidgets.QFrame(self.prev1h_frame_2)
+        self.fc_line_6.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_6.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_6.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_6.setObjectName("fc_line_6")
+        self.prev1h_layout_2.addWidget(self.fc_line_6)
+        self.verticalLayout_8 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_8.setObjectName("verticalLayout_8")
+        self.fc_hour_lb_8 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_8.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_8.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_8.setFont(font)
+        self.fc_hour_lb_8.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_8.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_8.setWordWrap(True)
+        self.fc_hour_lb_8.setObjectName("fc_hour_lb_8")
+        self.verticalLayout_8.addWidget(self.fc_hour_lb_8)
+        self.fc_weat_bt_8 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_8.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_8.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_8.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_8.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_8.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_8.setFont(font)
+        self.fc_weat_bt_8.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_8.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_8.setObjectName("fc_weat_bt_8")
+        self.verticalLayout_8.addWidget(self.fc_weat_bt_8)
+        self.fc_temp_lb_8 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_8.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_8.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_8.setFont(font)
+        self.fc_temp_lb_8.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_8.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_8.setWordWrap(True)
+        self.fc_temp_lb_8.setObjectName("fc_temp_lb_8")
+        self.verticalLayout_8.addWidget(self.fc_temp_lb_8)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_8)
+        self.fc_line_7 = QtWidgets.QFrame(self.prev1h_frame_2)
+        self.fc_line_7.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_7.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_7.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_7.setObjectName("fc_line_7")
+        self.prev1h_layout_2.addWidget(self.fc_line_7)
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_9.setObjectName("verticalLayout_9")
+        self.fc_hour_lb_9 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_9.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_9.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_9.setFont(font)
+        self.fc_hour_lb_9.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_9.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_9.setWordWrap(True)
+        self.fc_hour_lb_9.setObjectName("fc_hour_lb_9")
+        self.verticalLayout_9.addWidget(self.fc_hour_lb_9)
+        self.fc_weat_bt_9 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_9.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_9.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_9.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_9.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_9.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_9.setFont(font)
+        self.fc_weat_bt_9.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_9.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_9.setObjectName("fc_weat_bt_9")
+        self.verticalLayout_9.addWidget(self.fc_weat_bt_9)
+        self.fc_temp_lb_9 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_9.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_9.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_9.setFont(font)
+        self.fc_temp_lb_9.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_9.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_9.setWordWrap(True)
+        self.fc_temp_lb_9.setObjectName("fc_temp_lb_9")
+        self.verticalLayout_9.addWidget(self.fc_temp_lb_9)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_9)
+        self.fc_line_8 = QtWidgets.QFrame(self.prev1h_frame_2)
+        self.fc_line_8.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_8.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_8.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_8.setObjectName("fc_line_8")
+        self.prev1h_layout_2.addWidget(self.fc_line_8)
+        self.verticalLayout_10 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_10.setObjectName("verticalLayout_10")
+        self.fc_hour_lb_10 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_10.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_10.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_10.setFont(font)
+        self.fc_hour_lb_10.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_10.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_10.setWordWrap(True)
+        self.fc_hour_lb_10.setObjectName("fc_hour_lb_10")
+        self.verticalLayout_10.addWidget(self.fc_hour_lb_10)
+        self.fc_weat_bt_10 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_10.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_10.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_10.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_10.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_10.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_10.setFont(font)
+        self.fc_weat_bt_10.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_10.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_10.setObjectName("fc_weat_bt_10")
+        self.verticalLayout_10.addWidget(self.fc_weat_bt_10)
+        self.fc_temp_lb_10 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_10.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_10.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_10.setFont(font)
+        self.fc_temp_lb_10.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_10.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_10.setWordWrap(True)
+        self.fc_temp_lb_10.setObjectName("fc_temp_lb_10")
+        self.verticalLayout_10.addWidget(self.fc_temp_lb_10)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_10)
+        self.fc_line_9 = QtWidgets.QFrame(self.prev1h_frame_2)
+        self.fc_line_9.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_9.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_9.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_9.setObjectName("fc_line_9")
+        self.prev1h_layout_2.addWidget(self.fc_line_9)
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.fc_hour_lb_11 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_11.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_11.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_11.setFont(font)
+        self.fc_hour_lb_11.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_11.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_11.setWordWrap(True)
+        self.fc_hour_lb_11.setObjectName("fc_hour_lb_11")
+        self.verticalLayout_11.addWidget(self.fc_hour_lb_11)
+        self.fc_weat_bt_11 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_11.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_11.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_11.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_11.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_11.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_11.setFont(font)
+        self.fc_weat_bt_11.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_11.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_11.setObjectName("fc_weat_bt_11")
+        self.verticalLayout_11.addWidget(self.fc_weat_bt_11)
+        self.fc_temp_lb_11 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_11.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_11.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_11.setFont(font)
+        self.fc_temp_lb_11.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_11.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_11.setWordWrap(True)
+        self.fc_temp_lb_11.setObjectName("fc_temp_lb_11")
+        self.verticalLayout_11.addWidget(self.fc_temp_lb_11)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_11)
+        self.fc_line_10 = QtWidgets.QFrame(self.prev1h_frame_2)
+        self.fc_line_10.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_10.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_10.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_10.setObjectName("fc_line_10")
+        self.prev1h_layout_2.addWidget(self.fc_line_10)
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.fc_hour_lb_12 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_hour_lb_12.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_12.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_12.setFont(font)
+        self.fc_hour_lb_12.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_12.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_12.setWordWrap(True)
+        self.fc_hour_lb_12.setObjectName("fc_hour_lb_12")
+        self.verticalLayout_12.addWidget(self.fc_hour_lb_12)
+        self.fc_weat_bt_12 = QtWidgets.QToolButton(self.prev1h_frame_2)
+        self.fc_weat_bt_12.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_12.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_12.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_12.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_12.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_12.setFont(font)
+        self.fc_weat_bt_12.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_12.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_12.setObjectName("fc_weat_bt_12")
+        self.verticalLayout_12.addWidget(self.fc_weat_bt_12)
+        self.fc_temp_lb_12 = QtWidgets.QLabel(self.prev1h_frame_2)
+        self.fc_temp_lb_12.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_12.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_12.setFont(font)
+        self.fc_temp_lb_12.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_12.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_12.setWordWrap(True)
+        self.fc_temp_lb_12.setObjectName("fc_temp_lb_12")
+        self.verticalLayout_12.addWidget(self.fc_temp_lb_12)
+        self.prev1h_layout_2.addLayout(self.verticalLayout_12)
         self.gridLayout_9.addLayout(self.prev1h_layout_2, 0, 0, 1, 1)
         self.gridLayout_11.addWidget(self.prev1h_frame_2, 2, 0, 1, 1)
+        self.prev1h_frame_1 = QtWidgets.QFrame(self.fc_page_1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.prev1h_frame_1.sizePolicy().hasHeightForWidth())
+        self.prev1h_frame_1.setSizePolicy(sizePolicy)
+        self.prev1h_frame_1.setStyleSheet("QFrame {\n"
+"   background: #DEEBF7;\n"
+"   border: 0px solid black;\n"
+"   border-radius: 20px;\n"
+"}")
+        self.prev1h_frame_1.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.prev1h_frame_1.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.prev1h_frame_1.setObjectName("prev1h_frame_1")
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.prev1h_frame_1)
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_10.setSpacing(0)
+        self.gridLayout_10.setObjectName("gridLayout_10")
+        self.prev1h_layout_1 = QtWidgets.QHBoxLayout()
+        self.prev1h_layout_1.setObjectName("prev1h_layout_1")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.fc_hour_lb_1 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_1.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_1.setFont(font)
+        self.fc_hour_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_1.setWordWrap(True)
+        self.fc_hour_lb_1.setObjectName("fc_hour_lb_1")
+        self.verticalLayout.addWidget(self.fc_hour_lb_1)
+        self.fc_weat_bt_1 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_1.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_1.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_1.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_1.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_1.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_1.setFont(font)
+        self.fc_weat_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_1.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_1.setObjectName("fc_weat_bt_1")
+        self.verticalLayout.addWidget(self.fc_weat_bt_1)
+        self.fc_temp_lb_1 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_1.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_1.setFont(font)
+        self.fc_temp_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_1.setWordWrap(True)
+        self.fc_temp_lb_1.setObjectName("fc_temp_lb_1")
+        self.verticalLayout.addWidget(self.fc_temp_lb_1)
+        self.prev1h_layout_1.addLayout(self.verticalLayout)
+        self.fc_line_2 = QtWidgets.QFrame(self.prev1h_frame_1)
+        self.fc_line_2.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_2.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_2.setObjectName("fc_line_2")
+        self.prev1h_layout_1.addWidget(self.fc_line_2)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.fc_hour_lb_2 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_2.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_2.setFont(font)
+        self.fc_hour_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_2.setWordWrap(True)
+        self.fc_hour_lb_2.setObjectName("fc_hour_lb_2")
+        self.verticalLayout_2.addWidget(self.fc_hour_lb_2)
+        self.fc_weat_bt_2 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_2.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_2.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_2.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_2.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_2.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_2.setFont(font)
+        self.fc_weat_bt_2.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_2.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_2.setObjectName("fc_weat_bt_2")
+        self.verticalLayout_2.addWidget(self.fc_weat_bt_2)
+        self.fc_temp_lb_2 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_2.setFont(font)
+        self.fc_temp_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_2.setWordWrap(True)
+        self.fc_temp_lb_2.setObjectName("fc_temp_lb_2")
+        self.verticalLayout_2.addWidget(self.fc_temp_lb_2)
+        self.prev1h_layout_1.addLayout(self.verticalLayout_2)
+        self.fc_line_3 = QtWidgets.QFrame(self.prev1h_frame_1)
+        self.fc_line_3.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_3.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_3.setObjectName("fc_line_3")
+        self.prev1h_layout_1.addWidget(self.fc_line_3)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.fc_hour_lb_3 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_3.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_3.setFont(font)
+        self.fc_hour_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_3.setWordWrap(True)
+        self.fc_hour_lb_3.setObjectName("fc_hour_lb_3")
+        self.verticalLayout_3.addWidget(self.fc_hour_lb_3)
+        self.fc_weat_bt_3 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_3.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_3.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_3.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_3.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_3.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_3.setFont(font)
+        self.fc_weat_bt_3.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_3.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_3.setObjectName("fc_weat_bt_3")
+        self.verticalLayout_3.addWidget(self.fc_weat_bt_3)
+        self.fc_temp_lb_3 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_3.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_3.setFont(font)
+        self.fc_temp_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_3.setWordWrap(True)
+        self.fc_temp_lb_3.setObjectName("fc_temp_lb_3")
+        self.verticalLayout_3.addWidget(self.fc_temp_lb_3)
+        self.prev1h_layout_1.addLayout(self.verticalLayout_3)
+        self.fc_line_1 = QtWidgets.QFrame(self.prev1h_frame_1)
+        self.fc_line_1.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_1.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_1.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_1.setObjectName("fc_line_1")
+        self.prev1h_layout_1.addWidget(self.fc_line_1)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.fc_hour_lb_4 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_4.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_4.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_4.setFont(font)
+        self.fc_hour_lb_4.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_4.setWordWrap(True)
+        self.fc_hour_lb_4.setObjectName("fc_hour_lb_4")
+        self.verticalLayout_4.addWidget(self.fc_hour_lb_4)
+        self.fc_weat_bt_4 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_4.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_4.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_4.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_4.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_4.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_4.setFont(font)
+        self.fc_weat_bt_4.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_4.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_4.setObjectName("fc_weat_bt_4")
+        self.verticalLayout_4.addWidget(self.fc_weat_bt_4)
+        self.fc_temp_lb_4 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_4.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_4.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_4.setFont(font)
+        self.fc_temp_lb_4.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_4.setWordWrap(True)
+        self.fc_temp_lb_4.setObjectName("fc_temp_lb_4")
+        self.verticalLayout_4.addWidget(self.fc_temp_lb_4)
+        self.prev1h_layout_1.addLayout(self.verticalLayout_4)
+        self.fc_line_4 = QtWidgets.QFrame(self.prev1h_frame_1)
+        self.fc_line_4.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_4.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_4.setObjectName("fc_line_4")
+        self.prev1h_layout_1.addWidget(self.fc_line_4)
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.fc_hour_lb_5 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_5.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_5.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_5.setFont(font)
+        self.fc_hour_lb_5.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_5.setWordWrap(True)
+        self.fc_hour_lb_5.setObjectName("fc_hour_lb_5")
+        self.verticalLayout_5.addWidget(self.fc_hour_lb_5)
+        self.fc_weat_bt_5 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_5.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_5.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_5.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_5.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_5.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_5.setFont(font)
+        self.fc_weat_bt_5.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_5.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_5.setObjectName("fc_weat_bt_5")
+        self.verticalLayout_5.addWidget(self.fc_weat_bt_5)
+        self.fc_temp_lb_5 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_5.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_5.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_5.setFont(font)
+        self.fc_temp_lb_5.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_5.setWordWrap(True)
+        self.fc_temp_lb_5.setObjectName("fc_temp_lb_5")
+        self.verticalLayout_5.addWidget(self.fc_temp_lb_5)
+        self.prev1h_layout_1.addLayout(self.verticalLayout_5)
+        self.fc_line_5 = QtWidgets.QFrame(self.prev1h_frame_1)
+        self.fc_line_5.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_5.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_5.setObjectName("fc_line_5")
+        self.prev1h_layout_1.addWidget(self.fc_line_5)
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.fc_hour_lb_6 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_hour_lb_6.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_6.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_6.setFont(font)
+        self.fc_hour_lb_6.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_6.setWordWrap(True)
+        self.fc_hour_lb_6.setObjectName("fc_hour_lb_6")
+        self.verticalLayout_6.addWidget(self.fc_hour_lb_6)
+        self.fc_weat_bt_6 = QtWidgets.QToolButton(self.prev1h_frame_1)
+        self.fc_weat_bt_6.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_6.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_6.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_6.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_6.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_6.setFont(font)
+        self.fc_weat_bt_6.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_6.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_6.setObjectName("fc_weat_bt_6")
+        self.verticalLayout_6.addWidget(self.fc_weat_bt_6)
+        self.fc_temp_lb_6 = QtWidgets.QLabel(self.prev1h_frame_1)
+        self.fc_temp_lb_6.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_6.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_6.setFont(font)
+        self.fc_temp_lb_6.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_6.setWordWrap(True)
+        self.fc_temp_lb_6.setObjectName("fc_temp_lb_6")
+        self.verticalLayout_6.addWidget(self.fc_temp_lb_6)
+        self.prev1h_layout_1.addLayout(self.verticalLayout_6)
+        self.gridLayout_10.addLayout(self.prev1h_layout_1, 0, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.prev1h_frame_1, 0, 0, 1, 1)
         self.forecast_1h_stack.addWidget(self.fc_page_1)
         self.fc_page_2 = QtWidgets.QWidget()
         self.fc_page_2.setObjectName("fc_page_2")
@@ -1377,6 +2242,438 @@ class Ui_MainWindow(object):
         self.gridLayout_17.setObjectName("gridLayout_17")
         self.prev1h_layout_3 = QtWidgets.QHBoxLayout()
         self.prev1h_layout_3.setObjectName("prev1h_layout_3")
+        self.verticalLayout_13 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_13.setObjectName("verticalLayout_13")
+        self.fc_hour_lb_13 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_13.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_13.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_13.setFont(font)
+        self.fc_hour_lb_13.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_13.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_13.setWordWrap(True)
+        self.fc_hour_lb_13.setObjectName("fc_hour_lb_13")
+        self.verticalLayout_13.addWidget(self.fc_hour_lb_13)
+        self.fc_weat_bt_13 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_13.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_13.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_13.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_13.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_13.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_13.setFont(font)
+        self.fc_weat_bt_13.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_13.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_13.setObjectName("fc_weat_bt_13")
+        self.verticalLayout_13.addWidget(self.fc_weat_bt_13)
+        self.fc_temp_lb_13 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_13.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_13.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_13.setFont(font)
+        self.fc_temp_lb_13.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_13.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_13.setWordWrap(True)
+        self.fc_temp_lb_13.setObjectName("fc_temp_lb_13")
+        self.verticalLayout_13.addWidget(self.fc_temp_lb_13)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_13)
+        self.fc_line_11 = QtWidgets.QFrame(self.prev1h_frame_3)
+        self.fc_line_11.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_11.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_11.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_11.setObjectName("fc_line_11")
+        self.prev1h_layout_3.addWidget(self.fc_line_11)
+        self.verticalLayout_14 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_14.setObjectName("verticalLayout_14")
+        self.fc_hour_lb_14 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_14.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_14.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_14.setFont(font)
+        self.fc_hour_lb_14.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_14.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_14.setWordWrap(True)
+        self.fc_hour_lb_14.setObjectName("fc_hour_lb_14")
+        self.verticalLayout_14.addWidget(self.fc_hour_lb_14)
+        self.fc_weat_bt_14 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_14.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_14.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_14.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_14.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_14.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_14.setFont(font)
+        self.fc_weat_bt_14.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_14.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_14.setObjectName("fc_weat_bt_14")
+        self.verticalLayout_14.addWidget(self.fc_weat_bt_14)
+        self.fc_temp_lb_14 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_14.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_14.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_14.setFont(font)
+        self.fc_temp_lb_14.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_14.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_14.setWordWrap(True)
+        self.fc_temp_lb_14.setObjectName("fc_temp_lb_14")
+        self.verticalLayout_14.addWidget(self.fc_temp_lb_14)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_14)
+        self.fc_line_12 = QtWidgets.QFrame(self.prev1h_frame_3)
+        self.fc_line_12.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_12.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_12.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_12.setObjectName("fc_line_12")
+        self.prev1h_layout_3.addWidget(self.fc_line_12)
+        self.verticalLayout_15 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_15.setObjectName("verticalLayout_15")
+        self.fc_hour_lb_15 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_15.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_15.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_15.setFont(font)
+        self.fc_hour_lb_15.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_15.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_15.setWordWrap(True)
+        self.fc_hour_lb_15.setObjectName("fc_hour_lb_15")
+        self.verticalLayout_15.addWidget(self.fc_hour_lb_15)
+        self.fc_weat_bt_15 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_15.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_15.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_15.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_15.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_15.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_15.setFont(font)
+        self.fc_weat_bt_15.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_15.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_15.setObjectName("fc_weat_bt_15")
+        self.verticalLayout_15.addWidget(self.fc_weat_bt_15)
+        self.fc_temp_lb_15 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_15.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_15.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_15.setFont(font)
+        self.fc_temp_lb_15.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_15.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_15.setWordWrap(True)
+        self.fc_temp_lb_15.setObjectName("fc_temp_lb_15")
+        self.verticalLayout_15.addWidget(self.fc_temp_lb_15)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_15)
+        self.fc_line_13 = QtWidgets.QFrame(self.prev1h_frame_3)
+        self.fc_line_13.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_13.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_13.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_13.setObjectName("fc_line_13")
+        self.prev1h_layout_3.addWidget(self.fc_line_13)
+        self.verticalLayout_16 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_16.setObjectName("verticalLayout_16")
+        self.fc_hour_lb_16 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_16.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_16.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_16.setFont(font)
+        self.fc_hour_lb_16.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_16.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_16.setWordWrap(True)
+        self.fc_hour_lb_16.setObjectName("fc_hour_lb_16")
+        self.verticalLayout_16.addWidget(self.fc_hour_lb_16)
+        self.fc_weat_bt_16 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_16.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_16.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_16.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_16.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_16.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_16.setFont(font)
+        self.fc_weat_bt_16.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_16.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_16.setObjectName("fc_weat_bt_16")
+        self.verticalLayout_16.addWidget(self.fc_weat_bt_16)
+        self.fc_temp_lb_16 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_16.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_16.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_16.setFont(font)
+        self.fc_temp_lb_16.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_16.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_16.setWordWrap(True)
+        self.fc_temp_lb_16.setObjectName("fc_temp_lb_16")
+        self.verticalLayout_16.addWidget(self.fc_temp_lb_16)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_16)
+        self.fc_line_14 = QtWidgets.QFrame(self.prev1h_frame_3)
+        self.fc_line_14.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_14.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_14.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_14.setObjectName("fc_line_14")
+        self.prev1h_layout_3.addWidget(self.fc_line_14)
+        self.verticalLayout_17 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_17.setObjectName("verticalLayout_17")
+        self.fc_hour_lb_17 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_17.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_17.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_17.setFont(font)
+        self.fc_hour_lb_17.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_17.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_17.setWordWrap(True)
+        self.fc_hour_lb_17.setObjectName("fc_hour_lb_17")
+        self.verticalLayout_17.addWidget(self.fc_hour_lb_17)
+        self.fc_weat_bt_17 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_17.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_17.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_17.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_17.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_17.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_17.setFont(font)
+        self.fc_weat_bt_17.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_17.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_17.setObjectName("fc_weat_bt_17")
+        self.verticalLayout_17.addWidget(self.fc_weat_bt_17)
+        self.fc_temp_lb_17 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_17.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_17.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_17.setFont(font)
+        self.fc_temp_lb_17.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_17.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_17.setWordWrap(True)
+        self.fc_temp_lb_17.setObjectName("fc_temp_lb_17")
+        self.verticalLayout_17.addWidget(self.fc_temp_lb_17)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_17)
+        self.fc_line_15 = QtWidgets.QFrame(self.prev1h_frame_3)
+        self.fc_line_15.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_15.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_15.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_15.setObjectName("fc_line_15")
+        self.prev1h_layout_3.addWidget(self.fc_line_15)
+        self.verticalLayout_18 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_18.setObjectName("verticalLayout_18")
+        self.fc_hour_lb_18 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_hour_lb_18.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_18.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_18.setFont(font)
+        self.fc_hour_lb_18.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_18.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_18.setWordWrap(True)
+        self.fc_hour_lb_18.setObjectName("fc_hour_lb_18")
+        self.verticalLayout_18.addWidget(self.fc_hour_lb_18)
+        self.fc_weat_bt_18 = QtWidgets.QToolButton(self.prev1h_frame_3)
+        self.fc_weat_bt_18.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_18.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_18.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_18.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_18.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_18.setFont(font)
+        self.fc_weat_bt_18.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_18.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_18.setObjectName("fc_weat_bt_18")
+        self.verticalLayout_18.addWidget(self.fc_weat_bt_18)
+        self.fc_temp_lb_18 = QtWidgets.QLabel(self.prev1h_frame_3)
+        self.fc_temp_lb_18.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_18.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_18.setFont(font)
+        self.fc_temp_lb_18.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_18.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_18.setWordWrap(True)
+        self.fc_temp_lb_18.setObjectName("fc_temp_lb_18")
+        self.verticalLayout_18.addWidget(self.fc_temp_lb_18)
+        self.prev1h_layout_3.addLayout(self.verticalLayout_18)
         self.gridLayout_17.addLayout(self.prev1h_layout_3, 0, 0, 1, 1)
         self.gridLayout_19.addWidget(self.prev1h_frame_3, 0, 0, 1, 1)
         spacerItem9 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -1401,6 +2698,438 @@ class Ui_MainWindow(object):
         self.gridLayout_18.setObjectName("gridLayout_18")
         self.prev1h_layout_4 = QtWidgets.QHBoxLayout()
         self.prev1h_layout_4.setObjectName("prev1h_layout_4")
+        self.verticalLayout_19 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_19.setObjectName("verticalLayout_19")
+        self.fc_hour_lb_19 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_19.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_19.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_19.setFont(font)
+        self.fc_hour_lb_19.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_19.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_19.setWordWrap(True)
+        self.fc_hour_lb_19.setObjectName("fc_hour_lb_19")
+        self.verticalLayout_19.addWidget(self.fc_hour_lb_19)
+        self.fc_weat_bt_19 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_19.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_19.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_19.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_19.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_19.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_19.setFont(font)
+        self.fc_weat_bt_19.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_19.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_19.setObjectName("fc_weat_bt_19")
+        self.verticalLayout_19.addWidget(self.fc_weat_bt_19)
+        self.fc_temp_lb_19 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_19.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_19.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_19.setFont(font)
+        self.fc_temp_lb_19.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_19.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_19.setWordWrap(True)
+        self.fc_temp_lb_19.setObjectName("fc_temp_lb_19")
+        self.verticalLayout_19.addWidget(self.fc_temp_lb_19)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_19)
+        self.fc_line_16 = QtWidgets.QFrame(self.prev1h_frame_4)
+        self.fc_line_16.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_16.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_16.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_16.setObjectName("fc_line_16")
+        self.prev1h_layout_4.addWidget(self.fc_line_16)
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.fc_hour_lb_20 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_20.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_20.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_20.setFont(font)
+        self.fc_hour_lb_20.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_20.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_20.setWordWrap(True)
+        self.fc_hour_lb_20.setObjectName("fc_hour_lb_20")
+        self.verticalLayout_20.addWidget(self.fc_hour_lb_20)
+        self.fc_weat_bt_20 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_20.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_20.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_20.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_20.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_20.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_20.setFont(font)
+        self.fc_weat_bt_20.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_20.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_20.setObjectName("fc_weat_bt_20")
+        self.verticalLayout_20.addWidget(self.fc_weat_bt_20)
+        self.fc_temp_lb_20 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_20.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_20.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_20.setFont(font)
+        self.fc_temp_lb_20.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_20.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_20.setWordWrap(True)
+        self.fc_temp_lb_20.setObjectName("fc_temp_lb_20")
+        self.verticalLayout_20.addWidget(self.fc_temp_lb_20)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_20)
+        self.fc_line_17 = QtWidgets.QFrame(self.prev1h_frame_4)
+        self.fc_line_17.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_17.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_17.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_17.setObjectName("fc_line_17")
+        self.prev1h_layout_4.addWidget(self.fc_line_17)
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_21.setObjectName("verticalLayout_21")
+        self.fc_hour_lb_21 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_21.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_21.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_21.setFont(font)
+        self.fc_hour_lb_21.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_21.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_21.setWordWrap(True)
+        self.fc_hour_lb_21.setObjectName("fc_hour_lb_21")
+        self.verticalLayout_21.addWidget(self.fc_hour_lb_21)
+        self.fc_weat_bt_21 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_21.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_21.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_21.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_21.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_21.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_21.setFont(font)
+        self.fc_weat_bt_21.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_21.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_21.setObjectName("fc_weat_bt_21")
+        self.verticalLayout_21.addWidget(self.fc_weat_bt_21)
+        self.fc_temp_lb_21 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_21.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_21.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_21.setFont(font)
+        self.fc_temp_lb_21.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_21.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_21.setWordWrap(True)
+        self.fc_temp_lb_21.setObjectName("fc_temp_lb_21")
+        self.verticalLayout_21.addWidget(self.fc_temp_lb_21)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_21)
+        self.fc_line_18 = QtWidgets.QFrame(self.prev1h_frame_4)
+        self.fc_line_18.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_18.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_18.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_18.setObjectName("fc_line_18")
+        self.prev1h_layout_4.addWidget(self.fc_line_18)
+        self.verticalLayout_22 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_22.setObjectName("verticalLayout_22")
+        self.fc_hour_lb_22 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_22.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_22.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_22.setFont(font)
+        self.fc_hour_lb_22.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_22.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_22.setWordWrap(True)
+        self.fc_hour_lb_22.setObjectName("fc_hour_lb_22")
+        self.verticalLayout_22.addWidget(self.fc_hour_lb_22)
+        self.fc_weat_bt_22 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_22.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_22.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_22.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_22.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_22.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_22.setFont(font)
+        self.fc_weat_bt_22.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_22.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_22.setObjectName("fc_weat_bt_22")
+        self.verticalLayout_22.addWidget(self.fc_weat_bt_22)
+        self.fc_temp_lb_22 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_22.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_22.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_22.setFont(font)
+        self.fc_temp_lb_22.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_22.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_22.setWordWrap(True)
+        self.fc_temp_lb_22.setObjectName("fc_temp_lb_22")
+        self.verticalLayout_22.addWidget(self.fc_temp_lb_22)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_22)
+        self.fc_line_19 = QtWidgets.QFrame(self.prev1h_frame_4)
+        self.fc_line_19.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_19.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_19.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_19.setObjectName("fc_line_19")
+        self.prev1h_layout_4.addWidget(self.fc_line_19)
+        self.verticalLayout_23 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_23.setObjectName("verticalLayout_23")
+        self.fc_hour_lb_23 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_23.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_23.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_23.setFont(font)
+        self.fc_hour_lb_23.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_23.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_23.setWordWrap(True)
+        self.fc_hour_lb_23.setObjectName("fc_hour_lb_23")
+        self.verticalLayout_23.addWidget(self.fc_hour_lb_23)
+        self.fc_weat_bt_23 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_23.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_23.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_23.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_23.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_23.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_23.setFont(font)
+        self.fc_weat_bt_23.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_23.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_23.setObjectName("fc_weat_bt_23")
+        self.verticalLayout_23.addWidget(self.fc_weat_bt_23)
+        self.fc_temp_lb_23 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_23.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_23.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_23.setFont(font)
+        self.fc_temp_lb_23.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_23.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_23.setWordWrap(True)
+        self.fc_temp_lb_23.setObjectName("fc_temp_lb_23")
+        self.verticalLayout_23.addWidget(self.fc_temp_lb_23)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_23)
+        self.fc_line_20 = QtWidgets.QFrame(self.prev1h_frame_4)
+        self.fc_line_20.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_20.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_20.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_20.setObjectName("fc_line_20")
+        self.prev1h_layout_4.addWidget(self.fc_line_20)
+        self.verticalLayout_24 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_24.setObjectName("verticalLayout_24")
+        self.fc_hour_lb_24 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_hour_lb_24.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_hour_lb_24.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_hour_lb_24.setFont(font)
+        self.fc_hour_lb_24.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_hour_lb_24.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_hour_lb_24.setWordWrap(True)
+        self.fc_hour_lb_24.setObjectName("fc_hour_lb_24")
+        self.verticalLayout_24.addWidget(self.fc_hour_lb_24)
+        self.fc_weat_bt_24 = QtWidgets.QToolButton(self.prev1h_frame_4)
+        self.fc_weat_bt_24.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_weat_bt_24.sizePolicy().hasHeightForWidth())
+        self.fc_weat_bt_24.setSizePolicy(sizePolicy)
+        self.fc_weat_bt_24.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_24.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        self.fc_weat_bt_24.setFont(font)
+        self.fc_weat_bt_24.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_weat_bt_24.setIconSize(QtCore.QSize(80, 80))
+        self.fc_weat_bt_24.setObjectName("fc_weat_bt_24")
+        self.verticalLayout_24.addWidget(self.fc_weat_bt_24)
+        self.fc_temp_lb_24 = QtWidgets.QLabel(self.prev1h_frame_4)
+        self.fc_temp_lb_24.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_temp_lb_24.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_temp_lb_24.setFont(font)
+        self.fc_temp_lb_24.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_temp_lb_24.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_temp_lb_24.setWordWrap(True)
+        self.fc_temp_lb_24.setObjectName("fc_temp_lb_24")
+        self.verticalLayout_24.addWidget(self.fc_temp_lb_24)
+        self.prev1h_layout_4.addLayout(self.verticalLayout_24)
         self.gridLayout_18.addLayout(self.prev1h_layout_4, 0, 0, 1, 1)
         self.gridLayout_19.addWidget(self.prev1h_frame_4, 2, 0, 1, 1)
         self.forecast_1h_stack.addWidget(self.fc_page_2)
@@ -1512,6 +3241,224 @@ class Ui_MainWindow(object):
         self.gridLayout_13.setObjectName("gridLayout_13")
         self.prev6h_layout_1 = QtWidgets.QHBoxLayout()
         self.prev6h_layout_1.setObjectName("prev6h_layout_1")
+        self.verticalLayout_25 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_25.setObjectName("verticalLayout_25")
+        self.fc_day_lb_1 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_day_lb_1.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_day_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_day_lb_1.setFont(font)
+        self.fc_day_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_day_lb_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_day_lb_1.setWordWrap(True)
+        self.fc_day_lb_1.setObjectName("fc_day_lb_1")
+        self.verticalLayout_25.addWidget(self.fc_day_lb_1)
+        self.fc_dweat_bt_1 = QtWidgets.QToolButton(self.prev6h_frame_1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_dweat_bt_1.sizePolicy().hasHeightForWidth())
+        self.fc_dweat_bt_1.setSizePolicy(sizePolicy)
+        self.fc_dweat_bt_1.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_1.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_dweat_bt_1.setFont(font)
+        self.fc_dweat_bt_1.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap("pictogrammes/averses_orageuses.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.fc_dweat_bt_1.setIcon(icon13)
+        self.fc_dweat_bt_1.setIconSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_1.setObjectName("fc_dweat_bt_1")
+        self.verticalLayout_25.addWidget(self.fc_dweat_bt_1)
+        self.fc_mmtemp_lb_1 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_mmtemp_lb_1.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_mmtemp_lb_1.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_mmtemp_lb_1.setFont(font)
+        self.fc_mmtemp_lb_1.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_mmtemp_lb_1.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_mmtemp_lb_1.setWordWrap(True)
+        self.fc_mmtemp_lb_1.setObjectName("fc_mmtemp_lb_1")
+        self.verticalLayout_25.addWidget(self.fc_mmtemp_lb_1)
+        self.prev6h_layout_1.addLayout(self.verticalLayout_25)
+        self.fc_line_21 = QtWidgets.QFrame(self.prev6h_frame_1)
+        self.fc_line_21.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_21.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_21.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_21.setObjectName("fc_line_21")
+        self.prev6h_layout_1.addWidget(self.fc_line_21)
+        self.verticalLayout_26 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_26.setObjectName("verticalLayout_26")
+        self.fc_day_lb_2 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_day_lb_2.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_day_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_day_lb_2.setFont(font)
+        self.fc_day_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_day_lb_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_day_lb_2.setWordWrap(True)
+        self.fc_day_lb_2.setObjectName("fc_day_lb_2")
+        self.verticalLayout_26.addWidget(self.fc_day_lb_2)
+        self.fc_dweat_bt_2 = QtWidgets.QToolButton(self.prev6h_frame_1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_dweat_bt_2.sizePolicy().hasHeightForWidth())
+        self.fc_dweat_bt_2.setSizePolicy(sizePolicy)
+        self.fc_dweat_bt_2.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_2.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_dweat_bt_2.setFont(font)
+        self.fc_dweat_bt_2.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_dweat_bt_2.setIcon(icon13)
+        self.fc_dweat_bt_2.setIconSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_2.setObjectName("fc_dweat_bt_2")
+        self.verticalLayout_26.addWidget(self.fc_dweat_bt_2)
+        self.fc_mmtemp_lb_2 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_mmtemp_lb_2.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_mmtemp_lb_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_mmtemp_lb_2.setFont(font)
+        self.fc_mmtemp_lb_2.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_mmtemp_lb_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_mmtemp_lb_2.setWordWrap(True)
+        self.fc_mmtemp_lb_2.setObjectName("fc_mmtemp_lb_2")
+        self.verticalLayout_26.addWidget(self.fc_mmtemp_lb_2)
+        self.prev6h_layout_1.addLayout(self.verticalLayout_26)
+        self.fc_line_22 = QtWidgets.QFrame(self.prev6h_frame_1)
+        self.fc_line_22.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_22.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_22.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_22.setObjectName("fc_line_22")
+        self.prev6h_layout_1.addWidget(self.fc_line_22)
+        self.verticalLayout_27 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_27.setObjectName("verticalLayout_27")
+        self.fc_day_lb_3 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_day_lb_3.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_day_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_day_lb_3.setFont(font)
+        self.fc_day_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_day_lb_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_day_lb_3.setWordWrap(True)
+        self.fc_day_lb_3.setObjectName("fc_day_lb_3")
+        self.verticalLayout_27.addWidget(self.fc_day_lb_3)
+        self.fc_dweat_bt_3 = QtWidgets.QToolButton(self.prev6h_frame_1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_dweat_bt_3.sizePolicy().hasHeightForWidth())
+        self.fc_dweat_bt_3.setSizePolicy(sizePolicy)
+        self.fc_dweat_bt_3.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_3.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_dweat_bt_3.setFont(font)
+        self.fc_dweat_bt_3.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_dweat_bt_3.setIcon(icon13)
+        self.fc_dweat_bt_3.setIconSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_3.setObjectName("fc_dweat_bt_3")
+        self.verticalLayout_27.addWidget(self.fc_dweat_bt_3)
+        self.fc_mmtemp_lb_3 = QtWidgets.QLabel(self.prev6h_frame_1)
+        self.fc_mmtemp_lb_3.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_mmtemp_lb_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_mmtemp_lb_3.setFont(font)
+        self.fc_mmtemp_lb_3.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_mmtemp_lb_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_mmtemp_lb_3.setWordWrap(True)
+        self.fc_mmtemp_lb_3.setObjectName("fc_mmtemp_lb_3")
+        self.verticalLayout_27.addWidget(self.fc_mmtemp_lb_3)
+        self.prev6h_layout_1.addLayout(self.verticalLayout_27)
         self.gridLayout_13.addLayout(self.prev6h_layout_1, 0, 0, 1, 1)
         self.gridLayout_14.addWidget(self.prev6h_frame_1, 0, 0, 1, 1)
         spacerItem12 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -1536,6 +3483,146 @@ class Ui_MainWindow(object):
         self.gridLayout_12.setObjectName("gridLayout_12")
         self.prev6h_layout_2 = QtWidgets.QHBoxLayout()
         self.prev6h_layout_2.setObjectName("prev6h_layout_2")
+        self.verticalLayout_28 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_28.setObjectName("verticalLayout_28")
+        self.fc_day_lb_4 = QtWidgets.QLabel(self.prev6h_frame_2)
+        self.fc_day_lb_4.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_day_lb_4.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_day_lb_4.setFont(font)
+        self.fc_day_lb_4.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_day_lb_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_day_lb_4.setWordWrap(True)
+        self.fc_day_lb_4.setObjectName("fc_day_lb_4")
+        self.verticalLayout_28.addWidget(self.fc_day_lb_4)
+        self.fc_dweat_bt_4 = QtWidgets.QToolButton(self.prev6h_frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_dweat_bt_4.sizePolicy().hasHeightForWidth())
+        self.fc_dweat_bt_4.setSizePolicy(sizePolicy)
+        self.fc_dweat_bt_4.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_4.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_dweat_bt_4.setFont(font)
+        self.fc_dweat_bt_4.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_dweat_bt_4.setIcon(icon13)
+        self.fc_dweat_bt_4.setIconSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_4.setObjectName("fc_dweat_bt_4")
+        self.verticalLayout_28.addWidget(self.fc_dweat_bt_4)
+        self.fc_mmtemp_lb_4 = QtWidgets.QLabel(self.prev6h_frame_2)
+        self.fc_mmtemp_lb_4.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_mmtemp_lb_4.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_mmtemp_lb_4.setFont(font)
+        self.fc_mmtemp_lb_4.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_mmtemp_lb_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_mmtemp_lb_4.setWordWrap(True)
+        self.fc_mmtemp_lb_4.setObjectName("fc_mmtemp_lb_4")
+        self.verticalLayout_28.addWidget(self.fc_mmtemp_lb_4)
+        self.prev6h_layout_2.addLayout(self.verticalLayout_28)
+        self.fc_line_23 = QtWidgets.QFrame(self.prev6h_frame_2)
+        self.fc_line_23.setStyleSheet("QFrame {\n"
+"   background: rgb(190,190,190);\n"
+"   width: 5px;\n"
+"   border: 0px solid black;\n"
+"   margin-top: 10px;\n"
+"   margin-bottom: 10px;\n"
+"}")
+        self.fc_line_23.setFrameShape(QtWidgets.QFrame.VLine)
+        self.fc_line_23.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.fc_line_23.setObjectName("fc_line_23")
+        self.prev6h_layout_2.addWidget(self.fc_line_23)
+        self.verticalLayout_29 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_29.setObjectName("verticalLayout_29")
+        self.fc_day_lb_5 = QtWidgets.QLabel(self.prev6h_frame_2)
+        self.fc_day_lb_5.setMinimumSize(QtCore.QSize(0, 0))
+        self.fc_day_lb_5.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_day_lb_5.setFont(font)
+        self.fc_day_lb_5.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_day_lb_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_day_lb_5.setWordWrap(True)
+        self.fc_day_lb_5.setObjectName("fc_day_lb_5")
+        self.verticalLayout_29.addWidget(self.fc_day_lb_5)
+        self.fc_dweat_bt_5 = QtWidgets.QToolButton(self.prev6h_frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fc_dweat_bt_5.sizePolicy().hasHeightForWidth())
+        self.fc_dweat_bt_5.setSizePolicy(sizePolicy)
+        self.fc_dweat_bt_5.setMinimumSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_5.setMaximumSize(QtCore.QSize(16777215, 80))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_dweat_bt_5.setFont(font)
+        self.fc_dweat_bt_5.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.fc_dweat_bt_5.setIcon(icon13)
+        self.fc_dweat_bt_5.setIconSize(QtCore.QSize(80, 80))
+        self.fc_dweat_bt_5.setObjectName("fc_dweat_bt_5")
+        self.verticalLayout_29.addWidget(self.fc_dweat_bt_5)
+        self.fc_mmtemp_lb_5 = QtWidgets.QLabel(self.prev6h_frame_2)
+        self.fc_mmtemp_lb_5.setMinimumSize(QtCore.QSize(0, 50))
+        self.fc_mmtemp_lb_5.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.fc_mmtemp_lb_5.setFont(font)
+        self.fc_mmtemp_lb_5.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.fc_mmtemp_lb_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.fc_mmtemp_lb_5.setWordWrap(True)
+        self.fc_mmtemp_lb_5.setObjectName("fc_mmtemp_lb_5")
+        self.verticalLayout_29.addWidget(self.fc_mmtemp_lb_5)
+        self.prev6h_layout_2.addLayout(self.verticalLayout_29)
         self.gridLayout_12.addLayout(self.prev6h_layout_2, 0, 0, 1, 1)
         self.gridLayout_14.addWidget(self.prev6h_frame_2, 2, 0, 1, 1)
         self.main_stacked_widget.addWidget(self.page_5)
@@ -1576,3 +3663,114 @@ class Ui_MainWindow(object):
         self.moon_lb_2.setText(_translate("MainWindow", "Phase de la Lune :"))
         self.in_label_4.setText(_translate("MainWindow", "Intérieur"))
         self.out_label_5.setText(_translate("MainWindow", "Extérieur"))
+        self.fc_hour_lb_7.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_7.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_7.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_8.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_8.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_8.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_9.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_9.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_9.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_10.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_10.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_10.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_11.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_11.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_11.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_12.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_12.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_12.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_1.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_1.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_1.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_2.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_2.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_2.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_3.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_3.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_3.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_4.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_4.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_4.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_5.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_5.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_5.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_6.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_6.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_6.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_13.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_13.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_13.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_14.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_14.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_14.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_15.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_15.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_15.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_16.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_16.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_16.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_17.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_17.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_17.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_18.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_18.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_18.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_19.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_19.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_19.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_20.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_20.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_20.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_21.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_21.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_21.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_22.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_22.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_22.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_23.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_23.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_23.setText(_translate("MainWindow", "ND"))
+        self.fc_hour_lb_24.setText(_translate("MainWindow", "No data"))
+        self.fc_weat_bt_24.setText(_translate("MainWindow", "No\n"
+"data"))
+        self.fc_temp_lb_24.setText(_translate("MainWindow", "ND"))
+        self.fc_day_lb_1.setText(_translate("MainWindow", "No data"))
+        self.fc_dweat_bt_1.setText(_translate("MainWindow", "No data"))
+        self.fc_mmtemp_lb_1.setText(_translate("MainWindow", "ND / ND"))
+        self.fc_day_lb_2.setText(_translate("MainWindow", "No data"))
+        self.fc_dweat_bt_2.setText(_translate("MainWindow", "No data"))
+        self.fc_mmtemp_lb_2.setText(_translate("MainWindow", "ND / ND"))
+        self.fc_day_lb_3.setText(_translate("MainWindow", "No data"))
+        self.fc_dweat_bt_3.setText(_translate("MainWindow", "No data"))
+        self.fc_mmtemp_lb_3.setText(_translate("MainWindow", "ND / ND"))
+        self.fc_day_lb_4.setText(_translate("MainWindow", "No data"))
+        self.fc_dweat_bt_4.setText(_translate("MainWindow", "No data"))
+        self.fc_mmtemp_lb_4.setText(_translate("MainWindow", "ND / ND"))
+        self.fc_day_lb_5.setText(_translate("MainWindow", "No data"))
+        self.fc_dweat_bt_5.setText(_translate("MainWindow", "No data"))
+        self.fc_mmtemp_lb_5.setText(_translate("MainWindow", "ND / ND"))

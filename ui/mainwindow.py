@@ -23,7 +23,7 @@ from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict, angle_moon_phase, get_season)
+                             link_value_icon_dict, angle_moon_phase, get_season, weather_to_pictogrammes)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
@@ -149,6 +149,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_bt.clicked.connect(self.show_pressure_details)
         self.in_humidity_bt.clicked.connect(self.show_hum_temp_details)
         self.out_humidity_bt.clicked.connect(self.show_hum_temp_details)
+        fc_buttons = self.forecast_1h_stack.findChildren(QtWidgets.QToolButton)
+        for button in fc_buttons:
+            button.clicked.connect(self.display_1h_forecast_details)
+        fc_buttons = self.page_5.findChildren(QtWidgets.QToolButton)
+        for button in fc_buttons:
+            button.clicked.connect(self.display_6h1d_forecast_details)
         self.button_list = [self.in_out_bt, self.ephemeride_bt, self.time_series_bt, self.h1_prev_bt, self.h6_prev_bt]
         self.in_out_bt.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.time_label.setGraphicsEffect(shadow_creation_function(1, 5))
@@ -506,82 +512,80 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def display_fc_1h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_1h')
         if self.forecast_data:
-            clean_1h_forecast_widgets(self)
-            lim = 0
+            i = 1
             for t, forecast in self.forecast_data['hourly'].items():
-                hour = str(t.hour)
-                weather = forecast['weather']
-                temp = str(round(forecast['temp']))
-                if 0 <= lim < 6:
-                    horizontal_layout = self.prev1h_layout_1
-                elif 6 <= lim < 12:
-                    self.right_fc_button.click()
-                    horizontal_layout = self.prev1h_layout_2
-                elif 12 <= lim < 18:
-                    horizontal_layout = self.prev1h_layout_3
-                else:
-                    horizontal_layout = self.prev1h_layout_4
-                add_1h_forecast_widget(self, hour, weather, temp, t, horizontal_layout)
-                lim += 1
-            self.left_fc_button.click()
+                hour = str(t.hour) + 'h'
+                if hour == '0h':
+                    hour = 'Minuit'
+                elif hour == '12h':
+                    hour = 'Midi'
+                hour_lb = self.forecast_1h_stack.findChild(QtWidgets.QLabel, f'fc_hour_lb_{i}')
+                weat_bt = self.forecast_1h_stack.findChild(QtWidgets.QToolButton, f'fc_weat_bt_{i}')
+                temp_lb = self.forecast_1h_stack.findChild(QtWidgets.QLabel, f'fc_temp_lb_{i}')
+                hour_lb.setText(hour)
+                weat_bt.setIcon(weather_to_pictogrammes(forecast['weather'], t, self.sunrise_6days, self.sunset_6days))
+                temp_lb.setText(str(round(forecast['temp'])) + '°C')
+                i += 1
 
     def display_fc_6h(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_fc_6h')
         if self.forecast_data:
-            clean_6h_forecast_widgets(self)
-            logging.debug(f'gui - mainwindow.py - MainWindow - display_fc_6h - objects '
-                          f'{len(self.forecast_data["quaterly"])}')
             if self.forecast_data['api'] == 'meteofrance':
-                j = 0
                 for i in [0, 4, 8, 12, 16]:
                     dt_list = list(self.forecast_data['quaterly'].keys())[i: i + 4]
-                    dt = dt_list[2]
-                    weather = self.forecast_data['quaterly'][dt]['weather']
+                    weather = self.forecast_data['quaterly'][dt_list[2]]['weather']
                     temp_list = [self.forecast_data['quaterly'][t]['temp'] for t in dt_list]
-                    date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
+                    date = days_months_dictionary()['day'][dt_list[2].weekday() + 1] + ' ' + str(dt_list[2].day)
                     temp = f'{round(min(temp_list))}°C / {round(max(temp_list))}°C'
-                    if i < 12:
-                        horizontal_layout = self.prev6h_layout_1
-                    else:
-                        horizontal_layout = self.prev6h_layout_2
-                    sunrise, sunset = self.sunrise_6days[j + 1], self.sunset_6days[j + 1]
-                    add_6h_forecast_widget(self, date, weather, temp, dt_list, horizontal_layout, sunrise, sunset)
-                    j += 1
-            else:
+                    date_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_day_lb_{int(i / 4) + 1}')
+                    weat_bt = self.page_5.findChild(QtWidgets.QToolButton, f'fc_dweat_bt_{int(i / 4) + 1}')
+                    temp_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_mmtemp_lb_{int(i / 4) + 1}')
+                    date_lb.setText(date)
+                    weat_bt.setIcon(weather_to_pictogrammes(weather))
+                    weat_bt.setText(str(i))
+                    temp_lb.setText(temp)
+            elif self.forecast_data['api'] == 'openweather':
                 i = 0
                 for dt, fc in self.forecast_data['quaterly'].items():
                     date = days_months_dictionary()['day'][dt.weekday() + 1] + ' ' + str(dt.day)
                     weather = fc['weather']
                     temp = f'{round(fc["temp"]["min"])}°C / {round(fc["temp"]["max"])}°C'
-                    if i < 3:
-                        horizontal_layout = self.prev6h_layout_1
-                    else:
-                        horizontal_layout = self.prev6h_layout_2
-                    data = {'temp': temp, 'date': dt, 'weather': weather, 'cover': fc['cover'], 'pres': fc['pres'],
-                            'rain': fc['rain'], 'w_spd': fc['w_spd'], 'w_dir': fc['w_dir']}
-                    add_6h_forecast_widget(self, date, weather, temp, data, horizontal_layout=horizontal_layout,
-                                           api='openweather')
+                    date_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_day_lb_{i + 1}')
+                    weat_bt = self.page_5.findChild(QtWidgets.QToolButton, f'fc_dweat_bt_{i + 1}')
+                    temp_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_mmtemp_lb_{i + 1}')
+                    date_lb.setText(date)
+                    weat_bt.setIcon(weather_to_pictogrammes(weather))
+                    temp_lb.setText(temp)
                     i += 1
 
-    def display_1h_forecast_details(self, full_dt):
-        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - full_dt: {full_dt}')
-        forecast = self.forecast_data['hourly'][full_dt]
-        details_window = My1hFCDetails(forecast, self.sunrise_6days, self.sunset_6days, self)
-        details_window.exec_()
+    def display_1h_forecast_details(self):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details')
+        if self.forecast_data:
+            idx = int(self.sender().objectName()[11:]) - 1
+            forecast = self.forecast_data['hourly'][list(self.forecast_data['hourly'].keys())[idx]]
+            details_window = My1hFCDetails(forecast, self.sunrise_6days, self.sunset_6days, self)
+            details_window.exec_()
 
-    def display_1d_forecast_details(self, data):
-        logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details - data: {data}')
-        details_window = My1dFCDetails(data, self)
-        details_window.exec_()
-
-    def display_6h_forecast_details(self, dt_list, sunrise, sunset):
-        logging.debug(f'gui - mainwindow.py - MainWindow - display_6h_forecast_details - dt_list: {dt_list} ; '
-                      f'sunrise: {sunrise} ; sunset: {sunset}')
-        forecast = []
-        for dt in dt_list:
-            forecast.append([dt, self.forecast_data['quaterly'][dt]])
-        details_window = My6hFCDetails(forecast, sunrise, sunset, self)
-        details_window.exec_()
+    def display_6h1d_forecast_details(self):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_6h1d_forecast_details')
+        if self.forecast_data:
+            idx1 = int(self.sender().objectName()[12:])
+            if self.forecast_data['api'] == 'meteofrance':
+                idx2 = int(self.sender().text())
+                dt_list = list(self.forecast_data['quaterly'].keys())[idx2: idx2 + 4]
+                forecast = []
+                for dt in dt_list:
+                    forecast.append([dt, self.forecast_data['quaterly'][dt]])
+                details_window = My6hFCDetails(forecast, self.sunrise_6days[idx1], self.sunset_6days[idx1], self)
+                details_window.exec_()
+            elif self.forecast_data['api'] == 'openweather':
+                dt = list(self.forecast_data['quaterly'].keys())[idx1 - 1]
+                fc = self.forecast_data['quaterly'][dt]
+                data = {'temp': f'{round(fc["temp"]["min"])}°C / {round(fc["temp"]["max"])}°C', 'date': dt,
+                        'weather': fc['weather'], 'cover': fc['cover'], 'pres': fc['pres'],
+                        'rain': fc['rain'], 'w_spd': fc['w_spd'], 'w_dir': fc['w_dir']}
+                details_window = My1dFCDetails(data, self)
+                details_window.exec_()
 
     def show_bat_link_details(self):
         logging.debug('gui - mainwindow.py - MainWindow - show_bat_link_details')
