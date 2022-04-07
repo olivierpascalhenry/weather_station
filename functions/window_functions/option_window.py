@@ -409,7 +409,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 place_dict['dp_gps'] = f'Lon : {lon} ; Lat : {lat}'
                 place_dict['object'] = list_places[0]
                 place_dict['ville'] = list_places[0].name
-                place_dict['cp_id'] = list_places[0].id
+                place_dict['cp_id'] = str(list_places[0].id)
                 place_dict['longitude'] = list_places[0].lon
                 place_dict['latitude'] = list_places[0].lat
 
