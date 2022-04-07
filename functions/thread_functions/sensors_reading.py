@@ -125,7 +125,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         self.name = sensor_dict['id']
         self.sensor_dict = sensor_dict
         self.address = int(sensor_dict['id'][sensor_dict['id'].find('0x'):], 16)
-        self.bus = sensor_dict['bus']
+        self.bus = smbus2.SMBus(sensor_dict['bus'])
         self.cal_params = None
         self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
@@ -144,7 +144,8 @@ class BME280DataCollectingThread(QtCore.QThread):
     def collect_data(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - collect_data')
         try:
-            data = bme280.sample(smbus2.SMBus(self.bus), self.address, self.cal_params)
+            # bus = smbus2.SMBus(self.bus)
+            data = bme280.sample(self.bus, self.address, self.cal_params)
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
             pres = round(data.pressure, 1)
@@ -182,7 +183,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - set_bme280_parameters - '
                       f'bus: {self.bus} ; address: {self.address}')
         try:
-            self.cal_params = bme280.load_calibration_params(smbus2.SMBus(self.bus), self.address)
+            self.cal_params = bme280.load_calibration_params(self.bus, self.address)
             return True
         except OSError:
             logging.info(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - run - '
@@ -196,6 +197,7 @@ class BME280DataCollectingThread(QtCore.QThread):
     def stop(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - stop')
         self.connector.close()
+        self.bus.close()
         self.terminate()
 
 
@@ -277,38 +279,22 @@ class MqttToDbThread(QtCore.QThread):
         database = os.path.basename(message.topic)
         try:
             temperature = round(data['temperature'], 1)
-            if self.mqtt_dict['cal_methode']:
-                if self.mqtt_dict['cal_methode'] == 'offset':
-                    temperature += float(self.mqtt_dict['cal_value'])
-        except KeyError:
-            temperature = None
-        try:
+            if self.mqtt_dict['devices'][database]['cal_methode']:
+                if self.mqtt_dict['devices'][database]['cal_methode'] == 'offset':
+                    temperature += float(self.mqtt_dict['devices'][database]['cal_value'])
             humidity = round(data['humidity'], 1)
-        except KeyError:
-            humidity = None
-        try:
             pressure = round(data['pressure'], 1)
-        except KeyError:
-            pressure = None
-
-        if self.alt is not None and temperature is not None:
-            pressure_msl = pressure + ((pressure * 9.80665 * self.alt) /
-                                       (287.0531 * (273.15 + temperature + (self.alt / 400))))
-            pressure_msl = round(pressure_msl, 1)
-        else:
-            pressure_msl = prespressure
-
-        try:
+            if self.alt is not None and temperature is not None:
+                pressure_msl = pressure + ((pressure * 9.80665 * self.alt) /
+                                           (287.0531 * (273.15 + temperature + (self.alt / 400))))
+                pressure_msl = round(pressure_msl, 1)
+            else:
+                pressure_msl = pressure
             battery = data['battery']
-        except KeyError:
-            battery = None
-        try:
             signal = data['linkquality']
-        except KeyError:
-            signal = None
-
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - sending data to db')
-
+        except:
+            logging.exception(f'gui - sensors_reading.py - MqttToDbThread - parse data - issue with data')
+            temperature, humidity, pressure, pressure_msl, battery, signal = None, None, None, None, None, None
         self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):

@@ -6,6 +6,7 @@
     * an issue in the thread to check postgresql and database has been fixed.
     * fixed a keyerror with a dispatching dictionary.
     * fixed an issue with calibration in MQTT thread.
+    * the mqtt dict was wrongly read by temperature calibration.
 
   * MODIFIED:
     * set_size function has been improved.
