@@ -20,6 +20,7 @@
     * simplified weather forecast requests.
     * the place object is now a dictionary embedding the old place object.
     * the computation of ephemeris has been moved to a qthread.
+    * moved the plotting of data to new functions in the same thread.
 
   * ADDED
     * a new download thread has been added (part of new update system).
