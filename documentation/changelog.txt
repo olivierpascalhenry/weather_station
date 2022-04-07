@@ -1,4 +1,4 @@
-### April XX 2022, Release version 0.12.0 ###
+### April 7 2022, Release version 0.12.0 ###
 
   * FIXED:
     * the sunlive time was wrongly computed, it has been fixed.
