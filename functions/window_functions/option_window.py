@@ -439,7 +439,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             elif self.sender().objectName() == 'ca_bt_1':
                 self.ca_ln_1.setText(numpad_window.num_line.text())
             elif self.sender().objectName() == 'ap_gb_3_bt_1':
-                self.ap_gb_3_ln_1.setText(numpad_window.num_line.text())
+                self.ap_gb_5_ln_1.setText(numpad_window.num_line.text())
             elif self.sender().objectName() == 'sy_gb_bt_1':
                 self.sy_gb_ln_1.setText(numpad_window.num_line.text())
             elif self.sender().objectName() == 'db_gb_bt_5':
@@ -450,7 +450,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         keyboard_window = MyKeyboard(self.mainparent)
         keyboard_window.exec_()
         if not keyboard_window.cancel:
-            if self.sender().objectName() == 'ap_gb_2_ln_1':
+            if self.sender().objectName() == 'ap_gb_2_bt_1':
                 self.ap_gb_2_ln_1.setText(keyboard_window.num_line.text())
             elif self.sender().objectName() == 'db_gb_bt_1':
                 self.db_gb_ln_1.setText(keyboard_window.num_line.text())
