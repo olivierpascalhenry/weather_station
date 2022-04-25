@@ -112,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_battery = None
         self.out_signal = None
         self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
-        self.stacked_widget_dispatcher = {2: self.plot_time_series_start, 3: self.display_fc_1h, 4: self.display_fc_6h}
+        # self.stacked_widget_dispatcher = {2: self.plot_time_series_start, 3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
         self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
@@ -505,6 +505,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_forecast_data - fc_data: {fc_data}')
         if fc_data:
             self.forecast_data = fc_data
+            self.display_fc_1h()
+            self.display_fc_6h()
+
+
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
                 self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
@@ -716,8 +720,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-        if idx > 1:
-            self.stacked_widget_dispatcher[idx]()
+
+        if idx == 2:
+            self.plot_time_series_start()
+
+
+
+        # if idx > 1:
+        #     self.stacked_widget_dispatcher[idx]()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
