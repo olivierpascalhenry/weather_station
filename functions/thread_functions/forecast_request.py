@@ -42,7 +42,6 @@ class MFForecastRequest(QtCore.QThread):
                                      'w_dir': forecast['wind']['direction'],
                                      'w_gst': forecast['wind']['gust'],
                                      'rain': forecast['rain']['1h'],
-                                     'rain_test': float(forecast['rain']['1h']) * 100,
                                      'snow': forecast['snow']['1h'],
                                      'weather': forecast['weather']['desc'],
                                      'cover': forecast['clouds']}
@@ -105,6 +104,7 @@ class MFForecastRequest(QtCore.QThread):
     def stop(self):
         logging.debug('gui - forecast_resquest.py - MFForecastRequest - stop')
         self.terminate()
+        logging.debug('gui - forecast_resquest.py - MFForecastRequest - stop - terminate')
 
 
 class OWForecastRequest(QtCore.QThread):
@@ -190,3 +190,4 @@ class OWForecastRequest(QtCore.QThread):
     def stop(self):
         logging.debug('gui - forecast_resquest.py - OWForecastRequest - stop')
         self.terminate()
+        logging.debug('gui - forecast_resquest.py - OWForecastRequest - stop - terminate')

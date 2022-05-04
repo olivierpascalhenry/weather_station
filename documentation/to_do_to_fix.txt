@@ -5,6 +5,3 @@
 ### To fix list: ###
 
 * lorsqu'on plot des séries, si la liste est vide, min ou max ne fonctionne pas.
-* supprimer le closeEvent dans le mainwindow.py et voir si ça règle le plantage.
-
-
