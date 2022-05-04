@@ -1,4 +1,4 @@
-### April XX 2022, Release version 0.13.0 ###
+### May XX 2022, Release version 0.12.1 ###
 
   * MODIFIED:
     * forecast data are now automatically parse and displayed once they are received from weather API.
