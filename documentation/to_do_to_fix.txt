@@ -4,4 +4,4 @@
 
 ### To fix list: ###
 
-* lorsqu'on plot des séries, si la liste est vide, min ou max ne fonctionne pas.
+*
