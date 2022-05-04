@@ -81,7 +81,9 @@ class DS18B20DataCollectingThread(QtCore.QThread):
     def stop(self):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop')
         self.connector.close()
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop - connector closed')
         self.terminate()
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop - terminate')
 
 
 class DS18B20DataCollectingTestThread(QtCore.QThread):
@@ -114,7 +116,9 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop')
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop - terminate')
 
 
 class BME280DataCollectingThread(QtCore.QThread):
@@ -144,7 +148,6 @@ class BME280DataCollectingThread(QtCore.QThread):
     def collect_data(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - collect_data')
         try:
-            # bus = smbus2.SMBus(self.bus)
             data = bme280.sample(self.bus, self.address, self.cal_params)
             temp = round(data.temperature, 1)
             hum = round(data.humidity, 1)
@@ -197,8 +200,11 @@ class BME280DataCollectingThread(QtCore.QThread):
     def stop(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - stop')
         self.connector.close()
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - connector closed')
         self.bus.close()
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - bus closed')
         self.terminate()
+        logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - terminate')
 
 
 class BME280DataCollectingTestThread(QtCore.QThread):
@@ -235,7 +241,9 @@ class BME280DataCollectingTestThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - stop')
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - stop - terminate')
 
 
 class MqttToDbThread(QtCore.QThread):
@@ -311,11 +319,12 @@ class MqttToDbThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
-        if platform.system() == 'Linux':
-            self.mqtt_client.disconnect()
-            self.mqtt_client.loop_stop()
+        self.mqtt_client.disconnect()
+        self.mqtt_client.loop_stop()
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - terminate')
 
 
 class MqttToDbTestThread(QtCore.QThread):
@@ -350,10 +359,10 @@ class MqttToDbTestThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop')
-        if platform.system() == 'Linux':
-            self.mqtt_client.disconnect()
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - terminate')
 
 
 class DBInDataThread(QtCore.QThread):
@@ -441,7 +450,9 @@ class DBInDataThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - stop')
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - DBInDataThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - DBInDataThread - stop - terminate')
 
 
 class DBOutDataThread(QtCore.QThread):
@@ -529,4 +540,6 @@ class DBOutDataThread(QtCore.QThread):
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - stop')
         self.connector.close()
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - connector closed')
         self.terminate()
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - terminate')
