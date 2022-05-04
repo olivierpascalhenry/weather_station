@@ -67,6 +67,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.connector = None
         self.cursor = None
         self.reboot = False
+        self.shutdown = False
         self.current_date = None
         self.figure_in = None
         self.figure_out = None
@@ -112,7 +113,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_battery = None
         self.out_signal = None
         self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
-        # self.stacked_widget_dispatcher = {2: self.plot_time_series_start, 3: self.display_fc_1h, 4: self.display_fc_6h}
         self.sunrise_6days = []
         self.sunset_6days = []
         self.fc_1h_vert_lay_1 = []
@@ -507,8 +507,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.forecast_data = fc_data
             self.display_fc_1h()
             self.display_fc_6h()
-
-
             if fc_data['warning']:
                 self.warning_button.setObjectName('warning_function')
                 self.warning_button.setIcon(icon_creation_function('weather_warning_icon.svg'))
@@ -720,14 +718,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-
         if idx == 2:
             self.plot_time_series_start()
-
-
-
-        # if idx > 1:
-        #     self.stacked_widget_dispatcher[idx]()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
@@ -778,20 +770,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
         if platform.system() == 'Windows':
-            self.close()
+            self.close_gui()
         else:
             exit_window = MyExit(self)
             exit_window.exec_()
             if not exit_window.cancel:
                 if exit_window.exit:
-                    self.close()
+                    self.close_gui()
                 elif exit_window.reboot:
-                    os.system('sudo shutdown -r now')
+                    self.reboot = True
+                    self.close_gui()
+                    # os.system('sudo shutdown -r now')
                 elif exit_window.shutdown:
-                    os.system('sudo shutdown -h now')
+                    self.shutdown = True
+                    self.close_gui()
+                    # os.system('sudo shutdown -h now')
 
-    def closeEvent(self, event):
-        logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
+    def close_gui(self):
+        logging.info('gui - mainwindow.py - MainWindow - close_gui')
         for thread in self.ds18b20_data_threads + self.bme280_data_threads + self.collect_mqtt_data_thread:
             thread.stop()
         if self.db_cleaning_thread is not None:
@@ -803,9 +799,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.compute_ephemeris_thread is not None:
             self.compute_ephemeris_thread.stop()
         self.timer.stop()
+
+        time.sleep(5)
+
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
-        if platform.system() == 'Linux' and self.reboot:
+        if self.reboot:
             os.system('sudo shutdown -r now')
-        event.accept()
+        elif self.shutdown:
+            os.system('sudo shutdown -h now')
+        else:
+            self.close()
+
+
+    # def closeEvent(self, event):
+    #     logging.debug('gui - mainwindow.py - MainWindow - closeEvent')
+    #     for thread in self.ds18b20_data_threads + self.bme280_data_threads + self.collect_mqtt_data_thread:
+    #         thread.stop()
+    #     if self.db_cleaning_thread is not None:
+    #         self.db_cleaning_thread.stop()
+    #     if self.display_in_data_thread is not None:
+    #         self.display_in_data_thread.stop()
+    #     if self.display_out_data_thread is not None:
+    #         self.display_out_data_thread.stop()
+    #     if self.compute_ephemeris_thread is not None:
+    #         self.compute_ephemeris_thread.stop()
+    #     self.timer.stop()
+    #     logging.info('**********************************')
+    #     logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
+    #     logging.info('**********************************')
+    #     if platform.system() == 'Linux' and self.reboot:
+    #         os.system('sudo shutdown -r now')
+    #     event.accept()
