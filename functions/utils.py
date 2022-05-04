@@ -183,7 +183,7 @@ def weather_to_pictogrammes(weather, dt=None, sunrise=None, sunset=None):
                          'Couvert': 'couvert.svg',
                          'Rares averses': 'rares_averses.svg',
                          'Pluies éparses': 'pluies_eparses.svg',
-                         'Risque de grèle': 'risque_grele.svg',
+                         'Risque de grêle': 'risque_grele.svg',
                          'Averses orageuses': 'averses_orageuses.svg',
                          'Brume': 'brume.svg',
                          'Averses': 'pluie.svg',
