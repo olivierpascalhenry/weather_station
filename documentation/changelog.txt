@@ -6,6 +6,7 @@
 
   * FIXED:
     * a mistake has been fixed in forecast name.
+    * time limits have been moved to another parts of plot thread to force computation.
 
 
 ### April 7 2022, Release version 0.12.0 ###
