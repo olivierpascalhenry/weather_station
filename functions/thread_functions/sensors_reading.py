@@ -8,10 +8,10 @@ import datetime
 import platform
 import psycopg2
 from PyQt5 import QtCore
+import paho.mqtt.client as mqtt
 if platform.system() == 'Linux':
     import smbus2
     import bme280
-    import paho.mqtt.client as mqtt
 
 
 class DS18B20DataCollectingThread(QtCore.QThread):
@@ -246,42 +246,47 @@ class BME280DataCollectingTestThread(QtCore.QThread):
         logging.debug('gui - sensors_reading.py - BME280DataCollectingTestThread - stop - terminate')
 
 
-class MqttToDbThread(QtCore.QThread):
-    def __init__(self, db_dict, mqtt_dict, altitude):
-        QtCore.QThread.__init__(self)
-        logging.info(f'gui - sensors_reading.py - MqttToDbThread - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
+class MqttToDbObject(QtCore.QObject):
+    def __init__(self, db_dict, mqtt_dict, altitude, parent=None):
+        super(MqttToDbObject, self).__init__(parent)
+        logging.info(f'gui - sensors_reading.py - MqttToDbObject - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
                      f'{altitude}')
         self.alt = altitude
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
         self.mqtt_dict = mqtt_dict
-        self.mqtt_client = None
-
-    def run(self):
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
         self.mqtt_client = mqtt.Client('weather_station_thread')
         self.mqtt_client.on_message = self.parse_data
         self.mqtt_client.on_connect = self.on_connect
         self.mqtt_client.on_disconnect = self.on_disconnect
         self.mqtt_client.username_pw_set(username=self.mqtt_dict['username'], password=self.mqtt_dict['password'])
+
+    @QtCore.pyqtSlot()
+    def connect_to_mqtt(self):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbObject - connect_to_mqtt')
         self.mqtt_client.connect(self.mqtt_dict['address'])
         topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
         self.mqtt_client.subscribe(topics_list)
         self.mqtt_client.loop_start()
 
+    @QtCore.pyqtSlot()
+    def disconnect_from_mqtt(self):
+        logging.debug('gui - sensors_reading.py - MqttToDbObject - disconnect_from_mqtt')
+        self.mqtt_client.disconnect()
+
     @staticmethod
     def on_connect(client, userdata, flags, rc):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbObject - connected to broker with connect code: {rc}')
 
     @staticmethod
     def on_disconnect(client, userdata, rc):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code:'
+        logging.debug(f'gui - sensors_reading.py - MqttToDbObject - disconnected from broker with disconnect code:'
                       f' {rc}')
         client.loop_stop()
 
     def parse_data(self, client, userdata, message):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : '
+        logging.debug(f'gui - sensors_reading.py - MqttToDbObject - parse data - message received : '
                       f'{str(message.payload.decode("utf-8"))} ; from {message.topic}')
         date_time = datetime.datetime.now()
         data = json.loads(str(message.payload.decode('utf-8')))
@@ -302,12 +307,12 @@ class MqttToDbThread(QtCore.QThread):
             battery = data['battery']
             signal = data['linkquality']
         except:
-            logging.exception(f'gui - sensors_reading.py - MqttToDbThread - parse data - issue with data')
+            logging.exception(f'gui - sensors_reading.py - MqttToDbObject - parse data - issue with data')
             temperature, humidity, pressure, pressure_msl, battery, signal = None, None, None, None, None, None
         self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
-        logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
+        logging.debug(f'gui - sensors_reading.py - MqttToDbObject - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
                       f'| {ps_sl} | {bt} | {lk} | {db}')
         try:
             self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, pressure_msl, '
@@ -315,19 +320,92 @@ class MqttToDbThread(QtCore.QThread):
                                 (dt, tp, hm, ps, ps_sl, bt, lk))
             self.connector.commit()
         except Exception:
-            logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
+            logging.exception('gui - sensors_reading.py - MqttToDbObject - set_mqtt_client - an exception occurred '
                               'when adding data to db')
 
-    def stop(self):
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
-        # self.mqtt_client.loop_stop()
-        # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - mqtt loop closed')
-        # self.mqtt_client.disconnect()
-        # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - mqtt disconnected')
-        self.connector.close()
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - connector closed')
-        self.terminate()
-        logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - terminate')
+
+# class MqttToDbThread(QtCore.QThread):
+#     def __init__(self, db_dict, mqtt_dict, altitude):
+#         QtCore.QThread.__init__(self)
+#         logging.info(f'gui - sensors_reading.py - MqttToDbThread - __init__ - mqtt_dict: {mqtt_dict} ; altitude: '
+#                      f'{altitude}')
+#         self.alt = altitude
+#         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
+#                                           database=db_dict['database'], port=db_dict['port'])
+#         self.cursor = self.connector.cursor()
+#         self.mqtt_dict = mqtt_dict
+#         self.mqtt_client = None
+#
+#     def run(self):
+#         logging.debug('gui - sensors_reading.py - MqttToDbThread - run')
+#         self.mqtt_client = mqtt.Client('weather_station_thread')
+#         self.mqtt_client.on_message = self.parse_data
+#         self.mqtt_client.on_connect = self.on_connect
+#         self.mqtt_client.on_disconnect = self.on_disconnect
+#         self.mqtt_client.username_pw_set(username=self.mqtt_dict['username'], password=self.mqtt_dict['password'])
+#         self.mqtt_client.connect(self.mqtt_dict['address'])
+#         topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
+#         self.mqtt_client.subscribe(topics_list)
+#         self.mqtt_client.loop_start()
+#
+#     @staticmethod
+#     def on_connect(client, userdata, flags, rc):
+#         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - connected to broker with connect code: {rc}')
+#
+#     @staticmethod
+#     def on_disconnect(client, userdata, rc):
+#         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - disconnected from broker with disconnect code:'
+#                       f' {rc}')
+#         client.loop_stop()
+#
+#     def parse_data(self, client, userdata, message):
+#         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - parse data - message received : '
+#                       f'{str(message.payload.decode("utf-8"))} ; from {message.topic}')
+#         date_time = datetime.datetime.now()
+#         data = json.loads(str(message.payload.decode('utf-8')))
+#         database = os.path.basename(message.topic)
+#         try:
+#             temperature = round(data['temperature'], 1)
+#             if self.mqtt_dict['devices'][database]['cal_methode']:
+#                 if self.mqtt_dict['devices'][database]['cal_methode'] == 'offset':
+#                     temperature += float(self.mqtt_dict['devices'][database]['cal_value'])
+#             humidity = round(data['humidity'], 1)
+#             pressure = round(data['pressure'], 1)
+#             if self.alt is not None and temperature is not None:
+#                 pressure_msl = pressure + ((pressure * 9.80665 * self.alt) /
+#                                            (287.0531 * (273.15 + temperature + (self.alt / 400))))
+#                 pressure_msl = round(pressure_msl, 1)
+#             else:
+#                 pressure_msl = pressure
+#             battery = data['battery']
+#             signal = data['linkquality']
+#         except:
+#             logging.exception(f'gui - sensors_reading.py - MqttToDbThread - parse data - issue with data')
+#             temperature, humidity, pressure, pressure_msl, battery, signal = None, None, None, None, None, None
+#         self.add_data_to_db(date_time, temperature, humidity, pressure, pressure_msl, battery, signal, database)
+#
+#     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
+#         logging.debug(f'gui - sensors_reading.py - MqttToDbThread - add_data_to_db - data : {dt} | {tp} | {hm} | {ps} '
+#                       f'| {ps_sl} | {bt} | {lk} | {db}')
+#         try:
+#             self.cursor.execute(f'insert into "{db}" (date_time, temperature, humidity, pressure, pressure_msl, '
+#                                 f'battery, signal) values (%s, %s, %s, %s, %s, %s, %s)',
+#                                 (dt, tp, hm, ps, ps_sl, bt, lk))
+#             self.connector.commit()
+#         except Exception:
+#             logging.exception('gui - sensors_reading.py - MqttToDbThread - set_mqtt_client - an exception occurred '
+#                               'when adding data to db')
+#
+#     def stop(self):
+#         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop')
+#         # self.mqtt_client.loop_stop()
+#         # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - mqtt loop closed')
+#         # self.mqtt_client.disconnect()
+#         # logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - mqtt disconnected')
+#         self.connector.close()
+#         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - connector closed')
+#         self.terminate()
+#         logging.debug('gui - sensors_reading.py - MqttToDbThread - stop - terminate')
 
 
 class MqttToDbTestThread(QtCore.QThread):
