@@ -1,7 +1,7 @@
 Version:
 --------
 
-Weather Station v0.11.0
+Weather Station v0.12.0
 
 
 Project Overview:
