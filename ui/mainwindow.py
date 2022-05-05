@@ -30,9 +30,9 @@ from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownloa
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo,
                                                       MyUpdateProcess)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
-                                                        MqttToDbThread, DBInDataThread, DBOutDataThread,
+                                                        DBInDataThread, DBOutDataThread, MqttToDbObject,
                                                         DS18B20DataCollectingTestThread, MqttToDbTestThread,
-                                                        BME280DataCollectingTestThread, MqttToDbObject)
+                                                        BME280DataCollectingTestThread)
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager,

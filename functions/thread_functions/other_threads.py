@@ -478,7 +478,7 @@ class RequestPlotDataThread(QtCore.QThread):
         self.sensor_dict = sensor_dict
         self.now = None
         self.limit = None
-        self.hours_list = now
+        self.hours_list = None
         self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
                                           password=self.config_dict.get('DATABASE', 'password'),
                                           host=self.config_dict.get('DATABASE', 'host'),
