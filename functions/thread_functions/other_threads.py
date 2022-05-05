@@ -464,7 +464,6 @@ class RequestPlotDataThread(QtCore.QThread):
     color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
     ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
                     '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
-    hours_list = mpl_hour_list()
 
     def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
@@ -479,6 +478,7 @@ class RequestPlotDataThread(QtCore.QThread):
         self.sensor_dict = sensor_dict
         self.now = None
         self.limit = None
+        self.hours_list = now
         self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
                                           password=self.config_dict.get('DATABASE', 'password'),
                                           host=self.config_dict.get('DATABASE', 'host'),
@@ -495,6 +495,7 @@ class RequestPlotDataThread(QtCore.QThread):
         try:
             self.now = datetime.datetime.now()
             self.limit = self.now - datetime.timedelta(hours=24)
+            self.hours_list = mpl_hour_list()
             self.plot_in_data()
             self.plot_out_data()
             self.canvas_in.draw()
