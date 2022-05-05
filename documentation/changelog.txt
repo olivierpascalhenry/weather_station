@@ -4,6 +4,7 @@
     * forecast data are now automatically parse and displayed once they are received from weather API.
     * forecast buttons (1h and 1d/6h) don't trigger forecast data parsing anymore.
     * few logging messages have been added to forecast threads.
+    * a new mqtt thread has been coded.
 
   * FIXED:
     * a mistake has been fixed in forecast name.
