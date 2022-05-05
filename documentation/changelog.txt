@@ -1,10 +1,10 @@
-### May XX 2022, Release version 0.12.1 ###
+### May 5 2022, Release version 0.12.1 ###
 
   * MODIFIED:
     * forecast data are now automatically parse and displayed once they are received from weather API.
     * forecast buttons (1h and 1d/6h) don't trigger forecast data parsing anymore.
     * few logging messages have been added to forecast threads.
-    * a new mqtt thread has been coded.
+    * a new mqtt thread has been coded to replace the crashing old one.
 
   * FIXED:
     * a mistake has been fixed in forecast name.

@@ -279,8 +279,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
             self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
-            # self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
-            self.collect_mqtt_data_thread = [MqttToDbObject(self.db_dict, self.sensor_dict['MQTT'], alt)]
+            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
 
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.start()
