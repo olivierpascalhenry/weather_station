@@ -3,6 +3,9 @@
   * FIXED
     * fixed an issue with the function which converts day number in week to day name for the computation of ephemeris.
 
+  * MODIFIED
+    * removed the version number from readme as I constantly forget to update it ...
+
 
 ### May 5 2022, Release version 0.12.1 ###
 
