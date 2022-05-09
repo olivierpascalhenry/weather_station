@@ -682,7 +682,7 @@ class ComputeEphemerisThread(QtCore.QThread):
                     h = '0' + h
                 if len(m) == 1:
                     m = '0' + m
-                day_box_title = (f'{days_months_dictionary()["day"][current_date.weekday()]} '
+                day_box_title = (f'{days_months_dictionary()["day"][current_date.weekday() + 1]} '
                                  f'{current_date.day} '
                                  f'{days_months_dictionary()["month"][current_date.month]} '
                                  f'{current_date.year}')
