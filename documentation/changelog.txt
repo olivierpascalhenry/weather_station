@@ -3,6 +3,7 @@
 
   * FIXED:
     * plot thread tried to compute min and max of a list even if the list is empty.
+    * MQTT test thread was not handled properly since last version.
 
 
 ### May 5 2022, Release version 0.12.1 ###

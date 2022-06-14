@@ -271,11 +271,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if (self.sensor_dict['MQTT'] and self.sensor_dict['MQTT']['username'] and
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
-
-                # self.collect_mqtt_data_thread = [MqttToDbThread(self.db_dict, self.sensor_dict['MQTT'], alt)]
-
                 self.collect_mqtt_data_thread = [MqttToDbObject(self.db_dict, self.sensor_dict['MQTT'], alt)]
-
         else:
             self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
             self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
@@ -285,7 +281,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             thread.start()
 
         for thread in self.collect_mqtt_data_thread:
-            thread.connect_to_mqtt()
+            try:
+                thread.connect_to_mqtt()
+            except AttributeError:
+                thread.start()
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
@@ -797,7 +796,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.stop()
         for thread in self.collect_mqtt_data_thread:
-            thread.disconnect_from_mqtt()
+            try:
+                thread.disconnect_from_mqtt()
+            except AttributeError:
+                thread.stop()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
         if self.display_in_data_thread is not None:
