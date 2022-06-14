@@ -432,6 +432,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def plot_time_series_start(self):
         logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
         self.time_series_stack.setCurrentIndex(0)
+        self.set_ts_stack_icon()
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
         self.setup_plot_area()
