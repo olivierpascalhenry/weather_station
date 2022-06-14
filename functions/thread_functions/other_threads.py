@@ -555,7 +555,7 @@ class RequestPlotDataThread(QtCore.QThread):
         self.plot_out_1.tick_params(axis='y', labelcolor=self.color_1)
         self.plot_out_2.set_ylabel(ylabel, color=self.color_3)
         self.plot_out_2.tick_params(axis='y', labelcolor=self.color_3)
-        if temp_out_y is not None:
+        if temp_out_y is not None and temp_out_y:
             self.plot_out_1.plot(temp_out_x, temp_out_y, color=self.color_1, linewidth=1.)
             y_min, y_max = 10, 30
             while min(temp_out_y) < y_min:
@@ -563,7 +563,7 @@ class RequestPlotDataThread(QtCore.QThread):
             while max(temp_out_y) > y_max:
                 y_max += 5
             self.plot_out_1.set_ylim(y_min, y_max)
-        if pres_out_y is not None:
+        if pres_out_y is not None and pres_out_y:
             self.plot_out_2.plot(pres_out_x, pres_out_y, color=self.color_3, linewidth=1.)
             y_min, y_max = 990, 1030
             while min(pres_out_y) < y_min:
