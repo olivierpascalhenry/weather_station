@@ -296,16 +296,28 @@ class MqttToDbObject(QtCore.QObject):
             if self.mqtt_dict['devices'][database]['cal_methode']:
                 if self.mqtt_dict['devices'][database]['cal_methode'] == 'offset':
                     temperature += float(self.mqtt_dict['devices'][database]['cal_value'])
-            humidity = round(data['humidity'], 1)
-            pressure = round(data['pressure'], 1)
-            if self.alt is not None and temperature is not None:
+            try:
+                humidity = round(data['humidity'], 1)
+            except KeyError:
+                humidity = None
+            try:
+                pressure = round(data['pressure'], 1)
+            except KeyError:
+                pressure = None
+            if self.alt is not None and temperature is not None and pressure is not None:
                 pressure_msl = pressure + ((pressure * 9.80665 * self.alt) /
                                            (287.0531 * (273.15 + temperature + (self.alt / 400))))
                 pressure_msl = round(pressure_msl, 1)
             else:
                 pressure_msl = pressure
-            battery = data['battery']
-            signal = data['linkquality']
+            try:
+                battery = data['battery']
+            except KeyError:
+                battery = None
+            try:
+                signal = data['linkquality']
+            except KeyError:
+                signal = None
         except:
             logging.exception(f'gui - sensors_reading.py - MqttToDbObject - parse data - issue with data')
             temperature, humidity, pressure, pressure_msl, battery, signal = None, None, None, None, None, None
