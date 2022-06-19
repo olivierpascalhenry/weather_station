@@ -4,6 +4,8 @@ import copy
 import pickle
 import logging
 import pathlib
+import datetime
+import psycopg2
 from meteofrance_api import MeteoFranceClient
 from pyowm.owm import OWM
 from pyowm.utils.config import get_default_config
@@ -75,6 +77,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.sy_vl.setAlignment(QtCore.Qt.AlignTop)
         self.st_vl.setAlignment(QtCore.Qt.AlignTop)
         self.db_vl.setAlignment(QtCore.Qt.AlignTop)
+        self.db_gb_2_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.lo_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -110,6 +113,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_rb_2.clicked.connect(self.change_place_info)
         self.ap_gb_bt_1.clicked.connect(self.set_openweather_key)
         self.sy_gb_2_bt_1.clicked.connect(self.check_update)
+        self.sy_gb_2_bt_2.clicked.connect(self.export_to_csv)
+        self.db_gb_2_cb_1.currentIndexChanged.connect(self.activate_export_button)
         if getattr(sys, 'frozen', False):
             self.sy_gb_2_bt_1.setEnabled(True)
         else:
@@ -140,7 +145,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def parse_sensor_list_in_cb(self):
         logging.debug('gui - option_window.py - MyOptions - parse_sensor_list_in_cb')
         cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
-                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
+                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1]
         if self.sensor_list:
             for cb in cb_list:
                 cb.clear()
@@ -150,12 +155,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             for cb in cb_list:
                 cb.clear()
                 cb.addItem('Pas de capteur')
+        self.activate_export_button()
 
     def update_cb_with_sensor_list(self):
         logging.debug('gui - option_window.py - MyOptions - update_cb_with_sensor_list')
         self.create_sensor_list()
         cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
-                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2]
+                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1]
         if self.sensor_list:
             for cb in cb_list:
                 device = cb.currentText()
@@ -168,6 +174,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             for cb in cb_list:
                 cb.clear()
                 cb.addItem('Pas de capteur')
+        self.activate_export_button()
 
     def read_config_dict(self):
         logging.debug('gui - option_window.py - MyOptions - read_config_dict')
@@ -462,13 +469,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.db_gb_ln_4.setText(keyboard_window.num_line.text())
 
     def check_update(self):
-        logging.debug('gui - mainwindow.py - MainWindow - check_update')
+        logging.debug('gui - option_window.py - MyOptions - check_update')
         self.check_update_thread = CheckUpdate(gui_version)
         self.check_update_thread.finished.connect(self.parse_update_check)
         self.check_update_thread.start()
 
     def parse_update_check(self, url_dict):
-        logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - url_dict: {url_dict}')
+        logging.debug(f'gui - option_window.py - MyOptions - parse_update_check - url_dict: {url_dict}')
         if url_dict:
             logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - update available')
             self.available_update.emit(url_dict)
@@ -477,7 +484,70 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             info_window = MyInfo(text, self.mainparent)
             info_window.exec_()
         else:
-            logging.debug('gui - mainwindow.py - MainWindow - parse_update_check - no update available')
+            logging.debug('gui - option_window.py - MyOptions - parse_update_check - no update available')
+
+    def export_to_csv(self):
+        logging.debug(f'gui - option_window.py - MyOptions - export_to_csv')
+        sensor = self.db_gb_2_cb_1.currentText()
+        table = None
+        for _, ddict in self.sensor_dict['DS18B20'].items():
+            if sensor == ddict['name']:
+                table = ddict['table']
+        for _, ddict in self.sensor_dict['BME280'].items():
+            if sensor == ddict['name']:
+                table = ddict['table']
+        for device, _ in self.sensor_dict['MQTT']['devices'].items():
+            if sensor == device:
+                table = device
+
+        if table is not None:
+            file_dialog = QtWidgets.QFileDialog()
+            filter_types = 'CSV Files (*.csv)'
+            file_name = f'{table}_data_export_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}'
+            file_name, _ = file_dialog.getSaveFileName(self, 'Sauvegarder un fichier', file_name, filter_types)
+            if file_name:
+                logging.debug(f'gui - option_window.py - MyOptions - export_to_csv - file_name: {file_name} ; table: '
+                              f'{table}')
+                try:
+                    data_str = (f'data exported from the Weather Station\nsensor: {sensor}\ntable: {table}\nfields on '
+                                f'the next line\n')
+                    conn = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
+                                            password=self.config_dict.get('DATABASE', 'password'),
+                                            host=self.config_dict.get('DATABASE', 'host'),
+                                            database=self.config_dict.get('DATABASE', 'database'),
+                                            port=self.config_dict.get('DATABASE', 'port'))
+                    curs = conn.cursor()
+                    curs.execute(f"SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '{table}' "
+                                 f"ORDER BY ordinal_position;")
+                    data_str += ','.join([item[0] for item in curs.fetchall()]) + '\n'
+
+                    curs.execute(f'SELECT * FROM "{table}" ORDER BY date_time DESC;')
+                    data = curs.fetchall()
+
+                    if data and data is not None:
+                        for tmp in data:
+                            dt, t, h, p, b, s, pm = tmp
+                            data_str += f'{dt.strftime("%Y-%m-%d %H:%M:%S.%f")},{t},{h},{p},{b},{s},{pm}\n'
+
+                        f = open(file_name, 'w')
+                        f.write(data_str)
+                        f.close()
+                        self.db_gb_2_lb_2.setText('Les données ont été exportées !')
+                    else:
+                        self.db_gb_2_lb_2.setText('Pas de données pour cette table !')
+                except:
+                    logging.exception('gui - option_window.py - MyOptions - export_to_csv - an exception occured when '
+                                      'trying to export data')
+                    self.db_gb_2_lb_2.setText('Pas de données pour cette table !')
+
+        else:
+            self.db_gb_2_lb_2.setText('Cette table n\'existe plus !')
+
+    def activate_export_button(self):
+        if self.db_gb_2_cb_1.currentText() in ['Choisir un capteur', 'Pas de capteur']:
+            self.sy_gb_2_bt_2.setEnabled(False)
+        else:
+            self.sy_gb_2_bt_2.setEnabled(True)
 
     def close_window(self):
         logging.debug('gui - option_window.py - MyOptions - close_window')

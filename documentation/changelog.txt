@@ -5,6 +5,10 @@
     * plot thread tried to compute min and max of a list even if the list is empty.
     * MQTT test thread was not handled properly since last version.
     * the dot icons were not well refreshed when the time series button is clicked.
+    * MQTT threads was crashing when fields other than temperature were not available for MQTT devices.
+
+  * ADDED :
+    * a button and a function to export database data have been introduced.
 
 
 ### May 5 2022, Release version 0.12.1 ###
