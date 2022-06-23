@@ -4,4 +4,4 @@
 
 ### To fix list: ###
 
-* les champs existants des capteurs MQTT n'aparaissent pas dans le manager lorsqu'on sélectionne un capteur.
+*
