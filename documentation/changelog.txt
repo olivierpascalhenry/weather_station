@@ -6,6 +6,8 @@
     * MQTT test thread was not handled properly since last version.
     * the dot icons were not well refreshed when the time series button is clicked.
     * MQTT threads was crashing when fields other than temperature were not available for MQTT devices.
+    * the mqtt device manager tried to parse calibration methode and value even it is not handled yet. It has been fixed
+    .
 
   * ADDED :
     * a button and a function to export database data have been introduced.

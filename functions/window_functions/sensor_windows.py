@@ -83,7 +83,9 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         self.addtopic_bt.setEnabled(True)
         self.store_ln.setText(self.mqtt_dict['devices'][item.text()]['store'])
         self.active_ck.setChecked(str2bool(self.mqtt_dict['devices'][item.text()]['active']))
-        topic_list = [topic for topic in self.mqtt_dict['devices'][item.text()] if topic not in ['store', 'active']]
+        topic_list = [topic for topic in self.mqtt_dict['devices'][item.text()] if topic not in ['store', 'active',
+                                                                                                 'cal_methode',
+                                                                                                 'cal_value']]
         clear_layout(self.topic_layout)
         self.topic_hor_layout.clear()
         self.topic_del_button.clear()
