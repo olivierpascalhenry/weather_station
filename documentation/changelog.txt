@@ -1,4 +1,10 @@
 
+### August XX 2022, Release version 0.12.3 ###
+
+  * FIXED:
+    * when exporting data, if an error occured and a retry is done, the text in the warning box is not cleared.
+
+
 ### June 23 2022, Release version 0.12.2 ###
 
   * FIXED:

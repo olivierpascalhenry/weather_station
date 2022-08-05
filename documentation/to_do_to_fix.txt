@@ -1,6 +1,6 @@
 ### To do list: ###
 
-*
+* ajouter un texte pour dire que la donnée est ancienne (> 2h)
 
 ### To fix list: ###
 

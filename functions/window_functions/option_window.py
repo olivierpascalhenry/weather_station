@@ -488,6 +488,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def export_to_csv(self):
         logging.debug(f'gui - option_window.py - MyOptions - export_to_csv')
+        self.db_gb_2_lb_2.clear()
         sensor = self.db_gb_2_cb_1.currentText()
         table = None
         for _, ddict in self.sensor_dict['DS18B20'].items():
