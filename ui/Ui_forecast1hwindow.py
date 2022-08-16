@@ -179,67 +179,6 @@ class Ui_forecast1hWindow(object):
         self.rain_ln.setWordWrap(True)
         self.rain_ln.setObjectName("rain_ln")
         self.gridLayout.addWidget(self.rain_ln, 3, 1, 1, 1)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.dir_ln = QtWidgets.QToolButton(forecast1hWindow)
-        self.dir_ln.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.dir_ln.sizePolicy().hasHeightForWidth())
-        self.dir_ln.setSizePolicy(sizePolicy)
-        self.dir_ln.setMinimumSize(QtCore.QSize(40, 40))
-        self.dir_ln.setMaximumSize(QtCore.QSize(40, 40))
-        self.dir_ln.setStyleSheet("QToolButton {\n"
-"    border: 1px solid transparent;\n"
-"    border-radius: 10px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.dir_ln.setText("")
-        self.dir_ln.setIconSize(QtCore.QSize(40, 40))
-        self.dir_ln.setObjectName("dir_ln")
-        self.horizontalLayout.addWidget(self.dir_ln)
-        self.speed_ln = QtWidgets.QLabel(forecast1hWindow)
-        self.speed_ln.setMinimumSize(QtCore.QSize(0, 50))
-        self.speed_ln.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(18)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.speed_ln.setFont(font)
-        self.speed_ln.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"}")
-        self.speed_ln.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.speed_ln.setWordWrap(True)
-        self.speed_ln.setObjectName("speed_ln")
-        self.horizontalLayout.addWidget(self.speed_ln)
-        self.gridLayout.addLayout(self.horizontalLayout, 4, 1, 1, 1)
-        self.wind_lb = QtWidgets.QLabel(forecast1hWindow)
-        self.wind_lb.setMinimumSize(QtCore.QSize(190, 50))
-        self.wind_lb.setMaximumSize(QtCore.QSize(190, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(18)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.wind_lb.setFont(font)
-        self.wind_lb.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"}")
-        self.wind_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.wind_lb.setWordWrap(True)
-        self.wind_lb.setObjectName("wind_lb")
-        self.gridLayout.addWidget(self.wind_lb, 4, 0, 1, 1)
         self.temp_lb = QtWidgets.QLabel(forecast1hWindow)
         self.temp_lb.setMinimumSize(QtCore.QSize(190, 50))
         self.temp_lb.setMaximumSize(QtCore.QSize(190, 16777215))
@@ -257,6 +196,23 @@ class Ui_forecast1hWindow(object):
         self.temp_lb.setWordWrap(True)
         self.temp_lb.setObjectName("temp_lb")
         self.gridLayout.addWidget(self.temp_lb, 0, 0, 1, 1)
+        self.wind_lb = QtWidgets.QLabel(forecast1hWindow)
+        self.wind_lb.setMinimumSize(QtCore.QSize(190, 50))
+        self.wind_lb.setMaximumSize(QtCore.QSize(190, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(18)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.wind_lb.setFont(font)
+        self.wind_lb.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"}")
+        self.wind_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.wind_lb.setWordWrap(True)
+        self.wind_lb.setObjectName("wind_lb")
+        self.gridLayout.addWidget(self.wind_lb, 4, 0, 1, 1)
         self.cover_ln = QtWidgets.QLabel(forecast1hWindow)
         self.cover_ln.setMinimumSize(QtCore.QSize(155, 50))
         self.cover_ln.setMaximumSize(QtCore.QSize(155, 16777215))
@@ -342,23 +298,79 @@ class Ui_forecast1hWindow(object):
         self.rain_lb.setWordWrap(True)
         self.rain_lb.setObjectName("rain_lb")
         self.gridLayout.addWidget(self.rain_lb, 3, 0, 1, 1)
-        self.gust_lb = QtWidgets.QLabel(forecast1hWindow)
-        self.gust_lb.setMinimumSize(QtCore.QSize(190, 50))
-        self.gust_lb.setMaximumSize(QtCore.QSize(190, 16777215))
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.dir_ln = QtWidgets.QToolButton(forecast1hWindow)
+        self.dir_ln.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dir_ln.sizePolicy().hasHeightForWidth())
+        self.dir_ln.setSizePolicy(sizePolicy)
+        self.dir_ln.setMinimumSize(QtCore.QSize(40, 40))
+        self.dir_ln.setMaximumSize(QtCore.QSize(40, 40))
+        self.dir_ln.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.dir_ln.setText("")
+        self.dir_ln.setIconSize(QtCore.QSize(40, 40))
+        self.dir_ln.setObjectName("dir_ln")
+        self.horizontalLayout.addWidget(self.dir_ln)
+        self.speed_ln = QtWidgets.QLabel(forecast1hWindow)
+        self.speed_ln.setMinimumSize(QtCore.QSize(0, 50))
+        self.speed_ln.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.gust_lb.setFont(font)
-        self.gust_lb.setStyleSheet("QLabel {\n"
+        self.speed_ln.setFont(font)
+        self.speed_ln.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "    border: 0px solid rgb(75,75,75);\n"
 "}")
-        self.gust_lb.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.gust_lb.setWordWrap(True)
-        self.gust_lb.setObjectName("gust_lb")
-        self.gridLayout.addWidget(self.gust_lb, 5, 0, 1, 1)
+        self.speed_ln.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.speed_ln.setWordWrap(True)
+        self.speed_ln.setObjectName("speed_ln")
+        self.horizontalLayout.addWidget(self.speed_ln)
+        self.gridLayout.addLayout(self.horizontalLayout, 4, 1, 1, 1)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.gust_icon = QtWidgets.QToolButton(forecast1hWindow)
+        self.gust_icon.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.gust_icon.sizePolicy().hasHeightForWidth())
+        self.gust_icon.setSizePolicy(sizePolicy)
+        self.gust_icon.setMinimumSize(QtCore.QSize(40, 40))
+        self.gust_icon.setMaximumSize(QtCore.QSize(40, 40))
+        self.gust_icon.setStyleSheet("QToolButton {\n"
+"    border: 1px solid transparent;\n"
+"    border-radius: 10px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.gust_icon.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/gust_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.gust_icon.setIcon(icon1)
+        self.gust_icon.setIconSize(QtCore.QSize(40, 40))
+        self.gust_icon.setObjectName("gust_icon")
+        self.horizontalLayout_4.addWidget(self.gust_icon)
         self.gust_ln = QtWidgets.QLabel(forecast1hWindow)
         self.gust_ln.setMinimumSize(QtCore.QSize(0, 50))
         self.gust_ln.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -375,7 +387,8 @@ class Ui_forecast1hWindow(object):
         self.gust_ln.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.gust_ln.setWordWrap(True)
         self.gust_ln.setObjectName("gust_ln")
-        self.gridLayout.addWidget(self.gust_ln, 5, 1, 1, 1)
+        self.horizontalLayout_4.addWidget(self.gust_ln)
+        self.gridLayout.addLayout(self.horizontalLayout_4, 5, 1, 1, 1)
         self.horizontalLayout_3.addLayout(self.gridLayout)
         self.gridLayout_2.addLayout(self.horizontalLayout_3, 2, 0, 1, 1)
 
@@ -388,13 +401,12 @@ class Ui_forecast1hWindow(object):
         self.hour_label.setText(_translate("forecast1hWindow", "10h"))
         self.temp_ln.setText(_translate("forecast1hWindow", "22°C"))
         self.rain_ln.setText(_translate("forecast1hWindow", "50 %"))
-        self.speed_ln.setText(_translate("forecast1hWindow", "25 km/h"))
-        self.wind_lb.setText(_translate("forecast1hWindow", "Vent :"))
         self.temp_lb.setText(_translate("forecast1hWindow", "Température :"))
+        self.wind_lb.setText(_translate("forecast1hWindow", "Vent :"))
         self.cover_ln.setText(_translate("forecast1hWindow", "50 %"))
         self.pres_ln.setText(_translate("forecast1hWindow", "1019 hPa"))
         self.pres_lb.setText(_translate("forecast1hWindow", "Pression :"))
         self.cover_lb.setText(_translate("forecast1hWindow", "Couverture :"))
         self.rain_lb.setText(_translate("forecast1hWindow", "Pluie :"))
-        self.gust_lb.setText(_translate("forecast1hWindow", "Rafale :"))
+        self.speed_ln.setText(_translate("forecast1hWindow", "25 km/h"))
         self.gust_ln.setText(_translate("forecast1hWindow", "25 km/h"))
