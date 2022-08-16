@@ -1,18 +1,18 @@
 import bisect
 import logging
 import datetime
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, uic
 from ui.Ui_forecast1hwindow import Ui_forecast1hWindow
 from ui.Ui_forecast6hwindow import Ui_forecast6hWindow
 from ui.Ui_forecast1dwindow import Ui_forecast1dWindow
 from functions.utils import weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme
 
 
-class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
+class My1hFCDetails(QtWidgets.QDialog):
     def __init__(self, forecast, sunrise, sunset, parent=None):
         logging.info('gui - weather_windows.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        self.setupUi(self)
+        uic.loadUi('graphic_materials/1hforecast_details.ui', self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -49,6 +49,10 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.cover_ln.setText(str(self.forecast['cover']) + ' %')
         self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
         self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], dt, self.sunrise, self.sunset))
+        if self.forecast['w_gst'] > 0:
+            self.gust_ln.setText(str(self.forecast['w_gst']) + ' km/h')
+        else:
+            self.gust_ln.clear()
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My1hFCDetails - close_window')
