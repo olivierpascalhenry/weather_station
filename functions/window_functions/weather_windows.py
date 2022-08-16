@@ -108,7 +108,6 @@ class My6hFCDetails(QtWidgets.QDialog):
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
                            + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], dt, self.sunrise,
                                                                          self.sunset))
-
             if wgust > 5:
                 self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('R : ' + str(wgust) + ' km/h')
             else:
@@ -119,11 +118,11 @@ class My6hFCDetails(QtWidgets.QDialog):
         self.close()
 
 
-class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
+class My1dFCDetails(QtWidgets.QDialog):
     def __init__(self, data, parent=None):
         logging.info('gui - other_windows_functions.py - My1dFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        self.setupUi(self)
+        uic.loadUi('graphic_materials/1d_ow_forecast_details', self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -137,6 +136,7 @@ class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
     def parse_forecast(self):
         logging.debug('gui - other_windows_functions.py - My1dFCDetails - parse_forecast')
         wspeed = round(self.data['w_spd'] * 3600 / 1000)
+        wgust = round(fc[1]['w_gst'] * 3600 / 1000)
         wdir = self.data['w_dir']
         date = (days_months_dictionary()['day'][self.data['date'].weekday() + 1] + ' ' + str(self.data['date'].day)
                 + ' ' + days_months_dictionary()['month'][self.data['date'].month])
@@ -148,6 +148,10 @@ class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
             icon = wind_dir_to_pictogramme(bisect.bisect_right([x * 7.5 for x in range(49)], wdir))
         else:
             icon = wind_dir_to_pictogramme(0)
+        if wgust > 5:
+            self.gust_ln.setText(str(wgust) + ' km/h')
+        else:
+            self.gust_ln.clear()
         self.dir_ln.setIcon(icon)
         self.date_label.setText(date)
         self.temp_ln.setText(self.data['temp'])

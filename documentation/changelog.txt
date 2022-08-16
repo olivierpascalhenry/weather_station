@@ -7,6 +7,7 @@
   * ADDED :
     * gusts have been added to 1h forecast window.
     * gusts have been added to 6h forecast window.
+    * gusts have been added to 1d OpenWeather forecast window.
 
   * MODIFIED:
     * ui file is now handled without the need of a py conversion.
