@@ -10,6 +10,7 @@
 
   * MODIFIED:
     * ui file is now handled without the need of a py conversion.
+    * icons have been moved in the graphic_materials folder
 
 
 ### June 23 2022, Release version 0.12.2 ###
