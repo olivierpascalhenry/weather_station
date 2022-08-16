@@ -4,6 +4,13 @@
   * FIXED:
     * when exporting data, if an error occured and a retry is done, the text in the warning box is not cleared.
 
+  * ADDED :
+    * gusts have been added to 1h forecast window.
+    * gusts have been added to 6h forecast window.
+
+  * MODIFIED:
+    * ui file is now handled without the need of a py conversion.
+
 
 ### June 23 2022, Release version 0.12.2 ###
 
