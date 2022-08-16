@@ -21,7 +21,6 @@ from ui.Ui_batlinkwindow import Ui_batlinkWindow
 from ui.Ui_pressurewindow import Ui_pressureWindow
 from ui.Ui_temphumwindow import Ui_temphumWindow
 from ui.Ui_apiwindow import Ui_apiWindow
-from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from ui.Ui_updateprocesswindow import Ui_updateprocessWindow
 from functions.utils import code_to_departement, stylesheet_creation_function, font_creation_function
 from functions.thread_functions.other_threads import DownloadFile, UnzipFile, InstallFile, RebootingThread

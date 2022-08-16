@@ -8,11 +8,11 @@ from ui.Ui_forecast1dwindow import Ui_forecast1dWindow
 from functions.utils import weather_to_pictogrammes, days_months_dictionary, wind_dir_to_pictogramme
 
 
-class My1hFCDetails(QtWidgets.QDialog):
+class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
     def __init__(self, forecast, sunrise, sunset, parent=None):
         logging.info('gui - weather_windows.py - My1hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        uic.loadUi('graphic_materials/1hforecast_details.ui', self)
+        self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -60,11 +60,11 @@ class My1hFCDetails(QtWidgets.QDialog):
         self.close()
 
 
-class My6hFCDetails(QtWidgets.QDialog):
+class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
     def __init__(self, forecast, sunrise, sunset, parent=None):
         logging.info('gui - weather_windows.py - My6hFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        uic.loadUi('graphic_materials/6hforecast_details.ui', self)
+        self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
@@ -118,11 +118,11 @@ class My6hFCDetails(QtWidgets.QDialog):
         self.close()
 
 
-class My1dFCDetails(QtWidgets.QDialog):
+class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
     def __init__(self, data, parent=None):
         logging.info('gui - other_windows_functions.py - My1dFCDetails - __init__')
         QtWidgets.QWidget.__init__(self, parent)
-        uic.loadUi('graphic_materials/1d_ow_forecast_details', self)
+        self.setupUi(self)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setOffset(5)
