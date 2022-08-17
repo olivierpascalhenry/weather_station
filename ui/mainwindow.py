@@ -99,6 +99,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.update_url = None
         self.timer = None
         self.in_temperature = None
+        self.in_old = None
         self.in_temperature_min_max = None
         self.in_humidity = None
         self.in_pressure = None
@@ -106,6 +107,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.in_battery = None
         self.in_signal = None
         self.out_temperature = None
+        self.out_old = None
         self.out_temperature_min_max = None
         self.out_humidity = None
         self.out_pressure = None
@@ -317,6 +319,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def refresh_in_display(self, data_dict):
         logging.debug(f'gui - mainwindow.py - MainWindow - refresh_in_display - data_dict: {data_dict}')
         self.in_temperature = data_dict['temp']
+        self.in_old = data_dict['old']
         self.in_temperature_min_max = data_dict['temp_minmax']
         self.in_humidity = data_dict['hum']
         self.in_pressure = data_dict['pres']
@@ -327,6 +330,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.in_temperature_label.setText(f'{self.in_temperature} °C')
         else:
             self.in_temperature_label.setText('No data')
+        if self.in_old:
+            self.in_old_data.setText('(donnée ancienne)')
+        else:
+            self.in_old_data.clear()
         if self.in_temperature_min_max is not None and self.in_temperature_min_max[0] is not None:
             self.in_label_3.setText(f'{self.in_temperature_min_max[0]} °C / {self.in_temperature_min_max[1]} °C')
         else:
@@ -376,6 +383,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def refresh_out_display(self, data_dict):
         logging.debug(f'gui - mainwindow.py - MainWindow - refresh_out_display - data_dict: {data_dict}')
         self.out_temperature = data_dict['temp']
+        self.out_old = data_dict['old']
         self.out_temperature_min_max = data_dict['temp_minmax']
         self.out_humidity = data_dict['hum']
         self.out_pressure = data_dict['pres']
@@ -386,6 +394,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.out_temperature_label.setText(f'{self.out_temperature} °C')
         else:
             self.out_temperature_label.setText('No data')
+        if self.out_old:
+            self.out_old_data.setText('(donnée ancienne)')
+        else:
+            self.out_old_data.clear()
         if self.out_temperature_min_max is not None and self.out_temperature_min_max[0] is not None:
             self.out_label_3.setText(f'{self.out_temperature_min_max[0]} °C / {self.out_temperature_min_max[1]} °C')
         else:

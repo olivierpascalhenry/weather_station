@@ -417,7 +417,7 @@ class DBInDataThread(QtCore.QThread):
                             break
         logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - table: {table}')
         if table is not None:
-            req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+            req_dict = {'temp': {'query': f'SELECT temperature, date_time FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'temperature'},
                         'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
                                         'column': 'temperature'},
@@ -435,7 +435,7 @@ class DBInDataThread(QtCore.QThread):
             column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
-                            'bat': None, 'sig': None}
+                            'bat': None, 'sig': None, 'old': False}
                 for var, req in req_dict.items():
                     try:
                         if req['column'] in column_list:
@@ -445,6 +445,9 @@ class DBInDataThread(QtCore.QThread):
                                 if var == 'temp_minmax':
                                     var_dict[var] = data
                                 else:
+                                    if var == 'temp':
+                                        if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                            var_dict['old'] = True
                                     var_dict[var] = data[0]
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
@@ -507,7 +510,7 @@ class DBOutDataThread(QtCore.QThread):
                             break
         logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - table: {table}')
         if table is not None:
-            req_dict = {'temp': {'query': f'SELECT temperature FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+            req_dict = {'temp': {'query': f'SELECT temperature, datetime FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'temperature'},
                         'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
                                         'column': 'temperature'},
@@ -525,7 +528,7 @@ class DBOutDataThread(QtCore.QThread):
             column_list = [column[0] for column in self.cursor.fetchall()]
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
-                            'bat': None, 'sig': None}
+                            'bat': None, 'sig': None, 'old': False}
                 for var, req in req_dict.items():
                     try:
                         if req['column'] in column_list:
@@ -535,6 +538,9 @@ class DBOutDataThread(QtCore.QThread):
                                 if var == 'temp_minmax':
                                     var_dict[var] = data
                                 else:
+                                    if var == 'temp':
+                                        if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                            var_dict['old'] = True
                                     var_dict[var] = data[0]
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '

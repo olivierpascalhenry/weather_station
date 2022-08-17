@@ -10,6 +10,7 @@
     * gusts have been added to 1d OpenWeather forecast window.
     * an icon was missing.
     * an icon for gusts has been added.
+    * if sensor data are old (>2h), a message is displayed.
 
   * MODIFIED:
     * the stylesheet of few windows have been modified for better consistency with the main window.
