@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_townsearchWindow(object):
-    def setupUi(self, townsearchWindow, gui_path=''):
+    def setupUi(self, townsearchWindow):
         townsearchWindow.setObjectName("townsearchWindow")
         townsearchWindow.resize(504, 286)
         townsearchWindow.setMinimumSize(QtCore.QSize(0, 0))
@@ -23,27 +23,25 @@ class Ui_townsearchWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         townsearchWindow.setFont(font)
         townsearchWindow.setStyleSheet("QWidget#townsearchWindow {\n"
-"   background-color: rgb(230,230,230);\n"
+"   background-color: rgb(240,240,240);\n"
 "   border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(townsearchWindow)
+        self.gridLayout_2.setVerticalSpacing(11)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scroll_area = QtWidgets.QScrollArea(townsearchWindow)
-
-        stylesheet = ("QScrollArea { background: transparent; }\n"
+        self.scroll_area.setStyleSheet("QScrollArea { background: transparent; }\n"
 "\n"
 "QScrollArea > QWidget > QWidget { background: transparent; }\n"
 "\n"
 "QScrollBar:vertical {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
+"  background-color: rgb(255, 255, 255);\n"
 "  width: 20px;\n"
 "  margin: 21px 0px 21px 0px;\n"
 "}\n"
 "\n"
 "QScrollBar:horizontal {\n"
-"  border: 0px solid white;\n"
-"  background-color: rgb(240, 240, 240);\n"
+"  background-color: rgb(255, 255, 255);\n"
 "  height: 20px;\n"
 "  margin: 0px 21px 0px 21px;\n"
 "}\n"
@@ -54,7 +52,7 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:hover {\n"
-"  background-color: rgb(167, 167, 167);\n"
+"  background-color: rgb(166, 166, 166);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:vertical:pressed {\n"
@@ -67,7 +65,7 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:hover {\n"
-"  background-color: rgb(167, 167, 167);\n"
+"  background-color: rgb(166, 166, 166);\n"
 "}\n"
 "\n"
 "QScrollBar:handle:horizontal:pressed {\n"
@@ -75,18 +73,14 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical {\n"
-"  border-top: 0px solid rgb(240,240,240);\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
 "  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
+"  height: 21px;\n"
 "  subcontrol-position: bottom;\n"
 "  subcontrol-origin: margin;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:hover {\n"
-"  background-color: rgb(219, 219, 219);\n"
+"  background-color: rgb(218, 218, 218);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:vertical:pressed {\n"
@@ -94,18 +88,14 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid rgb(240,240,240);\n"
 "  background-color: rgb(240, 240, 240);\n"
-"  height: 20px;\n"
+"  height: 21px;\n"
 "  subcontrol-position: top;\n"
 "  subcontrol-origin: margin;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:hover {\n"
-"  background-color: rgb(219, 219, 219);\n"
+"  background-color: rgb(218, 218, 218);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical:pressed {\n"
@@ -135,18 +125,14 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid rgb(240,240,240);\n"
-"  border-right: 0px solid white;\n"
-"  border-bottom: 0px solid white;\n"
 "  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
+"  width: 21px;\n"
 "  subcontrol-position: right;\n"
 "  subcontrol-origin: margin;\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:hover {\n"
-"  background-color: rgb(219, 219, 219);\n"
+"  background-color: rgb(218, 218, 218);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal:pressed {\n"
@@ -154,18 +140,14 @@ class Ui_townsearchWindow(object):
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal {\n"
-"  border-top: 0px solid white;\n"
-"  border-left: 0px solid white;\n"
-"  border-right: 0px solid rgb(240,240,240);\n"
-"  border-bottom: 0px solid white;\n"
 "  background-color: rgb(240, 240, 240);\n"
-"  width: 20px;\n"
+"  width: 21px;\n"
 "  subcontrol-position: left;\n"
 "  subcontrol-origin: margin;\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:hover {\n"
-"  background-color: rgb(219, 219, 219);\n"
+"  background-color: rgb(218, 218, 218);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal:pressed {\n"
@@ -193,15 +175,13 @@ class Ui_townsearchWindow(object):
 "  right: -1px;\n"
 "  bottom: -1px;\n"
 "}")
-
-        self.scroll_area.setStyleSheet(stylesheet.replace('icons', gui_path + 'icons'))
         self.scroll_area.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.scroll_area.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContentsOnFirstShow)
         self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 482, 185))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 482, 201))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -211,8 +191,6 @@ class Ui_townsearchWindow(object):
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
         self.scroll_area.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.scroll_area, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.ok_button = QtWidgets.QToolButton(townsearchWindow)
@@ -244,13 +222,13 @@ class Ui_townsearchWindow(object):
 "}")
         self.ok_button.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(gui_path + "icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon)
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_4.addWidget(self.ok_button)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem1)
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
         self.cancel_button = QtWidgets.QToolButton(townsearchWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -280,14 +258,14 @@ class Ui_townsearchWindow(object):
 "}")
         self.cancel_button.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(gui_path + "icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.cancel_button.setIcon(icon1)
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_4.addWidget(self.cancel_button)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem2)
-        self.gridLayout_2.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
 
         self.retranslateUi(townsearchWindow)
         QtCore.QMetaObject.connectSlotsByName(townsearchWindow)

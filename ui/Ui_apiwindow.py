@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_apiWindow(object):
     def setupUi(self, apiWindow):
         apiWindow.setObjectName("apiWindow")
-        apiWindow.resize(644, 294)
+        apiWindow.resize(644, 274)
         apiWindow.setMinimumSize(QtCore.QSize(0, 0))
         apiWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -26,35 +26,14 @@ class Ui_apiWindow(object):
         icon.addPixmap(QtGui.QPixmap("icons/info_popup_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         apiWindow.setWindowIcon(icon)
         apiWindow.setStyleSheet("QWidget#apiWindow {\n"
-"    background-color: rgb(230,230,230);\n"
+"    background-color: rgb(240,240,240);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(apiWindow)
+        self.gridLayout.setVerticalSpacing(11)
         self.gridLayout.setObjectName("gridLayout")
-        self.label = QtWidgets.QLabel(apiWindow)
-        self.label.setMinimumSize(QtCore.QSize(0, 0))
-        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro")
-        font.setPointSize(16)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.label.setFont(font)
-        self.label.setStyleSheet("QLabel {\n"
-"    color: rgb(45,45,45);\n"
-"}")
-        self.label.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.label.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.label.setLineWidth(0)
-        self.label.setMidLineWidth(0)
-        self.label.setTextFormat(QtCore.Qt.AutoText)
-        self.label.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
-        self.label.setWordWrap(True)
-        self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 4, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setSpacing(7)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.line_edit = QtWidgets.QLineEdit(apiWindow)
         self.line_edit.setEnabled(True)
@@ -69,7 +48,7 @@ class Ui_apiWindow(object):
         self.line_edit.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+"    background-color: white;\n"
 "    color: rgb(45,45,45);\n"
 "}\n"
 "\n"
@@ -102,9 +81,28 @@ class Ui_apiWindow(object):
         self.edit_button.setIconSize(QtCore.QSize(36, 36))
         self.edit_button.setObjectName("edit_button")
         self.horizontalLayout.addWidget(self.edit_button)
-        self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 7, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem1, 3, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+        self.label = QtWidgets.QLabel(apiWindow)
+        self.label.setMinimumSize(QtCore.QSize(0, 0))
+        self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro")
+        font.setPointSize(16)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.label.setFont(font)
+        self.label.setStyleSheet("QLabel {\n"
+"    color: rgb(45,45,45);\n"
+"}")
+        self.label.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.label.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.label.setLineWidth(0)
+        self.label.setMidLineWidth(0)
+        self.label.setTextFormat(QtCore.Qt.AutoText)
+        self.label.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
+        self.label.setWordWrap(True)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.ok_button = QtWidgets.QToolButton(apiWindow)
@@ -141,8 +139,8 @@ class Ui_apiWindow(object):
         self.ok_button.setIconSize(QtCore.QSize(45, 45))
         self.ok_button.setObjectName("ok_button")
         self.horizontalLayout_2.addWidget(self.ok_button)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem2)
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.cancel_button = QtWidgets.QToolButton(apiWindow)
         self.cancel_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -177,9 +175,9 @@ class Ui_apiWindow(object):
         self.cancel_button.setIconSize(QtCore.QSize(45, 45))
         self.cancel_button.setObjectName("cancel_button")
         self.horizontalLayout_2.addWidget(self.cancel_button)
-        spacerItem3 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem3)
-        self.gridLayout.addLayout(self.horizontalLayout_2, 4, 0, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(278, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+        self.gridLayout.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
 
         self.retranslateUi(apiWindow)
         QtCore.QMetaObject.connectSlotsByName(apiWindow)

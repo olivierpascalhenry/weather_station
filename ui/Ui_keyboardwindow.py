@@ -14,7 +14,7 @@ from functions.gui_widgets import QDoublePushButton
 class Ui_keyboardWindow(object):
     def setupUi(self, keyboardWindow):
         keyboardWindow.setObjectName("keyboardWindow")
-        keyboardWindow.resize(588, 430)
+        keyboardWindow.resize(614, 428)
         keyboardWindow.setMinimumSize(QtCore.QSize(0, 0))
         keyboardWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -24,91 +24,13 @@ class Ui_keyboardWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         keyboardWindow.setFont(font)
         keyboardWindow.setStyleSheet("QWidget#keyboardWindow {\n"
-"   background-color: rgb(230,230,230);\n"
+"   background-color: rgb(240,240,240);\n"
 "   border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(keyboardWindow)
         self.gridLayout_2.setContentsMargins(11, -1, -1, -1)
+        self.gridLayout_2.setVerticalSpacing(11)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.ok_button = QtWidgets.QToolButton(keyboardWindow)
-        self.ok_button.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
-        self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
-        self.ok_button.setMaximumSize(QtCore.QSize(50, 50))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.ok_button.setFont(font)
-        self.ok_button.setStyleSheet("QToolButton {\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"    border-radius: 3px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.ok_button.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ok_button.setIcon(icon)
-        self.ok_button.setIconSize(QtCore.QSize(45, 45))
-        self.ok_button.setObjectName("ok_button")
-        self.horizontalLayout_4.addWidget(self.ok_button)
-        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem)
-        self.cancel_button = QtWidgets.QToolButton(keyboardWindow)
-        self.cancel_button.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cancel_button.sizePolicy().hasHeightForWidth())
-        self.cancel_button.setSizePolicy(sizePolicy)
-        self.cancel_button.setMinimumSize(QtCore.QSize(50, 50))
-        self.cancel_button.setMaximumSize(QtCore.QSize(50, 50))
-        font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(22)
-        font.setKerning(True)
-        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
-        self.cancel_button.setFont(font)
-        self.cancel_button.setStyleSheet("QToolButton {\n"
-"    border: 0px solid rgb(75,75,75);\n"
-"    border-radius: 3px;\n"
-"    background-color: transparent;\n"
-"    width: 27px;\n"
-"    height: 27px;\n"
-"    color: rgb(45,45,45);\n"
-"}\n"
-"\n"
-"QToolButton:flat {\n"
-"    border: none;\n"
-"}")
-        self.cancel_button.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.cancel_button.setIcon(icon1)
-        self.cancel_button.setIconSize(QtCore.QSize(45, 45))
-        self.cancel_button.setObjectName("cancel_button")
-        self.horizontalLayout_4.addWidget(self.cancel_button)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem1)
-        self.gridLayout_2.addLayout(self.horizontalLayout_4, 4, 0, 1, 2)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 7, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_2.addItem(spacerItem2, 1, 1, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 7, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem3, 3, 1, 1, 1)
         self.num_line = QtWidgets.QLineEdit(keyboardWindow)
         self.num_line.setMinimumSize(QtCore.QSize(0, 40))
         self.num_line.setMaximumSize(QtCore.QSize(16777215, 40))
@@ -121,7 +43,7 @@ class Ui_keyboardWindow(object):
         self.num_line.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+"    background-color: white;\n"
 "    color: rgb(45,45,45);\n"
 "}")
         self.num_line.setText("")
@@ -133,6 +55,7 @@ class Ui_keyboardWindow(object):
         self.num_line.setObjectName("num_line")
         self.gridLayout_2.addWidget(self.num_line, 0, 0, 1, 2)
         self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setSpacing(10)
         self.gridLayout.setObjectName("gridLayout")
         self.button_1 = QtWidgets.QToolButton(keyboardWindow)
         self.button_1.setEnabled(True)
@@ -1261,8 +1184,8 @@ class Ui_keyboardWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.button_up.sizePolicy().hasHeightForWidth())
         self.button_up.setSizePolicy(sizePolicy)
-        self.button_up.setMinimumSize(QtCore.QSize(107, 50))
-        self.button_up.setMaximumSize(QtCore.QSize(107, 50))
+        self.button_up.setMinimumSize(QtCore.QSize(110, 50))
+        self.button_up.setMaximumSize(QtCore.QSize(110, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(22)
@@ -1280,9 +1203,9 @@ class Ui_keyboardWindow(object):
 "    transform: translateY(10px);\n"
 "    background-color: rgb(96,96,96);\n"
 "}")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/up_arrow_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_up.setIcon(icon2)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icons/up_arrow_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_up.setIcon(icon)
         self.button_up.setObjectName("button_up")
         self.gridLayout.addWidget(self.button_up, 4, 0, 1, 2)
         self.button_sp = QtWidgets.QToolButton(keyboardWindow)
@@ -1292,8 +1215,8 @@ class Ui_keyboardWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.button_sp.sizePolicy().hasHeightForWidth())
         self.button_sp.setSizePolicy(sizePolicy)
-        self.button_sp.setMinimumSize(QtCore.QSize(278, 50))
-        self.button_sp.setMaximumSize(QtCore.QSize(278, 50))
+        self.button_sp.setMinimumSize(QtCore.QSize(290, 50))
+        self.button_sp.setMaximumSize(QtCore.QSize(290, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(22)
@@ -1311,9 +1234,10 @@ class Ui_keyboardWindow(object):
 "    transform: translateY(10px);\n"
 "    background-color: rgb(96,96,96);\n"
 "}")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/escape_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_sp.setIcon(icon3)
+        self.button_sp.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icons/escape_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_sp.setIcon(icon1)
         self.button_sp.setIconSize(QtCore.QSize(107, 40))
         self.button_sp.setObjectName("button_sp")
         self.gridLayout.addWidget(self.button_sp, 4, 2, 1, 5)
@@ -1352,8 +1276,8 @@ class Ui_keyboardWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.button_ret.sizePolicy().hasHeightForWidth())
         self.button_ret.setSizePolicy(sizePolicy)
-        self.button_ret.setMinimumSize(QtCore.QSize(107, 50))
-        self.button_ret.setMaximumSize(QtCore.QSize(107, 50))
+        self.button_ret.setMinimumSize(QtCore.QSize(110, 50))
+        self.button_ret.setMaximumSize(QtCore.QSize(110, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
         font.setPointSize(22)
@@ -1372,14 +1296,89 @@ class Ui_keyboardWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_ret.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("icons/bwd_arrow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.button_ret.setIcon(icon4)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("icons/bwd_arrow.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_ret.setIcon(icon2)
         self.button_ret.setIconSize(QtCore.QSize(40, 45))
         self.button_ret.setArrowType(QtCore.Qt.NoArrow)
         self.button_ret.setObjectName("button_ret")
         self.gridLayout.addWidget(self.button_ret, 4, 8, 1, 2)
-        self.gridLayout_2.addLayout(self.gridLayout, 2, 0, 1, 2)
+        self.gridLayout_2.addLayout(self.gridLayout, 1, 0, 1, 2)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.ok_button = QtWidgets.QToolButton(keyboardWindow)
+        self.ok_button.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
+        self.ok_button.setSizePolicy(sizePolicy)
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.ok_button.setFont(font)
+        self.ok_button.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.ok_button.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("icons/validate_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ok_button.setIcon(icon3)
+        self.ok_button.setIconSize(QtCore.QSize(45, 45))
+        self.ok_button.setObjectName("ok_button")
+        self.horizontalLayout_4.addWidget(self.ok_button)
+        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem)
+        self.cancel_button = QtWidgets.QToolButton(keyboardWindow)
+        self.cancel_button.setEnabled(True)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cancel_button.sizePolicy().hasHeightForWidth())
+        self.cancel_button.setSizePolicy(sizePolicy)
+        self.cancel_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.cancel_button.setMaximumSize(QtCore.QSize(50, 50))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro SemiBold")
+        font.setPointSize(22)
+        font.setKerning(True)
+        font.setStyleStrategy(QtGui.QFont.PreferAntialias)
+        self.cancel_button.setFont(font)
+        self.cancel_button.setStyleSheet("QToolButton {\n"
+"    border: 0px solid rgb(75,75,75);\n"
+"    border-radius: 3px;\n"
+"    background-color: transparent;\n"
+"    width: 27px;\n"
+"    height: 27px;\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QToolButton:flat {\n"
+"    border: none;\n"
+"}")
+        self.cancel_button.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("icons/del_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.cancel_button.setIcon(icon4)
+        self.cancel_button.setIconSize(QtCore.QSize(45, 45))
+        self.cancel_button.setObjectName("cancel_button")
+        self.horizontalLayout_4.addWidget(self.cancel_button)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_4, 2, 0, 1, 2)
 
         self.retranslateUi(keyboardWindow)
         QtCore.QMetaObject.connectSlotsByName(keyboardWindow)
@@ -1427,5 +1426,4 @@ class Ui_keyboardWindow(object):
         self.button_us.setText(_translate("keyboardWindow", "_"))
         self.button_ti.setText(_translate("keyboardWindow", "-"))
         self.button_up.setText(_translate("keyboardWindow", "^"))
-        self.button_sp.setText(_translate("keyboardWindow", " "))
         self.button_sl.setText(_translate("keyboardWindow", "/"))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'closewindow2.ui'
+# Form implementation generated from reading ui file 'closewindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -25,7 +25,7 @@ class Ui_closeWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         closeWindow.setFont(font)
         closeWindow.setStyleSheet("QWidget#closeWindow {\n"
-"    background-color: rgb(230,230,230);\n"
+"    background-color: rgb(240,240,240);\n"
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(closeWindow)

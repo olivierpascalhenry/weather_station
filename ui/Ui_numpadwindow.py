@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_numpadWindow(object):
     def setupUi(self, numpadWindow):
         numpadWindow.setObjectName("numpadWindow")
-        numpadWindow.resize(246, 298)
+        numpadWindow.resize(254, 308)
         numpadWindow.setMinimumSize(QtCore.QSize(0, 0))
         numpadWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -23,11 +23,12 @@ class Ui_numpadWindow(object):
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         numpadWindow.setFont(font)
         numpadWindow.setStyleSheet("QWidget#numpadWindow {\n"
-"   background-color: rgb(230,230,230);\n"
+"   background-color: rgb(240,240,240);\n"
 "   border: 1px solid rgb(75,75,75);\n"
 "}")
-        self.gridLayout = QtWidgets.QGridLayout(numpadWindow)
-        self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout_2 = QtWidgets.QGridLayout(numpadWindow)
+        self.gridLayout_2.setVerticalSpacing(11)
+        self.gridLayout_2.setObjectName("gridLayout_2")
         self.num_line = QtWidgets.QLineEdit(numpadWindow)
         self.num_line.setMinimumSize(QtCore.QSize(0, 40))
         self.num_line.setMaximumSize(QtCore.QSize(16777215, 40))
@@ -40,7 +41,7 @@ class Ui_numpadWindow(object):
         self.num_line.setStyleSheet("QLineEdit {\n"
 "    border-radius: 3px;\n"
 "    padding: 1px 4px 1px 4px;\n"
-"    background-color:  rgb(240, 240, 240);\n"
+"    background-color: white;\n"
 "    color: rgb(45,45,45);\n"
 "}")
         self.num_line.setText("")
@@ -50,9 +51,10 @@ class Ui_numpadWindow(object):
         self.num_line.setReadOnly(True)
         self.num_line.setClearButtonEnabled(False)
         self.num_line.setObjectName("num_line")
-        self.gridLayout.addWidget(self.num_line, 0, 0, 1, 1)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.gridLayout_2.addWidget(self.num_line, 0, 0, 1, 1)
+        self.gridLayout = QtWidgets.QGridLayout()
+        self.gridLayout.setSpacing(10)
+        self.gridLayout.setObjectName("gridLayout")
         self.button_1 = QtWidgets.QToolButton(numpadWindow)
         self.button_1.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -80,7 +82,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_1.setObjectName("button_1")
-        self.horizontalLayout.addWidget(self.button_1)
+        self.gridLayout.addWidget(self.button_1, 0, 0, 1, 1)
         self.button_2 = QtWidgets.QToolButton(numpadWindow)
         self.button_2.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -108,7 +110,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_2.setObjectName("button_2")
-        self.horizontalLayout.addWidget(self.button_2)
+        self.gridLayout.addWidget(self.button_2, 0, 1, 1, 1)
         self.button_3 = QtWidgets.QToolButton(numpadWindow)
         self.button_3.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -136,7 +138,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_3.setObjectName("button_3")
-        self.horizontalLayout.addWidget(self.button_3)
+        self.gridLayout.addWidget(self.button_3, 0, 2, 1, 1)
         self.button_4 = QtWidgets.QToolButton(numpadWindow)
         self.button_4.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -164,10 +166,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_4.setObjectName("button_4")
-        self.horizontalLayout.addWidget(self.button_4)
-        self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 1)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.gridLayout.addWidget(self.button_4, 0, 3, 1, 1)
         self.button_5 = QtWidgets.QToolButton(numpadWindow)
         self.button_5.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -195,7 +194,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_5.setObjectName("button_5")
-        self.horizontalLayout_2.addWidget(self.button_5)
+        self.gridLayout.addWidget(self.button_5, 1, 0, 1, 1)
         self.button_6 = QtWidgets.QToolButton(numpadWindow)
         self.button_6.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -223,7 +222,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_6.setObjectName("button_6")
-        self.horizontalLayout_2.addWidget(self.button_6)
+        self.gridLayout.addWidget(self.button_6, 1, 1, 1, 1)
         self.button_7 = QtWidgets.QToolButton(numpadWindow)
         self.button_7.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -251,7 +250,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_7.setObjectName("button_7")
-        self.horizontalLayout_2.addWidget(self.button_7)
+        self.gridLayout.addWidget(self.button_7, 1, 2, 1, 1)
         self.button_8 = QtWidgets.QToolButton(numpadWindow)
         self.button_8.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -279,10 +278,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_8.setObjectName("button_8")
-        self.horizontalLayout_2.addWidget(self.button_8)
-        self.gridLayout.addLayout(self.horizontalLayout_2, 2, 0, 1, 1)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.gridLayout.addWidget(self.button_8, 1, 3, 1, 1)
         self.button_9 = QtWidgets.QToolButton(numpadWindow)
         self.button_9.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -310,7 +306,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_9.setObjectName("button_9")
-        self.horizontalLayout_3.addWidget(self.button_9)
+        self.gridLayout.addWidget(self.button_9, 2, 0, 1, 1)
         self.button_0 = QtWidgets.QToolButton(numpadWindow)
         self.button_0.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -338,7 +334,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_0.setObjectName("button_0")
-        self.horizontalLayout_3.addWidget(self.button_0)
+        self.gridLayout.addWidget(self.button_0, 2, 1, 1, 1)
         self.button_p = QtWidgets.QToolButton(numpadWindow)
         self.button_p.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -366,7 +362,7 @@ class Ui_numpadWindow(object):
 "    background-color: rgb(96,96,96);\n"
 "}")
         self.button_p.setObjectName("button_p")
-        self.horizontalLayout_3.addWidget(self.button_p)
+        self.gridLayout.addWidget(self.button_p, 2, 2, 1, 1)
         self.button_ret = QtWidgets.QToolButton(numpadWindow)
         self.button_ret.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -400,8 +396,8 @@ class Ui_numpadWindow(object):
         self.button_ret.setIconSize(QtCore.QSize(40, 45))
         self.button_ret.setArrowType(QtCore.Qt.NoArrow)
         self.button_ret.setObjectName("button_ret")
-        self.horizontalLayout_3.addWidget(self.button_ret)
-        self.gridLayout.addLayout(self.horizontalLayout_3, 3, 0, 1, 1)
+        self.gridLayout.addWidget(self.button_ret, 2, 3, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout, 1, 0, 1, 1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.ok_button = QtWidgets.QToolButton(numpadWindow)
@@ -476,7 +472,7 @@ class Ui_numpadWindow(object):
         self.horizontalLayout_4.addWidget(self.cancel_button)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem1)
-        self.gridLayout.addLayout(self.horizontalLayout_4, 4, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
 
         self.retranslateUi(numpadWindow)
         QtCore.QMetaObject.connectSlotsByName(numpadWindow)

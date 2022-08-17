@@ -2,17 +2,17 @@
 ### August XX 2022, Release version 0.12.3 ###
 
   * FIXED:
-    * when exporting data, if an error occured and a retry is done, the text in the warning box is not cleared.
+    * when exporting data, if an error occurred and a retry is done, the text in the warning box is not cleared.
 
   * ADDED :
     * gusts have been added to 1h forecast window.
     * gusts have been added to 6h forecast window.
     * gusts have been added to 1d OpenWeather forecast window.
     * an icon was missing.
+    * an icon for gusts has been added.
 
   * MODIFIED:
-    * ui file is now handled without the need of a py conversion.
-    * icons have been moved in the graphic_materials folder
+    * the stylesheet of few windows have been modified for better consistency with the main window.
 
 
 ### June 23 2022, Release version 0.12.2 ###

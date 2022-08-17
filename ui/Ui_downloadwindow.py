@@ -17,7 +17,7 @@ class Ui_downloadWindow(object):
         downloadWindow.setMinimumSize(QtCore.QSize(0, 0))
         downloadWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         downloadWindow.setStyleSheet("QWidget#downloadWindow {\n"
-"    background-color: rgb(230,230,230);\n"
+"    background-color: rgb(240,240,240);\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(downloadWindow)
         self.gridLayout.setObjectName("gridLayout")
@@ -87,23 +87,17 @@ class Ui_downloadWindow(object):
         self.dw_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid #acacac;\n"
 "    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                    stop:0 #f0f0f0, stop:1 #e5e5e5);\n"
-"    color: rgb(45,45,45);\n"
+"    background-color: rgb(230,230,230);\n"
+"    color: rgb(45,45,45)\n"
 "}\n"
 "\n"
 "QToolButton:hover {\n"
-"    border: 1px solid #7eb4ea;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                    stop:0 #ecf4fc, stop:1 #dcecfc);\n"
+"    background-color: rgb(220,220,220);\n"
 "}\n"
 "\n"
+"\n"
 "QToolButton:pressed {\n"
-"    border: 1px solid #579de5;\n"
-"    border-radius: 1px;\n"
-"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
-"                                    stop:0 #daecfc, stop:1 #c4e0fc);\n"
+"    background-color: rgb(210,210,210);\n"
 "}")
         self.dw_button.setObjectName("dw_button")
         self.horizontalLayout.addWidget(self.dw_button)
