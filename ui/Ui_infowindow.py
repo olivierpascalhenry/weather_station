@@ -340,7 +340,7 @@ class Ui_infoWindow(object):
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 158))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 168))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(0, 0, 10, 0)
@@ -366,8 +366,8 @@ class Ui_infoWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.exit_button = QtWidgets.QToolButton(infoWindow)
-        self.exit_button.setMinimumSize(QtCore.QSize(50, 50))
-        self.exit_button.setMaximumSize(QtCore.QSize(50, 50))
+        self.exit_button.setMinimumSize(QtCore.QSize(40, 40))
+        self.exit_button.setMaximumSize(QtCore.QSize(40, 40))
         self.exit_button.setStyleSheet("QToolButton {\n"
 "    border: 0px solid rgb(75,75,75);\n"
 "    border-radius: 3px;\n"
