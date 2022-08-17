@@ -510,7 +510,7 @@ class DBOutDataThread(QtCore.QThread):
                             break
         logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - table: {table}')
         if table is not None:
-            req_dict = {'temp': {'query': f'SELECT temperature, datetime FROM "{table}" ORDER BY date_time DESC LIMIT 1',
+            req_dict = {'temp': {'query': f'SELECT temperature, date_time FROM "{table}" ORDER BY date_time DESC LIMIT 1',
                                  'column': 'temperature'},
                         'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
                                         'column': 'temperature'},
