@@ -109,9 +109,9 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
                            + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], dt, self.sunrise,
                                                                          self.sunset))
             if wgust > 5:
-                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('R : ' + str(wgust) + ' km/h')
+                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText(str(wgust) + ' km/h')
             else:
-                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('R : ' + str(wgust) + ' km/h')
+                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('')
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My6hFCDetails - close_window')
