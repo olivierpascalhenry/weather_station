@@ -137,6 +137,8 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
                 return
         self.topic_hor_layout.append(QtWidgets.QHBoxLayout())
         self.topic_hor_layout[self.topic_nbr].setObjectName(f'topic_hor_layout_{self.topic_nbr}')
+        self.topic_hor_layout[self.topic_nbr].addItem(QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed,
+                                                                            QtWidgets.QSizePolicy.Minimum))
         self.topic_del_button.append(QtWidgets.QToolButton())
         self.topic_del_button[self.topic_nbr].setMinimumSize(QtCore.QSize(40, 40))
         self.topic_del_button[self.topic_nbr].setMaximumSize(QtCore.QSize(40, 40))
