@@ -57,11 +57,11 @@ class MFForecastRequest(QtCore.QThread):
                     dt += datetime.timedelta(hours=6)
                     day_time_list.append(dt)
 
-                # prepare min max of day
-
                 tmp = {}
-                for dforecast in place_forecast.daily_forecast:
+                for i, dforecast in enumerate(place_forecast.daily_forecast):
                     tmp[dforecast['dt']] = {'temp': dforecast['T'], 'weather': dforecast['weather12H']['desc']}
+                    if i > 5:
+                        break
 
                 forecast_next = place_forecast.forecast
                 forecast_dt = [datetime.datetime.utcfromtimestamp(forecast['dt']) for forecast in forecast_next]

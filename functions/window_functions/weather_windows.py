@@ -136,7 +136,7 @@ class My1dFCDetails(QtWidgets.QDialog, Ui_forecast1dWindow):
     def parse_forecast(self):
         logging.debug('gui - other_windows_functions.py - My1dFCDetails - parse_forecast')
         wspeed = round(self.data['w_spd'] * 3600 / 1000)
-        wgust = round(fc[1]['w_gst'] * 3600 / 1000)
+        wgust = round(self.data['w_gst'] * 3600 / 1000)
         wdir = self.data['w_dir']
         date = (days_months_dictionary()['day'][self.data['date'].weekday() + 1] + ' ' + str(self.data['date'].day)
                 + ' ' + days_months_dictionary()['month'][self.data['date'].month])

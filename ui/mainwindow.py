@@ -605,7 +605,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 fc = self.forecast_data['quaterly'][dt]
                 data = {'temp': f'{round(fc["temp"]["min"])}°C / {round(fc["temp"]["max"])}°C', 'date': dt,
                         'weather': fc['weather'], 'cover': fc['cover'], 'pres': fc['pres'],
-                        'rain': fc['rain'], 'w_spd': fc['w_spd'], 'w_dir': fc['w_dir']}
+                        'rain': fc['rain'], 'w_spd': fc['w_spd'], 'w_dir': fc['w_dir'], 'w_gst': fc['w_gst']}
                 details_window = My1dFCDetails(data, self)
                 details_window.exec_()
 
