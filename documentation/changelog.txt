@@ -16,6 +16,7 @@
   * MODIFIED:
     * the stylesheet of few windows have been modified for better consistency with the main window.
     * the 1d forecast page with MF forecast now show data based on daily forecast.
+    * a new infowindow has been introduced.
 
 
 ### June 23 2022, Release version 0.12.2 ###

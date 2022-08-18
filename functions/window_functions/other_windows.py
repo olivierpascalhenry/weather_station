@@ -76,6 +76,12 @@ class MyInfo(QtWidgets.QDialog, Ui_infoWindow):
         shadow.setBlurRadius(25)
         self.setGraphicsEffect(shadow)
         self.move(int((self.parent().width() - self.width()) / 2), int((self.parent().height() - self.height()) / 2))
+        scroll = QtWidgets.QScroller.scroller(self.scroll_area.viewport())
+        scroll.grabGesture(self.scroll_area.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
+        properties = scroll.scrollerProperties()
+        properties.setScrollMetric(QtWidgets.QScrollerProperties.VerticalOvershootPolicy,
+                                   QtWidgets.QScrollerProperties.OvershootAlwaysOff)
+        scroll.setScrollerProperties(properties)
         self.label.setText(info_text)
         self.exit_button.clicked.connect(self.close_window)
 

@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_infoWindow(object):
     def setupUi(self, infoWindow):
         infoWindow.setObjectName("infoWindow")
-        infoWindow.resize(386, 256)
+        infoWindow.resize(460, 240)
         infoWindow.setMinimumSize(QtCore.QSize(0, 0))
         infoWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -22,8 +22,9 @@ class Ui_infoWindow(object):
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         infoWindow.setFont(font)
-        infoWindow.setStyleSheet("QWidget {\n"
+        infoWindow.setStyleSheet("QWidget#infoWindow {\n"
 "    background-color: rgb(240,240,240);\n"
+"    border: 1px solid rgb(75,75,75);\n"
 "}\n"
 "\n"
 "QScrollBar:vertical {\n"
@@ -95,7 +96,7 @@ class Ui_infoWindow(object):
 "}\n"
 "\n"
 "QScrollBar::up-arrow:vertical {\n"
-"  image: url(icons:up_arrow_icon.svg); \n"
+"  image: url(icons/up_arrow_icon.svg); \n"
 "  width: 16px;\n"
 "  height: 16px;\n"
 "}\n"
@@ -106,7 +107,7 @@ class Ui_infoWindow(object):
 "}\n"
 "\n"
 "QScrollBar::down-arrow:vertical {\n"
-"  image: url(icons:down_arrow_icon.svg); \n"
+"  image: url(icons/down_arrow_icon.svg); \n"
 "  width: 16px;\n"
 "  height: 16px;\n"
 "}\n"
@@ -147,7 +148,7 @@ class Ui_infoWindow(object):
 "}\n"
 "\n"
 "QScrollBar::left-arrow:horizontal {\n"
-"  image: url(icons:left_arrow_icon.svg); \n"
+"  image: url(icons/left_arrow_icon.svg); \n"
 "  width: 16px;\n"
 "  height: 16px;\n"
 "}\n"
@@ -158,7 +159,7 @@ class Ui_infoWindow(object):
 "}\n"
 "\n"
 "QScrollBar::right-arrow:horizontal {\n"
-"  image: url(icons:right_arrow_icon.svg); \n"
+"  image: url(icons/right_arrow_icon.svg); \n"
 "  width: 16px;\n"
 "  height: 16px;\n"
 "}\n"
@@ -166,9 +167,74 @@ class Ui_infoWindow(object):
 "QScrollBar::right-arrow:horizontal:pressed {\n"
 "  right: -1px;\n"
 "  bottom: -1px;\n"
+"}\n"
+"\n"
+"QComboBox {\n"
+"    border: 1px solid rgb(170, 170, 170);\n"
+"    border-radius: 1px;\n"
+"    padding-left: 5px;\n"
+"    background-color: rgb(230,230,230);\n"
+"    color: rgb(45,45,45);\n"
+"}\n"
+"\n"
+"QComboBox:disabled {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(145,145,145);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    background-color: rgb(220,220,220);\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 27px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(icons/down_arrow_icon.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow:disabled {\n"
+"    image: url(icons/down_arrow_icon_deactivated.svg); \n"
+"    width: 16px;\n"
+"    height: 16px\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    background: rgb(230,230,230);\n"
+"    border: 0px solid #f0f0f0;\n"
+"    outline: 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:hover {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView::item:selected {\n"
+"    background-color: rgb(200,200,200);\n"
+"    color: rgb(45,45,45);\n"
+"    margin: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"\n"
+"QComboBox QAbstractItemView::item {\n"
+"    margin: 3px 5px 3px 5px;\n"
+"    color: rgb(45,45,45);\n"
 "}")
         self.gridLayout_2 = QtWidgets.QGridLayout(infoWindow)
-        self.gridLayout_2.setContentsMargins(-1, -1, 0, -1)
+        self.gridLayout_2.setContentsMargins(0, -1, 1, -1)
+        self.gridLayout_2.setVerticalSpacing(11)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.scroll_area = QtWidgets.QScrollArea(infoWindow)
         self.scroll_area.setStyleSheet("QScrollArea { background: transparent; }\n"
@@ -340,10 +406,10 @@ class Ui_infoWindow(object):
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 375, 168))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 459, 165))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout.setContentsMargins(0, 0, 10, 0)
+        self.gridLayout.setContentsMargins(11, 0, -1, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         font = QtGui.QFont()
@@ -361,10 +427,10 @@ class Ui_infoWindow(object):
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.scroll_area.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.scroll_area, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
         self.exit_button = QtWidgets.QToolButton(infoWindow)
         self.exit_button.setMinimumSize(QtCore.QSize(40, 40))
         self.exit_button.setMaximumSize(QtCore.QSize(40, 40))
@@ -389,7 +455,7 @@ class Ui_infoWindow(object):
         self.horizontalLayout.addWidget(self.exit_button)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
-        self.gridLayout_2.addLayout(self.horizontalLayout, 2, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.retranslateUi(infoWindow)
         QtCore.QMetaObject.connectSlotsByName(infoWindow)
