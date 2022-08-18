@@ -6,6 +6,7 @@ import logging
 import pathlib
 import datetime
 import psycopg2
+import requests
 from meteofrance_api import MeteoFranceClient
 from pyowm.owm import OWM
 from pyowm.utils.config import get_default_config
@@ -79,6 +80,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.db_vl.setAlignment(QtCore.Qt.AlignTop)
         self.db_gb_2_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.lo_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.sy_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -115,6 +117,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.sy_gb_2_bt_1.clicked.connect(self.check_update)
         self.sy_gb_2_bt_2.clicked.connect(self.export_to_csv)
         self.db_gb_2_cb_1.currentIndexChanged.connect(self.activate_export_button)
+        self.sy_gb_cb_1.currentIndexChanged.connect(self.activate_elevation_widgets)
+        self.sy_gb_bt_4.clicked.connect(self.elevation_request)
         if getattr(sys, 'frozen', False):
             self.sy_gb_2_bt_1.setEnabled(True)
         else:
@@ -545,10 +549,81 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.db_gb_2_lb_2.setText('Cette table n\'existe plus !')
 
     def activate_export_button(self):
+        logging.debug(f'gui - option_window.py - MyOptions - activate_export_button')
         if self.db_gb_2_cb_1.currentText() in ['Choisir un capteur', 'Pas de capteur']:
             self.sy_gb_2_bt_2.setEnabled(False)
         else:
             self.sy_gb_2_bt_2.setEnabled(True)
+
+    def activate_elevation_widgets(self):
+        logging.debug(f'gui - option_window.py - MyOptions - activate_elevation_widgets - current index: '
+                      f'{self.sy_gb_cb_1.currentIndex()}')
+        if self.sy_gb_cb_1.currentIndex() == 0:
+            self.sy_gb_ln_1.setEnabled(True)
+            self.sy_gb_ln_2.setEnabled(False)
+            self.sy_gb_ln_3.setEnabled(False)
+            self.sy_gb_bt_1.setEnabled(True)
+            self.sy_gb_bt_2.setEnabled(False)
+            self.sy_gb_bt_3.setEnabled(False)
+            self.sy_gb_bt_4.setEnabled(False)
+        elif self.sy_gb_cb_1.currentIndex() == 1:
+            self.sy_gb_ln_1.setEnabled(False)
+            self.sy_gb_ln_2.setEnabled(False)
+            self.sy_gb_ln_3.setEnabled(False)
+            self.sy_gb_bt_1.setEnabled(False)
+            self.sy_gb_bt_2.setEnabled(False)
+            self.sy_gb_bt_3.setEnabled(False)
+            self.sy_gb_bt_4.setEnabled(True)
+        else:
+            self.sy_gb_ln_1.setEnabled(False)
+            self.sy_gb_bt_1.setEnabled(False)
+            self.sy_gb_ln_2.setEnabled(True)
+            self.sy_gb_ln_3.setEnabled(True)
+            self.sy_gb_bt_2.setEnabled(True)
+            self.sy_gb_bt_3.setEnabled(True)
+            self.sy_gb_bt_4.setEnabled(True)
+
+    def elevation_request(self):
+        logging.debug(f'gui - option_window.py - MyOptions - elevation_request')
+        lon, lat = None, None
+        error = False
+        msg = ''
+        elev = None
+        if self.sy_gb_cb_1.currentIndex() == 1:
+            if self.place_object is not None:
+                lon, lat = self.place_object['longitude'], self.place_object['latitude']
+        else:
+            if self.sy_gb_ln_2.text() and self.sy_gb_ln_3.text():
+                lon = float(self.sy_gb_ln_2.text())
+                lat = float(self.sy_gb_ln_3.text())
+        try:
+            logging.debug(f'gui - option_window.py - MyOptions - elevation_request - lon: {lon} | lat: {lat}')
+            query = f'https://api.open-elevation.com/api/v1/lookup?locations={lat},{lon}'
+            ans = requests.get(query)
+
+            if ans.status_code == 200:
+                try:
+                    elev = int(ans.json()['results'][0]['elevation'])
+                except ValueError:
+                    logging.exception('an exception occurred when sending a request for elevation data.')
+                    error = True
+                    msg = ('Le serveur OpenElevation n\'a pas retourné une réponse exploitable. En conséquence, '
+                           'l\'élévation n\'a pas pu être récupérée.')
+            else:
+                logging.error('an exception occurred when sending a request for elevation data.')
+                error = True
+                msg = ('Le serveur OpenElevation a retourné un code d\'erreur. Veuillez vérifier les valeurs de '
+                       'longitude et de latitude pour la requête.')
+        except requests.exceptions.ConnectionError:
+            logging.exception('an exception occurred when sending a request for elevation data.')
+            error = True
+            msg = ('Erreur de connexion. Soit la station météo n\'est pas connectée à Internet, soit le serveur '
+                   'OpenElevation n\'est pas accessible.')
+        if error:
+            info_window = MyInfo(msg, self.mainparent)
+            info_window.exec_()
+        else:
+            self.sy_gb_ln_1.setText(str(elev))
 
     def close_window(self):
         logging.debug('gui - option_window.py - MyOptions - close_window')
