@@ -555,10 +555,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.forecast_data['api'] == 'meteofrance':
                 for i in [0, 4, 8, 12, 16]:
                     dt_list = list(self.forecast_data['quaterly'].keys())[i: i + 4]
-                    weather = self.forecast_data['quaterly'][dt_list[2]]['weather']
-                    temp_list = [self.forecast_data['quaterly'][t]['temp'] for t in dt_list]
+                    weather = self.forecast_data['quaterly'][dt_list[0]]['weather12h']
+                    temp_list = self.forecast_data['quaterly'][dt_list[0]]['temp_min_max']
                     date = days_months_dictionary()['day'][dt_list[2].weekday() + 1] + ' ' + str(dt_list[2].day)
-                    temp = f'{round(min(temp_list))}°C / {round(max(temp_list))}°C'
+                    temp = f'{round(temp_list["min"])}°C / {round(temp_list["max"])}°C'
                     date_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_day_lb_{int(i / 4) + 1}')
                     weat_bt = self.page_5.findChild(QtWidgets.QToolButton, f'fc_dweat_bt_{int(i / 4) + 1}')
                     temp_lb = self.page_5.findChild(QtWidgets.QLabel, f'fc_mmtemp_lb_{int(i / 4) + 1}')

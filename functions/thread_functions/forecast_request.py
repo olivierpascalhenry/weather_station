@@ -57,20 +57,36 @@ class MFForecastRequest(QtCore.QThread):
                     dt += datetime.timedelta(hours=6)
                     day_time_list.append(dt)
 
+                # prepare min max of day
+
+                tmp = {}
+                for dforecast in place_forecast.daily_forecast:
+                    tmp[dforecast['dt']] = {'temp': dforecast['T'], 'weather': dforecast['weather12H']['desc']}
+
                 forecast_next = place_forecast.forecast
                 forecast_dt = [datetime.datetime.utcfromtimestamp(forecast['dt']) for forecast in forecast_next]
                 occurences = [i for i, item in enumerate(forecast_dt) if item in set(day_time_list)]
                 for idx in occurences:
                     forecast = forecast_next[idx]
+
+                    if forecast['dt'] in list(tmp.keys()):
+                        temp_min_max = tmp[forecast['dt']]['temp']
+                        weather12h = tmp[forecast['dt']]['weather']
+                    else:
+                        temp_min_max = None
+                        weather12h = None
+
                     dt = datetime.datetime.utcfromtimestamp(forecast['dt'])
                     fc_6h[dt] = {'datetime': dt,
                                  'temp': forecast['T']['value'],
+                                 'temp_min_max': temp_min_max,
                                  'hum': forecast['humidity'],
                                  'pres': forecast['sea_level'],
                                  'w_spd': forecast['wind']['speed'],
                                  'w_dir': forecast['wind']['direction'],
                                  'w_gst': forecast['wind']['gust'],
                                  'weather': forecast['weather']['desc'],
+                                 'weather12h': weather12h,
                                  'cover': forecast['clouds']}
 
                 self.forecast['quaterly'] = fc_6h
