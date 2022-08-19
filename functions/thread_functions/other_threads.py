@@ -456,6 +456,40 @@ class DBTableManager(QtCore.QThread):
             self.work_failed.emit(msg)
 
 
+class RequestPlotDataTestThread(QtCore.QThread):
+    success = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal()
+    zone_dict = {'in': {'table_1': 'in_temperature', 'table_2': 'in_humidity'},
+                 'out': {'table_1': 'out_temperature', 'table_2': 'out_pressure'}}
+    color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+    ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
+                    '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
+
+    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, config_dict, sensor_dict):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
+        self.canvas_in = canvas_in
+        self.canvas_out = canvas_out
+        self.plot_in_1 = plot_in_1
+        self.plot_in_2 = plot_in_2
+        self.plot_out_1 = plot_out_1
+        self.plot_out_2 = plot_out_2
+        self.config_dict = config_dict
+        self.sensor_dict = sensor_dict
+        self.now = None
+        self.limit = None
+        self.hours_list = None
+        self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
+                                          password=self.config_dict.get('DATABASE', 'password'),
+                                          host=self.config_dict.get('DATABASE', 'host'),
+                                          database=self.config_dict.get('DATABASE', 'database'),
+                                          port=self.config_dict.get('DATABASE', 'port'))
+        self.cursor = self.connector.cursor()
+
+
+
+
+
 class RequestPlotDataThread(QtCore.QThread):
     success = QtCore.pyqtSignal()
     error = QtCore.pyqtSignal()

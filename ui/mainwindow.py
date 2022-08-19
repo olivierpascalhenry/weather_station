@@ -174,6 +174,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_postgresql_connection()
         self.check_internet_connection()
 
+        self.setup_plot_area_test()
+
+
+
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')
         self.check_posgresql = CheckPostgresqlConnexion(self.db_dict)
@@ -491,6 +495,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         clear_layout(self.plot_layout_1)
         clear_layout(self.plot_layout_3)
 
+    def setup_plot_area_test(self):
+        color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+        self.figure_in = plt.figure(facecolor='#E2F0D9')
+        self.canvas_in = FigureCanvas(self.figure_in)
+        NavigationToolbar(self.canvas_in, self).hide()
+        self.plot_in = self.figure_in.add_subplot(1, 1, 1)
+        self.plot_in_2 = self.plot_in.twinx()
+        self.plot_in.spines['top'].set_visible(False)
+        self.plot_in_2.spines['top'].set_visible(False)
+        self.plot_in.set_facecolor('None')
+        self.plot_in.set_ylabel('Température (°C)', color=color_1)
+        self.plot_in.tick_params(axis='y', labelcolor=color_1)
+        self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
+        self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
+        self.figure_in.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
+        self.figure_out = plt.figure(facecolor='#FBE5D6')
+        self.canvas_out = FigureCanvas(self.figure_out)
+        NavigationToolbar(self.canvas_out, self).hide()
+        self.plot_out = self.figure_out.add_subplot(1, 1, 1)
+        self.plot_out_2 = self.plot_out.twinx()
+        self.plot_out.spines['top'].set_visible(False)
+        self.plot_out_2.spines['top'].set_visible(False)
+        self.plot_out.set_ylabel('Température (°C)', color=color_1)
+        self.plot_out.tick_params(axis='y', labelcolor=color_1)
+        self.plot_out_2.set_ylabel('Pression MSL (hPa)', color=color_3)
+        self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
+        self.figure_out.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
+        self.plot_out.set_facecolor('None')
+
+
+        self.plot_in.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+        self.plot_out.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+
+
+        self.plot_layout_1.addWidget(self.canvas_in)
+        self.plot_layout_3.addWidget(self.canvas_out)
+        self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+                                                         QtWidgets.QSizePolicy.Fixed))
+        self.plot_layout_3.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+                                                         QtWidgets.QSizePolicy.Fixed))
+
+
+
+
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
         color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
@@ -738,8 +786,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-        if idx == 2:
-            self.plot_time_series_start()
+        # if idx == 2:
+        #     self.plot_time_series_start()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
