@@ -390,6 +390,23 @@ def mpl_hour_list():
     return list(reversed(hours_list))
 
 
+def define_time_ticks(now):
+    tick_list, label_list = [], []
+    i = 0
+    for hour in reversed(list(range(1, 25, 1))):
+        tick_list.append(now - datetime.timedelta(hours=hour))
+        if i == 0:
+            label_list.append(f'-{hour}h')
+        else:
+            label_list.append('')
+        i += 1
+        if i == 4:
+            i = 0
+    tick_list.append(now)
+    label_list.append('Now')
+    return tick_list, label_list
+
+
 # def db_data_to_mpl_vectors(data):
 #     logging.debug('gui - utils.py - db_data_to_mpl_vectors')
 #     t, x = [], []

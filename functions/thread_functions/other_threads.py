@@ -456,63 +456,17 @@ class DBTableManager(QtCore.QThread):
             self.work_failed.emit(msg)
 
 
-class RequestPlotDataTestThread(QtCore.QThread):
-    success = QtCore.pyqtSignal()
-    error = QtCore.pyqtSignal()
-    zone_dict = {'in': {'table_1': 'in_temperature', 'table_2': 'in_humidity'},
-                 'out': {'table_1': 'out_temperature', 'table_2': 'out_pressure'}}
-    color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
-    ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
-                    '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
-
-    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, config_dict, sensor_dict):
-        QtCore.QThread.__init__(self)
-        logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
-        self.canvas_in = canvas_in
-        self.canvas_out = canvas_out
-        self.plot_in_1 = plot_in_1
-        self.plot_in_2 = plot_in_2
-        self.plot_out_1 = plot_out_1
-        self.plot_out_2 = plot_out_2
-        self.config_dict = config_dict
-        self.sensor_dict = sensor_dict
-        self.now = None
-        self.limit = None
-        self.hours_list = None
-        self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
-                                          password=self.config_dict.get('DATABASE', 'password'),
-                                          host=self.config_dict.get('DATABASE', 'host'),
-                                          database=self.config_dict.get('DATABASE', 'database'),
-                                          port=self.config_dict.get('DATABASE', 'port'))
-        self.cursor = self.connector.cursor()
-
-
-
-
-
 class RequestPlotDataThread(QtCore.QThread):
-    success = QtCore.pyqtSignal()
+    success = QtCore.pyqtSignal(dict)
     error = QtCore.pyqtSignal()
-    zone_dict = {'in': {'table_1': 'in_temperature', 'table_2': 'in_humidity'},
-                 'out': {'table_1': 'out_temperature', 'table_2': 'out_pressure'}}
-    color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
-    ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
-                    '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
 
-    def __init__(self, canvas_in, canvas_out, plot_in_1, plot_in_2, plot_out_1, plot_out_2, config_dict, sensor_dict):
+    def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - RequestPlotDataThread - __init__')
-        self.canvas_in = canvas_in
-        self.canvas_out = canvas_out
-        self.plot_in_1 = plot_in_1
-        self.plot_in_2 = plot_in_2
-        self.plot_out_1 = plot_out_1
-        self.plot_out_2 = plot_out_2
         self.config_dict = config_dict
         self.sensor_dict = sensor_dict
-        self.now = None
-        self.limit = None
-        self.hours_list = None
+        self.now = datetime.datetime.now()
+        self.limit = self.now - datetime.timedelta(hours=24)
         self.connector = psycopg2.connect(user=self.config_dict.get('DATABASE', 'username'),
                                           password=self.config_dict.get('DATABASE', 'password'),
                                           host=self.config_dict.get('DATABASE', 'host'),
@@ -522,105 +476,131 @@ class RequestPlotDataThread(QtCore.QThread):
 
     def run(self):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - run')
-        self.plot_data()
 
-    def plot_data(self):
-        logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_data')
         try:
-            self.now = datetime.datetime.now()
-            self.limit = self.now - datetime.timedelta(hours=24)
-            self.hours_list = mpl_hour_list()
-            self.plot_in_data()
-            self.plot_out_data()
-            self.canvas_in.draw()
-            self.canvas_out.draw()
+            in_temp_table, in_hum_table = self.get_device_table('in')
+            out_temp_table, out_pres_table = self.get_device_table('out')
+            data_dict = {'temp_in': self.query_table_for_data('temperature', in_temp_table, self.limit),
+                         'temp_out': self.query_table_for_data('temperature', out_temp_table, self.limit),
+                         'hum_in': self.query_table_for_data('humidity', in_hum_table, self.limit)}
+            if self.config_dict.getboolean('TIMESERIES', 'msl_pressure'):
+                data_dict['pres_out'] = self.query_table_for_data('pressure_msl', out_pres_table, self.limit)
+            else:
+                data_dict['pres_out'] = self.query_table_for_data('pressure_msl', out_pres_table, self.limit)
+
+            self.cursor.close()
             self.connector.close()
-            self.success.emit()
-        except Exception:
-            logging.exception('gui - other_threads.py - RequestPlotDataThread - plot_data - an exception '
-                              'occurred when ploting data')
-            self.connector.close()
+            self.success.emit(data_dict)
+        except:
+            logging.exception('gui - other_threads.py - RequestPlotDataThread - plot_data - an exception occurred '
+                              'when ploting data')
             self.error.emit()
+            self.cursor.close()
+            self.connector.close()
 
-    def plot_in_data(self):
-        logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_in_data')
-        in_temp_table, in_hum_table = self.get_device_table('in')
-        temp_in_x, temp_in_y = self.query_table_for_data('temperature', in_temp_table, self.limit)
-        hum_in_x, hum_in_y = self.query_table_for_data('humidity', in_hum_table, self.limit)
-        self.plot_in_1.clear()
-        self.plot_in_2.clear()
-        self.plot_in_1.set_ylabel('Température (°C)', color=self.color_1)
-        self.plot_in_1.tick_params(axis='y', labelcolor=self.color_1)
-        self.plot_in_2.set_ylabel('Humidité (%)', color=self.color_2)
-        self.plot_in_2.tick_params(axis='y', labelcolor=self.color_2)
-        self.plot_in_2.set_ylim(0, 100)
-        if temp_in_y is not None:
-            self.plot_in_1.plot(temp_in_x, temp_in_y, color=self.color_1, linewidth=1.)
-            y_min, y_max = 10, 30
-            while min(temp_in_y) < y_min:
-                y_min -= 5
-            while max(temp_in_y) > y_max:
-                y_max += 5
-            self.plot_in_1.set_ylim(y_min, y_max)
-        if hum_in_y is not None:
-            self.plot_in_2.plot(hum_in_x, hum_in_y, color=self.color_2, linewidth=1.)
-        self.plot_in_1.set_xlim(self.limit, self.now)
-        self.plot_in_1.set_xticks(self.hours_list)
-        self.plot_in_1.set_xticklabels(self.ticks_labels)
-        length = len(self.plot_in_1.get_yticks())
-        upper = self.plot_in_2.get_yticks()[-1]
-        lower = self.plot_in_2.get_yticks()[0]
-        self.plot_in_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
-        self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
 
-    def plot_out_data(self):
-        logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_out_data')
-        out_temp_table, out_pres_table = self.get_device_table('out')
-        temp_out_x, temp_out_y = self.query_table_for_data('temperature', out_temp_table, self.limit)
-        if self.config_dict.getboolean('TIMESERIES', 'msl_pressure'):
-            ylabel = 'Pression SL (hPa)'
-            pres_out_x, pres_out_y = self.query_table_for_data('pressure_msl', out_pres_table, self.limit)
-        else:
-            ylabel = 'Pression (hPa)'
-            pres_out_x, pres_out_y = self.query_table_for_data('pressure', out_pres_table, self.limit)
-        self.plot_out_1.clear()
-        self.plot_out_2.clear()
-        self.plot_out_1.set_ylabel('Température (°C)', color=self.color_1)
-        self.plot_out_1.tick_params(axis='y', labelcolor=self.color_1)
-        self.plot_out_2.set_ylabel(ylabel, color=self.color_3)
-        self.plot_out_2.tick_params(axis='y', labelcolor=self.color_3)
-        if temp_out_y is not None and temp_out_y.size != 0:
-            self.plot_out_1.plot(temp_out_x, temp_out_y, color=self.color_1, linewidth=1.)
-            y_min, y_max = 10, 30
-            while min(temp_out_y) < y_min:
-                y_min -= 5
-            while max(temp_out_y) > y_max:
-                y_max += 5
-            self.plot_out_1.set_ylim(y_min, y_max)
-        if pres_out_y is not None and pres_out_y.size != 0:
-            self.plot_out_2.plot(pres_out_x, pres_out_y, color=self.color_3, linewidth=1.)
-            y_min, y_max = 990, 1030
-            while min(pres_out_y) < y_min:
-                y_min -= 5
-            while max(pres_out_y) > y_max:
-                y_max += 5
-            self.plot_out_2.set_ylim(y_min, y_max)
-        self.plot_out_1.set_xlim(self.limit, self.now)
-        self.plot_out_1.set_xticks(self.hours_list)
-        self.plot_out_1.set_xticklabels(self.ticks_labels)
-        length = len(self.plot_out_1.get_yticks())
-        upper = self.plot_out_2.get_yticks()[-1]
-        lower = self.plot_out_2.get_yticks()[0]
-        self.plot_out_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
-        self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+
+        # self.plot_data()
+
+    # def plot_data(self):
+    #     logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_data')
+    #     try:
+    #         self.now = datetime.datetime.now()
+    #         self.limit = self.now - datetime.timedelta(hours=24)
+    #         self.hours_list = mpl_hour_list()
+    #         self.plot_in_data()
+    #         self.plot_out_data()
+    #         self.canvas_in.draw()
+    #         self.canvas_out.draw()
+    #         self.connector.close()
+    #         self.success.emit()
+    #     except Exception:
+    #         logging.exception('gui - other_threads.py - RequestPlotDataThread - plot_data - an exception '
+    #                           'occurred when ploting data')
+    #         self.connector.close()
+    #         self.error.emit()
+
+    # def plot_in_data(self):
+    #     logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_in_data')
+    #     in_temp_table, in_hum_table = self.get_device_table('in')
+    #     temp_in_x, temp_in_y = self.query_table_for_data('temperature', in_temp_table, self.limit)
+    #     hum_in_x, hum_in_y = self.query_table_for_data('humidity', in_hum_table, self.limit)
+    #     self.plot_in_1.clear()
+    #     self.plot_in_2.clear()
+    #     self.plot_in_1.set_ylabel('Température (°C)', color=self.color_1)
+    #     self.plot_in_1.tick_params(axis='y', labelcolor=self.color_1)
+    #     self.plot_in_2.set_ylabel('Humidité (%)', color=self.color_2)
+    #     self.plot_in_2.tick_params(axis='y', labelcolor=self.color_2)
+    #     self.plot_in_2.set_ylim(0, 100)
+    #     if temp_in_y is not None:
+    #         self.plot_in_1.plot(temp_in_x, temp_in_y, color=self.color_1, linewidth=1.)
+    #         y_min, y_max = 10, 30
+    #         while min(temp_in_y) < y_min:
+    #             y_min -= 5
+    #         while max(temp_in_y) > y_max:
+    #             y_max += 5
+    #         self.plot_in_1.set_ylim(y_min, y_max)
+    #     if hum_in_y is not None:
+    #         self.plot_in_2.plot(hum_in_x, hum_in_y, color=self.color_2, linewidth=1.)
+    #     self.plot_in_1.set_xlim(self.limit, self.now)
+    #     self.plot_in_1.set_xticks(self.hours_list)
+    #     self.plot_in_1.set_xticklabels(self.ticks_labels)
+    #     length = len(self.plot_in_1.get_yticks())
+    #     upper = self.plot_in_2.get_yticks()[-1]
+    #     lower = self.plot_in_2.get_yticks()[0]
+    #     self.plot_in_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
+    #     self.plot_in_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+    #
+    # def plot_out_data(self):
+    #     logging.debug('gui - other_threads.py - RequestPlotDataThread - plot_out_data')
+    #     out_temp_table, out_pres_table = self.get_device_table('out')
+    #     temp_out_x, temp_out_y = self.query_table_for_data('temperature', out_temp_table, self.limit)
+    #     if self.config_dict.getboolean('TIMESERIES', 'msl_pressure'):
+    #         ylabel = 'Pression SL (hPa)'
+    #         pres_out_x, pres_out_y = self.query_table_for_data('pressure_msl', out_pres_table, self.limit)
+    #     else:
+    #         ylabel = 'Pression (hPa)'
+    #         pres_out_x, pres_out_y = self.query_table_for_data('pressure', out_pres_table, self.limit)
+    #     self.plot_out_1.clear()
+    #     self.plot_out_2.clear()
+    #     self.plot_out_1.set_ylabel('Température (°C)', color=self.color_1)
+    #     self.plot_out_1.tick_params(axis='y', labelcolor=self.color_1)
+    #     self.plot_out_2.set_ylabel(ylabel, color=self.color_3)
+    #     self.plot_out_2.tick_params(axis='y', labelcolor=self.color_3)
+    #     if temp_out_y is not None and temp_out_y.size != 0:
+    #         self.plot_out_1.plot(temp_out_x, temp_out_y, color=self.color_1, linewidth=1.)
+    #         y_min, y_max = 10, 30
+    #         while min(temp_out_y) < y_min:
+    #             y_min -= 5
+    #         while max(temp_out_y) > y_max:
+    #             y_max += 5
+    #         self.plot_out_1.set_ylim(y_min, y_max)
+    #     if pres_out_y is not None and pres_out_y.size != 0:
+    #         self.plot_out_2.plot(pres_out_x, pres_out_y, color=self.color_3, linewidth=1.)
+    #         y_min, y_max = 990, 1030
+    #         while min(pres_out_y) < y_min:
+    #             y_min -= 5
+    #         while max(pres_out_y) > y_max:
+    #             y_max += 5
+    #         self.plot_out_2.set_ylim(y_min, y_max)
+    #     self.plot_out_1.set_xlim(self.limit, self.now)
+    #     self.plot_out_1.set_xticks(self.hours_list)
+    #     self.plot_out_1.set_xticklabels(self.ticks_labels)
+    #     length = len(self.plot_out_1.get_yticks())
+    #     upper = self.plot_out_2.get_yticks()[-1]
+    #     lower = self.plot_out_2.get_yticks()[0]
+    #     self.plot_out_2.set_yticks([lower + x * (upper - lower) / (length - 1) for x in range(length)])
+    #     self.plot_out_1.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
 
     def get_device_table(self, zone):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - get_device_table')
+        zone_dict = {'in': {'table_1': 'in_temperature', 'table_2': 'in_humidity'},
+                     'out': {'table_1': 'out_temperature', 'table_2': 'out_pressure'}}
         table_1, table_2 = None, None
-        if self.config_dict.get('TIMESERIES', self.zone_dict[zone]['table_1']):
-            table_1 = self.get_table(self.config_dict.get('TIMESERIES', self.zone_dict[zone]['table_1']))
-        if self.config_dict.get('TIMESERIES', self.zone_dict[zone]['table_2']):
-            table_2 = self.get_table(self.config_dict.get('TIMESERIES', self.zone_dict[zone]['table_2']))
+        if self.config_dict.get('TIMESERIES', zone_dict[zone]['table_1']):
+            table_1 = self.get_table(self.config_dict.get('TIMESERIES', zone_dict[zone]['table_1']))
+        if self.config_dict.get('TIMESERIES', zone_dict[zone]['table_2']):
+            table_2 = self.get_table(self.config_dict.get('TIMESERIES', zone_dict[zone]['table_2']))
         return table_1, table_2
 
     def get_table(self, device_name):

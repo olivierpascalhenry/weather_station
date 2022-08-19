@@ -23,7 +23,8 @@ from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
 from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
                              shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict, angle_moon_phase, get_season, weather_to_pictogrammes)
+                             link_value_icon_dict, angle_moon_phase, get_season, weather_to_pictogrammes,
+                             define_time_ticks)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
 from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
@@ -114,6 +115,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.out_pressure_msl = None
         self.out_battery = None
         self.out_signal = None
+        self.new_plot = True
+        self.color_1, self.color_2, self.color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
         self.forecast_service_dispatcher = {'openweather': OWForecastRequest, 'meteofrance': MFForecastRequest}
         self.sunrise_6days = []
         self.sunset_6days = []
@@ -174,7 +177,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.check_postgresql_connection()
         self.check_internet_connection()
 
-        self.setup_plot_area_test()
+        self.setup_plot_area()
 
 
 
@@ -445,103 +448,100 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             icon = 'none_icon.png'
         self.out_signal_bt.setIcon(icon_creation_function(icon))
 
-    def plot_time_series_start(self):
-        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
-        self.time_series_stack.setCurrentIndex(0)
-        self.set_ts_stack_icon()
-        clear_layout(self.plot_layout_1)
-        clear_layout(self.plot_layout_3)
-        self.setup_plot_area()
-        self.h_spin_lay = QtWidgets.QHBoxLayout()
-        self.h_spin_lay.setObjectName('h_spin_lay')
-        self.spinner = WaitingSpinner(self, roundness=40., opacity=15., fade=70., radius=24., lines=16,
-                                      line_length=26., line_width=6., speed=1., color=(75, 75, 75))
-        self.h_spin_lay.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
-                                                      QtWidgets.QSizePolicy.Minimum))
-        self.h_spin_lay.addWidget(self.spinner)
-        self.h_spin_lay.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
-                                                      QtWidgets.QSizePolicy.Minimum))
-        self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Expanding))
-        self.plot_layout_1.addLayout(self.h_spin_lay)
-        self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Expanding))
-        self.spinner.start()
+    def request_plot_data(self):
         if self.database_ok:
-            self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in,
-                                                             self.plot_in_2, self.plot_out, self.plot_out_2,
-                                                             self.config_dict, self.sensor_dict)
-            self.request_plot_thread.success.connect(self.plot_time_series_end)
-            self.request_plot_thread.error.connect(self.plot_time_series_error)
+            self.request_plot_thread = RequestPlotDataThread(self.config_dict, self.sensor_dict)
+            self.request_plot_thread.success.connect(self.plot_time_series)
+            self.request_plot_thread.error.connect(self.request_plot_data_error)
             self.request_plot_thread.start()
         else:
-            self.plot_time_series_error()
+            self.request_plot_data_error()
 
-    def plot_time_series_end(self):
-        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_end')
-        self.spinner.stop()
-        clear_layout(self.plot_layout_1)
-        clear_layout(self.plot_layout_3)
-        self.plot_layout_1.addWidget(self.canvas_in)
-        self.plot_layout_3.addWidget(self.canvas_out)
-        self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Fixed))
-        self.plot_layout_3.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Fixed))
-
-    def plot_time_series_error(self):
-        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_error')
-        self.spinner.stop()
-        clear_layout(self.plot_layout_1)
-        clear_layout(self.plot_layout_3)
-
-    def setup_plot_area_test(self):
+    def plot_time_series(self, val_dict):
         color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
-        self.figure_in = plt.figure(facecolor='#E2F0D9')
-        self.canvas_in = FigureCanvas(self.figure_in)
-        NavigationToolbar(self.canvas_in, self).hide()
-        self.plot_in = self.figure_in.add_subplot(1, 1, 1)
-        self.plot_in_2 = self.plot_in.twinx()
-        self.plot_in.spines['top'].set_visible(False)
-        self.plot_in_2.spines['top'].set_visible(False)
-        self.plot_in.set_facecolor('None')
-        self.plot_in.set_ylabel('Température (°C)', color=color_1)
-        self.plot_in.tick_params(axis='y', labelcolor=color_1)
-        self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
-        self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
-        self.figure_in.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
-        self.figure_out = plt.figure(facecolor='#FBE5D6')
-        self.canvas_out = FigureCanvas(self.figure_out)
-        NavigationToolbar(self.canvas_out, self).hide()
-        self.plot_out = self.figure_out.add_subplot(1, 1, 1)
-        self.plot_out_2 = self.plot_out.twinx()
-        self.plot_out.spines['top'].set_visible(False)
-        self.plot_out_2.spines['top'].set_visible(False)
-        self.plot_out.set_ylabel('Température (°C)', color=color_1)
-        self.plot_out.tick_params(axis='y', labelcolor=color_1)
-        self.plot_out_2.set_ylabel('Pression MSL (hPa)', color=color_3)
-        self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-        self.figure_out.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
-        self.plot_out.set_facecolor('None')
+        ticks_labels = ['-24h', '', ' ', '', '-20h', '', ' ', '', '-16h', '', ' ', '', '-12h', '', ' ',
+                        '', '-8h', '', ' ', '', '-4h', '', ' ', '', 'Now']
+
+        start = datetime.datetime.now()
+        tick_list, label_list = define_time_ticks(val_dict['temp_in'][0][-1])
+        if self.new_plot:
+            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
+            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
+            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
+            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
+            self.new_plot = False
+        else:
+            self.plot_in.lines.pop(0)
+            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
+            self.plot_in_2.lines.pop(0)
+            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
+            self.plot_out.lines.pop(0)
+            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
+            self.plot_out_2.lines.pop(0)
+            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
+
+        self.plot_in.set_xlim(tick_list[0], tick_list[-1])
+        self.plot_out.set_xlim(tick_list[0], tick_list[-1])
+
+        self.plot_in.set_xticks(tick_list)
+        self.plot_out.set_xticks(tick_list)
+        self.plot_in.set_xticklabels(label_list)
+        self.plot_out.set_xticklabels(label_list)
+        self.canvas_in.draw()
+        self.canvas_out.draw()
+        print(datetime.datetime.now() - start)
 
 
-        self.plot_in.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
-        self.plot_out.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+    # def plot_time_series_start(self):
+    #     logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_start')
+    #     self.time_series_stack.setCurrentIndex(0)
+    #     self.set_ts_stack_icon()
+    #     clear_layout(self.plot_layout_1)
+    #     clear_layout(self.plot_layout_3)
+    #     # self.setup_plot_area()
+    #     self.h_spin_lay = QtWidgets.QHBoxLayout()
+    #     self.h_spin_lay.setObjectName('h_spin_lay')
+    #     self.spinner = WaitingSpinner(self, roundness=40., opacity=15., fade=70., radius=24., lines=16,
+    #                                   line_length=26., line_width=6., speed=1., color=(75, 75, 75))
+    #     self.h_spin_lay.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
+    #                                                   QtWidgets.QSizePolicy.Minimum))
+    #     self.h_spin_lay.addWidget(self.spinner)
+    #     self.h_spin_lay.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding,
+    #                                                   QtWidgets.QSizePolicy.Minimum))
+    #     self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+    #                                                      QtWidgets.QSizePolicy.Expanding))
+    #     self.plot_layout_1.addLayout(self.h_spin_lay)
+    #     self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+    #                                                      QtWidgets.QSizePolicy.Expanding))
+    #     self.spinner.start()
+    #     if self.database_ok:
+    #         self.request_plot_thread = RequestPlotDataThread(self.canvas_in, self.canvas_out, self.plot_in,
+    #                                                          self.plot_in_2, self.plot_out, self.plot_out_2,
+    #                                                          self.config_dict, self.sensor_dict)
+    #         self.request_plot_thread.success.connect(self.plot_time_series_end)
+    #         self.request_plot_thread.error.connect(self.plot_time_series_error)
+    #         self.request_plot_thread.start()
+    #     else:
+    #         self.plot_time_series_error()
 
+    # def plot_time_series_end(self):
+    #     logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_end')
+    #     self.spinner.stop()
+    #     clear_layout(self.plot_layout_1)
+    #     clear_layout(self.plot_layout_3)
+    #     self.plot_layout_1.addWidget(self.canvas_in)
+    #     self.plot_layout_3.addWidget(self.canvas_out)
+    #     self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+    #                                                      QtWidgets.QSizePolicy.Fixed))
+    #     self.plot_layout_3.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
+    #                                                      QtWidgets.QSizePolicy.Fixed))
 
-        self.plot_layout_1.addWidget(self.canvas_in)
-        self.plot_layout_3.addWidget(self.canvas_out)
-        self.plot_layout_1.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Fixed))
-        self.plot_layout_3.addItem(QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum,
-                                                         QtWidgets.QSizePolicy.Fixed))
-
-
-
+    def request_plot_data_error(self):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_time_series_error')
+        # il faudrait plotter du texte pour dire qu'il y a eu une erreur
 
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
-        color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
         self.figure_in = plt.figure(facecolor='#E2F0D9')
         self.canvas_in = FigureCanvas(self.figure_in)
         NavigationToolbar(self.canvas_in, self).hide()
@@ -550,11 +550,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_in.spines['top'].set_visible(False)
         self.plot_in_2.spines['top'].set_visible(False)
         self.plot_in.set_facecolor('None')
-        self.plot_in.set_ylabel('Température (°C)', color=color_1)
-        self.plot_in.tick_params(axis='y', labelcolor=color_1)
-        self.plot_in_2.set_ylabel('Humidité (%)', color=color_2)
-        self.plot_in_2.tick_params(axis='y', labelcolor=color_2)
-        self.figure_in.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
+        self.plot_in.set_ylabel('Température (°C)', color=self.color_1)
+        self.plot_in.tick_params(axis='y', labelcolor=self.color_1)
+        self.plot_in_2.set_ylabel('Humidité (%)', color=self.color_2)
+        self.plot_in_2.tick_params(axis='y', labelcolor=self.color_2)
+        self.figure_in.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.95)
         self.figure_out = plt.figure(facecolor='#FBE5D6')
         self.canvas_out = FigureCanvas(self.figure_out)
         NavigationToolbar(self.canvas_out, self).hide()
@@ -562,12 +562,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out_2 = self.plot_out.twinx()
         self.plot_out.spines['top'].set_visible(False)
         self.plot_out_2.spines['top'].set_visible(False)
-        self.plot_out.set_ylabel('Température (°C)', color=color_1)
-        self.plot_out.tick_params(axis='y', labelcolor=color_1)
-        self.plot_out_2.set_ylabel('Pression MSL (hPa)', color=color_3)
-        self.plot_out_2.tick_params(axis='y', labelcolor=color_3)
-        self.figure_out.subplots_adjust(left=0.08, right=0.89, bottom=0.06, top=0.95)
+        self.plot_out.set_ylabel('Température (°C)', color=self.color_1)
+        self.plot_out.tick_params(axis='y', labelcolor=self.color_1)
+
+        if self.config_dict.getboolean('TIMESERIES', 'msl_pressure'):
+            ylabel = 'Pression SL (hPa)'
+        else:
+            ylabel = 'Pression (hPa)'
+
+        self.plot_out_2.set_ylabel(ylabel, color=self.color_3)
+        self.plot_out_2.tick_params(axis='y', labelcolor=self.color_3)
+        self.figure_out.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.95)
         self.plot_out.set_facecolor('None')
+        self.plot_in_2.set_ylim(0, 100)
+        self.plot_in.set_ylim(10, 30)
+        self.plot_in_2.set_yticks(range(0, 110, 10))
+        self.plot_in.set_yticks(range(10, 32, 2))
+        self.plot_in.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+        self.plot_out_2.set_ylim(980, 1030)
+        self.plot_out.set_ylim(-10, 40)
+        self.plot_out_2.set_yticks(range(980, 1035, 5))
+        self.plot_out.set_yticks(range(-10, 45, 5))
+        self.plot_out.grid(linestyle='-', linewidth=0.5, color='grey', alpha=0.5)
+        self.plot_layout_1.addWidget(self.canvas_in)
+        self.plot_layout_3.addWidget(self.canvas_out)
+        self.canvas_in.draw()
+        self.canvas_out.draw()
 
     def parse_forecast_data(self, fc_data):
         logging.debug(f'gui - mainwindow.py - MainWindow - parse_forecast_data - fc_data: {fc_data}')
@@ -786,8 +806,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             button.setStyleSheet(stylesheet_creation_function('qtoolbutton_menu'))
         self.button_list[idx].setStyleSheet(stylesheet_creation_function('qtoolbutton_menu_activated'))
         self.main_stacked_widget.setCurrentIndex(idx)
-        # if idx == 2:
-        #     self.plot_time_series_start()
+        if idx == 2:
+            self.request_plot_data()
 
     def set_ts_stack_left(self):
         logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
