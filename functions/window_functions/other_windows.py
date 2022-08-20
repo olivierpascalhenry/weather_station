@@ -513,8 +513,8 @@ class MyBatLink(QtWidgets.QDialog, Ui_batlinkWindow):
 
     def set_details(self):
         logging.debug('gui - other_windows.py - MyBatLink - set_details')
-        self.batterie_lb_2.setText(f'{int(self.bat)} %')
-        self.signal_lb_3.setText(f'{int(round((self.link / 255) * 100, 0))} %')
+        self.batterie_ln.setText(str(int(self.bat)))
+        self.signal_ln.setText(str(int(round((self.link / 255) * 100, 0))))
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyBatLink - close_window')
@@ -540,9 +540,9 @@ class MyPressure(QtWidgets.QDialog, Ui_pressureWindow):
 
     def set_details(self):
         logging.debug('gui - other_windows.py - MyPressure - set_details')
-        self.pressure_lb_4.setText(f'{self.pres} hPa')
-        self.pressure_lb_5.setText(f'{self.pres_msl} hPa')
-        self.pressure_lb_6.setText(f'{self.alt} m')
+        self.pressure_ln.setText(str(self.pres))
+        self.pressuresl_ln.setText(str(self.pres_msl))
+        self.altitude_ln.setText(str(self.alt))
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyPressure - close_window')
@@ -568,9 +568,9 @@ class MyTempHum(QtWidgets.QDialog, Ui_temphumWindow):
 
     def set_details(self):
         logging.debug('gui - other_windows.py - MyTempHum - set_details')
-        self.hum_lb.setText(f'{self.hum} %')
-        self.temp_lb.setText(f'{self.temp} °C')
-        self.dew_lb.setText(f'{self.dew} °C')
+        self.hum_ln.setText(str(self.hum))
+        self.temp_ln.setText(str(self.temp))
+        self.dew_ln.setText(str(self.dew))
 
     def close_window(self):
         logging.debug('gui - other_windows.py - MyTempHum - close_window')

@@ -3,6 +3,7 @@
 
   * FIXED:
     * when exporting data, if an error occurred and a retry is done, the text in the warning box is not cleared.
+    * two variables weren't initialized correctly.
 
   * ADDED :
     * gusts have been added to 1h forecast window.
@@ -20,6 +21,8 @@
     * the 1d forecast page with MF forecast now show data based on daily forecast.
     * a new way to plot time series has been introduced to improve rendering times.
     * font files have been removed. Now Source Sans Pro must be installed on Raspberry Pi.
+    * units for different fields have been put in their own QLabel widget
+    * improved reading of battery, signal, pressure, temperature and humidity windows.
 
 
 ### June 23 2022, Release version 0.12.2 ###
