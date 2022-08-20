@@ -112,7 +112,7 @@ class Ui_connexionWindow(object):
         self.label.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(16)
+        font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.label.setFont(font)

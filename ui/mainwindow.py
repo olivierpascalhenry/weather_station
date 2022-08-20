@@ -51,8 +51,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.user_path = user_path
         self.config_dict = config_dict
         self.sensor_dict = sensor_dict
-        QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-Regular.ttf')
-        QtGui.QFontDatabase.addApplicationFont(f'{self.gui_path}/fonts/SourceSansPro-SemiBold.ttf')
         self.setupUi(self)
         if platform.system() == 'Linux':
             self.showFullScreen()
@@ -173,13 +171,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show_date()
         self.set_time_date()
         self.load_place_data()
+        self.setup_plot_area()
         self.launch_ephemeris_thread()
         self.check_postgresql_connection()
         self.check_internet_connection()
-
-        self.setup_plot_area()
-
-
 
     def check_postgresql_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_postgresql_connection')

@@ -414,13 +414,14 @@ class Ui_infoWindow(object):
         self.label = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(14)
+        font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.label.setFont(font)
         self.label.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "}")
+        self.label.setText("")
         self.label.setAlignment(QtCore.Qt.AlignJustify|QtCore.Qt.AlignTop)
         self.label.setWordWrap(True)
         self.label.setObjectName("label")
@@ -463,4 +464,3 @@ class Ui_infoWindow(object):
     def retranslateUi(self, infoWindow):
         _translate = QtCore.QCoreApplication.translate
         infoWindow.setWindowTitle(_translate("infoWindow", "Information"))
-        self.label.setText(_translate("infoWindow", "PostgreSQL ne semble pas être installé. Il est obligatoire pour assurer le bon fonctionnement de la station météo."))

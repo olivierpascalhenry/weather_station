@@ -217,7 +217,7 @@ class Ui_aboutlogWindow(object):
         self.label.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(14)
+        font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -240,7 +240,7 @@ class Ui_aboutlogWindow(object):
         self.browser_1.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(12)
+        font.setPointSize(16)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_1.setFont(font)
@@ -274,7 +274,7 @@ class Ui_aboutlogWindow(object):
         self.label_2.setMaximumSize(QtCore.QSize(16777215, 27))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro SemiBold")
-        font.setPointSize(14)
+        font.setPointSize(18)
         font.setBold(False)
         font.setWeight(50)
         font.setKerning(True)
@@ -297,7 +297,7 @@ class Ui_aboutlogWindow(object):
         self.browser_2.setMinimumSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
-        font.setPointSize(12)
+        font.setPointSize(16)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.browser_2.setFont(font)
@@ -363,12 +363,12 @@ class Ui_aboutlogWindow(object):
         self.browser_1.setHtml(_translate("aboutlogWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><title>Changelog</title><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:16pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"justify\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:10pt;\"><br /></p></body></html>"))
         self.label_2.setText(_translate("aboutlogWindow", "Changelog"))
         self.browser_2.setDocumentTitle(_translate("aboutlogWindow", "Changelog"))
         self.browser_2.setHtml(_translate("aboutlogWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><title>Changelog</title><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:12pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:\'Source Sans Pro\'; font-size:16pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'FreeSans\'; font-size:9pt;\"><br /></p></body></html>"))
