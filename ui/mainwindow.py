@@ -842,17 +842,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.query_forecast_thread is not None:
             self.query_forecast_thread.stop()
         self.timer.stop()
-
         time.sleep(0.5)
-        # self.ds18b20_data_threads = None
-        # self.bme280_data_threads = None
-        # self.collect_mqtt_data_thread = None
-        # self.db_cleaning_thread = None
-        # self.display_in_data_thread = None
-        # self.display_out_data_thread = None
-        # self.compute_ephemeris_thread = None
-        # self.query_forecast_thread = None
-
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
