@@ -7,7 +7,8 @@ This project comes from the idea to propose an "out-of-the-box" system, as compl
 More Information:
 -----------------
 
-The weather station is coded with Python 3.7 and relies on few technologies such as PostgreSQL, MQTT and Zigbee2MQTT. It has been tested on a Raspberry PI 4b with Buster and Bullseye Raspberry PI OS.
+The weather station is coded with Python 3.9 and relies on few technologies such as PostgreSQL, MQTT and Zigbee2MQTT.
+It has been tested on a Raspberry PI 4b with Buster and Bullseye Raspberry PI OS.
 Few APIs have been included : Météo-France and OpenWeatherMap. More will come in the future.
 Few sensors are handled by the weather station : DS18B20 (one or more) and BME280 (one or more), through 1-wire and I2C buses. More will come in the future, once I can get my hand on them.
 The main language of the software is French. English will be added once the full code is stable.
@@ -73,12 +74,16 @@ Other software :
 * Mosquitto (2.0.11+)
 * Zigbee2Mqtt (1.24.0)
 
+Fonts :
+
+The weather station uses Source Sans Pro as a font. It needs to be installed to give better results.
 
 Stand-alone package:
 --------------------
 
 A stand-alone package is compiled using PyInstaller. Thus, a Python installation is not necessary. In that case, only PostgreSQL, Mosquitto and Zigbee2Mqtt are mandatory.
 
+The weather station uses Source Sans Pro as a font. It needs to be installed to give better results.
 
 Specific configuration for PostgreSQL, Mosquitto and Zigbee2Mqtt
 ----------------------------------------------------------------
@@ -111,7 +116,8 @@ Sensors relying on MQTT to send and store data are supported if each variable ha
 Limitations
 -----------
 
-The GUI has been developed on a raspberry pi 4 connected to a Waveshare 7" monitor (https://www.waveshare.com/product/raspberry-pi/displays/7inch-hdmi-lcd-c.htm?___SID=U) and is not responsive (lack of knowledge from the developer). Thus it can't adapt automatically to different screen size.
+The GUI has been developed on a raspberry pi 4 connected to a Waveshare 7" monitor (https://www.waveshare.com/product/raspberry-pi/displays/7inch-hdmi-lcd-c.htm?___SID=U) and is not responsive (lack of knowledge from the 
+developer). Thus it can't adapt automatically to different screen size. It will be adapted in the next major version.
 
 As the GUI is intended to be used with a touch screen, the mouse cursor is hidden on a linux system for all windows.
 
