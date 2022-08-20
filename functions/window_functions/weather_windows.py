@@ -44,16 +44,16 @@ class My1hFCDetails(QtWidgets.QDialog, Ui_forecast1hWindow):
         self.dir_ln.setIcon(icon)
         self.date_label.setText(date)
         self.hour_label.setText(str(dt.hour) + 'h')
-        self.temp_ln.setText(str(self.forecast['temp']) + '°C')
-        self.pres_ln.setText(str(self.forecast['pres']) + ' hPa')
-        self.speed_ln.setText(str(wspeed) + ' km/h')
-        self.cover_ln.setText(str(self.forecast['cover']) + ' %')
-        self.rain_ln.setText(str(self.forecast['rain']) + ' mm')
+        self.temp_ln.setText(str(self.forecast['temp']))
+        self.pres_ln.setText(str(self.forecast['pres']))
+        self.speed_ln.setText(str(wspeed))
+        self.cover_ln.setText(str(self.forecast['cover']))
+        self.rain_ln.setText(str(self.forecast['rain']))
         self.weather_lb.setIcon(weather_to_pictogrammes(self.forecast['weather'], dt, self.sunrise, self.sunset))
         if wgust > 5:
-            self.gust_ln.setText(str(wgust) + ' km/h')
+            self.gust_ln.setText(str(wgust))
         else:
-            self.gust_ln.clear()
+            self.gust_ln.setText('--')
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My1hFCDetails - close_window')
@@ -101,17 +101,17 @@ class My6hFCDetails(QtWidgets.QDialog, Ui_forecast6hWindow):
             else:
                 dt += datetime.timedelta(hours=6)
 
-            self.findChild(QtWidgets.QLabel, 'temp_ln_' + str(i + 1)).setText(str(fc[1]['temp']) + '°C')
-            self.findChild(QtWidgets.QLabel, 'pres_ln_' + str(i + 1)).setText(str(round(fc[1]['pres'])) + ' hPa')
-            self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed) + ' km/h')
+            self.findChild(QtWidgets.QLabel, 'temp_ln_' + str(i + 1)).setText(str(fc[1]['temp']))
+            self.findChild(QtWidgets.QLabel, 'pres_ln_' + str(i + 1)).setText(str(round(fc[1]['pres'])))
+            self.findChild(QtWidgets.QLabel, 'speed_ln_' + str(i + 1)).setText(str(wspeed))
             self.findChild(QtWidgets.QToolButton, 'dir_ln_' + str(i + 1)).setIcon(icon)
             self.findChild(QtWidgets.QToolButton, 'weather_lb_'
                            + str(i + 1)).setIcon(weather_to_pictogrammes(fc[1]['weather'], dt, self.sunrise,
                                                                          self.sunset))
             if wgust > 5:
-                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText(str(wgust) + ' km/h')
+                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText(str(wgust))
             else:
-                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('')
+                self.findChild(QtWidgets.QLabel, 'gust_ln_' + str(i + 1)).setText('--')
 
     def close_window(self):
         logging.debug('gui - weather_windows.py - My6hFCDetails - close_window')
