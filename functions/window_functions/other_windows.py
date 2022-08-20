@@ -271,6 +271,8 @@ class MyTown(QtWidgets.QDialog, Ui_townsearchWindow):
         self.cp_id = None
         self.dp_gps = None
         self.place = None
+        self.lon = None
+        self.lat = None
         self.ok_button.clicked.connect(self.confirm_place)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.setEnabled(False)
