@@ -30,14 +30,14 @@ class Ui_warningWindow(object):
 "    border: 1px solid rgb(75,75,75);\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(warningWindow)
-        self.gridLayout.setSpacing(11)
+        self.gridLayout.setHorizontalSpacing(11)
         self.gridLayout.setObjectName("gridLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.warning_button = QtWidgets.QToolButton(warningWindow)
         self.warning_button.setEnabled(True)
-        self.warning_button.setMinimumSize(QtCore.QSize(55, 55))
-        self.warning_button.setMaximumSize(QtCore.QSize(55, 55))
+        self.warning_button.setMinimumSize(QtCore.QSize(80, 80))
+        self.warning_button.setMaximumSize(QtCore.QSize(80, 80))
         self.warning_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -52,15 +52,15 @@ class Ui_warningWindow(object):
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("icons/weather_warning_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.warning_button.setIcon(icon1)
-        self.warning_button.setIconSize(QtCore.QSize(55, 55))
+        self.warning_button.setIconSize(QtCore.QSize(80, 80))
         self.warning_button.setObjectName("warning_button")
         self.verticalLayout.addWidget(self.warning_button)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.ok_button = QtWidgets.QToolButton(warningWindow)
         self.ok_button.setEnabled(True)
-        self.ok_button.setMinimumSize(QtCore.QSize(55, 55))
-        self.ok_button.setMaximumSize(QtCore.QSize(55, 55))
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(80, 50))
         self.ok_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    background-color: transparent;\n"
@@ -75,7 +75,7 @@ class Ui_warningWindow(object):
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ok_button.setIcon(icon2)
-        self.ok_button.setIconSize(QtCore.QSize(55, 55))
+        self.ok_button.setIconSize(QtCore.QSize(50, 50))
         self.ok_button.setObjectName("ok_button")
         self.verticalLayout.addWidget(self.ok_button)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)

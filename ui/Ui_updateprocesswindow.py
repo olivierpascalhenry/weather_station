@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_updateprocessWindow(object):
     def setupUi(self, updateprocessWindow):
         updateprocessWindow.setObjectName("updateprocessWindow")
-        updateprocessWindow.resize(602, 326)
+        updateprocessWindow.resize(600, 340)
         updateprocessWindow.setMinimumSize(QtCore.QSize(0, 0))
         updateprocessWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -237,8 +237,8 @@ class Ui_updateprocessWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.cancel_button = QtWidgets.QToolButton(updateprocessWindow)
-        self.cancel_button.setMinimumSize(QtCore.QSize(100, 40))
-        self.cancel_button.setMaximumSize(QtCore.QSize(100, 40))
+        self.cancel_button.setMinimumSize(QtCore.QSize(100, 50))
+        self.cancel_button.setMaximumSize(QtCore.QSize(100, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(18)

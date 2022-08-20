@@ -96,8 +96,8 @@ class Ui_forecast1dWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
         self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(80, 80))
-        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 80))
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 50))
         self.ok_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    border-radius: 10px;\n"
@@ -373,15 +373,15 @@ class Ui_forecast1dWindow(object):
 
     def retranslateUi(self, forecast1dWindow):
         _translate = QtCore.QCoreApplication.translate
-        self.date_label.setText(_translate("forecast1dWindow", "Dimanche 31 Septembre"))
-        self.temp_ln.setText(_translate("forecast1dWindow", "12°C / 18°C"))
+        self.date_label.setText(_translate("forecast1dWindow", "ND"))
+        self.temp_ln.setText(_translate("forecast1dWindow", "ND"))
         self.rain_lb.setText(_translate("forecast1dWindow", "Pluie :"))
-        self.rain_ln.setText(_translate("forecast1dWindow", "50 %"))
+        self.rain_ln.setText(_translate("forecast1dWindow", "ND"))
         self.pres_lb.setText(_translate("forecast1dWindow", "Pression :"))
-        self.cover_ln.setText(_translate("forecast1dWindow", "50 %"))
+        self.cover_ln.setText(_translate("forecast1dWindow", "ND"))
         self.wind_lb.setText(_translate("forecast1dWindow", "Vent :"))
         self.cover_lb.setText(_translate("forecast1dWindow", "Couverture :"))
-        self.pres_ln.setText(_translate("forecast1dWindow", "1019 hPa"))
+        self.pres_ln.setText(_translate("forecast1dWindow", "ND"))
         self.temp_lb.setText(_translate("forecast1dWindow", "Température :"))
-        self.speed_ln.setText(_translate("forecast1dWindow", "25 km/h"))
-        self.gust_ln.setText(_translate("forecast1dWindow", "25 km/h"))
+        self.speed_ln.setText(_translate("forecast1dWindow", "ND"))
+        self.gust_ln.setText(_translate("forecast1dWindow", "ND"))

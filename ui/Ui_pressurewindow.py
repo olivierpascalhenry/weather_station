@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_pressureWindow(object):
     def setupUi(self, pressureWindow):
         pressureWindow.setObjectName("pressureWindow")
-        pressureWindow.resize(574, 242)
+        pressureWindow.resize(574, 239)
         pressureWindow.setMinimumSize(QtCore.QSize(0, 0))
         pressureWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         font = QtGui.QFont()
@@ -29,6 +29,7 @@ class Ui_pressureWindow(object):
 "}\n"
 "")
         self.gridLayout_2 = QtWidgets.QGridLayout(pressureWindow)
+        self.gridLayout_2.setVerticalSpacing(11)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
@@ -165,6 +166,10 @@ class Ui_pressureWindow(object):
         self.pressure_lb_6.setObjectName("pressure_lb_6")
         self.gridLayout.addWidget(self.pressure_lb_6, 2, 1, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
         self.ok_button = QtWidgets.QToolButton(pressureWindow)
         self.ok_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -172,8 +177,8 @@ class Ui_pressureWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
         self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(80, 80))
-        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 80))
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(50, 50))
         self.ok_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    border-radius: 10px;\n"
@@ -191,7 +196,10 @@ class Ui_pressureWindow(object):
         self.ok_button.setIcon(icon)
         self.ok_button.setIconSize(QtCore.QSize(50, 50))
         self.ok_button.setObjectName("ok_button")
-        self.gridLayout_2.addWidget(self.ok_button, 1, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.ok_button)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.gridLayout_2.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.retranslateUi(pressureWindow)
         QtCore.QMetaObject.connectSlotsByName(pressureWindow)

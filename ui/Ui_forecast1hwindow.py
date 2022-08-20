@@ -120,8 +120,8 @@ class Ui_forecast1hWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
         self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(80, 80))
-        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 80))
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 50))
         self.ok_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    border-radius: 10px;\n"
@@ -399,14 +399,14 @@ class Ui_forecast1hWindow(object):
         _translate = QtCore.QCoreApplication.translate
         self.date_label.setText(_translate("forecast1hWindow", "ND"))
         self.hour_label.setText(_translate("forecast1hWindow", "ND"))
-        self.temp_ln.setText(_translate("forecast1hWindow", "22°C"))
-        self.rain_ln.setText(_translate("forecast1hWindow", "50 %"))
+        self.temp_ln.setText(_translate("forecast1hWindow", "ND"))
+        self.rain_ln.setText(_translate("forecast1hWindow", "ND"))
         self.temp_lb.setText(_translate("forecast1hWindow", "Température :"))
         self.wind_lb.setText(_translate("forecast1hWindow", "Vent :"))
-        self.cover_ln.setText(_translate("forecast1hWindow", "50 %"))
-        self.pres_ln.setText(_translate("forecast1hWindow", "1019 hPa"))
+        self.cover_ln.setText(_translate("forecast1hWindow", "ND"))
+        self.pres_ln.setText(_translate("forecast1hWindow", "ND"))
         self.pres_lb.setText(_translate("forecast1hWindow", "Pression :"))
         self.cover_lb.setText(_translate("forecast1hWindow", "Couverture :"))
         self.rain_lb.setText(_translate("forecast1hWindow", "Pluie :"))
-        self.speed_ln.setText(_translate("forecast1hWindow", "25 km/h"))
-        self.gust_ln.setText(_translate("forecast1hWindow", "25 km/h"))
+        self.speed_ln.setText(_translate("forecast1hWindow", "ND"))
+        self.gust_ln.setText(_translate("forecast1hWindow", "ND"))

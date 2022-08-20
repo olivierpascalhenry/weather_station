@@ -29,6 +29,7 @@ class Ui_batlinkWindow(object):
 "}\n"
 "")
         self.gridLayout_2 = QtWidgets.QGridLayout(batlinkWindow)
+        self.gridLayout_2.setVerticalSpacing(11)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
@@ -121,6 +122,10 @@ class Ui_batlinkWindow(object):
         self.signal_lb_3.setObjectName("signal_lb_3")
         self.gridLayout.addWidget(self.signal_lb_3, 1, 1, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem)
         self.ok_button = QtWidgets.QToolButton(batlinkWindow)
         self.ok_button.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
@@ -128,8 +133,8 @@ class Ui_batlinkWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.ok_button.sizePolicy().hasHeightForWidth())
         self.ok_button.setSizePolicy(sizePolicy)
-        self.ok_button.setMinimumSize(QtCore.QSize(80, 80))
-        self.ok_button.setMaximumSize(QtCore.QSize(16777215, 80))
+        self.ok_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.ok_button.setMaximumSize(QtCore.QSize(50, 50))
         self.ok_button.setStyleSheet("QToolButton {\n"
 "    border: 1px solid transparent;\n"
 "    border-radius: 10px;\n"
@@ -147,7 +152,10 @@ class Ui_batlinkWindow(object):
         self.ok_button.setIcon(icon)
         self.ok_button.setIconSize(QtCore.QSize(50, 50))
         self.ok_button.setObjectName("ok_button")
-        self.gridLayout_2.addWidget(self.ok_button, 1, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.ok_button)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.gridLayout_2.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.retranslateUi(batlinkWindow)
         QtCore.QMetaObject.connectSlotsByName(batlinkWindow)

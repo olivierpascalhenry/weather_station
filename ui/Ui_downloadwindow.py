@@ -13,13 +13,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_downloadWindow(object):
     def setupUi(self, downloadWindow):
         downloadWindow.setObjectName("downloadWindow")
-        downloadWindow.resize(550, 166)
+        downloadWindow.resize(550, 176)
         downloadWindow.setMinimumSize(QtCore.QSize(0, 0))
         downloadWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         downloadWindow.setStyleSheet("QWidget#downloadWindow {\n"
 "    background-color: rgb(240,240,240);\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(downloadWindow)
+        self.gridLayout.setVerticalSpacing(11)
         self.gridLayout.setObjectName("gridLayout")
         self.dw_progress_bar = QtWidgets.QProgressBar(downloadWindow)
         self.dw_progress_bar.setMinimumSize(QtCore.QSize(0, 30))
@@ -77,8 +78,8 @@ class Ui_downloadWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.dw_button = QtWidgets.QToolButton(downloadWindow)
-        self.dw_button.setMinimumSize(QtCore.QSize(100, 40))
-        self.dw_button.setMaximumSize(QtCore.QSize(100, 40))
+        self.dw_button.setMinimumSize(QtCore.QSize(100, 50))
+        self.dw_button.setMaximumSize(QtCore.QSize(100, 50))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(18)

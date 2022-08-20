@@ -406,7 +406,7 @@ class Ui_infoWindow(object):
         self.scroll_area.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.scroll_area.setObjectName("scroll_area")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 459, 165))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 459, 155))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(11, 0, -1, 0)
@@ -433,8 +433,8 @@ class Ui_infoWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.exit_button = QtWidgets.QToolButton(infoWindow)
-        self.exit_button.setMinimumSize(QtCore.QSize(40, 40))
-        self.exit_button.setMaximumSize(QtCore.QSize(40, 40))
+        self.exit_button.setMinimumSize(QtCore.QSize(50, 50))
+        self.exit_button.setMaximumSize(QtCore.QSize(50, 50))
         self.exit_button.setStyleSheet("QToolButton {\n"
 "    border: 0px solid rgb(75,75,75);\n"
 "    border-radius: 3px;\n"
@@ -451,7 +451,7 @@ class Ui_infoWindow(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icons/exit_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.exit_button.setIcon(icon)
-        self.exit_button.setIconSize(QtCore.QSize(45, 45))
+        self.exit_button.setIconSize(QtCore.QSize(50, 50))
         self.exit_button.setObjectName("exit_button")
         self.horizontalLayout.addWidget(self.exit_button)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
