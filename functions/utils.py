@@ -63,10 +63,10 @@ def update_config_file(user_path):
     if config_dict['SYSTEM'].getboolean('auto_check_connexion') is None:
         option_missing = True
         config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
-    if config_dict['SYSTEM'].getboolean('auto_connexion_unit') is None:
+    if config_dict['SYSTEM'].get('auto_connexion_unit') is None:
         option_missing = True
         config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
-    if config_dict['SYSTEM'].getboolean('auto_connexion_value') is None:
+    if config_dict['SYSTEM'].get('auto_connexion_value') is None:
         option_missing = True
         config_dict.set('SYSTEM', 'auto_connexion_value', '')
     if option_missing:
