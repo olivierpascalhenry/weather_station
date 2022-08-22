@@ -119,6 +119,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.db_gb_2_cb_1.currentIndexChanged.connect(self.activate_export_button)
         self.sy_gb_cb_1.currentIndexChanged.connect(self.activate_elevation_widgets)
         self.sy_gb_bt_4.clicked.connect(self.elevation_request)
+        self.sy_gb_4_ck_1.stateChanged.connect(self.activate_auto_connexion_period)
         if getattr(sys, 'frozen', False):
             self.sy_gb_2_bt_1.setEnabled(True)
         else:
@@ -198,6 +199,10 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.ap_gb_5_ln_1.setText(self.config_dict.get('API', 'request_rate'))
         self.sy_gb_ln_1.setText(self.config_dict.get('SYSTEM', 'place_altitude'))
         self.sy_gb_2_ck_1.setChecked(self.config_dict.getboolean('SYSTEM', 'check_update'))
+        self.sy_gb_4_ck_1.setChecked(self.config_dict.getboolean('SYSTEM', 'auto_check_connexion'))
+        if self.sy_gb_4_ck_1.isChecked():
+            self.sy_gb_4_ln_1.setText(self.config_dict.get('SYSTEM', 'auto_connexion_value'))
+            self.sy_gb_4_cb_1.setCurrentText(self.config_dict.get('SYSTEM', 'auto_connexion_unit'))
         self.ts_gb_ext_ck_1.setChecked(self.config_dict.getboolean('TIMESERIES', 'msl_pressure'))
         if self.config_dict.get('DISPLAY', 'in_sensor') in self.sensor_list:
             self.af_gb_int_cb_1.setCurrentIndex(self.af_gb_int_cb_1.findText(self.config_dict.get('DISPLAY',
@@ -256,6 +261,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.config_dict.set('API', 'request_rate', self.ap_gb_5_ln_1.text())
             self.config_dict.set('SYSTEM', 'place_altitude', self.sy_gb_ln_1.text())
             self.config_dict.set('SYSTEM', 'check_update', str(self.sy_gb_2_ck_1.isChecked()))
+            self.config_dict.set('SYSTEM', 'auto_check_connexion', str(self.sy_gb_4_ck_1.isChecked()))
+            if self.sy_gb_4_ck_1.isChecked():
+                self.config_dict.set('SYSTEM', 'auto_connexion_value', str(self.sy_gb_4_ln_1.text()))
+                self.config_dict.set('SYSTEM', 'auto_connexion_unit', str(self.sy_gb_4_cb_1.currentText()))
+            else:
+                self.config_dict.set('SYSTEM', 'auto_connexion_value', '')
+                self.config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
             if self.ts_gb_int_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
                 self.config_dict.set('TIMESERIES', 'in_temperature', str(self.ts_gb_int_cb_1.currentText()))
             else:
@@ -624,6 +636,12 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             info_window.exec_()
         else:
             self.sy_gb_ln_1.setText(str(elev))
+
+    def activate_auto_connexion_period(self):
+        logging.debug('gui - option_window.py - MyOptions - activate_auto_connexion_period')
+        self.sy_gb_4_ln_1.setEnabled(self.sy_gb_4_ck_1.isChecked())
+        self.sy_gb_4_cb_1.setEnabled(self.sy_gb_4_ck_1.isChecked())
+        self.sy_gb_4_bt_1.setEnabled(self.sy_gb_4_ck_1.isChecked())
 
     def close_window(self):
         logging.debug('gui - option_window.py - MyOptions - close_window')
