@@ -39,6 +39,7 @@ def create_option_file(user_path):
     config_dict.set('TIMESERIES', 'msl_pressure', 'False')
     config_dict.set('SYSTEM', 'place_altitude', '')
     config_dict.set('SYSTEM', 'check_update', 'False')
+    config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
     config_dict.set('API', 'api_used', 'meteofrance')
     config_dict.set('API', 'api_key', '')
     config_dict.set('API', 'user_place', 'False')
@@ -50,6 +51,20 @@ def create_option_file(user_path):
     config_dict.set('DATABASE', 'host', '127.0.0.1')
     config_dict.write(ini_file)
     ini_file.close()
+
+
+def update_config_file(user_path):
+    ini_path = pathlib.Path(user_path).joinpath('weather_station.ini')
+    option_missing = False
+    config_dict = configparser.ConfigParser()
+    config_dict.read(ini_path)
+    if config_dict['SYSTEM'].getboolean('auto_check_connexion') is None:
+        option_missing = True
+        config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
+    if option_missing:
+        ini_file = open(ini_path, 'w')
+        config_dict.write(ini_file)
+        ini_file.close()
 
 
 def create_sensor_file(user_path):

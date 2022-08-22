@@ -4,6 +4,8 @@
   * MODIFIED:
     * removed old code in utils.py.
 
+  * ADDED:
+    * a function to update a configuration file has been introduced.
 
 
 ### August 20 2022, Release version 0.13.0 ###

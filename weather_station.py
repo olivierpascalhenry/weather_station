@@ -8,7 +8,8 @@ import configparser
 from PyQt5 import QtWidgets, QtCore
 from ui.mainwindow import MainWindow
 from ui.version import gui_version
-from functions.utils import create_option_file, create_logging_handlers, sync_graphic_folders, create_sensor_file
+from functions.utils import (create_option_file, create_logging_handlers, sync_graphic_folders, create_sensor_file,
+                             update_config_file)
 from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
 from psycopg2 import __version__ as pg_version
@@ -28,6 +29,7 @@ def launch_station(gui_path, user_path):
         if not pathlib.Path(user_path).is_dir():
             pathlib.Path(user_path).mkdir()
         create_option_file(user_path)
+    update_config_file(user_path)
     config_dict = configparser.ConfigParser()
     config_dict.read(str(pathlib.Path(user_path).joinpath('weather_station.ini')))
     if not pathlib.Path(pathlib.Path(user_path).joinpath('sensor_file.json')).is_file():
