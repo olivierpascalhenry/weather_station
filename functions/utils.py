@@ -407,15 +407,6 @@ def define_time_ticks(now):
     return tick_list, label_list
 
 
-# def db_data_to_mpl_vectors(data):
-#     logging.debug('gui - utils.py - db_data_to_mpl_vectors')
-#     t, x = [], []
-#     for tx in data:
-#         t.append(tx[0])
-#         x.append(tx[1])
-#     return t, x
-
-
 def set_size(bytes_size):
     logging.debug('gui - utils.py - set_size')
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
