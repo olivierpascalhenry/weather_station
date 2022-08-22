@@ -40,6 +40,8 @@ def create_option_file(user_path):
     config_dict.set('SYSTEM', 'place_altitude', '')
     config_dict.set('SYSTEM', 'check_update', 'False')
     config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
+    config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
+    config_dict.set('SYSTEM', 'auto_connexion_value', '')
     config_dict.set('API', 'api_used', 'meteofrance')
     config_dict.set('API', 'api_key', '')
     config_dict.set('API', 'user_place', 'False')
@@ -61,6 +63,12 @@ def update_config_file(user_path):
     if config_dict['SYSTEM'].getboolean('auto_check_connexion') is None:
         option_missing = True
         config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
+    if config_dict['SYSTEM'].getboolean('auto_connexion_unit') is None:
+        option_missing = True
+        config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
+    if config_dict['SYSTEM'].getboolean('auto_connexion_value') is None:
+        option_missing = True
+        config_dict.set('SYSTEM', 'auto_connexion_value', '')
     if option_missing:
         ini_file = open(ini_path, 'w')
         config_dict.write(ini_file)

@@ -6,6 +6,7 @@
 
   * ADDED:
     * a function to update a configuration file has been introduced.
+    * few new options have been added to the configuration file.
 
 
 ### August 20 2022, Release version 0.13.0 ###
