@@ -206,7 +206,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
         self.check_internet = CheckInternetConnexion(self.config_dict)
         self.check_internet.connexion_alive.connect(self.start_internet_services)
-        self.check_internet.no_connexion.connect(self.no_internet_message)
+        if self.config_dict.getboolean('SYSTEM', 'auto_check_connexion'):
+            self.check_internet.no_connexion.connect(self.display_no_data)
+        else:
+            self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()
 
     def start_internet_services(self):
@@ -218,6 +221,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
+
+        self.display_no_data()
+
         connexion_window = MyConnexion(self)
         connexion_window.exec_()
         if connexion_window.retry:
@@ -307,6 +313,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             fc_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]
             self.query_forecast_thread = fc_thread(self.place_object, self.config_dict)
             self.query_forecast_thread.fc_data.connect(self.parse_forecast_data)
+            self.query_forecast_thread.no_forecast.connect(self.display_no_data)
             self.query_forecast_thread.start()
         else:
             logging.warning('gui - mainwindow.py - MainWindow - launch_weather_request : no API registered in options'
@@ -597,6 +604,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     weat_bt.setIcon(weather_to_pictogrammes(weather))
                     temp_lb.setText(temp)
                     i += 1
+
+    def display_no_data(self):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_no_data')
+        icon = icon_creation_function('no_data_icon')
+        weat_bts = self.forecast_1h_stack.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_weat_bt_'))
+        weat_bts += self.page_5.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_dweat_bt_'))
+        for button in weat_bts:
+            button.setIcon(icon)
 
     def display_1h_forecast_details(self):
         logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details')

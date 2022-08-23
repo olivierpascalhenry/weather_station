@@ -337,6 +337,7 @@ class CheckInternetConnexion(QtCore.QThread):
                     break
                 except OSError:
                     logging.exception('no connectivity detected')
+                    self.no_connexion.emit()
                 time.sleep(time_sleep)
         else:
             try:
