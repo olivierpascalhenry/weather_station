@@ -204,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_internet_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
-        self.check_internet = CheckInternetConnexion()
+        self.check_internet = CheckInternetConnexion(self.config_dict)
         self.check_internet.connexion_alive.connect(self.start_internet_services)
         self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()

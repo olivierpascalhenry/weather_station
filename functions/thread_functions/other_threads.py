@@ -317,20 +317,34 @@ class RebootingThread(QtCore.QThread):
 class CheckInternetConnexion(QtCore.QThread):
     connexion_alive = QtCore.pyqtSignal()
     no_connexion = QtCore.pyqtSignal()
+    time_dict = {'secondes': 1, 'minutes': 60, 'hours': 3600}
 
-    def __init__(self):
+    def __init__(self, config_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CheckInternetConnexion - __init__')
+        self.config_dict = config_dict
         self.ip_address = '1.1.1.1'
 
     def run(self):
         logging.debug('gui - other_threads.py - CheckInternetConnexion - run')
-        try:
-            socket.create_connection((self.ip_address, 53))
-            self.connexion_alive.emit()
-        except OSError:
-            time.sleep(3)
-            self.no_connexion.emit()
+        if self.config_dict.getboolean('SYSTEM', 'auto_check_connexion'):
+            time_factor = self.time_dict[self.config_dict.get('SYSTEM', 'auto_connexion_unit')]
+            time_sleep = int(self.config_dict.get('SYSTEM', 'auto_connexion_value')) * time_factor
+            while True:
+                try:
+                    socket.create_connection((self.ip_address, 53))
+                    self.connexion_alive.emit()
+                    break
+                except OSError:
+                    logging.exception('no connectivity detected')
+                time.sleep(time_sleep)
+        else:
+            try:
+                socket.create_connection((self.ip_address, 53))
+                self.connexion_alive.emit()
+            except OSError:
+                logging.exception('no connectivity detected')
+                self.no_connexion.emit()
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckInternetConnexion - stop')
