@@ -221,9 +221,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
-
         self.display_no_data()
-
         connexion_window = MyConnexion(self)
         connexion_window.exec_()
         if connexion_window.retry:
@@ -610,8 +608,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         icon = icon_creation_function('no_data_icon')
         weat_bts = self.forecast_1h_stack.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_weat_bt_'))
         weat_bts += self.page_5.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_dweat_bt_'))
+        weat_lbs = self.forecast_1h_stack.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_hour_lb_'))
+        weat_lbs += self.forecast_1h_stack.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_temp_lb_'))
+        weat_lbs += self.page_5.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_day_lb_'))
+        weat_lbs += self.page_5.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_mmtemp_lb_'))
         for button in weat_bts:
             button.setIcon(icon)
+        for label in weat_lbs:
+            label.clear()
 
     def display_1h_forecast_details(self):
         logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details')
