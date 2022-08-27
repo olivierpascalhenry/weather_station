@@ -13,6 +13,9 @@
     * it is now possible to ask the weather station to test automatically the connectivity every period of time defined
     by the user if it is offline.
 
+  * FIXED:
+    * a widget has been forgotten in keyboard window.
+
 
 ### August 20 2022, Release version 0.13.0 ###
 
