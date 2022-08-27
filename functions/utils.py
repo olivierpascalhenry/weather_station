@@ -76,9 +76,12 @@ def update_config_file(user_path):
             option_missing = True
             config_dict.add_section(section)
         for option, value in options.items():
-            if config_dict[section].getboolean(option) is None:
+            if config_dict[section].get(option) is None:
                 option_missing = True
-                config_dict.set(section, option, value)
+                if value in ['False', 'True']:
+                    config_dict.setboolean(section, option, value)
+                else:
+                    config_dict.set(section, option, value)
     if option_missing:
         ini_file = open(ini_path, 'w')
         config_dict.write(ini_file)
