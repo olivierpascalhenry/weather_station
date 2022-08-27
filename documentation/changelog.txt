@@ -5,6 +5,7 @@
     * removed old code in utils.py.
     * if no connexion or no forecast can be parsed, a no data icon is now displayed in forecast sections, and labels are
      cleared.
+     * the function to update the config file has been changed for better performance.
 
   * ADDED:
     * a function to update a configuration file has been introduced.
