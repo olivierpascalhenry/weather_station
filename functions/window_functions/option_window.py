@@ -72,6 +72,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.api_key = None
         self.sensor_list = []
         self.check_update_thread = None
+        self.cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
+                        self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1, self.af_gb_int_cb_2,
+                        self.af_gb_ext_cb_2, self.af_gb_int_cb_3, self.af_gb_ext_cb_3]
         self.af_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ca_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
@@ -83,6 +86,10 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.sy_gb_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_int_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_ext_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_int_cb_3.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_ext_cb_3.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_int_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -149,15 +156,13 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
 
     def parse_sensor_list_in_cb(self):
         logging.debug('gui - option_window.py - MyOptions - parse_sensor_list_in_cb')
-        cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
-                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1]
         if self.sensor_list:
-            for cb in cb_list:
+            for cb in self.cb_list:
                 cb.clear()
                 cb.addItem('Choisir un capteur')
                 cb.addItems(sorted(self.sensor_list))
         else:
-            for cb in cb_list:
+            for cb in self.cb_list:
                 cb.clear()
                 cb.addItem('Pas de capteur')
         self.activate_export_button()
@@ -165,10 +170,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
     def update_cb_with_sensor_list(self):
         logging.debug('gui - option_window.py - MyOptions - update_cb_with_sensor_list')
         self.create_sensor_list()
-        cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
-                   self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1]
         if self.sensor_list:
-            for cb in cb_list:
+            for cb in self.cb_list:
                 device = cb.currentText()
                 cb.clear()
                 cb.addItem('Choisir un capteur')
@@ -176,7 +179,7 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 if device in self.sensor_list:
                     cb.setCurrentIndex(cb.findText(device))
         else:
-            for cb in cb_list:
+            for cb in self.cb_list:
                 cb.clear()
                 cb.addItem('Pas de capteur')
         self.activate_export_button()
@@ -204,12 +207,24 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             self.sy_gb_4_ln_1.setText(self.config_dict.get('SYSTEM', 'auto_connexion_value'))
             self.sy_gb_4_cb_1.setCurrentText(self.config_dict.get('SYSTEM', 'auto_connexion_unit'))
         self.ts_gb_ext_ck_1.setChecked(self.config_dict.getboolean('TIMESERIES', 'msl_pressure'))
-        if self.config_dict.get('DISPLAY', 'in_sensor') in self.sensor_list:
+        if self.config_dict.get('DISPLAY', 'in_temperature') in self.sensor_list:
             self.af_gb_int_cb_1.setCurrentIndex(self.af_gb_int_cb_1.findText(self.config_dict.get('DISPLAY',
-                                                                                                  'in_sensor')))
-        if self.config_dict.get('DISPLAY', 'out_sensor') in self.sensor_list:
+                                                                                                  'in_temperature')))
+        if self.config_dict.get('DISPLAY', 'in_humidity') in self.sensor_list:
+            self.af_gb_int_cb_2.setCurrentIndex(self.af_gb_int_cb_2.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'in_humidity')))
+        if self.config_dict.get('DISPLAY', 'in_temperature') in self.sensor_list:
+            self.af_gb_int_cb_3.setCurrentIndex(self.af_gb_int_cb_3.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'in_temperature')))
+        if self.config_dict.get('DISPLAY', 'out_temperature') in self.sensor_list:
             self.af_gb_ext_cb_1.setCurrentIndex(self.af_gb_ext_cb_1.findText(self.config_dict.get('DISPLAY',
-                                                                                                  'out_sensor')))
+                                                                                                  'out_temperature')))
+        if self.config_dict.get('DISPLAY', 'out_humidity') in self.sensor_list:
+            self.af_gb_ext_cb_2.setCurrentIndex(self.af_gb_ext_cb_2.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'out_humidity')))
+        if self.config_dict.get('DISPLAY', 'out_pressure') in self.sensor_list:
+            self.af_gb_ext_cb_3.setCurrentIndex(self.af_gb_ext_cb_3.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'out_pressure')))
         if self.config_dict.get('TIMESERIES', 'in_temperature') in self.sensor_list:
             self.ts_gb_int_cb_1.setCurrentIndex(self.ts_gb_int_cb_1.findText(self.config_dict.get('TIMESERIES',
                                                                                                   'in_temperature')))
@@ -285,13 +300,29 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
             else:
                 self.config_dict.set('TIMESERIES', 'out_pressure', '')
             if self.af_gb_ext_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
-                self.config_dict.set('DISPLAY', 'out_sensor', str(self.af_gb_ext_cb_1.currentText()))
+                self.config_dict.set('DISPLAY', 'out_temperature', str(self.af_gb_ext_cb_1.currentText()))
             else:
-                self.config_dict.set('DISPLAY', 'out_sensor', '')
+                self.config_dict.set('DISPLAY', 'out_temperature', '')
             if self.af_gb_int_cb_1.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
-                self.config_dict.set('DISPLAY', 'in_sensor', str(self.af_gb_int_cb_1.currentText()))
+                self.config_dict.set('DISPLAY', 'in_temperature', str(self.af_gb_int_cb_1.currentText()))
             else:
-                self.config_dict.set('DISPLAY', 'in_sensor', '')
+                self.config_dict.set('DISPLAY', 'in_temperature', '')
+            if self.af_gb_ext_cb_2.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'out_humidity', str(self.af_gb_ext_cb_2.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'out_humidity', '')
+            if self.af_gb_int_cb_2.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'in_humidity', str(self.af_gb_int_cb_2.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'in_humidity', '')
+            if self.af_gb_ext_cb_3.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'out_pressure', str(self.af_gb_ext_cb_3.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'out_pressure', '')
+            if self.af_gb_int_cb_3.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'in_pressure', str(self.af_gb_int_cb_3.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'in_pressure', '')
             if self.ap_gb_rb_1.isChecked():
                 self.config_dict.set('API', 'api_used', 'meteofrance')
                 self.config_dict.set('API', 'api_key', '')

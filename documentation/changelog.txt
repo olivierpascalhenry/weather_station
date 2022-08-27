@@ -13,6 +13,7 @@
     * new options have been added to the option window.
     * it is now possible to ask the weather station to test automatically the connectivity every period of time defined
     by the user if it is offline.
+    * new options for in and out temperature/humidity/pressure, have been added to the option window.
 
   * FIXED:
     * a widget has been forgotten in keyboard window.
