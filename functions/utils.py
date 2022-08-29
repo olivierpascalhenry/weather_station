@@ -62,6 +62,7 @@ def create_option_file(user_path):
 def update_config_file(user_path):
     ini_path = pathlib.Path(user_path).joinpath('weather_station.ini')
     option_missing = False
+    remove_option = False
     config_dict = configparser.ConfigParser()
     config_dict.read(ini_path)
     new_option_list = {'SYSTEM': {'auto_check_connexion': 'False',
@@ -69,6 +70,7 @@ def update_config_file(user_path):
                                   'auto_connexion_value': ''},
                        'DISPLAY': {'in_temperature': '', 'in_humidity': '', 'in_pressure': '',
                                    'out_temperature': '', 'out_humidity': '', 'out_pressure': ''}}
+    old_options_list = {'DISPLAY': ['in_sensor', 'out_sensor']}
     for section, options in new_option_list.items():
         try:
             config_dict[section]
@@ -82,7 +84,15 @@ def update_config_file(user_path):
                     config_dict.setboolean(section, option, value)
                 else:
                     config_dict.set(section, option, value)
-    if option_missing:
+
+    for section, options in old_options_list.items():
+        for option in options:
+            config_dict.remove_option(section, option)
+            remove_option = True
+            if not config_dict.items(section):
+                config_dict.remove_section(section)
+
+    if option_missing or remove_option:
         ini_file = open(ini_path, 'w')
         config_dict.write(ini_file)
         ini_file.close()
