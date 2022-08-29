@@ -1,33 +1,26 @@
 import io
-import os
 import sys
 import copy
-import json
 import math
 import time
-import ephem
 import pickle
 import platform
 import logging
 import pathlib
 import configparser
-import tempfile
-import shutil
 import datetime
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
-from pyqtspinner.spinner import WaitingSpinner
 from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
-from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
-                             shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict, angle_moon_phase, get_season, weather_to_pictogrammes,
-                             define_time_ticks)
+from functions.utils import (days_months_dictionary, stylesheet_creation_function, shadow_creation_function,
+                             icon_creation_function, battery_value_icon_dict, link_value_icon_dict,
+                             weather_to_pictogrammes, define_time_ticks)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
-from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
+from functions.window_functions.other_windows import (MyAbout, MyExit, MyWarning, MyWarningUpdate,
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo,
                                                       MyUpdateProcess)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
@@ -38,8 +31,6 @@ from functions.thread_functions.forecast_request import MFForecastRequest, OWFor
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager,
                                                       ComputeEphemerisThread)
-from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
-                                     clean_6h_forecast_widgets)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):

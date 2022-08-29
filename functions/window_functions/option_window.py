@@ -5,8 +5,6 @@ import pickle
 import logging
 import pathlib
 import datetime
-import psycopg2
-import requests
 from meteofrance_api import MeteoFranceClient
 from pyowm.owm import OWM
 from pyowm.utils.config import get_default_config

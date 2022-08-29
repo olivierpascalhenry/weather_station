@@ -11,7 +11,6 @@ import datetime
 import psycopg2
 import requests
 import platform
-import subprocess
 import numpy as np
 from zipfile import ZipFile
 from distutils.version import LooseVersion

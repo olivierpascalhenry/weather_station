@@ -5,12 +5,10 @@ import logging
 import pathlib
 import datetime
 import platform
-import subprocess
 import configparser
 from dirsync import sync
 from logging.handlers import RotatingFileHandler
 from PyQt5 import QtGui, QtWidgets
-from numpy import nan
 
 
 def create_option_file(user_path):
