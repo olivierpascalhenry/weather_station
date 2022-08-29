@@ -381,7 +381,9 @@ class DBInDataThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBInDataThread - __init__')
         self.sensor_dict = sensor_dict
-        self.device_name = config_dict.get('DISPLAY', 'in_sensor')
+        self.temp_device = config_dict.get('DISPLAY', 'in_temperature')
+        self.hum_device = config_dict.get('DISPLAY', 'in_humidity')
+        self.pres_device = config_dict.get('DISPLAY', 'in_pressure')
         self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
         self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
                                           password=config_dict.get('DATABASE', 'password'),
@@ -396,62 +398,54 @@ class DBInDataThread(QtCore.QThread):
 
     def request_data(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - request_data')
-        table = None
-        if platform.system() == 'Windows':
-            table = self.device_name
-        else:
-            if self.device_name:
-                for _, ddict in self.sensor_dict['DS18B20'].items():
-                    if self.device_name == ddict['name']:
-                        table = ddict['table']
-                        break
-                if table is None:
-                    for _, ddict in self.sensor_dict['BME280'].items():
-                        if self.device_name == ddict['name']:
-                            table = ddict['table']
-                            break
-                if table is None:
-                    for device, _ in self.sensor_dict['MQTT']['devices'].items():
-                        if self.device_name == device:
-                            table = device
-                            break
-        logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - table: {table}')
-        if table is not None:
-            req_dict = {'temp': {'query': f'SELECT temperature, date_time FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                 'column': 'temperature'},
-                        'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
-                                        'column': 'temperature'},
-                        'hum': {'query': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'humidity'},
-                        'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                 'column': 'pressure'},
-                        'pres_msl': {'query': f'SELECT pressure_msl FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                     'column': 'pressure_msl'},
-                        'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'battery'},
-                        'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'signal'}}
-            self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
-            column_list = [column[0] for column in self.cursor.fetchall()]
+        temp_table, hum_table, pres_table = None, None, None
+        req_dict = {}
+        sensor_list = {ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['DS18B20'].items()}
+        sensor_list.update({ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['BME280'].items()})
+        sensor_list.update({device: device for device, _ in self.sensor_dict['MQTT']['devices'].items()})
+        if self.temp_device:
+            temp_table = sensor_list[self.temp_device]
+        if self.hum_device:
+            hum_table = sensor_list[self.hum_device]
+        if self.pres_device:
+            pres_table = sensor_list[self.pres_device]
+
+        logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - temp_table: {temp_table} ; '
+                      f'hum_table: {hum_table} ; pres_table: {pres_table}')
+
+        if temp_table is not None:
+            req_dict.update({'temp': f'SELECT temperature, date_time FROM "{temp_table}" ORDER BY date_time DESC '
+                                     f'LIMIT 1',
+                             'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{temp_table}"',
+                             'bat': f'SELECT battery FROM "{temp_table}" ORDER BY date_time DESC LIMIT 1',
+                             'sig': f'SELECT signal FROM "{temp_table}" ORDER BY date_time DESC LIMIT 1'})
+        if hum_table is not None:
+            req_dict.update({'hum': f'SELECT humidity FROM "{hum_table}" ORDER BY date_time DESC LIMIT 1'})
+        if pres_table is not None:
+            req_dict.update({'pres': f'SELECT pressure FROM "{pres_table}" ORDER BY date_time DESC LIMIT 1',
+                             'pres_msl': f'SELECT pressure_msl FROM "{pres_table}" ORDER BY date_time DESC LIMIT 1'})
+
+        if req_dict:
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
                             'bat': None, 'sig': None, 'old': False}
+
                 for var, req in req_dict.items():
                     try:
-                        if req['column'] in column_list:
-                            self.cursor.execute(req['query'])
-                            data = self.cursor.fetchone()
-                            if data is not None:
-                                if var == 'temp_minmax':
-                                    var_dict[var] = data
-                                else:
-                                    if var == 'temp':
-                                        if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
-                                            var_dict['old'] = True
-                                    var_dict[var] = data[0]
+                        self.cursor.execute(req)
+                        data = self.cursor.fetchone()
+                        if data is not None:
+                            if var == 'temp_minmax':
+                                var_dict[var] = data
+                            else:
+                                if var == 'temp':
+                                    if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                        var_dict['old'] = True
+                                var_dict[var] = data[0]
+
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} from {table}')
+                                          f'occurred when requesting {var} with request {req}')
                 logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - var_dict: {var_dict}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
@@ -461,6 +455,7 @@ class DBInDataThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - stop')
+        self.cursor.close()
         self.connector.close()
         logging.debug('gui - sensors_reading.py - DBInDataThread - stop - connector closed')
         self.terminate()
@@ -473,6 +468,9 @@ class DBOutDataThread(QtCore.QThread):
     def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBOutDataThread - __init__')
+        self.temp_device = config_dict.get('DISPLAY', 'out_temperature')
+        self.hum_device = config_dict.get('DISPLAY', 'out_humidity')
+        self.pres_device = config_dict.get('DISPLAY', 'out_pressure')
         self.sensor_dict = sensor_dict
         self.device_name = config_dict.get('DISPLAY', 'out_sensor')
         self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
@@ -489,62 +487,50 @@ class DBOutDataThread(QtCore.QThread):
 
     def request_data(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - request_data')
-        table = None
-        if platform.system() == 'Windows':
-            table = self.device_name
-        else:
-            if self.device_name:
-                for _, ddict in self.sensor_dict['DS18B20'].items():
-                    if self.device_name == ddict['name']:
-                        table = ddict['table']
-                        break
-                if table is None:
-                    for _, ddict in self.sensor_dict['BME280'].items():
-                        if self.device_name == ddict['name']:
-                            table = ddict['table']
-                            break
-                if table is None:
-                    for device, _ in self.sensor_dict['MQTT']['devices'].items():
-                        if self.device_name == device:
-                            table = device
-                            break
-        logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - table: {table}')
-        if table is not None:
-            req_dict = {'temp': {'query': f'SELECT temperature, date_time FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                 'column': 'temperature'},
-                        'temp_minmax': {'query': f'SELECT MIN (temperature), MAX (temperature) FROM "{table}"',
-                                        'column': 'temperature'},
-                        'hum': {'query': f'SELECT humidity FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'humidity'},
-                        'pres': {'query': f'SELECT pressure FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                 'column': 'pressure'},
-                        'pres_msl': {'query': f'SELECT pressure_msl FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                     'column': 'pressure_msl'},
-                        'bat': {'query': f'SELECT battery FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'battery'},
-                        'sig': {'query': f'SELECT signal FROM "{table}" ORDER BY date_time DESC LIMIT 1',
-                                'column': 'signal'}}
-            self.cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name='{table}'")
-            column_list = [column[0] for column in self.cursor.fetchall()]
+        temp_table, hum_table, pres_table = None, None, None
+        req_dict = {}
+        sensor_list = {ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['DS18B20'].items()}
+        sensor_list.update({ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['BME280'].items()})
+        sensor_list.update({device: device for device, _ in self.sensor_dict['MQTT']['devices'].items()})
+        if self.temp_device:
+            temp_table = sensor_list[self.temp_device]
+        if self.hum_device:
+            hum_table = sensor_list[self.hum_device]
+        if self.pres_device:
+            pres_table = sensor_list[self.pres_device]
+
+        logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - temp_table: {temp_table} ; '
+                      f'hum_table: {hum_table} ; pres_table: {pres_table}')
+        if temp_table is not None:
+            req_dict.update({'temp': f'SELECT temperature, date_time FROM "{temp_table}" ORDER BY date_time DESC '
+                                     f'LIMIT 1',
+                             'temp_minmax': f'SELECT MIN (temperature), MAX (temperature) FROM "{temp_table}"',
+                             'bat': f'SELECT battery FROM "{temp_table}" ORDER BY date_time DESC LIMIT 1',
+                             'sig': f'SELECT signal FROM "{temp_table}" ORDER BY date_time DESC LIMIT 1'})
+        if hum_table is not None:
+            req_dict.update({'hum': f'SELECT humidity FROM "{hum_table}" ORDER BY date_time DESC LIMIT 1'})
+        if pres_table is not None:
+            req_dict.update({'pres': f'SELECT pressure FROM "{pres_table}" ORDER BY date_time DESC LIMIT 1',
+                             'pres_msl': f'SELECT pressure_msl FROM "{pres_table}" ORDER BY date_time DESC LIMIT 1'})
+        if req_dict:
             while True:
                 var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
                             'bat': None, 'sig': None, 'old': False}
                 for var, req in req_dict.items():
                     try:
-                        if req['column'] in column_list:
-                            self.cursor.execute(req['query'])
-                            data = self.cursor.fetchone()
-                            if data is not None:
-                                if var == 'temp_minmax':
-                                    var_dict[var] = data
-                                else:
-                                    if var == 'temp':
-                                        if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
-                                            var_dict['old'] = True
-                                    var_dict[var] = data[0]
+                        self.cursor.execute(req)
+                        data = self.cursor.fetchone()
+                        if data is not None:
+                            if var == 'temp_minmax':
+                                var_dict[var] = data
+                            else:
+                                if var == 'temp':
+                                    if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                        var_dict['old'] = True
+                                var_dict[var] = data[0]
                     except Exception:
                         logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} from {table}')
+                                          f'occurred when requesting {var} with request {req}')
                 logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - var_dict: {var_dict}')
                 self.db_data.emit(var_dict)
                 time.sleep(self.display_rate)
@@ -554,6 +540,7 @@ class DBOutDataThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - stop')
+        self.cursor.close()
         self.connector.close()
         logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - connector closed')
         self.terminate()
