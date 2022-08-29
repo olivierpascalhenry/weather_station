@@ -16,53 +16,64 @@ from numpy import nan
 def create_option_file(user_path):
     ini_file = open(pathlib.Path(user_path).joinpath('weather_station.ini'), 'w')
     config_dict = configparser.ConfigParser()
-    config_dict.add_section('LOG')
-    config_dict.add_section('SYSTEM')
-    config_dict.add_section('API')
-    config_dict.add_section('DISPLAY')
-    config_dict.add_section('SENSOR')
-    config_dict.add_section('TIMESERIES')
-    config_dict.add_section('DATABASE')
-    config_dict.set('LOG', 'level', 'DEBUG')
-    config_dict.set('LOG', 'path', str(user_path))
-    config_dict.set('SENSOR', 'sensors_rate', '30')
-    config_dict.set('DISPLAY', 'in_display_rate', '30')
-    config_dict.set('DISPLAY', 'in_temperature', '')
-    config_dict.set('DISPLAY', 'in_humidity', '')
-    config_dict.set('DISPLAY', 'in_pressure', '')
-    config_dict.set('DISPLAY', 'in_msl_pressure', 'False')
-    config_dict.set('DISPLAY', 'out_display_rate', '30')
-    config_dict.set('DISPLAY', 'out_temperature', '')
-    config_dict.set('DISPLAY', 'out_humidity', '')
-    config_dict.set('DISPLAY', 'out_pressure', '')
-    config_dict.set('DISPLAY', 'out_msl_pressure', 'False')
-    config_dict.set('TIMESERIES', 'in_temperature', '')
-    config_dict.set('TIMESERIES', 'in_humidity', '')
-    config_dict.set('TIMESERIES', 'out_temperature', '')
-    config_dict.set('TIMESERIES', 'out_pressure', '')
-    config_dict.set('TIMESERIES', 'msl_pressure', 'False')
-    config_dict.set('SYSTEM', 'place_altitude', '')
-    config_dict.set('SYSTEM', 'check_update', 'False')
-    config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
-    config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
-    config_dict.set('SYSTEM', 'auto_connexion_value', '')
-    config_dict.set('API', 'api_used', 'meteofrance')
-    config_dict.set('API', 'api_key', '')
-    config_dict.set('API', 'user_place', 'False')
-    config_dict.set('API', 'request_rate', '30')
-    config_dict.set('DATABASE', 'port', '5432')
-    config_dict.set('DATABASE', 'username', '')
-    config_dict.set('DATABASE', 'password', '')
-    config_dict.set('DATABASE', 'database', '')
-    config_dict.set('DATABASE', 'host', '127.0.0.1')
+    config_dict['LOG'] = {'level': 'DEBUG', 'path': str(user_path)}
+    config_dict['SYSTEM'] = {'place_altitude': '', 'check_update': 'False', 'auto_check_connexion': 'False',
+                             'auto_connexion_unit': 'minutes', 'auto_connexion_value': ''}
+    config_dict['API'] = {'api_used': 'meteofrance', 'api_key': '', 'user_place': 'False', 'request_rate': '30'}
+    config_dict['DISPLAY'] = {'in_display_rate': '30', 'in_temperature': '', 'in_humidity': '', 'in_pressure': '',
+                              'in_msl_pressure': 'False', 'out_display_rate': '30', 'out_temperature': '',
+                              'out_humidity': '', 'out_pressure': '', 'out_msl_pressure': 'False'}
+    config_dict['SENSOR'] = {'sensors_rate': '30'}
+    config_dict['TIMESERIES'] = {'in_temperature': '', 'in_humidity': '', 'out_temperature': '', 'out_pressure': '',
+                                 'msl_pressure': 'False'}
+    config_dict['DATABASE'] = {'port': '', 'username': '', 'password': '', 'database': '', 'host': ''}
+
+    # config_dict.add_section('LOG')
+    # config_dict.add_section('SYSTEM')
+    # config_dict.add_section('API')
+    # config_dict.add_section('DISPLAY')
+    # config_dict.add_section('SENSOR')
+    # config_dict.add_section('TIMESERIES')
+    # config_dict.add_section('DATABASE')
+    # config_dict.set('LOG', 'level', 'DEBUG')
+    # config_dict.set('LOG', 'path', str(user_path))
+    # config_dict.set('SENSOR', 'sensors_rate', '30')
+    # config_dict.set('DISPLAY', 'in_display_rate', '30')
+    # config_dict.set('DISPLAY', 'in_temperature', '')
+    # config_dict.set('DISPLAY', 'in_humidity', '')
+    # config_dict.set('DISPLAY', 'in_pressure', '')
+    # config_dict.set('DISPLAY', 'in_msl_pressure', 'False')
+    # config_dict.set('DISPLAY', 'out_display_rate', '30')
+    # config_dict.set('DISPLAY', 'out_temperature', '')
+    # config_dict.set('DISPLAY', 'out_humidity', '')
+    # config_dict.set('DISPLAY', 'out_pressure', '')
+    # config_dict.set('DISPLAY', 'out_msl_pressure', 'False')
+    # config_dict.set('TIMESERIES', 'in_temperature', '')
+    # config_dict.set('TIMESERIES', 'in_humidity', '')
+    # config_dict.set('TIMESERIES', 'out_temperature', '')
+    # config_dict.set('TIMESERIES', 'out_pressure', '')
+    # config_dict.set('TIMESERIES', 'msl_pressure', 'False')
+    # config_dict.set('SYSTEM', 'place_altitude', '')
+    # config_dict.set('SYSTEM', 'check_update', 'False')
+    # config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
+    # config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
+    # config_dict.set('SYSTEM', 'auto_connexion_value', '')
+    # config_dict.set('API', 'api_used', 'meteofrance')
+    # config_dict.set('API', 'api_key', '')
+    # config_dict.set('API', 'user_place', 'False')
+    # config_dict.set('API', 'request_rate', '30')
+    # config_dict.set('DATABASE', 'port', '5432')
+    # config_dict.set('DATABASE', 'username', '')
+    # config_dict.set('DATABASE', 'password', '')
+    # config_dict.set('DATABASE', 'database', '')
+    # config_dict.set('DATABASE', 'host', '127.0.0.1')
     config_dict.write(ini_file)
     ini_file.close()
 
 
 def update_config_file(user_path):
     ini_path = pathlib.Path(user_path).joinpath('weather_station.ini')
-    option_missing = False
-    remove_option = False
+    option_missing, remove_option = False, False
     config_dict = configparser.ConfigParser()
     config_dict.read(ini_path)
     new_option_list = {'SYSTEM': {'auto_check_connexion': 'False',

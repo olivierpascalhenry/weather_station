@@ -387,6 +387,9 @@ class CheckPostgresqlConnexion(QtCore.QThread):
             elif 'timeout expired' in str(e):
                 msg = ('La connexion à PostgreSQL a échoué. Veuillez vérifier les paramètres de connexion '
                        '(adresse et port).')
+            elif 'no password supplied' in str(e):
+                msg = ('La connexion à PostgreSQL a échoué. Veuillez vérifier les paramètres de connexion '
+                       '(adresse, port, utilisateur et mot de passe).')
             else:
                 msg = 'La connexion à PostgreSQL a échoué. Veuillez lire le log pour obtenir des détails sur cet échec.'
             self.postgresql_failed.emit(msg)
