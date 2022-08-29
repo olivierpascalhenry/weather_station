@@ -213,9 +213,9 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         if self.config_dict.get('DISPLAY', 'in_humidity') in self.sensor_list:
             self.af_gb_int_cb_2.setCurrentIndex(self.af_gb_int_cb_2.findText(self.config_dict.get('DISPLAY',
                                                                                                   'in_humidity')))
-        if self.config_dict.get('DISPLAY', 'in_temperature') in self.sensor_list:
+        if self.config_dict.get('DISPLAY', 'in_pressure') in self.sensor_list:
             self.af_gb_int_cb_3.setCurrentIndex(self.af_gb_int_cb_3.findText(self.config_dict.get('DISPLAY',
-                                                                                                  'in_temperature')))
+                                                                                                  'in_pressure')))
         if self.config_dict.get('DISPLAY', 'out_temperature') in self.sensor_list:
             self.af_gb_ext_cb_1.setCurrentIndex(self.af_gb_ext_cb_1.findText(self.config_dict.get('DISPLAY',
                                                                                                   'out_temperature')))
