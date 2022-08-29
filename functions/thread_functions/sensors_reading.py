@@ -472,7 +472,6 @@ class DBOutDataThread(QtCore.QThread):
         self.hum_device = config_dict.get('DISPLAY', 'out_humidity')
         self.pres_device = config_dict.get('DISPLAY', 'out_pressure')
         self.sensor_dict = sensor_dict
-        self.device_name = config_dict.get('DISPLAY', 'out_sensor')
         self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
         self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
                                           password=config_dict.get('DATABASE', 'password'),

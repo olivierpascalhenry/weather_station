@@ -296,11 +296,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        if self.config_dict.get('DISPLAY', 'in_sensor'):
+        if self.config_dict.get('DISPLAY', 'in_temperature'):
             self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
             self.display_in_data_thread.db_data.connect(self.refresh_in_display)
             self.display_in_data_thread.start()
-        if self.config_dict.get('DISPLAY', 'out_sensor'):
+        if self.config_dict.get('DISPLAY', 'out_temperature'):
             self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
             self.display_out_data_thread.db_data.connect(self.refresh_out_display)
             self.display_out_data_thread.start()
