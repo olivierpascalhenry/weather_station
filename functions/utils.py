@@ -27,46 +27,6 @@ def create_option_file(user_path):
     config_dict['TIMESERIES'] = {'in_temperature': '', 'in_humidity': '', 'out_temperature': '', 'out_pressure': '',
                                  'msl_pressure': 'False'}
     config_dict['DATABASE'] = {'port': '', 'username': '', 'password': '', 'database': '', 'host': ''}
-
-    # config_dict.add_section('LOG')
-    # config_dict.add_section('SYSTEM')
-    # config_dict.add_section('API')
-    # config_dict.add_section('DISPLAY')
-    # config_dict.add_section('SENSOR')
-    # config_dict.add_section('TIMESERIES')
-    # config_dict.add_section('DATABASE')
-    # config_dict.set('LOG', 'level', 'DEBUG')
-    # config_dict.set('LOG', 'path', str(user_path))
-    # config_dict.set('SENSOR', 'sensors_rate', '30')
-    # config_dict.set('DISPLAY', 'in_display_rate', '30')
-    # config_dict.set('DISPLAY', 'in_temperature', '')
-    # config_dict.set('DISPLAY', 'in_humidity', '')
-    # config_dict.set('DISPLAY', 'in_pressure', '')
-    # config_dict.set('DISPLAY', 'in_msl_pressure', 'False')
-    # config_dict.set('DISPLAY', 'out_display_rate', '30')
-    # config_dict.set('DISPLAY', 'out_temperature', '')
-    # config_dict.set('DISPLAY', 'out_humidity', '')
-    # config_dict.set('DISPLAY', 'out_pressure', '')
-    # config_dict.set('DISPLAY', 'out_msl_pressure', 'False')
-    # config_dict.set('TIMESERIES', 'in_temperature', '')
-    # config_dict.set('TIMESERIES', 'in_humidity', '')
-    # config_dict.set('TIMESERIES', 'out_temperature', '')
-    # config_dict.set('TIMESERIES', 'out_pressure', '')
-    # config_dict.set('TIMESERIES', 'msl_pressure', 'False')
-    # config_dict.set('SYSTEM', 'place_altitude', '')
-    # config_dict.set('SYSTEM', 'check_update', 'False')
-    # config_dict.set('SYSTEM', 'auto_check_connexion', 'False')
-    # config_dict.set('SYSTEM', 'auto_connexion_unit', 'minutes')
-    # config_dict.set('SYSTEM', 'auto_connexion_value', '')
-    # config_dict.set('API', 'api_used', 'meteofrance')
-    # config_dict.set('API', 'api_key', '')
-    # config_dict.set('API', 'user_place', 'False')
-    # config_dict.set('API', 'request_rate', '30')
-    # config_dict.set('DATABASE', 'port', '5432')
-    # config_dict.set('DATABASE', 'username', '')
-    # config_dict.set('DATABASE', 'password', '')
-    # config_dict.set('DATABASE', 'database', '')
-    # config_dict.set('DATABASE', 'host', '127.0.0.1')
     config_dict.write(ini_file)
     ini_file.close()
 
@@ -83,26 +43,18 @@ def update_config_file(user_path):
                                    'out_temperature': '', 'out_humidity': '', 'out_pressure': ''}}
     old_options_list = {'DISPLAY': ['in_sensor', 'out_sensor']}
     for section, options in new_option_list.items():
-        try:
-            config_dict[section]
-        except KeyError:
+        if section not in list(config_dict.keys()):
             option_missing = True
-            config_dict.add_section(section)
+            config_dict[section] = {}
         for option, value in options.items():
-            if config_dict[section].get(option) is None:
-                option_missing = True
-                if value in ['False', 'True']:
-                    config_dict.setboolean(section, option, value)
-                else:
-                    config_dict.set(section, option, value)
-
+            if option not in list(config_dict[section].keys()):
+                config_dict[section][option] = value
     for section, options in old_options_list.items():
         for option in options:
             config_dict.remove_option(section, option)
             remove_option = True
             if not config_dict.items(section):
                 config_dict.remove_section(section)
-
     if option_missing or remove_option:
         ini_file = open(ini_path, 'w')
         config_dict.write(ini_file)
