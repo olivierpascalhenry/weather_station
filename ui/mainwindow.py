@@ -845,11 +845,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.info('gui - mainwindow.py - MainWindow - close_gui')
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.stop()
-        for thread in self.collect_mqtt_data_thread:
-            try:
-                thread.disconnect_from_mqtt()
-            except AttributeError:
-                thread.stop()
+        if self.collect_mqtt_data_thread is not None
+            for thread in self.collect_mqtt_data_thread:
+                try:
+                    thread.disconnect_from_mqtt()
+                except AttributeError:
+                    thread.stop()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
         if self.display_in_data_thread is not None:

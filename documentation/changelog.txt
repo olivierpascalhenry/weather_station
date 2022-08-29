@@ -19,6 +19,7 @@
 
   * FIXED:
     * a widget has been forgotten in keyboard window.
+    * if no remote sensors are registered, the mqtt thread is none and not well cleared when the gui is closed.
 
 
 ### August 20 2022, Release version 0.13.0 ###
