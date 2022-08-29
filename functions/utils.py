@@ -14,7 +14,6 @@ from numpy import nan
 
 
 def create_option_file(user_path):
-    ini_file = open(pathlib.Path(user_path).joinpath('weather_station.ini'), 'w')
     config_dict = configparser.ConfigParser()
     config_dict['LOG'] = {'level': 'DEBUG', 'path': str(user_path)}
     config_dict['SYSTEM'] = {'place_altitude': '', 'check_update': 'False', 'auto_check_connexion': 'False',
@@ -27,6 +26,7 @@ def create_option_file(user_path):
     config_dict['TIMESERIES'] = {'in_temperature': '', 'in_humidity': '', 'out_temperature': '', 'out_pressure': '',
                                  'msl_pressure': 'False'}
     config_dict['DATABASE'] = {'port': '', 'username': '', 'password': '', 'database': '', 'host': ''}
+    ini_file = open(pathlib.Path(user_path).joinpath('weather_station.ini'), 'w')
     config_dict.write(ini_file)
     ini_file.close()
 
