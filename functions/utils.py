@@ -19,7 +19,8 @@ def create_option_file(user_path):
     config_dict['API'] = {'api_used': 'meteofrance', 'api_key': '', 'user_place': 'False', 'request_rate': '30'}
     config_dict['DISPLAY'] = {'in_display_rate': '30', 'in_temperature': '', 'in_humidity': '', 'in_pressure': '',
                               'in_msl_pressure': 'False', 'out_display_rate': '30', 'out_temperature': '',
-                              'out_humidity': '', 'out_pressure': '', 'out_msl_pressure': 'False'}
+                              'out_humidity': '', 'out_pressure': '', 'out_msl_pressure': 'False', 'in_bat_signal': '',
+                              'out_bat_signal': ''}
     config_dict['SENSOR'] = {'sensors_rate': '30'}
     config_dict['TIMESERIES'] = {'in_temperature': '', 'in_humidity': '', 'out_temperature': '', 'out_pressure': '',
                                  'msl_pressure': 'False'}
@@ -37,8 +38,8 @@ def update_config_file(user_path):
     new_option_list = {'SYSTEM': {'auto_check_connexion': 'False',
                                   'auto_connexion_unit': 'minutes',
                                   'auto_connexion_value': ''},
-                       'DISPLAY': {'in_temperature': '', 'in_humidity': '', 'in_pressure': '',
-                                   'out_temperature': '', 'out_humidity': '', 'out_pressure': ''}}
+                       'DISPLAY': {'in_temperature': '', 'in_humidity': '', 'in_pressure': '', 'in_bat_signal': '',
+                                   'out_temperature': '', 'out_humidity': '', 'out_pressure': '', 'out_bat_signal': ''}}
     old_options_list = {'DISPLAY': ['in_sensor', 'out_sensor']}
     for section, options in new_option_list.items():
         if section not in list(config_dict.keys()):

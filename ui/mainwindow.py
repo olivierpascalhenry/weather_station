@@ -2,6 +2,7 @@ import io
 import os
 import sys
 import copy
+import json
 import math
 import time
 import pickle
@@ -261,7 +262,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         alt = None
         if self.config_dict.get('SYSTEM', 'place_altitude'):
             alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-        if platform.system() == 'Linux':
+
+        if 'WEATHER_STATION_DEV' in os.environ:
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
+            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
+        else:
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 if ddict['table']:
                     self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
@@ -272,10 +278,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
                 self.collect_mqtt_data_thread = [MqttToDbObject(self.db_dict, self.sensor_dict['MQTT'], alt)]
-        else:
-            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
-            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
-            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
 
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.start()

@@ -72,7 +72,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.check_update_thread = None
         self.cb_list = [self.af_gb_int_cb_1, self.af_gb_ext_cb_1, self.ts_gb_int_cb_1, self.ts_gb_int_cb_2,
                         self.ts_gb_ext_cb_1, self.ts_gb_ext_cb_2, self.db_gb_2_cb_1, self.af_gb_int_cb_2,
-                        self.af_gb_ext_cb_2, self.af_gb_int_cb_3, self.af_gb_ext_cb_3]
+                        self.af_gb_ext_cb_2, self.af_gb_int_cb_3, self.af_gb_ext_cb_3, self.af_gb_int_cb_4,
+                        self.af_gb_ext_cb_4]
         self.af_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ca_vl.setAlignment(QtCore.Qt.AlignTop)
         self.ap_vl.setAlignment(QtCore.Qt.AlignTop)
@@ -88,6 +89,8 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         self.af_gb_ext_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_int_cb_3.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.af_gb_ext_cb_3.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_int_cb_4.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.af_gb_ext_cb_4.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_int_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_int_cb_2.setItemDelegate(QtWidgets.QStyledItemDelegate())
         self.ts_gb_ext_cb_1.setItemDelegate(QtWidgets.QStyledItemDelegate())
@@ -214,12 +217,18 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
         if self.config_dict.get('DISPLAY', 'in_pressure') in self.sensor_list:
             self.af_gb_int_cb_3.setCurrentIndex(self.af_gb_int_cb_3.findText(self.config_dict.get('DISPLAY',
                                                                                                   'in_pressure')))
+        if self.config_dict.get('DISPLAY', 'in_bat_signal') in self.sensor_list:
+            self.af_gb_int_cb_4.setCurrentIndex(self.af_gb_int_cb_4.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'in_bat_signal')))
         if self.config_dict.get('DISPLAY', 'out_temperature') in self.sensor_list:
             self.af_gb_ext_cb_1.setCurrentIndex(self.af_gb_ext_cb_1.findText(self.config_dict.get('DISPLAY',
                                                                                                   'out_temperature')))
         if self.config_dict.get('DISPLAY', 'out_humidity') in self.sensor_list:
             self.af_gb_ext_cb_2.setCurrentIndex(self.af_gb_ext_cb_2.findText(self.config_dict.get('DISPLAY',
                                                                                                   'out_humidity')))
+        if self.config_dict.get('DISPLAY', 'out_bat_signal') in self.sensor_list:
+            self.af_gb_ext_cb_4.setCurrentIndex(self.af_gb_ext_cb_4.findText(self.config_dict.get('DISPLAY',
+                                                                                                  'out_bat_signal')))
         if self.config_dict.get('DISPLAY', 'out_pressure') in self.sensor_list:
             self.af_gb_ext_cb_3.setCurrentIndex(self.af_gb_ext_cb_3.findText(self.config_dict.get('DISPLAY',
                                                                                                   'out_pressure')))
@@ -321,6 +330,16 @@ class MyOptions(QtWidgets.QDialog, Ui_optionWindow):
                 self.config_dict.set('DISPLAY', 'in_pressure', str(self.af_gb_int_cb_3.currentText()))
             else:
                 self.config_dict.set('DISPLAY', 'in_pressure', '')
+
+            if self.af_gb_ext_cb_4.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'out_bat_signal', str(self.af_gb_ext_cb_4.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'out_bat_signal', '')
+            if self.af_gb_int_cb_4.currentText() not in ['Choisir un capteur', 'Pas de capteur']:
+                self.config_dict.set('DISPLAY', 'in_bat_signal', str(self.af_gb_int_cb_4.currentText()))
+            else:
+                self.config_dict.set('DISPLAY', 'in_bat_signal', '')
+
             if self.ap_gb_rb_1.isChecked():
                 self.config_dict.set('API', 'api_used', 'meteofrance')
                 self.config_dict.set('API', 'api_key', '')
