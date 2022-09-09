@@ -11,12 +11,12 @@ import datetime
 import psycopg2
 import requests
 import platform
-import subprocess
 import numpy as np
 from zipfile import ZipFile
 from distutils.version import LooseVersion
 from PyQt5 import QtCore, QtGui
-from functions.utils import set_size, mpl_hour_list, angle_moon_phase, get_season, days_months_dictionary
+from functions.utils import (set_size, mpl_hour_list, angle_moon_phase, get_season, days_months_dictionary,
+                             define_time_ticks)
 
 
 class CleaningThread(QtCore.QThread):
@@ -317,20 +317,35 @@ class RebootingThread(QtCore.QThread):
 class CheckInternetConnexion(QtCore.QThread):
     connexion_alive = QtCore.pyqtSignal()
     no_connexion = QtCore.pyqtSignal()
+    time_dict = {'secondes': 1, 'minutes': 60, 'hours': 3600}
 
-    def __init__(self):
+    def __init__(self, config_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CheckInternetConnexion - __init__')
+        self.config_dict = config_dict
         self.ip_address = '1.1.1.1'
 
     def run(self):
         logging.debug('gui - other_threads.py - CheckInternetConnexion - run')
-        try:
-            socket.create_connection((self.ip_address, 53))
-            self.connexion_alive.emit()
-        except OSError:
-            time.sleep(3)
-            self.no_connexion.emit()
+        if self.config_dict.getboolean('SYSTEM', 'auto_check_connexion'):
+            time_factor = self.time_dict[self.config_dict.get('SYSTEM', 'auto_connexion_unit')]
+            time_sleep = int(self.config_dict.get('SYSTEM', 'auto_connexion_value')) * time_factor
+            while True:
+                try:
+                    socket.create_connection((self.ip_address, 53))
+                    self.connexion_alive.emit()
+                    break
+                except OSError:
+                    logging.exception('no connectivity detected')
+                    self.no_connexion.emit()
+                time.sleep(time_sleep)
+        else:
+            try:
+                socket.create_connection((self.ip_address, 53))
+                self.connexion_alive.emit()
+            except OSError:
+                logging.exception('no connectivity detected')
+                self.no_connexion.emit()
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckInternetConnexion - stop')
@@ -372,6 +387,9 @@ class CheckPostgresqlConnexion(QtCore.QThread):
             elif 'timeout expired' in str(e):
                 msg = ('La connexion à PostgreSQL a échoué. Veuillez vérifier les paramètres de connexion '
                        '(adresse et port).')
+            elif 'no password supplied' in str(e):
+                msg = ('La connexion à PostgreSQL a échoué. Veuillez vérifier les paramètres de connexion '
+                       '(adresse, port, utilisateur et mot de passe).')
             else:
                 msg = 'La connexion à PostgreSQL a échoué. Veuillez lire le log pour obtenir des détails sur cet échec.'
             self.postgresql_failed.emit(msg)
@@ -547,6 +565,69 @@ class RequestPlotDataThread(QtCore.QThread):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
         self.cursor.close()
         self.connector.close()
+        self.terminate()
+
+
+class PlotDataThread(QtCore.QThread):
+    success = QtCore.pyqtSignal()
+    error = QtCore.pyqtSignal(str)
+
+    def __init__(self, plot_in, plot_in_2, plot_out, plot_out_2, canvas_in, canvas_out, val_dict, first_plot):
+        QtCore.QThread.__init__(self)
+        logging.info('gui - other_threads.py - PlotDataThread - __init__')
+        self.plot_in = plot_in
+        self.plot_in_2 = plot_in_2
+        self.plot_out = plot_out
+        self.plot_out_2 = plot_out_2
+        self.canvas_in = canvas_in
+        self.canvas_out = canvas_out
+        self.val_dict = val_dict
+        self.first_plot = first_plot
+
+    def run(self):
+        logging.debug('gui - other_threads.py - PlotDataThread - run')
+        try:
+            color_1, color_2, color_3 = (0.785, 0, 0), (0, 0, 0.785), (0.1, 0.1, 0.1)
+            tick_list, label_list = define_time_ticks(self.val_dict['temp_in'][0][-1])
+            if self.first_plot:
+                self.plot_in.plot(self.val_dict['temp_in'][0], self.val_dict['temp_in'][1], color=color_1,
+                                  linewidth=1.)
+                self.plot_in_2.plot(self.val_dict['hum_in'][0], self.val_dict['hum_in'][1], color=color_2,
+                                    linewidth=1.)
+                self.plot_out.plot(self.val_dict['temp_out'][0], self.val_dict['temp_out'][1], color=color_1,
+                                   linewidth=1.)
+                self.plot_out_2.plot(self.val_dict['pres_out'][0], self.val_dict['pres_out'][1], color=color_3,
+                                     linewidth=1.)
+                self.first_plot = False
+            else:
+                self.plot_in.lines.pop(0)
+                self.plot_in.plot(self.val_dict['temp_in'][0], self.val_dict['temp_in'][1], color=color_1,
+                                  linewidth=1.)
+                self.plot_in_2.lines.pop(0)
+                self.plot_in_2.plot(self.val_dict['hum_in'][0], self.val_dict['hum_in'][1], color=color_2,
+                                    linewidth=1.)
+                self.plot_out.lines.pop(0)
+                self.plot_out.plot(self.val_dict['temp_out'][0], self.val_dict['temp_out'][1], color=color_1,
+                                   linewidth=1.)
+                self.plot_out_2.lines.pop(0)
+                self.plot_out_2.plot(self.val_dict['pres_out'][0], self.val_dict['pres_out'][1], color=color_3,
+                                     linewidth=1.)
+            self.plot_in.set_xlim(tick_list[0], tick_list[-1])
+            self.plot_out.set_xlim(tick_list[0], tick_list[-1])
+            self.plot_in.set_xticks(tick_list)
+            self.plot_out.set_xticks(tick_list)
+            self.plot_in.set_xticklabels(label_list)
+            self.plot_out.set_xticklabels(label_list)
+            self.canvas_in.draw()
+            self.canvas_out.draw()
+
+            self.success.emit()
+        except:
+            logging.exception('gui - other_threads.py - PlotDataThread - run - an error occured when plotting data')
+            self.error.emit('Une erreur lors du traçage des données\nempêche l\'affichage des séries temporelles')
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - PlotDataThread - stop')
         self.terminate()
 
 

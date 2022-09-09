@@ -13,6 +13,7 @@ from PyQt5 import QtCore
 
 class MFForecastRequest(QtCore.QThread):
     fc_data = QtCore.pyqtSignal(dict)
+    no_forecast = QtCore.pyqtSignal()
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
@@ -115,6 +116,7 @@ class MFForecastRequest(QtCore.QThread):
             except Exception:
                 logging.exception('gui - forecast_resquest.py - MFForecastRequest - run - an issue occured during'
                                   'the request of MF forecasts')
+                self.no_forecast.emit()
             time.sleep(self.request_rate)
 
     def stop(self):
@@ -125,6 +127,7 @@ class MFForecastRequest(QtCore.QThread):
 
 class OWForecastRequest(QtCore.QThread):
     fc_data = QtCore.pyqtSignal(dict)
+    no_forecast = QtCore.pyqtSignal()
 
     def __init__(self, user_place, config_dict):
         QtCore.QThread.__init__(self)
@@ -201,6 +204,7 @@ class OWForecastRequest(QtCore.QThread):
             except Exception:
                 logging.exception('gui - forecast_resquest.py - OWForecastRequest - run - an issue occured during'
                                   'the request of OWM forecasts')
+                self.no_forecast.emit()
             time.sleep(self.request_rate)
 
     def stop(self):

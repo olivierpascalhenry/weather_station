@@ -5,29 +5,25 @@ import copy
 import json
 import math
 import time
-import ephem
 import pickle
-import platform
 import logging
 import pathlib
-import configparser
-import tempfile
-import shutil
 import datetime
-from PyQt5 import QtWidgets, QtCore, QtGui
+import platform
+import configparser
+from pyqtspinner.spinner import WaitingSpinner
+from PyQt5 import QtWidgets, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
-from pyqtspinner.spinner import WaitingSpinner
 from ui.version import gui_version
 from ui.Ui_mainwindow import Ui_MainWindow
-from functions.utils import (days_months_dictionary, stylesheet_creation_function, clear_layout,
-                             shadow_creation_function, icon_creation_function, battery_value_icon_dict,
-                             link_value_icon_dict, angle_moon_phase, get_season, weather_to_pictogrammes,
-                             define_time_ticks)
+from functions.utils import (days_months_dictionary, stylesheet_creation_function, shadow_creation_function,
+                             icon_creation_function, battery_value_icon_dict, link_value_icon_dict,
+                             weather_to_pictogrammes, define_time_ticks)
 from functions.window_functions.option_window import MyOptions
 from functions.window_functions.weather_windows import My1hFCDetails, My6hFCDetails, My1dFCDetails
-from functions.window_functions.other_windows import (MyAbout, MyExit, MyDownload, MyWarning, MyWarningUpdate,
+from functions.window_functions.other_windows import (MyAbout, MyExit, MyWarning, MyWarningUpdate,
                                                       MyConnexion, MyBatLink, MyPressure, MyTempHum, MyInfo,
                                                       MyUpdateProcess)
 from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThread, BME280DataCollectingThread,
@@ -37,9 +33,7 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager,
-                                                      ComputeEphemerisThread)
-from functions.gui_functions import (add_1h_forecast_widget, add_6h_forecast_widget, clean_1h_forecast_widgets,
-                                     clean_6h_forecast_widgets)
+                                                      ComputeEphemerisThread, PlotDataThread)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -90,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.request_plot_thread = None
+        self.plot_data_thread = None
         self.compute_ephemeris_thread = None
         self.forecast_data = None
         self.check_internet = None
@@ -204,9 +199,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def check_internet_connection(self):
         logging.debug('gui - mainwindow.py - MainWindow - check_internet_connection')
-        self.check_internet = CheckInternetConnexion()
+        self.check_internet = CheckInternetConnexion(self.config_dict)
         self.check_internet.connexion_alive.connect(self.start_internet_services)
-        self.check_internet.no_connexion.connect(self.no_internet_message)
+        if self.config_dict.getboolean('SYSTEM', 'auto_check_connexion'):
+            self.check_internet.no_connexion.connect(self.display_no_data)
+        else:
+            self.check_internet.no_connexion.connect(self.no_internet_message)
         self.check_internet.start()
 
     def start_internet_services(self):
@@ -218,6 +216,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def no_internet_message(self):
         logging.warning('gui - mainwindow.py - MainWindow - no_internet_message - there is no connexion to the '
                         'outside world !')
+        self.display_no_data()
         connexion_window = MyConnexion(self)
         connexion_window.exec_()
         if connexion_window.retry:
@@ -265,7 +264,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         alt = None
         if self.config_dict.get('SYSTEM', 'place_altitude'):
             alt = float(self.config_dict.get('SYSTEM', 'place_altitude'))
-        if platform.system() == 'Linux':
+
+        if 'WEATHER_STATION_DEV' in os.environ:
+            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
+            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
+            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
+        else:
             for _, ddict in self.sensor_dict['DS18B20'].items():
                 if ddict['table']:
                     self.ds18b20_data_threads.append(DS18B20DataCollectingThread(self.db_dict, ddict))
@@ -276,10 +280,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.sensor_dict['MQTT']['password'] and self.sensor_dict['MQTT']['address'] and
                     self.sensor_dict['MQTT']['main_topic'] and self.sensor_dict['MQTT']['devices']):
                 self.collect_mqtt_data_thread = [MqttToDbObject(self.db_dict, self.sensor_dict['MQTT'], alt)]
-        else:
-            self.ds18b20_data_threads.append(DS18B20DataCollectingTestThread(self.db_dict))
-            self.bme280_data_threads.append(BME280DataCollectingTestThread(self.db_dict))
-            self.collect_mqtt_data_thread = [MqttToDbTestThread(self.db_dict)]
 
         for thread in self.ds18b20_data_threads + self.bme280_data_threads:
             thread.start()
@@ -292,11 +292,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_sensors_data(self):
         logging.debug('gui - mainwindow.py - MainWindow - display_sensors_data')
-        if self.config_dict.get('DISPLAY', 'in_sensor'):
+        if self.config_dict.get('DISPLAY', 'in_temperature'):
             self.display_in_data_thread = DBInDataThread(self.config_dict, self.sensor_dict)
             self.display_in_data_thread.db_data.connect(self.refresh_in_display)
             self.display_in_data_thread.start()
-        if self.config_dict.get('DISPLAY', 'out_sensor'):
+        if self.config_dict.get('DISPLAY', 'out_temperature'):
             self.display_out_data_thread = DBOutDataThread(self.config_dict, self.sensor_dict)
             self.display_out_data_thread.db_data.connect(self.refresh_out_display)
             self.display_out_data_thread.start()
@@ -307,6 +307,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             fc_thread = self.forecast_service_dispatcher[self.config_dict.get('API', 'api_used')]
             self.query_forecast_thread = fc_thread(self.place_object, self.config_dict)
             self.query_forecast_thread.fc_data.connect(self.parse_forecast_data)
+            self.query_forecast_thread.no_forecast.connect(self.display_no_data)
             self.query_forecast_thread.start()
         else:
             logging.warning('gui - mainwindow.py - MainWindow - launch_weather_request : no API registered in options'
@@ -445,6 +446,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def request_plot_data(self):
         logging.debug(f'gui - mainwindow.py - MainWindow - request_plot_data - database_ok: {self.database_ok}')
+        self.set_plot_spinner()
         if self.database_ok:
             self.request_plot_thread = RequestPlotDataThread(self.config_dict, self.sensor_dict)
             self.request_plot_thread.success.connect(self.plot_time_series)
@@ -456,33 +458,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def plot_time_series(self, val_dict):
         logging.debug(f'gui - mainwindow.py - MainWindow - plot_time_series')
-        tick_list, label_list = define_time_ticks(val_dict['temp_in'][0][-1])
-        if self.first_plot:
-            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
-            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
-            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
-            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
-            self.first_plot = False
-        else:
-            self.plot_in.lines.pop(0)
-            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
-            self.plot_in_2.lines.pop(0)
-            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
-            self.plot_out.lines.pop(0)
-            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
-            self.plot_out_2.lines.pop(0)
-            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
-        self.plot_in.set_xlim(tick_list[0], tick_list[-1])
-        self.plot_out.set_xlim(tick_list[0], tick_list[-1])
-        self.plot_in.set_xticks(tick_list)
-        self.plot_out.set_xticks(tick_list)
-        self.plot_in.set_xticklabels(label_list)
-        self.plot_out.set_xticklabels(label_list)
-        self.canvas_in.draw()
-        self.canvas_out.draw()
+        self.plot_data_thread = PlotDataThread(self.plot_in, self.plot_in_2, self.plot_out, self.plot_out_2,
+                                               self.canvas_in, self.canvas_out, val_dict, self.first_plot)
+        self.plot_data_thread.success.connect(self.plot_data_success)
+        self.plot_data_thread.error.connect(self.request_plot_data_error)
+        self.plot_data_thread.start()
+
+    def plot_data_success(self):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_data_success')
+        self.first_plot = False
+        self.spinner.stop()
 
     def request_plot_data_error(self, msg):
-        logging.debug('gui - mainwindow.py - MainWindow - request_plot_data_error')
+        logging.debug(f'gui - mainwindow.py - MainWindow - request_plot_data_error - msg: {msg}')
         text_kwargs1 = dict(ha='center', va='center', fontsize=20, color='#2d2d2d', fontfamily='Source Sans Pro',
                             backgroundcolor='#E2F0D9')
         text_kwargs2 = dict(ha='center', va='center', fontsize=20, color='#2d2d2d', fontfamily='Source Sans Pro',
@@ -491,6 +479,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.text(0.5, 0.5, msg, transform=self.plot_out.transAxes, **text_kwargs2)
         self.canvas_in.draw()
         self.canvas_out.draw()
+        self.spinner.stop()
 
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
@@ -597,6 +586,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     weat_bt.setIcon(weather_to_pictogrammes(weather))
                     temp_lb.setText(temp)
                     i += 1
+
+    def display_no_data(self):
+        logging.debug(f'gui - mainwindow.py - MainWindow - display_no_data')
+        icon = icon_creation_function('no_data_icon')
+        weat_bts = self.forecast_1h_stack.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_weat_bt_'))
+        weat_bts += self.page_5.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('^fc_dweat_bt_'))
+        weat_lbs = self.forecast_1h_stack.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_hour_lb_'))
+        weat_lbs += self.forecast_1h_stack.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_temp_lb_'))
+        weat_lbs += self.page_5.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_day_lb_'))
+        weat_lbs += self.page_5.findChildren(QtWidgets.QLabel, QtCore.QRegExp('^fc_mmtemp_lb_'))
+        for button in weat_bts:
+            button.setIcon(icon)
+        for label in weat_lbs:
+            label.clear()
 
     def display_1h_forecast_details(self):
         logging.debug(f'gui - mainwindow.py - MainWindow - display_1h_forecast_details')
@@ -805,6 +808,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 button.setIcon(icon_creation_function('empty_circle_icon.svg'))
 
+    def set_plot_spinner(self):
+        self.spinner = WaitingSpinner(self.page_3, centerOnParent=True, roundness=40., opacity=15., fade=70.,
+                                      radius=12., lines=16, line_length=12., line_width=2., speed=1.,
+                                      color=(75, 75, 75))
+        self.spinner.start()
+
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
         if platform.system() == 'Windows':
@@ -824,13 +833,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def close_gui(self):
         logging.info('gui - mainwindow.py - MainWindow - close_gui')
-        for thread in self.ds18b20_data_threads + self.bme280_data_threads:
-            thread.stop()
-        for thread in self.collect_mqtt_data_thread:
-            try:
-                thread.disconnect_from_mqtt()
-            except AttributeError:
+        if self.ds18b20_data_threads is not None:
+            for thread in self.ds18b20_data_threads:
                 thread.stop()
+        if self.bme280_data_threads is not None:
+            for thread in self.bme280_data_threads:
+                thread.stop()
+        if self.collect_mqtt_data_thread is not None:
+            for thread in self.collect_mqtt_data_thread:
+                try:
+                    thread.disconnect_from_mqtt()
+                except AttributeError:
+                    thread.stop()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
         if self.display_in_data_thread is not None:

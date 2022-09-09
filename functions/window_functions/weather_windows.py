@@ -1,7 +1,7 @@
 import bisect
 import logging
 import datetime
-from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5 import QtCore, QtWidgets
 from ui.Ui_forecast1hwindow import Ui_forecast1hWindow
 from ui.Ui_forecast6hwindow import Ui_forecast6hWindow
 from ui.Ui_forecast1dwindow import Ui_forecast1dWindow

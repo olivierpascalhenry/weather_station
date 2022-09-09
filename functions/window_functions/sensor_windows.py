@@ -1,3 +1,4 @@
+import os
 import logging
 import platform
 import pathlib
@@ -8,7 +9,7 @@ from ui.Ui_townsearchwindow import Ui_townsearchWindow
 from functions.window_functions.other_windows import MyKeyboard, MyNumpad
 from functions.utils import (code_to_departement, stylesheet_creation_function, font_creation_function,
                              icon_creation_function, clear_layout, str2bool)
-if platform.system() == 'Linux':
+if 'WEATHER_STATION_DEV' not in os.environ:
     import pigpio
 
 

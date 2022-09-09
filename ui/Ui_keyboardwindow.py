@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from functions.gui_widgets import QDoublePushButton
 
 
 class Ui_keyboardWindow(object):
@@ -1176,7 +1177,7 @@ class Ui_keyboardWindow(object):
 "}")
         self.button_ti.setObjectName("button_ti")
         self.gridLayout.addWidget(self.button_ti, 3, 9, 1, 1)
-        self.button_up = QtWidgets.QToolButton(keyboardWindow)
+        self.button_up = QDoublePushButton(keyboardWindow)
         self.button_up.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)

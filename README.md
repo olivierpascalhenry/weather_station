@@ -30,7 +30,7 @@ Features:
 Developments:
 -------------
 
-Develoments are made on my free time. As said above, the weather station software has been coded with Python 3.7, and thus it is pure Python. The GUI is handled by PyQt 5.15 and designed with QtCreator 5.0. The latest version of PyCharm is used to develop the software.
+Develoments are made on my free time. As said above, the weather station software has been coded with Python 3.9, and thus it is pure Python. The GUI is handled by PyQt 5.15 and designed with QtCreator 8.0. The latest version of PyCharm is used to develop the software.
 
 
 Installation:
@@ -77,6 +77,10 @@ Other software :
 Fonts :
 
 The weather station uses Source Sans Pro as a font. It needs to be installed to give better results.
+
+Environment variable :
+
+I use an environment variable ("WEATHER_STATION_DEV") on my development computers (Ubuntu and Windows). Thus it give the possibility to manipulate "fake" sensors with no access to smbus2/bme280/pigpio modules.
 
 Stand-alone package:
 --------------------

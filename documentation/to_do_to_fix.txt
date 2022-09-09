@@ -1,6 +1,7 @@
 ### To do list: ###
 
-*
+* supprimer tout le code de test et préparer une vrai machine virtuelle pour développer la station météo.
+* gérer le spinner avec le parent et non pas en l'ajoutant dans le layout
 
 ### To fix list: ###
 

@@ -1,4 +1,33 @@
 
+### September 09 2022, Release version 0.14.0 ###
+
+  * MODIFIED:
+    * removed old code in utils.py.
+    * if no connexion or no forecast can be parsed, a no data icon is now displayed in forecast sections, and labels are
+     cleared.
+     * the function to update the config file has been changed for better performance.
+     * the creation and update of the config file have been updated with the new API.
+     * the plot function has been moved to a new thread, and the spinner has been re-added.
+     * a new separator icon has been introduced.
+
+  * ADDED:
+    * a function to update a configuration file has been introduced.
+    * few new options have been added to the configuration file.
+    * new options have been added to the option window.
+    * it is now possible to ask the weather station to test automatically the connectivity every period of time
+    defined by the user if it is offline.
+    * new options for in and out temperature/humidity/pressure, have been added to the option window.
+    * it is now possible to choose which sensor will feed temperature/humidity/pressure data.
+    * the sensor which feeds temperature data will feed battery and signal data.
+    * an error message has been added if all options concerning database are empty.
+
+  * FIXED:
+    * a widget has been forgotten in keyboard window.
+    * if no sensors and remote sensors are registered, the sensor threads are none and not well cleared when the gui is
+    closed.
+    * json import has been deleted.
+
+
 ### August 20 2022, Release version 0.13.0 ###
 
   * FIXED:
