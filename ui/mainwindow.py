@@ -11,6 +11,7 @@ import logging
 import pathlib
 import configparser
 import datetime
+from pyqtspinner.spinner import WaitingSpinner
 from PyQt5 import QtWidgets, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -32,7 +33,7 @@ from functions.thread_functions.sensors_reading import (DS18B20DataCollectingThr
 from functions.thread_functions.forecast_request import MFForecastRequest, OWForecastRequest
 from functions.thread_functions.other_threads import (CleaningThread, CheckInternetConnexion, CheckUpdate,
                                                       RequestPlotDataThread, CheckPostgresqlConnexion, DBTableManager,
-                                                      ComputeEphemerisThread)
+                                                      ComputeEphemerisThread, PlotDataThread)
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -83,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.db_cleaning_thread = None
         self.check_update_thread = None
         self.request_plot_thread = None
+        self.plot_data_thread = None
         self.compute_ephemeris_thread = None
         self.forecast_data = None
         self.check_internet = None
@@ -444,6 +446,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def request_plot_data(self):
         logging.debug(f'gui - mainwindow.py - MainWindow - request_plot_data - database_ok: {self.database_ok}')
+        self.set_plot_spinner()
         if self.database_ok:
             self.request_plot_thread = RequestPlotDataThread(self.config_dict, self.sensor_dict)
             self.request_plot_thread.success.connect(self.plot_time_series)
@@ -455,33 +458,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def plot_time_series(self, val_dict):
         logging.debug(f'gui - mainwindow.py - MainWindow - plot_time_series')
-        tick_list, label_list = define_time_ticks(val_dict['temp_in'][0][-1])
-        if self.first_plot:
-            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
-            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
-            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
-            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
-            self.first_plot = False
-        else:
-            self.plot_in.lines.pop(0)
-            self.plot_in.plot(val_dict['temp_in'][0], val_dict['temp_in'][1], color=self.color_1, linewidth=1.)
-            self.plot_in_2.lines.pop(0)
-            self.plot_in_2.plot(val_dict['hum_in'][0], val_dict['hum_in'][1], color=self.color_2, linewidth=1.)
-            self.plot_out.lines.pop(0)
-            self.plot_out.plot(val_dict['temp_out'][0], val_dict['temp_out'][1], color=self.color_1, linewidth=1.)
-            self.plot_out_2.lines.pop(0)
-            self.plot_out_2.plot(val_dict['pres_out'][0], val_dict['pres_out'][1], color=self.color_3, linewidth=1.)
-        self.plot_in.set_xlim(tick_list[0], tick_list[-1])
-        self.plot_out.set_xlim(tick_list[0], tick_list[-1])
-        self.plot_in.set_xticks(tick_list)
-        self.plot_out.set_xticks(tick_list)
-        self.plot_in.set_xticklabels(label_list)
-        self.plot_out.set_xticklabels(label_list)
-        self.canvas_in.draw()
-        self.canvas_out.draw()
+        self.plot_data_thread = PlotDataThread(self.plot_in, self.plot_in_2, self.plot_out, self.plot_out_2,
+                                               self.canvas_in, self.canvas_out, val_dict, self.first_plot)
+        self.plot_data_thread.success.connect(self.plot_data_success)
+        self.plot_data_thread.error.connect(self.request_plot_data_error)
+        self.plot_data_thread.start()
+
+    def plot_data_success(self):
+        logging.debug('gui - mainwindow.py - MainWindow - plot_data_success')
+        self.first_plot = False
+        self.spinner.stop()
 
     def request_plot_data_error(self, msg):
-        logging.debug('gui - mainwindow.py - MainWindow - request_plot_data_error')
+        logging.debug(f'gui - mainwindow.py - MainWindow - request_plot_data_error - msg: {msg}')
         text_kwargs1 = dict(ha='center', va='center', fontsize=20, color='#2d2d2d', fontfamily='Source Sans Pro',
                             backgroundcolor='#E2F0D9')
         text_kwargs2 = dict(ha='center', va='center', fontsize=20, color='#2d2d2d', fontfamily='Source Sans Pro',
@@ -490,6 +479,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plot_out.text(0.5, 0.5, msg, transform=self.plot_out.transAxes, **text_kwargs2)
         self.canvas_in.draw()
         self.canvas_out.draw()
+        self.spinner.stop()
 
     def setup_plot_area(self):
         logging.debug('gui - mainwindow.py - MainWindow - setup_plot_area')
@@ -817,6 +807,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 button.setIcon(icon_creation_function('filled_circle_icon.svg'))
             else:
                 button.setIcon(icon_creation_function('empty_circle_icon.svg'))
+
+    def set_plot_spinner(self):
+        self.spinner = WaitingSpinner(self.page_3, centerOnParent=True, roundness=40., opacity=15., fade=70.,
+                                      radius=12., lines=16, line_length=12., line_width=2., speed=1.,
+                                      color=(75, 75, 75))
+        self.spinner.start()
 
     def exit_menu(self):
         logging.debug('gui - mainwindow.py - MainWindow - exit_menu')
