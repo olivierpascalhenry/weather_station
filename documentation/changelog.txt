@@ -1,5 +1,5 @@
 
-### September XX 2022, Release version 0.14.0 ###
+### September 09 2022, Release version 0.14.0 ###
 
   * MODIFIED:
     * removed old code in utils.py.
@@ -8,6 +8,7 @@
      * the function to update the config file has been changed for better performance.
      * the creation and update of the config file have been updated with the new API.
      * the plot function has been moved to a new thread, and the spinner has been re-added.
+     * a new separator icon has been introduced.
 
   * ADDED:
     * a function to update a configuration file has been introduced.
@@ -24,6 +25,7 @@
     * a widget has been forgotten in keyboard window.
     * if no sensors and remote sensors are registered, the sensor threads are none and not well cleared when the gui is
     closed.
+    * json import has been deleted.
 
 
 ### August 20 2022, Release version 0.13.0 ###
