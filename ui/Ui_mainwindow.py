@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_21 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout_21.setContentsMargins(0, 8, 0, 0)
-        self.gridLayout_21.setHorizontalSpacing(7)
+        self.gridLayout_21.setHorizontalSpacing(6)
         self.gridLayout_21.setVerticalSpacing(0)
         self.gridLayout_21.setObjectName("gridLayout_21")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
 "}")
         self.separator.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/separator_icon_2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("icons/separator_icon.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.separator.setIcon(icon1)
         self.separator.setIconSize(QtCore.QSize(20, 50))
         self.separator.setObjectName("separator")
@@ -396,8 +396,8 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.menu_layout = QtWidgets.QVBoxLayout()
-        self.menu_layout.setContentsMargins(6, -1, 0, 4)
-        self.menu_layout.setSpacing(4)
+        self.menu_layout.setContentsMargins(6, 6, 0, 6)
+        self.menu_layout.setSpacing(0)
         self.menu_layout.setObjectName("menu_layout")
         self.in_out_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.in_out_bt.setMinimumSize(QtCore.QSize(128, 100))
@@ -420,6 +420,8 @@ class Ui_MainWindow(object):
         self.in_out_bt.setIconSize(QtCore.QSize(110, 110))
         self.in_out_bt.setObjectName("in_out_bt")
         self.menu_layout.addWidget(self.in_out_bt)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.menu_layout.addItem(spacerItem2)
         self.ephemeride_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.ephemeride_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.ephemeride_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -441,6 +443,8 @@ class Ui_MainWindow(object):
         self.ephemeride_bt.setIconSize(QtCore.QSize(90, 90))
         self.ephemeride_bt.setObjectName("ephemeride_bt")
         self.menu_layout.addWidget(self.ephemeride_bt)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.menu_layout.addItem(spacerItem3)
         self.time_series_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.time_series_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.time_series_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -462,6 +466,8 @@ class Ui_MainWindow(object):
         self.time_series_bt.setIconSize(QtCore.QSize(110, 110))
         self.time_series_bt.setObjectName("time_series_bt")
         self.menu_layout.addWidget(self.time_series_bt)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.menu_layout.addItem(spacerItem4)
         self.h1_prev_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.h1_prev_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.h1_prev_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -483,6 +489,8 @@ class Ui_MainWindow(object):
         self.h1_prev_bt.setIconSize(QtCore.QSize(110, 110))
         self.h1_prev_bt.setObjectName("h1_prev_bt")
         self.menu_layout.addWidget(self.h1_prev_bt)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.menu_layout.addItem(spacerItem5)
         self.h6_prev_bt = QtWidgets.QToolButton(self.scrollAreaWidgetContents)
         self.h6_prev_bt.setMinimumSize(QtCore.QSize(128, 100))
         self.h6_prev_bt.setMaximumSize(QtCore.QSize(128, 100))
@@ -517,7 +525,7 @@ class Ui_MainWindow(object):
         self.page_1 = QtWidgets.QWidget()
         self.page_1.setObjectName("page_1")
         self.gridLayout_3 = QtWidgets.QGridLayout(self.page_1)
-        self.gridLayout_3.setContentsMargins(6, 10, 5, 10)
+        self.gridLayout_3.setContentsMargins(3, 6, 6, 6)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.in_frame = QtWidgets.QFrame(self.page_1)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -525,6 +533,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.in_frame.sizePolicy().hasHeightForWidth())
         self.in_frame.setSizePolicy(sizePolicy)
+        self.in_frame.setMinimumSize(QtCore.QSize(431, 0))
+        self.in_frame.setMaximumSize(QtCore.QSize(431, 16777215))
         self.in_frame.setStyleSheet("QFrame#in_frame {\n"
 "   background: #E2F0D9;\n"
 "   border: 0px solid black;\n"
@@ -612,8 +622,8 @@ class Ui_MainWindow(object):
         self.in_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
         self.in_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
         self.in_lab_frame.setStyleSheet("QFrame#in_lab_frame {\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    border-top: 1px solid rgb(45,45,45);\n"
+"    border-bottom: 1px solid rgb(45,45,45);\n"
 "}")
         self.in_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.in_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -732,14 +742,14 @@ class Ui_MainWindow(object):
         self.in_no_data.setObjectName("in_no_data")
         self.gridLayout_4.addWidget(self.in_no_data, 3, 0, 1, 1)
         self.gridLayout_3.addWidget(self.in_frame, 0, 0, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_3.addItem(spacerItem2, 0, 1, 1, 1)
         self.out_frame = QtWidgets.QFrame(self.page_1)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_frame.sizePolicy().hasHeightForWidth())
         self.out_frame.setSizePolicy(sizePolicy)
+        self.out_frame.setMinimumSize(QtCore.QSize(431, 0))
+        self.out_frame.setMaximumSize(QtCore.QSize(431, 16777215))
         self.out_frame.setStyleSheet("QFrame#out_frame {\n"
 "   background: #FBE5D6;\n"
 "   border: 0px solid black;\n"
@@ -806,8 +816,8 @@ class Ui_MainWindow(object):
         self.out_lab_frame.setMinimumSize(QtCore.QSize(0, 50))
         self.out_lab_frame.setMaximumSize(QtCore.QSize(16777215, 50))
         self.out_lab_frame.setStyleSheet("QFrame#out_lab_frame {\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    border-top: 1px solid rgb(45,45,45);\n"
+"    border-bottom: 1px solid rgb(45,45,45);\n"
 "}")
         self.out_lab_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.out_lab_frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -942,7 +952,7 @@ class Ui_MainWindow(object):
         self.out_no_data.setText("")
         self.out_no_data.setObjectName("out_no_data")
         self.gridLayout_5.addWidget(self.out_no_data, 3, 0, 1, 1)
-        self.gridLayout_3.addWidget(self.out_frame, 0, 2, 1, 1)
+        self.gridLayout_3.addWidget(self.out_frame, 0, 1, 1, 1)
         self.main_stacked_widget.addWidget(self.page_1)
         self.page_2 = QtWidgets.QWidget()
         self.page_2.setObjectName("page_2")
@@ -950,13 +960,13 @@ class Ui_MainWindow(object):
         self.gridLayout_26.setObjectName("gridLayout_26")
         self.day_box = QtWidgets.QGroupBox(self.page_2)
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
+        font.setFamily("Source Sans Pro Semibold")
         font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.day_box.setFont(font)
         self.day_box.setStyleSheet("QGroupBox{\n"
-"    border: 1px solid grey;\n"
+"    border: 1px solid rgb(45,45,45);\n"
 "    margin-top: 1.0em;\n"
 "    margin-right: 8px;\n"
 "    padding-top: 8px;\n"
@@ -1024,13 +1034,13 @@ class Ui_MainWindow(object):
         self.gridLayout_26.addWidget(self.day_box, 0, 0, 1, 1)
         self.sun_box = QtWidgets.QGroupBox(self.page_2)
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
+        font.setFamily("Source Sans Pro Semibold")
         font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.sun_box.setFont(font)
         self.sun_box.setStyleSheet("QGroupBox{\n"
-"    border: 1px solid grey;\n"
+"    border: 1px solid rgb(45,45,45);\n"
 "    margin-top: 1.0em;\n"
 "    margin-right: 8px;\n"
 "    padding-top: 8px;\n"
@@ -1079,13 +1089,13 @@ class Ui_MainWindow(object):
         self.gridLayout_26.addWidget(self.sun_box, 1, 0, 1, 1)
         self.moon_box = QtWidgets.QGroupBox(self.page_2)
         font = QtGui.QFont()
-        font.setFamily("Source Sans Pro SemiBold")
+        font.setFamily("Source Sans Pro Semibold")
         font.setPointSize(18)
         font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         self.moon_box.setFont(font)
         self.moon_box.setStyleSheet("QGroupBox{\n"
-"    border: 1px solid grey;\n"
+"    border: 1px solid rgb(45,45,45);\n"
 "    margin-top: 1.0em;\n"
 "    margin-right: 8px;\n"
 "    padding-top: 8px;\n"
@@ -1150,17 +1160,17 @@ class Ui_MainWindow(object):
         self.moon_lb_3.setWordWrap(True)
         self.moon_lb_3.setObjectName("moon_lb_3")
         self.horizontalLayout_4.addWidget(self.moon_lb_3)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem3)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem6)
         self.gridLayout_22.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
         self.gridLayout_26.addWidget(self.moon_box, 2, 0, 1, 1)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 69, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_26.addItem(spacerItem4, 3, 0, 1, 1)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 69, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_26.addItem(spacerItem7, 3, 0, 1, 1)
         self.main_stacked_widget.addWidget(self.page_2)
         self.page_3 = QtWidgets.QWidget()
         self.page_3.setObjectName("page_3")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.page_3)
-        self.gridLayout_8.setContentsMargins(6, 10, 10, 5)
+        self.gridLayout_8.setContentsMargins(3, 6, 6, 6)
         self.gridLayout_8.setHorizontalSpacing(7)
         self.gridLayout_8.setVerticalSpacing(0)
         self.gridLayout_8.setObjectName("gridLayout_8")
@@ -1190,8 +1200,8 @@ class Ui_MainWindow(object):
         self.gridLayout_6.setSpacing(0)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.in_label_4 = QtWidgets.QLabel(self.ts_frame_1)
-        self.in_label_4.setMinimumSize(QtCore.QSize(150, 40))
-        self.in_label_4.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.in_label_4.setMinimumSize(QtCore.QSize(150, 45))
+        self.in_label_4.setMaximumSize(QtCore.QSize(16777215, 45))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(18)
@@ -1201,11 +1211,11 @@ class Ui_MainWindow(object):
         self.in_label_4.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "    background: transparent;\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    border-top: 1px solid rgb(45,45,45);\n"
+"    border-bottom: 1px solid rgb(45,45,45);\n"
 "    margin-left: 270px;\n"
 "    margin-right: 270px;\n"
-"    margin-top: 5px;\n"
+"    margin-top: 10px;\n"
 "    border-radius: 0px;\n"
 "}")
         self.in_label_4.setAlignment(QtCore.Qt.AlignCenter)
@@ -1243,8 +1253,8 @@ class Ui_MainWindow(object):
         self.gridLayout_15.setSpacing(0)
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.out_label_5 = QtWidgets.QLabel(self.ts_frame_2)
-        self.out_label_5.setMinimumSize(QtCore.QSize(150, 40))
-        self.out_label_5.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.out_label_5.setMinimumSize(QtCore.QSize(150, 45))
+        self.out_label_5.setMaximumSize(QtCore.QSize(16777215, 45))
         font = QtGui.QFont()
         font.setFamily("Source Sans Pro")
         font.setPointSize(18)
@@ -1254,11 +1264,11 @@ class Ui_MainWindow(object):
         self.out_label_5.setStyleSheet("QLabel {\n"
 "    color: rgb(45,45,45);\n"
 "    background: transparent;\n"
-"    border-top: 1px solid rgb(75,75,75);\n"
-"    border-bottom: 1px solid rgb(75,75,75);\n"
+"    border-top: 1px solid rgb(45,45,45);\n"
+"    border-bottom: 1px solid rgb(45,45,45);\n"
 "    margin-left: 270px;\n"
 "    margin-right: 270px;\n"
-"    margin-top: 5px;\n"
+"    margin-top: 10px;\n"
 "    border-radius: 0px;\n"
 "}")
         self.out_label_5.setAlignment(QtCore.Qt.AlignCenter)
@@ -1296,8 +1306,8 @@ class Ui_MainWindow(object):
         self.left_ts_button.setArrowType(QtCore.Qt.NoArrow)
         self.left_ts_button.setObjectName("left_ts_button")
         self.horizontalLayout_2.addWidget(self.left_ts_button)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem5)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem8)
         self.ts_page_marker_1 = QtWidgets.QToolButton(self.page_3)
         self.ts_page_marker_1.setEnabled(False)
         self.ts_page_marker_1.setMinimumSize(QtCore.QSize(55, 55))
@@ -1341,8 +1351,8 @@ class Ui_MainWindow(object):
         self.ts_page_marker_2.setIcon(icon11)
         self.ts_page_marker_2.setObjectName("ts_page_marker_2")
         self.horizontalLayout_2.addWidget(self.ts_page_marker_2)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem6)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem9)
         self.right_ts_button = QtWidgets.QToolButton(self.page_3)
         self.right_ts_button.setMinimumSize(QtCore.QSize(55, 55))
         self.right_ts_button.setMaximumSize(QtCore.QSize(55, 55))
@@ -1369,7 +1379,7 @@ class Ui_MainWindow(object):
         self.page_4 = QtWidgets.QWidget()
         self.page_4.setObjectName("page_4")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.page_4)
-        self.gridLayout_2.setContentsMargins(6, 10, 10, 5)
+        self.gridLayout_2.setContentsMargins(3, 6, 6, 6)
         self.gridLayout_2.setHorizontalSpacing(7)
         self.gridLayout_2.setVerticalSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -1381,8 +1391,8 @@ class Ui_MainWindow(object):
         self.gridLayout_11 = QtWidgets.QGridLayout(self.fc_page_1)
         self.gridLayout_11.setContentsMargins(0, 0, 0, 10)
         self.gridLayout_11.setObjectName("gridLayout_11")
-        spacerItem7 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_11.addItem(spacerItem7, 1, 0, 1, 1)
+        spacerItem10 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_11.addItem(spacerItem10, 1, 0, 1, 1)
         self.prev1h_frame_2 = QtWidgets.QFrame(self.fc_page_1)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -2805,8 +2815,8 @@ class Ui_MainWindow(object):
         self.prev1h_layout_3.addLayout(self.verticalLayout_18)
         self.gridLayout_17.addLayout(self.prev1h_layout_3, 0, 0, 1, 1)
         self.gridLayout_19.addWidget(self.prev1h_frame_3, 0, 0, 1, 1)
-        spacerItem8 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_19.addItem(spacerItem8, 1, 0, 1, 1)
+        spacerItem11 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_19.addItem(spacerItem11, 1, 0, 1, 1)
         self.prev1h_frame_4 = QtWidgets.QFrame(self.fc_page_2)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -3302,8 +3312,8 @@ class Ui_MainWindow(object):
         self.left_fc_button.setArrowType(QtCore.Qt.NoArrow)
         self.left_fc_button.setObjectName("left_fc_button")
         self.horizontalLayout_3.addWidget(self.left_fc_button)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem9)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem12)
         self.fc_page_marker_1 = QtWidgets.QToolButton(self.page_4)
         self.fc_page_marker_1.setEnabled(False)
         self.fc_page_marker_1.setMinimumSize(QtCore.QSize(55, 55))
@@ -3340,8 +3350,8 @@ class Ui_MainWindow(object):
         self.fc_page_marker_2.setIcon(icon11)
         self.fc_page_marker_2.setObjectName("fc_page_marker_2")
         self.horizontalLayout_3.addWidget(self.fc_page_marker_2)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem10)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem13)
         self.right_fc_button = QtWidgets.QToolButton(self.page_4)
         self.right_fc_button.setMinimumSize(QtCore.QSize(55, 55))
         self.right_fc_button.setMaximumSize(QtCore.QSize(55, 55))
@@ -3366,7 +3376,7 @@ class Ui_MainWindow(object):
         self.page_5 = QtWidgets.QWidget()
         self.page_5.setObjectName("page_5")
         self.gridLayout_14 = QtWidgets.QGridLayout(self.page_5)
-        self.gridLayout_14.setContentsMargins(6, 10, 10, -1)
+        self.gridLayout_14.setContentsMargins(3, 6, 6, 6)
         self.gridLayout_14.setObjectName("gridLayout_14")
         self.prev6h_frame_1 = QtWidgets.QFrame(self.page_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -3617,8 +3627,8 @@ class Ui_MainWindow(object):
         self.prev6h_layout_1.addLayout(self.verticalLayout_27)
         self.gridLayout_13.addLayout(self.prev6h_layout_1, 0, 0, 1, 1)
         self.gridLayout_14.addWidget(self.prev6h_frame_1, 0, 0, 1, 1)
-        spacerItem11 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        self.gridLayout_14.addItem(spacerItem11, 1, 0, 1, 1)
+        spacerItem14 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        self.gridLayout_14.addItem(spacerItem14, 1, 0, 1, 1)
         self.prev6h_frame_2 = QtWidgets.QFrame(self.page_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)

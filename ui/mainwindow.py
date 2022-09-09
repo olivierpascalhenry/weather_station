@@ -6,11 +6,11 @@ import json
 import math
 import time
 import pickle
-import platform
 import logging
 import pathlib
-import configparser
 import datetime
+import platform
+import configparser
 from pyqtspinner.spinner import WaitingSpinner
 from PyQt5 import QtWidgets, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
