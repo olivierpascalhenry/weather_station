@@ -1,4 +1,11 @@
 
+
+### September xx 2022, Release version 0.14.1 ###
+
+  * FIXED:
+    * the computation of the moon phase has been corrected.
+
+
 ### September 09 2022, Release version 0.14.0 ###
 
   * MODIFIED:

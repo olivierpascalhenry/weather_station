@@ -657,7 +657,7 @@ class ComputeEphemerisThread(QtCore.QThread):
                 if sunlon >= moonlon:
                     angle = sunlon - moonlon
                 else:
-                    angle = 360. - sunlon - moonlon
+                    angle = 360. + (sunlon - moonlon)
                 angle_dict = angle_moon_phase()
                 angle_list = [a for a in angle_dict]
                 svg = None
