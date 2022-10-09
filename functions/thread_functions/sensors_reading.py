@@ -20,6 +20,11 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         logging.info(f'gui - sensors_reading.py - DS18B20DataCollectingThread - __init__ - sensor_dict: {sensor_dict}')
         self.name = sensor_dict['id']
         self.sensor_dict = sensor_dict
+
+        self.poller = QtCore.QTimer(self, interval=int(self.sensor_dict['refresh']) * 1000)
+        self.poller.timeout.connect(self.acquisition_routine)
+
+
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
@@ -27,14 +32,24 @@ class DS18B20DataCollectingThread(QtCore.QThread):
     def run(self):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - run')
         if self.check_sensor():
-            while True:
-                dtime = datetime.datetime.now().replace(microsecond=0)
-                temp = self.collect_data()
-                self.add_data_to_db(dtime, temp)
-                time.sleep(int(self.sensor_dict['refresh']))
+            self.poller.start()
+
+
+            # while True:
+            #     dtime = datetime.datetime.now().replace(microsecond=0)
+            #     temp = self.collect_data()
+            #     self.add_data_to_db(dtime, temp)
+            #     time.sleep(int(self.sensor_dict['refresh']))
         else:
             logging.info(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - run - '
                          f'no sensor detected')
+
+    def acquisition_routine(self):
+        logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - acquisition_routine')
+        dtime = datetime.datetime.now().replace(microsecond=0)
+        temp = self.collect_data()
+        self.add_data_to_db(dtime, temp)
+
 
     def add_data_to_db(self, dt, tp):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - add_data_to_db _ dt: '
@@ -80,9 +95,13 @@ class DS18B20DataCollectingThread(QtCore.QThread):
 
     def stop(self):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop')
+
+        self.poller.stop()
+
         self.connector.close()
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop - connector closed')
-        self.terminate()
+        # self.terminate()
+
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - stop - terminate')
 
 
@@ -92,16 +111,23 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DS18B20DataCollectingTestThread - __init__')
         self.sensors_rate = 30
+        random.seed()
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
 
-    def run(self):
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - run')
-        random.seed()
-        while True:
-            self.add_data_to_db(datetime.datetime.now().replace(microsecond=0), round(25. + random.uniform(0, 5), 1))
-            time.sleep(self.sensors_rate)
+        self.poller = QtCore.QTimer(self)
+        self.poller.moveToThread(self)
+        self.poller.timeout.connect(self.acquisition_routine)
+        self.started.connect(self.start_timer)
+        self.start()
+
+    def start_timer(self):
+        self.poller.start(self.sensors_rate * 1000)
+
+    def acquisition_routine(self):
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - acquisition_routine')
+        self.add_data_to_db(datetime.datetime.now().replace(microsecond=0), round(25. + random.uniform(0, 5), 1))
 
     def add_data_to_db(self, dt, tp):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingTestThread - add_data_to_db _ dt: {dt} ; tp:'
@@ -115,10 +141,11 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop')
+        self.poller.stop()
+        self.cursor.close()
         self.connector.close()
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop - connector closed')
-        self.terminate()
-        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop - terminate')
+        logging.debug('gui - sensors_reading.py - DS18B20DataCollectingTestThread - stop - qtimer stopped / db closed')
+        self.exit()
 
 
 class BME280DataCollectingThread(QtCore.QThread):
