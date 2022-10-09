@@ -415,10 +415,10 @@ class MqttToDbTestThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop')
+        self.cursor.close()
         self.connector.close()
-        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - connector closed')
-        self.terminate()
-        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - terminate')
+        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - db closed')
+        self.exit()
 
 
 class DBInDataThread(QtCore.QThread):
@@ -427,25 +427,39 @@ class DBInDataThread(QtCore.QThread):
     def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBInDataThread - __init__')
+        self.running = False
         self.sensor_dict = sensor_dict
-        self.temp_device = config_dict.get('DISPLAY', 'in_temperature')
-        self.hum_device = config_dict.get('DISPLAY', 'in_humidity')
-        self.pres_device = config_dict.get('DISPLAY', 'in_pressure')
-        self.sig_bat_device = config_dict.get('DISPLAY', 'in_bat_signal')
-        self.display_rate = int(config_dict.get('DISPLAY', 'in_display_rate'))
-        self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
-                                          password=config_dict.get('DATABASE', 'password'),
-                                          host=config_dict.get('DATABASE', 'host'),
-                                          database=config_dict.get('DATABASE', 'database'),
-                                          port=config_dict.get('DATABASE', 'port'))
+        self.request_dict = {}
+        self.temp_device = config_dict['DISPLAY']['in_temperature']
+        self.hum_device = config_dict['DISPLAY']['in_humidity']
+        self.pres_device = config_dict['DISPLAY']['in_pressure']
+        self.sig_bat_device = config_dict['DISPLAY']['in_bat_signal']
+        self.display_rate = int(config_dict['DISPLAY']['in_display_rate']) * 1000
+        self.connector = psycopg2.connect(user=config_dict['DATABASE']['username'],
+                                          password=config_dict['DATABASE']['password'],
+                                          host=config_dict['DATABASE']['host'],
+                                          database=config_dict['DATABASE']['database'],
+                                          port=config_dict['DATABASE']['port'])
         self.cursor = self.connector.cursor()
+        self.thread_timer = QtCore.QTimer(self)
+        self.thread_timer.moveToThread(self)
+        self.thread_timer.timeout.connect(self.request_data)
+        self.started.connect(self.start_routine)
+        self.start()
 
-    def run(self):
-        logging.debug('gui - sensors_reading.py - DBInDataThread - run')
-        self.request_data()
+    def start_routine(self):
+        logging.debug(f'gui - sensors_reading.py - DBInDataThread - start_routine')
+        self.running = True
+        self.request_dict = self.prepare_request()
+        if self.request_dict:
+            self.request_data()
+            self.thread_timer.start(self.display_rate)
+        else:
+            logging.error('gui - sensors_reading.py - DBInDataThread - request_data - no sensor in config file to '
+                          'display in data or the sensor doesnt exist in sensor dict')
+            self.stop()
 
-    def request_data(self):
-        logging.debug('gui - sensors_reading.py - DBInDataThread - request_data')
+    def prepare_request(self):
         temp_table, hum_table, pres_table, sig_bat_table = None, None, None, None
         req_dict = {}
         sensor_list = {ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['DS18B20'].items()}
@@ -475,39 +489,38 @@ class DBInDataThread(QtCore.QThread):
         if sig_bat_table is not None:
             req_dict.update({'bat': f'SELECT battery FROM "{sig_bat_table}" ORDER BY date_time DESC LIMIT 1',
                              'sig': f'SELECT signal FROM "{sig_bat_table}" ORDER BY date_time DESC LIMIT 1'})
-        if req_dict:
-            while True:
-                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
-                            'bat': None, 'sig': None, 'old': False}
-                for var, req in req_dict.items():
-                    try:
-                        self.cursor.execute(req)
-                        data = self.cursor.fetchone()
-                        if data is not None:
-                            if var == 'temp_minmax':
-                                var_dict[var] = data
-                            else:
-                                if var == 'temp':
-                                    if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
-                                        var_dict['old'] = True
-                                var_dict[var] = data[0]
-                    except Exception:
-                        logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} with request {req}')
-                logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - var_dict: {var_dict}')
-                self.db_data.emit(var_dict)
-                time.sleep(self.display_rate)
-        else:
-            logging.error('gui - sensors_reading.py - DBInDataThread - request_data - no sensor in config file to '
-                          'display in data or the sensor doesnt exist in sensor dict')
+        return req_dict
+
+    def request_data(self):
+        logging.debug('gui - sensors_reading.py - DBInDataThread - request_data')
+        var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
+                    'bat': None, 'sig': None, 'old': False}
+        for var, req in self.request_dict.items():
+            try:
+                self.cursor.execute(req)
+                data = self.cursor.fetchone()
+                if data is not None:
+                    if var == 'temp_minmax':
+                        var_dict[var] = data
+                    else:
+                        if var == 'temp':
+                            if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                var_dict['old'] = True
+                        var_dict[var] = data[0]
+            except Exception:
+                logging.exception(f'gui - sensors_reading.py - DBInDataThread - request_data - an exception '
+                                  f'occurred when requesting {var} with request {req}')
+        logging.debug(f'gui - sensors_reading.py - DBInDataThread - request_data - var_dict: {var_dict}')
+        self.db_data.emit(var_dict)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBInDataThread - stop')
+        self.thread_timer.stop()
         self.cursor.close()
         self.connector.close()
-        logging.debug('gui - sensors_reading.py - DBInDataThread - stop - connector closed')
-        self.terminate()
-        logging.debug('gui - sensors_reading.py - DBInDataThread - stop - terminate')
+        logging.debug('gui - sensors_reading.py - DBInDataThread - stop - qtimer stopped / db closed')
+        self.running = False
+        self.exit()
 
 
 class DBOutDataThread(QtCore.QThread):
@@ -516,25 +529,39 @@ class DBOutDataThread(QtCore.QThread):
     def __init__(self, config_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - DBOutDataThread - __init__')
-        self.temp_device = config_dict.get('DISPLAY', 'out_temperature')
-        self.hum_device = config_dict.get('DISPLAY', 'out_humidity')
-        self.pres_device = config_dict.get('DISPLAY', 'out_pressure')
-        self.sig_bat_device = config_dict.get('DISPLAY', 'out_bat_signal')
+        self.running = False
         self.sensor_dict = sensor_dict
-        self.display_rate = int(config_dict.get('DISPLAY', 'out_display_rate'))
-        self.connector = psycopg2.connect(user=config_dict.get('DATABASE', 'username'),
-                                          password=config_dict.get('DATABASE', 'password'),
-                                          host=config_dict.get('DATABASE', 'host'),
-                                          database=config_dict.get('DATABASE', 'database'),
-                                          port=config_dict.get('DATABASE', 'port'))
+        self.request_dict = {}
+        self.temp_device = config_dict['DISPLAY']['out_temperature']
+        self.hum_device = config_dict['DISPLAY']['out_humidity']
+        self.pres_device = config_dict['DISPLAY']['out_pressure']
+        self.sig_bat_device = config_dict['DISPLAY']['out_bat_signal']
+        self.display_rate = int(config_dict['DISPLAY']['out_display_rate']) * 1000
+        self.connector = psycopg2.connect(user=config_dict['DATABASE']['username'],
+                                          password=config_dict['DATABASE']['password'],
+                                          host=config_dict['DATABASE']['host'],
+                                          database=config_dict['DATABASE']['database'],
+                                          port=config_dict['DATABASE']['port'])
         self.cursor = self.connector.cursor()
+        self.thread_timer = QtCore.QTimer(self)
+        self.thread_timer.moveToThread(self)
+        self.thread_timer.timeout.connect(self.request_data)
+        self.started.connect(self.start_routine)
+        self.start()
 
-    def run(self):
-        logging.debug('gui - sensors_reading.py - DBOutDataThread - run')
-        self.request_data()
+    def start_routine(self):
+        logging.debug(f'gui - sensors_reading.py - DBOutDataThread - start_routine')
+        self.running = True
+        self.request_dict = self.prepare_request()
+        if self.request_dict:
+            self.request_data()
+            self.thread_timer.start(self.display_rate)
+        else:
+            logging.error('gui - sensors_reading.py - DBOutDataThread - request_data - no sensor in config file to '
+                          'display in data or the sensor doesnt exist in sensor dict')
+            self.stop()
 
-    def request_data(self):
-        logging.debug('gui - sensors_reading.py - DBOutDataThread - request_data')
+    def prepare_request(self):
         temp_table, hum_table, pres_table, sig_bat_table = None, None, None, None
         req_dict = {}
         sensor_list = {ddict['name']: ddict['table'] for _, ddict in self.sensor_dict['DS18B20'].items()}
@@ -563,36 +590,35 @@ class DBOutDataThread(QtCore.QThread):
         if sig_bat_table is not None:
             req_dict.update({'bat': f'SELECT battery FROM "{sig_bat_table}" ORDER BY date_time DESC LIMIT 1',
                              'sig': f'SELECT signal FROM "{sig_bat_table}" ORDER BY date_time DESC LIMIT 1'})
-        if req_dict:
-            while True:
-                var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
-                            'bat': None, 'sig': None, 'old': False}
-                for var, req in req_dict.items():
-                    try:
-                        self.cursor.execute(req)
-                        data = self.cursor.fetchone()
-                        if data is not None:
-                            if var == 'temp_minmax':
-                                var_dict[var] = data
-                            else:
-                                if var == 'temp':
-                                    if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
-                                        var_dict['old'] = True
-                                var_dict[var] = data[0]
-                    except Exception:
-                        logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
-                                          f'occurred when requesting {var} with request {req}')
-                logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - var_dict: {var_dict}')
-                self.db_data.emit(var_dict)
-                time.sleep(self.display_rate)
-        else:
-            logging.error('gui - sensors_reading.py - DBOutDataThread - request_data - no sensor in config file to '
-                          'display in data or the sensor doesnt exist in sensor dict')
+        return req_dict
+
+    def request_data(self):
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - request_data')
+        var_dict = {'temp': None, 'temp_minmax': None, 'hum': None, 'pres': None, 'pres_msl': None,
+                    'bat': None, 'sig': None, 'old': False}
+        for var, req in self.request_dict.items():
+            try:
+                self.cursor.execute(req)
+                data = self.cursor.fetchone()
+                if data is not None:
+                    if var == 'temp_minmax':
+                        var_dict[var] = data
+                    else:
+                        if var == 'temp':
+                            if (datetime.datetime.now() - data[1]).total_seconds() > 7200:
+                                var_dict['old'] = True
+                        var_dict[var] = data[0]
+            except Exception:
+                logging.exception(f'gui - sensors_reading.py - DBOutDataThread - request_data - an exception '
+                                  f'occurred when requesting {var} with request {req}')
+        logging.debug(f'gui - sensors_reading.py - DBOutDataThread - request_data - var_dict: {var_dict}')
+        self.db_data.emit(var_dict)
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - DBOutDataThread - stop')
+        self.thread_timer.stop()
         self.cursor.close()
         self.connector.close()
-        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - connector closed')
-        self.terminate()
-        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - terminate')
+        logging.debug('gui - sensors_reading.py - DBOutDataThread - stop - qtimer stopped / db closed')
+        self.running = False
+        self.exit()

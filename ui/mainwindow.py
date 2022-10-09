@@ -853,8 +853,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.db_cleaning_thread.stop()
         if self.display_in_data_thread is not None:
             self.display_in_data_thread.stop()
+            self.display_in_data_thread.wait()
         if self.display_out_data_thread is not None:
             self.display_out_data_thread.stop()
+            self.display_in_data_thread.wait()
         if self.compute_ephemeris_thread is not None:
             self.compute_ephemeris_thread.stop()
         if self.query_forecast_thread is not None:
