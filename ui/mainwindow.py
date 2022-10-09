@@ -835,10 +835,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         logging.info('gui - mainwindow.py - MainWindow - close_gui')
         if self.ds18b20_data_threads is not None:
             for thread in self.ds18b20_data_threads:
-                thread.stop()
+                if thread.running:
+                    thread.stop()
+                thread.wait()
         if self.bme280_data_threads is not None:
             for thread in self.bme280_data_threads:
-                thread.stop()
+                if thread.running:
+                    thread.stop()
+                thread.wait()
         if self.collect_mqtt_data_thread is not None:
             for thread in self.collect_mqtt_data_thread:
                 try:
