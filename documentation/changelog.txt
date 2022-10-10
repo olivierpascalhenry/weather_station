@@ -1,5 +1,5 @@
 
-### October xx 2022, Release version 0.15.1 ###
+### October 10 2022, Release version 0.15.1 ###
 
   * FIXED:
     * an issue was found and fixed in the thread to compute ephemeris.
