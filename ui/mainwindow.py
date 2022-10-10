@@ -864,8 +864,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.compute_ephemeris_thread.wait()
         if self.query_forecast_thread is not None:
             self.query_forecast_thread.stop()
+            self.query_forecast_thread.wait()
         self.timer.stop()
-        time.sleep(0.5)
+        # time.sleep(0.5)
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
