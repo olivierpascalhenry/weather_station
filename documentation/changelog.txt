@@ -4,6 +4,8 @@
 
   * FIXED:
     * the computation of the moon phase has been corrected.
+
+  * MODIFIED:
     * all qthreads with a run section has been changed to include a qtimer and allow proper termination.
 
 

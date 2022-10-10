@@ -1,8 +1,6 @@
 ### To do list: ###
 
 * supprimer tout le code de test et préparer une vrai machine virtuelle pour développer la station météo.
-* intégrer les idées de Cyrille dans les Thread.
-* vérifier si cela peut fonctionner avec QTimer pour éviter les boucles.
 
 ### To fix list: ###
 
