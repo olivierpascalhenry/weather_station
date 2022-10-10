@@ -34,7 +34,7 @@ class CleaningThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.clean_db)
         self.started.connect(self.start_routine)
-        self.start()
+        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - other_threads.py - CleaningThread - start_routine')
@@ -91,6 +91,7 @@ class CheckUpdate(QtCore.QThread):
     def run(self):
         logging.debug('gui - other_threads.py - CheckUpdate - run')
         self.update_request()
+        self.stop()
 
     def update_request(self):
         logging.debug('gui - other_threads.py - CheckUpdate - update_request')
@@ -107,7 +108,7 @@ class CheckUpdate(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckUpdate - stop')
-        self.terminate()
+        self.exit()
 
 
 class DownloadFile(QtCore.QThread):
