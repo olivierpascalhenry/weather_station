@@ -24,48 +24,59 @@ class CleaningThread(QtCore.QThread):
     def __init__(self, db_dict, sensor_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - other_threads.py - CleaningThread - __init__')
+        self.running = False
         self.sensor_dict = sensor_dict
+        self.routine_rate = 3600 * 1000
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
+        self.thread_timer = QtCore.QTimer(self)
+        self.thread_timer.moveToThread(self)
+        self.thread_timer.timeout.connect(self.clean_db)
+        self.started.connect(self.start_routine)
+        self.start()
 
-    def run(self):
-        logging.debug('gui - other_threads.py - CleaningThread - run')
+    def start_routine(self):
+        logging.debug(f'gui - other_threads.py - CleaningThread - start_routine')
+        self.running = True
         self.clean_db()
+        self.thread_timer.start(self.routine_rate)
 
     def clean_db(self):
         logging.debug('gui - other_threads.py - CleaningThread - clean_db')
-        while True:
-            try:
-                time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
-                if platform.system() == 'Windows':
-                    for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
-                        self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
-
-                for device, ddict in self.sensor_dict['DS18B20'].items():
-                    table = ddict['table']
-                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+        try:
+            time_limit = datetime.datetime.now() - datetime.timedelta(hours=48)
+            if platform.system() == 'Windows':
+                for table in ['BME280_TEST', 'DS18B20_TEST', 'AQARA_THP_TEST']:
                     self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
 
-                for device, ddict in self.sensor_dict['BME280'].items():
-                    table = ddict['table']
-                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
-                    self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
+            for device, ddict in self.sensor_dict['DS18B20'].items():
+                table = ddict['table']
+                time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
 
-                for device, ddict in self.sensor_dict['MQTT']['devices'].items():
-                    time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
-                    self.cursor.execute(f'DELETE FROM "{device}" WHERE date_time <= %s', (time_limit,))
+            for device, ddict in self.sensor_dict['BME280'].items():
+                table = ddict['table']
+                time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                self.cursor.execute(f'DELETE FROM "{table}" WHERE date_time <= %s', (time_limit,))
 
-                self.connector.commit()
-            except Exception:
-                logging.exception('gui - other_threads.py - CleaningThread - clean_db - an exception '
-                                  'occurred when cleaning db')
-            time.sleep(3600)
+            for device, ddict in self.sensor_dict['MQTT']['devices'].items():
+                time_limit = datetime.datetime.now() - datetime.timedelta(hours=int(ddict['store']))
+                self.cursor.execute(f'DELETE FROM "{device}" WHERE date_time <= %s', (time_limit,))
+
+            self.connector.commit()
+        except Exception:
+            logging.exception('gui - other_threads.py - CleaningThread - clean_db - an exception '
+                              'occurred when cleaning db')
 
     def stop(self):
         logging.debug('gui - other_threads.py - CleaningThread - stop')
+        self.thread_timer.stop()
+        self.cursor.close()
         self.connector.close()
-        self.terminate()
+        logging.debug(f'gui - other_threads.py - CleaningThread - stop - qtimer stopped / db closed')
+        self.running = False
+        self.exit()
 
 
 class CheckUpdate(QtCore.QThread):

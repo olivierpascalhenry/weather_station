@@ -851,6 +851,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     thread.stop()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
+            self.db_cleaning_thread.wait()
         if self.display_in_data_thread is not None:
             self.display_in_data_thread.stop()
             self.display_in_data_thread.wait()
