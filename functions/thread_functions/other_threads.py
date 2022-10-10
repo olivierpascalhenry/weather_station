@@ -177,7 +177,7 @@ class DownloadFile(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - DownloadFile - stop')
-        self.terminate()
+        self.exit()
 
 
 class UnzipFile(QtCore.QThread):
@@ -234,7 +234,7 @@ class UnzipFile(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - UnzipFile - stop')
-        self.terminate()
+        self.exit()
 
 
 class InstallFile(QtCore.QThread):
@@ -295,7 +295,7 @@ class InstallFile(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - InstallFile - stop')
-        self.terminate()
+        self.exit()
 
 
 class RebootingThread(QtCore.QThread):
@@ -323,7 +323,7 @@ class RebootingThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - RebootingThread - stop')
-        self.terminate()
+        self.exit()
 
 
 class CheckInternetConnexion(QtCore.QThread):
@@ -361,7 +361,7 @@ class CheckInternetConnexion(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckInternetConnexion - stop')
-        self.terminate()
+        self.exit()
 
 
 class CheckPostgresqlConnexion(QtCore.QThread):
@@ -412,7 +412,7 @@ class CheckPostgresqlConnexion(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
-        self.terminate()
+        self.exit()
 
 
 class DBTableManager(QtCore.QThread):
@@ -484,6 +484,10 @@ class DBTableManager(QtCore.QThread):
             msg = ('La gestion des tables des différents capteurs a échoué. Veuillez lire le log pour obtenir des '
                    'détails sur cet échec.')
             self.work_failed.emit(msg)
+
+    def stop(self):
+        logging.debug('gui - other_threads.py - CheckPostgresqlConnexion - stop')
+        self.exit()
 
 
 class RequestPlotDataThread(QtCore.QThread):
@@ -577,7 +581,7 @@ class RequestPlotDataThread(QtCore.QThread):
         logging.debug('gui - other_threads.py - RequestPlotDataThread - stop')
         self.cursor.close()
         self.connector.close()
-        self.terminate()
+        self.exit()
 
 
 class PlotDataThread(QtCore.QThread):
@@ -640,7 +644,7 @@ class PlotDataThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - other_threads.py - PlotDataThread - stop')
-        self.terminate()
+        self.exit()
 
 
 class ComputeEphemerisThread(QtCore.QThread):
@@ -651,74 +655,84 @@ class ComputeEphemerisThread(QtCore.QThread):
         logging.info('gui - other_threads.py - ComputeEphemerisThread - __init__')
         self.longitude = str(longitude)
         self.latitude = str(latitude)
+        self.running = False
+        self.computation_rate = 60 * 30 * 1000
+        self.observer, self.moon, self.sun = ephem.Observer(),  ephem.Moon(), ephem.Sun()
+        self.thread_timer = QtCore.QTimer(self)
+        self.thread_timer.moveToThread(self)
+        self.thread_timer.timeout.connect(self.compute_data)
+        self.started.connect(self.start_routine)
 
-    def run(self):
+    def start_routine(self):
+        logging.debug(f'gui - other_threads.py - ComputeEphemerisThread - start_routine')
+        self.running = True
+        self.compute_data()
+        self.thread_timer.start(self.display_rate)
+
+    def compute_data(self):
         logging.debug('gui - other_threads.py - ComputeEphemerisThread - run')
         try:
-            observer = ephem.Observer()
-            moon, sun = ephem.Moon(), ephem.Sun()
+            current_date = datetime.datetime.now()
+            sunrise_6days, sunset_6days = [], []
+            self.observer.lat, self.observer.lon, self.observer.date = self.latitude, self.longitude, current_date
+            self.sun.compute(self.observer)
+            self.moon.compute(self.observer)
+            sunlon = ephem.Ecliptic(self.sun).lon / math.pi * 180.0
+            moonlon = ephem.Ecliptic(self.moon).lon / math.pi * 180.0
+            if sunlon >= moonlon:
+                angle = sunlon - moonlon
+            else:
+                angle = 360. + (sunlon - moonlon)
+            angle_dict = angle_moon_phase()
+            angle_list = [a for a in angle_dict]
+            svg = None
+            for i in range(len(angle_list) - 1):
+                if angle_list[i] <= angle < angle_list[i + 1]:
+                    svg = angle_dict[angle_list[i]]
+                    break
 
-            while True:
-                current_date = datetime.datetime.now()
-                sunrise_6days, sunset_6days = [], []
-                observer.lat, observer.lon, observer.date = self.latitude, self.longitude, current_date
-                sun.compute(observer)
-                moon.compute(observer)
-                sunlon = ephem.Ecliptic(sun).lon / math.pi * 180.0
-                moonlon = ephem.Ecliptic(moon).lon / math.pi * 180.0
-                if sunlon >= moonlon:
-                    angle = sunlon - moonlon
-                else:
-                    angle = 360. + (sunlon - moonlon)
-                angle_dict = angle_moon_phase()
-                angle_list = [a for a in angle_dict]
-                svg = None
-                for i in range(len(angle_list) - 1):
-                    if angle_list[i] <= angle < angle_list[i + 1]:
-                        svg = angle_dict[angle_list[i]]
-                        break
+            next_date = current_date
+            for i in range(0, 6):
+                sunrise = ephem.localtime(self.observer.next_rising(self.sun, start=next_date.strftime('%Y/%m/%d')))
+                sunset = ephem.localtime(self.observer.next_setting(self.sun, start=next_date.strftime('%Y/%m/%d')))
+                sunrise_6days.append(sunrise)
+                sunset_6days.append(sunset)
+                next_date += datetime.timedelta(days=1)
 
-                next_date = current_date
-                for i in range(0, 6):
-                    sunrise = ephem.localtime(observer.next_rising(sun, start=next_date.strftime('%Y/%m/%d')))
-                    sunset = ephem.localtime(observer.next_setting(sun, start=next_date.strftime('%Y/%m/%d')))
-                    sunrise_6days.append(sunrise)
-                    sunset_6days.append(sunset)
-                    next_date += datetime.timedelta(days=1)
-
-                sunlive = sunset_6days[0] - sunrise_6days[0]
-                moonrise = ephem.localtime(observer.next_rising(moon, start=current_date.strftime('%Y/%m/%d')))
-                moonset = ephem.localtime(observer.next_setting(moon, start=current_date.strftime('%Y/%m/%d')))
-                h, m = str(sunlive.seconds // 3600), str((sunlive.seconds // 60) % 60)
-                if len(h) == 1:
-                    h = '0' + h
-                if len(m) == 1:
-                    m = '0' + m
-                day_box_title = (f'{days_months_dictionary()["day"][current_date.weekday() + 1]} '
-                                 f'{current_date.day} '
-                                 f'{days_months_dictionary()["month"][current_date.month]} '
-                                 f'{current_date.year}')
-                if current_date.timetuple().tm_yday == 1:
-                    day_year = f'{current_date.timetuple().tm_yday}er jour de l’année'
-                else:
-                    day_year = f'{current_date.timetuple().tm_yday}ème jour de l’année'
-                data_dict = {'day_box_title': day_box_title,
-                             'day_year': day_year,
-                             'week_nbr': f'Semaine {current_date.isocalendar()[1]}',
-                             'season': get_season(current_date),
-                             'sun_text': (f'Le Soleil se lève à {sunrise_6days[0].strftime("%Hh%M")} '
-                                          f'et se couche à {sunset_6days[0].strftime("%Hh%M")}'),
-                             'sun_live': f'Durée d’ensoleillement: {h}h{m}',
-                             'moon_text': (f'La Lune se lève à {moonrise.strftime("%Hh%M")} '
-                                           f'et se couche à {moonset.strftime("%Hh%M")}'),
-                             'moon_phase': QtGui.QPixmap(f'graphic_materials/pictogrammes/moon_phases/{svg}'),
-                             'sunrise_6days': sunrise_6days, 'sunset_6days': sunset_6days}
-                self.work_done.emit(data_dict)
-                time.sleep(60 * 30)
+            sunlive = sunset_6days[0] - sunrise_6days[0]
+            moonrise = ephem.localtime(self.observer.next_rising(self.moon, start=current_date.strftime('%Y/%m/%d')))
+            moonset = ephem.localtime(self.observer.next_setting(self.moon, start=current_date.strftime('%Y/%m/%d')))
+            h, m = str(sunlive.seconds // 3600), str((sunlive.seconds // 60) % 60)
+            if len(h) == 1:
+                h = '0' + h
+            if len(m) == 1:
+                m = '0' + m
+            day_box_title = (f'{days_months_dictionary()["day"][current_date.weekday() + 1]} '
+                             f'{current_date.day} '
+                             f'{days_months_dictionary()["month"][current_date.month]} '
+                             f'{current_date.year}')
+            if current_date.timetuple().tm_yday == 1:
+                day_year = f'{current_date.timetuple().tm_yday}er jour de l’année'
+            else:
+                day_year = f'{current_date.timetuple().tm_yday}ème jour de l’année'
+            data_dict = {'day_box_title': day_box_title,
+                         'day_year': day_year,
+                         'week_nbr': f'Semaine {current_date.isocalendar()[1]}',
+                         'season': get_season(current_date),
+                         'sun_text': (f'Le Soleil se lève à {sunrise_6days[0].strftime("%Hh%M")} '
+                                      f'et se couche à {sunset_6days[0].strftime("%Hh%M")}'),
+                         'sun_live': f'Durée d’ensoleillement: {h}h{m}',
+                         'moon_text': (f'La Lune se lève à {moonrise.strftime("%Hh%M")} '
+                                       f'et se couche à {moonset.strftime("%Hh%M")}'),
+                         'moon_phase': QtGui.QPixmap(f'graphic_materials/pictogrammes/moon_phases/{svg}'),
+                         'sunrise_6days': sunrise_6days, 'sunset_6days': sunset_6days}
+            self.work_done.emit(data_dict)
         except:
             logging.exception('gui - other_threads.py - ComputeEphemerisThread - run - an exception '
                               'occurred when computing ephemeris data')
 
     def stop(self):
         logging.debug('gui - other_threads.py - ComputeEphemerisThread - stop')
-        self.terminate()
+        self.thread_timer.stop()
+        self.running = False
+        self.exit()

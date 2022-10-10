@@ -849,6 +849,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     thread.disconnect_from_mqtt()
                 except AttributeError:
                     thread.stop()
+                    thread.wait()
         if self.db_cleaning_thread is not None:
             self.db_cleaning_thread.stop()
             self.db_cleaning_thread.wait()
@@ -860,6 +861,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.display_in_data_thread.wait()
         if self.compute_ephemeris_thread is not None:
             self.compute_ephemeris_thread.stop()
+            self.compute_ephemeris_thread.wait()
         if self.query_forecast_thread is not None:
             self.query_forecast_thread.stop()
         self.timer.stop()
