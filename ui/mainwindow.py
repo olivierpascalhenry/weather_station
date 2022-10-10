@@ -683,7 +683,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 update_window.exec_()
                 if update_window.success:
                     self.reboot = True
-                    self.close()
+                    self.close_gui()
         elif self.warning_button.objectName() == 'warning_function':
             warning_window = MyWarning(self.forecast_data['warning'], self)
             warning_window.exec_()
