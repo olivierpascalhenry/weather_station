@@ -28,7 +28,6 @@ class DS18B20DataCollectingThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.acquisition_routine)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingThread/{self.name} - start_routine')
@@ -111,7 +110,6 @@ class DS18B20DataCollectingTestThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.acquisition_routine)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - DS18B20DataCollectingTestThread - start_routine')
@@ -163,7 +161,7 @@ class BME280DataCollectingThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.acquisition_routine)
         self.started.connect(self.start_routine)
-        # self.start()
+
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingThread/{self.name} - start_routine')
@@ -255,7 +253,6 @@ class BME280DataCollectingTestThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.acquisition_routine)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - BME280DataCollectingTestThread - start_routine')
@@ -397,7 +394,6 @@ class MqttToDbTestThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.acquisition_routine)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - start_routine')
@@ -458,7 +454,6 @@ class DBInDataThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.request_data)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - DBInDataThread - start_routine')
@@ -560,7 +555,6 @@ class DBOutDataThread(QtCore.QThread):
         self.thread_timer.moveToThread(self)
         self.thread_timer.timeout.connect(self.request_data)
         self.started.connect(self.start_routine)
-        # self.start()
 
     def start_routine(self):
         logging.debug(f'gui - sensors_reading.py - DBOutDataThread - start_routine')

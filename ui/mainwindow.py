@@ -866,7 +866,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.query_forecast_thread.stop()
             self.query_forecast_thread.wait()
         self.timer.stop()
-        # time.sleep(0.5)
         logging.info('**********************************')
         logging.info('WEATHER STATION ' + gui_version + ' is closing ...')
         logging.info('**********************************')
