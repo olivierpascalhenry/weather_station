@@ -1,9 +1,10 @@
 
 
-### September xx 2022, Release version 0.14.1 ###
+### October xx 2022, Release version 0.15.0 ###
 
   * FIXED:
     * the computation of the moon phase has been corrected.
+    * all qthreads with a run section has been changed to include a qtimer and allow proper termination.
 
 
 ### September 09 2022, Release version 0.14.0 ###

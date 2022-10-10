@@ -387,19 +387,30 @@ class MqttToDbTestThread(QtCore.QThread):
     def __init__(self, db_dict):
         QtCore.QThread.__init__(self)
         logging.info('gui - sensors_reading.py - MqttToDbTestThread - __init__')
+        self.running = False
+        self.sensors_rate = 60
         self.connector = psycopg2.connect(user=db_dict['user'], password=db_dict['password'], host=db_dict['host'],
                                           database=db_dict['database'], port=db_dict['port'])
         self.cursor = self.connector.cursor()
+        self.cursor = self.connector.cursor()
+        self.thread_timer = QtCore.QTimer(self)
+        self.thread_timer.moveToThread(self)
+        self.thread_timer.timeout.connect(self.acquisition_routine)
+        self.started.connect(self.start_routine)
+        self.start()
 
-    def run(self):
-        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - run')
+    def start_routine(self):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - start_routine')
+        self.running = True
         random.seed()
-        while True:
-            self.add_data_to_db(datetime.datetime.now().replace(microsecond=0),
-                                round(20 + random.uniform(0, 5), 1), round(65 + random.uniform(0, 15), 1),
-                                round(1013 + random.uniform(0, 10), 1), round(1013 + random.uniform(0, 20), 1),
-                                75, 97, 'AQARA_THP_TEST')
-            time.sleep(60)
+        self.thread_timer.start(self.sensors_rate * 1000)
+
+    def acquisition_routine(self):
+        logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - acquisition_routine')
+        self.add_data_to_db(datetime.datetime.now().replace(microsecond=0),
+                            round(20 + random.uniform(0, 5), 1), round(65 + random.uniform(0, 15), 1),
+                            round(1013 + random.uniform(0, 10), 1), round(1013 + random.uniform(0, 20), 1),
+                            75, 97, 'AQARA_THP_TEST')
 
     def add_data_to_db(self, dt, tp, hm, ps, ps_sl, bt, lk, db):
         logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - add_data_to_db - data : {dt} | {tp} | {hm} '
@@ -415,9 +426,11 @@ class MqttToDbTestThread(QtCore.QThread):
 
     def stop(self):
         logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop')
+        self.thread_timer.stop()
         self.cursor.close()
         self.connector.close()
-        logging.debug('gui - sensors_reading.py - MqttToDbTestThread - stop - db closed')
+        logging.debug(f'gui - sensors_reading.py - MqttToDbTestThread - stop - qtimer stopped / db closed')
+        self.running = False
         self.exit()
 
 
