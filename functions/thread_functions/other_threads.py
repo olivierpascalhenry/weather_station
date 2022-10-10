@@ -667,7 +667,7 @@ class ComputeEphemerisThread(QtCore.QThread):
         logging.debug(f'gui - other_threads.py - ComputeEphemerisThread - start_routine')
         self.running = True
         self.compute_data()
-        self.thread_timer.start(self.display_rate)
+        self.thread_timer.start(self.computation_rate)
 
     def compute_data(self):
         logging.debug('gui - other_threads.py - ComputeEphemerisThread - run')
