@@ -1,15 +1,14 @@
-import os
 import logging
 import platform
 import pathlib
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 from ui.Ui_mqttmanagerwindow import Ui_mqttmanagerWindow
 from ui.Ui_1wiremanagerwindow import Ui_sensormanagerWindow
 from ui.Ui_townsearchwindow import Ui_townsearchWindow
 from functions.window_functions.other_windows import MyKeyboard, MyNumpad
-from functions.utils import (code_to_departement, stylesheet_creation_function, font_creation_function,
-                             icon_creation_function, clear_layout, str2bool)
-if 'WEATHER_STATION_DEV' not in os.environ:
+from functions.utils import (stylesheet_creation_function, font_creation_function, icon_creation_function,
+                             clear_layout, str2bool)
+if platform.system() == 'Linux':
     import pigpio
 
 

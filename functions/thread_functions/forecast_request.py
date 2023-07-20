@@ -1,4 +1,3 @@
-import time
 import logging
 import collections
 import datetime
