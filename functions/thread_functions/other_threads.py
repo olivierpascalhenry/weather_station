@@ -574,7 +574,7 @@ class RequestPlotDataThread(QtCore.QThread):
                                 f"date_time>='{time_limit.strftime('%Y-%m-%d %H:%M:%S')}' ORDER BY date_time")
             data = self.cursor.fetchall()
             data_x = np.asarray([x[0] for x in data])
-            data_y = np.asarray([x[1] for x in data], dtype=np.float)
+            data_y = np.asarray([x[1] for x in data], dtype=np.float32)
         return data_x, data_y
 
     def stop(self):

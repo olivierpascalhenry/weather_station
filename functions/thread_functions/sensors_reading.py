@@ -1,6 +1,5 @@
 import os
 import json
-import time
 import random
 import logging
 import pathlib
@@ -9,7 +8,7 @@ import platform
 import psycopg2
 from PyQt5 import QtCore
 import paho.mqtt.client as mqtt
-if 'WEATHER_STATION_DEV' not in os.environ:
+if platform.system() == 'Linux':
     import smbus2
     import bme280
 
