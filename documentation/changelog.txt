@@ -1,4 +1,12 @@
 
+### July 20 2023, Release version 0.15.2 ###
+
+  * MODIFIED:
+    * log message, when closing the gui, has been modified to register values of reboot and shutdown variables.
+    * new version of pyqtspinner.
+    * code has been cleaned.
+
+
 ### October 10 2022, Release version 0.15.1 ###
 
   * FIXED:

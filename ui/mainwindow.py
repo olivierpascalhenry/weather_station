@@ -4,7 +4,6 @@ import sys
 import copy
 import json
 import math
-import time
 import pickle
 import logging
 import pathlib
@@ -12,7 +11,7 @@ import datetime
 import platform
 import configparser
 from pyqtspinner.spinner import WaitingSpinner
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
@@ -809,9 +808,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 button.setIcon(icon_creation_function('empty_circle_icon.svg'))
 
     def set_plot_spinner(self):
-        self.spinner = WaitingSpinner(self.page_3, centerOnParent=True, roundness=40., opacity=15., fade=70.,
-                                      radius=12., lines=16, line_length=12., line_width=2., speed=1.,
-                                      color=(75, 75, 75))
+        self.spinner = WaitingSpinner(self.page_3, center_on_parent=True, disable_parent_when_spinning=False,
+                                      modality=QtCore.Qt.ApplicationModal, roundness=40., fade=70., lines=16,
+                                      line_length=12, line_width=2, radius=12,  speed=1.,
+                                      color=QtGui.QColor(75, 75, 75))
         self.spinner.start()
 
     def exit_menu(self):
@@ -832,7 +832,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.close_gui()
 
     def close_gui(self):
-        logging.info('gui - mainwindow.py - MainWindow - close_gui')
+        logging.info(f'gui - mainwindow.py - MainWindow - close_gui - reboot: {self.reboot} '
+                     f'; shutdown: {self.shutdown}')
         if self.ds18b20_data_threads is not None:
             for thread in self.ds18b20_data_threads:
                 if thread.running:
