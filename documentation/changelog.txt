@@ -1,4 +1,17 @@
 
+### July 20 2023, Release version 0.16.0 ###
+
+  * MODIFIED:
+    * MQTT manager window has been modified to handle new MQTT main topic.
+
+  * ADDED:
+    * a new function to update the sensor dictionary has been added.
+    * all functions to handle new MQTT main topic has been added.
+
+  * FIXED:
+    * fixed missing modules
+
+
 ### July 20 2023, Release version 0.15.2 ###
 
   * MODIFIED:

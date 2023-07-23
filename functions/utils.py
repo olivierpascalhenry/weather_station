@@ -63,10 +63,30 @@ def update_config_file(user_path):
 def create_sensor_file(user_path):
     date = datetime.datetime.now().strftime('%d/%m/%Y')
     json_dict = {'creation_date': date, 'modification_date': date, 'DS18B20': {}, 'BME280': {},
-                 'MQTT': {'username': '', 'password': '', 'address': '', 'main_topic': '', 'devices': {}}}
+                 'MQTT': {'username': '', 'password': '', 'address': '', 'port': '', 'main_topics': [], 'devices': {}}}
     f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'w')
     json.dump(json_dict, f, indent=4)
     f.close()
+
+
+def update_sensor_file(user_path):
+    f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'r')
+    json_dict = json.load(f)
+    f.close()
+    option_missing = False
+
+    if 'port' not in list(json_dict['MQTT'].keys()):
+        json_dict['MQTT']['port'] = '1883'
+        option_missing = True
+
+    if 'main_topics' not in list(json_dict['MQTT'].keys()):
+        json_dict['MQTT']['main_topics'] = ['']
+        option_missing = True
+
+    if option_missing:
+        f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'w')
+        json.dump(json_dict, f, indent=4)
+        f.close()
 
 
 def create_logging_handlers(config_dict, filename, default_path):

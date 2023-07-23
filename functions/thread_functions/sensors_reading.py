@@ -309,7 +309,8 @@ class MqttToDbObject(QtCore.QObject):
     def connect_to_mqtt(self):
         logging.debug(f'gui - sensors_reading.py - MqttToDbObject - connect_to_mqtt')
         self.mqtt_client.connect(self.mqtt_dict['address'])
-        topics_list = [(f'{self.mqtt_dict["main_topic"]}/{device}', 0) for device in self.mqtt_dict['devices']]
+        topics_list = [(f'{device_dict["main_topic"]}/{device}', 0) for device, device_dict in
+                       self.mqtt_dict['devices'].items()]
         self.mqtt_client.subscribe(topics_list)
         self.mqtt_client.loop_start()
 

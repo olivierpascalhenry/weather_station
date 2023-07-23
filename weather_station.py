@@ -9,7 +9,7 @@ from PyQt5 import QtWidgets, QtCore
 from ui.mainwindow import MainWindow
 from ui.version import gui_version
 from functions.utils import (create_option_file, create_logging_handlers, sync_graphic_folders, create_sensor_file,
-                             update_config_file)
+                             update_config_file, update_sensor_file)
 from matplotlib import __version__ as mpl_version
 from markdown import __version__ as mk_version
 from psycopg2 import __version__ as pg_version
@@ -34,6 +34,7 @@ def launch_station(gui_path, user_path):
     config_dict.read(str(pathlib.Path(user_path).joinpath('weather_station.ini')))
     if not pathlib.Path(pathlib.Path(user_path).joinpath('sensor_file.json')).is_file():
         create_sensor_file(user_path)
+    update_sensor_file(user_path)
     f = open(pathlib.Path(user_path).joinpath('sensor_file.json'), 'r')
     sensor_dict = json.load(f)
     f.close()

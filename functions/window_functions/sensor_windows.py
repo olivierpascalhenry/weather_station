@@ -37,6 +37,7 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         self.rev_equivalence_topic_dict = {value: key for key, value in self.equivalence_topic_dict.items()}
         self.verticalLayout_2.setAlignment(QtCore.Qt.AlignTop)
         self.addtopic_cb.setItemDelegate(QtWidgets.QStyledItemDelegate())
+        self.main_topic_cb.setItemDelegate(QtWidgets.QStyledItemDelegate())
         scroll = QtWidgets.QScroller.scroller(self.info_scroll_area.viewport())
         scroll.grabGesture(self.info_scroll_area.viewport(), QtWidgets.QScroller.LeftMouseButtonGesture)
         properties = scroll.scrollerProperties()
@@ -45,31 +46,101 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         scroll.setScrollerProperties(properties)
         self.cancel_button.clicked.connect(self.close_window)
         self.ok_button.clicked.connect(self.confirm_device_dict)
+        self.left_bt.clicked.connect(self.widget_navigate_left)
+        self.right_bt.clicked.connect(self.widget_navigate_right)
         self.sensor_list.itemClicked.connect(self.show_device_information)
+        self.topic_list.itemClicked.connect(self.activate_topic_del)
         self.add_sensor.clicked.connect(self.add_device)
         self.del_sensor.clicked.connect(self.del_device)
+        self.del_topic_bt.clicked.connect(self.del_main_topic)
+        self.add_topic_bt.clicked.connect(self.add_main_topic)
         self.addtopic_bt.clicked.connect(self.add_topic)
         self.active_ck.clicked.connect(self.set_device_active)
+        self.main_topic_cb.currentTextChanged.connect(self.set_main_topic)
         self.username_ln.textChanged.connect(self.add_text_to_dict)
         self.password_ln.textChanged.connect(self.add_text_to_dict)
         self.address_ln.textChanged.connect(self.add_text_to_dict)
-        self.main_topic_ln.textChanged.connect(self.add_text_to_dict)
         self.store_ln.textChanged.connect(self.add_text_to_dict)
         self.store_bt.clicked.connect(self.display_keyboard)
         self.username_bt.clicked.connect(self.display_keyboard)
         self.password_bt.clicked.connect(self.display_keyboard)
+        self.port_bt.clicked.connect(self.display_numpad)
         self.address_bt.clicked.connect(self.display_keyboard)
         self.main_topic_bt.clicked.connect(self.display_keyboard)
+        self.update_mqtt_dict()
         self.parse_mqtt_dict()
+
+    def update_mqtt_dict(self):
+        for device in self.mqtt_dict['devices']:
+            if 'main_topic' not in self.mqtt_dict['devices'][device]:
+                self.mqtt_dict['devices'][device]['main_topic'] = ''
 
     def parse_mqtt_dict(self):
         logging.debug('gui - other_windows.py - MqttManager - parse_mqtt_dict')
         self.username_ln.setText(self.mqtt_dict['username'])
         self.password_ln.setText(self.mqtt_dict['password'])
         self.address_ln.setText(self.mqtt_dict['address'])
-        self.main_topic_ln.setText(self.mqtt_dict['main_topic'])
+        topic_list = sorted([topic for topic in self.mqtt_dict['main_topics'] if topic])
+        if topic_list:
+            self.topic_list.addItems(topic_list)
+            self.main_topic_cb.currentTextChanged.disconnect()
+            self.main_topic_cb.clear()
+            self.main_topic_cb.addItem('Topic principal')
+            self.main_topic_cb.addItems(topic_list)
+            self.main_topic_cb.currentTextChanged.connect(self.set_main_topic)
         for device, ddict in self.mqtt_dict['devices'].items():
             self.sensor_list.addItem(device)
+
+    def widget_navigate_left(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_left')
+        idx = self.stacked_widget.currentIndex()
+        if idx != 0:
+            self.stacked_widget.setCurrentIndex(idx - 1)
+            self.set_stack_icon()
+
+    def widget_navigate_right(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_right')
+        idx = self.stacked_widget.currentIndex()
+        if idx != 1:
+            self.stacked_widget.setCurrentIndex(idx + 1)
+            self.set_stack_icon()
+
+    def set_stack_icon(self):
+        logging.debug('gui - mainwindow.py - MainWindow - set_ts_stack_icon')
+        idx = self.stacked_widget.currentIndex() + 1
+        for button in self.findChildren(QtWidgets.QToolButton, QtCore.QRegExp('page_marker*')):
+            if idx == int(button.objectName()[-1:]):
+                button.setIcon(icon_creation_function('filled_circle_icon.svg'))
+            else:
+                button.setIcon(icon_creation_function('empty_circle_icon.svg'))
+
+    def activate_topic_del(self):
+        self.del_topic_bt.setEnabled(True)
+
+    def add_main_topic(self):
+        if self.main_topic_ln.text() not in self.mqtt_dict['main_topics']:
+            self.topic_list.addItem(self.main_topic_ln.text())
+            self.mqtt_dict['main_topics'].append(self.main_topic_ln.text())
+            self.parse_main_topics()
+
+    def del_main_topic(self):
+        item = self.topic_list.takeItem(self.topic_list.currentRow())
+        self.mqtt_dict['main_topics'].pop(self.mqtt_dict['main_topics'].index(item.text()))
+        if self.topic_list.currentRow() == -1:
+            self.del_topic_bt.setEnabled(False)
+        self.parse_main_topics()
+
+    def parse_main_topics(self):
+        topic_list = sorted([topic for topic in self.mqtt_dict['main_topics'] if topic])
+        if topic_list:
+            self.main_topic_cb.currentTextChanged.disconnect()
+            self.main_topic_cb.clear()
+            self.main_topic_cb.addItem('Topic principal')
+            self.main_topic_cb.addItems(topic_list)
+            if self.sensor_list.selectedItems():
+                topic = self.mqtt_dict['devices'][self.sensor_list.currentItem().text()]['main_topic']
+                self.main_topic_cb.setCurrentIndex(self.main_topic_cb.findText(topic))
+            self.main_topic_cb.currentTextChanged.connect(self.set_main_topic)
 
     def show_device_information(self, item):
         logging.debug('gui - other_windows.py - MqttManager - show_device_information')
@@ -81,11 +152,19 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         self.store_bt.setEnabled(True)
         self.addtopic_cb.setEnabled(True)
         self.addtopic_bt.setEnabled(True)
+        self.maintopic_lb.setEnabled(True)
+        self.main_topic_cb.setEnabled(True)
+        main_topic = self.mqtt_dict['devices'][item.text()]['main_topic']
+        if main_topic and self.mqtt_dict['main_topics']:
+            self.main_topic_cb.currentTextChanged.disconnect()
+            self.main_topic_cb.setCurrentIndex(self.main_topic_cb.findText(main_topic))
+            self.main_topic_cb.currentTextChanged.connect(self.set_main_topic)
         self.store_ln.setText(self.mqtt_dict['devices'][item.text()]['store'])
         self.active_ck.setChecked(str2bool(self.mqtt_dict['devices'][item.text()]['active']))
         topic_list = [topic for topic in self.mqtt_dict['devices'][item.text()] if topic not in ['store', 'active',
                                                                                                  'cal_methode',
-                                                                                                 'cal_value']]
+                                                                                                 'cal_value',
+                                                                                                 'main_topic']]
         clear_layout(self.topic_layout)
         self.topic_hor_layout.clear()
         self.topic_del_button.clear()
@@ -105,7 +184,7 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
             name = str(keyboard_window.num_line.text())
             if not self.sensor_list.findItems(name, QtCore.Qt.MatchFixedString):
                 self.sensor_list.addItem(name)
-                tmp_dict = {'store': '24', 'active': 'True', 'cal_methode': '', 'cal_value': ''}
+                tmp_dict = {'store': '24', 'active': 'True', 'cal_methode': '', 'cal_value': '', 'main_topic': ''}
                 self.mqtt_dict['devices'][name] = tmp_dict
 
     def del_device(self):
@@ -209,7 +288,7 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
     def add_text_to_dict(self):
         logging.debug('gui - other_windows.py - MqttManager - add_text_to_dict')
         try:
-            if self.sender().objectName()[: -3] in ['username', 'address', 'password', 'main_topic']:
+            if self.sender().objectName()[: -3] in ['username', 'address', 'password']:
                 self.mqtt_dict[self.sender().objectName()[: -3]] = str(self.sender().text())
             else:
                 device = str(self.sensor_list.currentItem().text())
@@ -226,6 +305,12 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         device = str(self.sensor_list.currentItem().text())
         self.mqtt_dict['devices'][device]['active'] = str(self.active_ck.isChecked())
 
+    def set_main_topic(self):
+        if self.sensor_list.currentRow() != -1:
+            device = str(self.sensor_list.currentItem().text())
+            if device != 'Topic principal':
+                self.mqtt_dict['devices'][device]['main_topic'] = str(self.main_topic_cb.currentText())
+
     def display_keyboard(self):
         logging.debug('gui - other_windows.py - MqttManager - display_keyboard')
         if self.sender().objectName().startswith('topic_'):
@@ -237,6 +322,14 @@ class MqttManager(QtWidgets.QDialog, Ui_mqttmanagerWindow):
         keyboard_window.exec_()
         if not keyboard_window.cancel:
             lineedit.setText(keyboard_window.num_line.text())
+
+    def display_numpad(self):
+        logging.debug('gui - other_windows.py - MqttManager - display_numpad')
+        lineedit = self.findChild(QtWidgets.QLineEdit, self.sender().objectName()[: -2] + 'ln')
+        numpad_window = MyNumpad(self)
+        numpad_window.exec_()
+        if not numpad_window.cancel:
+            lineedit.setText(numpad_window.num_line.text())
 
     def confirm_device_dict(self):
         logging.debug('gui - other_windows.py - MqttManager - confirm_device_dict')
